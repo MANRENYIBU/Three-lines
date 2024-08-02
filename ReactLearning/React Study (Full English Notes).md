@@ -4,17 +4,17 @@
 
 #### 1.1 Preparation
 
-![image-20240801080929422](React Study (Full English Notes).assets/image-20240801080929422.png)
+![image-20240801080929422](./React Study (Full English Notes).assets/image-20240801080929422.png)
 
 In Pycharm, create stuff with React as its frame (here names it tccdog) Soon it will create relevant documents automatically
 
 #### 1.2 Experiment
 
-![image-20240801081704451](React Study (Full English Notes).assets/image-20240801081704451.png)
+![image-20240801081704451](./React Study (Full English Notes).assets/image-20240801081704451.png)
 
 click and run this program, showing this page down below means a successful installment
 
-![image-20240801081744470](React Study (Full English Notes).assets/image-20240801081744470.png)
+![image-20240801081744470](./React Study (Full English Notes).assets/image-20240801081744470.png)
 
 ### 2 First React Application
 
@@ -71,7 +71,8 @@ usually label is used with 'input'
 **`<input type="text" id="username" name="username" />`**:
 
 - This box's`id` is `username`，aligns with`label` 's' `htmlFor`.
-- ![image-20240801083437292](React Study (Full English Notes).assets/image-20240801083437292.png)
+
+  ![image-20240801083437292](./React Study (Full English Notes).assets/image-20240801083437292.png)
 
 ##### 3. IMPORTANT only one root is permitted in return
 
