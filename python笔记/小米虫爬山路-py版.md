@@ -1688,3 +1688,94 @@ B, 很高兴见到你, 欢迎问我任何问题。
 | 文本嵌入              | 文本嵌入是将文本信息映射到高维向量空间的过程，使得具有语义相似性的文本在向量空间中距离较近。 |
 | 文本相似度            | 文本相似度是衡量两段文本之间语义接近程度的度量。通过计算文本在嵌入空间中的相似性，可以评估它们在语义上的相似程度。 |
 | 排序与重排序          | 在信息检索中，排序指的是将检索到的文档按照其与查询的相关性进行排序。重排序则是在排序后的结果基础上再次调整文档的顺序，以进一步提高与用户查询的匹配度。 |
+
+## 13、使用Langchain + openAI + Mlivus 实现
+
+```python
+import dotenv
+import os
+
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_milvus.vectorstores import Milvus
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_text_splitters import CharacterTextSplitter
+from langchain.prompts import ChatPromptTemplate
+from langchain.schema.runnable import RunnablePassthrough
+from langchain.schema.output_parser import StrOutputParser
+
+
+# 加载pdf文件
+def load_pdf_file(pdf_file):
+    file = open(pdf_file, 'rb')
+    loader = PyPDFLoader(file)
+    docs = loader.load()
+    print('pdf:\n', docs[0].page_content[:100])
+    return docs
+
+
+def rag_llm_chain(query: str):
+    # 加载GPT配置
+    os.environ['OPENAI_API_KEY'] = 'fk228384-Cy7o7ePOKGf1uQcop66sLW4FC1T5ZV1o'
+
+    # 读取知识文档
+    documents = load_pdf_file('../资料/汽车知识问答/初赛训练数据集.pdf')
+    # 将文档分割成小块
+    text_splitter = CharacterTextSplitter(chunk_size=1024, chunk_overlap=128)
+    chunks = text_splitter.split_documents(documents)
+
+    # 使用OpenAI的GPT模型生成文档的向量
+    embeddings = OpenAIEmbeddings(model="text-embedding-ada-002",
+                                  openai_api_base='https://oa.api2d.net/v1',
+                                  openai_api_key='fk228384-Cy7o7ePOKGf1uQcop66sLW4FC1T5ZV1o'
+                                  )
+    # 存入Milvus
+    # vector_db = Milvus.from_documents(
+    #     chunks,
+    #     embeddings,
+    #     connection_args={
+    #         "uri": "https://in01-7d4aa6fa8cbf734.ali-cn-hangzhou.vectordb.zilliz.com.cn:19530",
+    #         "user": "db_admin",
+    #         "password": "Ks1{B?)5;cqw/yj{",
+    #         "secure": True
+    #     }
+    # )
+    #从现有的Mlivus中去知识库
+    vector_db = Milvus(
+        embeddings,
+        connection_args={
+            "uri": "https://in01-7d4aa6fa8cbf734.ali-cn-hangzhou.vectordb.zilliz.com.cn:19530",
+            "user": "db_admin",
+            "password": "Ks1{B?)5;cqw/yj{",
+        },
+        collection_name="LangChainCollection"
+    )
+
+    # 从Milvus中检索文档
+    retriever = vector_db.as_retriever()
+    # 提示模板
+    template = """你是一个问答机器人助手，请使用以下检索到的上下文来回答问题，
+    如果你不知道答案，就说你不知道。问题是：{question},上下文: {context},答案是:
+    """
+    prompt = ChatPromptTemplate.from_template(template)
+    llm = ChatOpenAI(model="gpt-3.5-turbo",
+                     temperature=0,
+                     base_url='https://oa.api2d.net/v1',
+                     api_key='fk228384-Cy7o7ePOKGf1uQcop66sLW4FC1T5ZV1o'
+                     )
+    rag_chain = (
+            {"context": retriever, "question": RunnablePassthrough()}
+            | prompt
+            | llm
+            | StrOutputParser()
+    )
+
+    res = rag_chain.invoke(query)
+    print(f'答案：{res}')
+
+
+if __name__ == '__main__':
+    query = "请问Lynk&Co领克汽车的事件数据记录系统（EDR）主要记录哪些信息？"
+    rag_llm_chain(query)
+
+```
+
