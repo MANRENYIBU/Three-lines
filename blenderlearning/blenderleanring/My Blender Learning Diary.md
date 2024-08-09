@@ -2,7 +2,7 @@
 
 ## 1.基础知识
 
-著名诗人陈洪平曾说，基础概念，要理解。在Blender中也是如此
+著名的肖云云情人黎俊杰曾说，基础概念，要理解。在Blender中也是如此
 
 ![image-20240808155548283](./blenderlearning/blenderlearning/My Blender Learning Diary.assets/image-20240808155548283.png)
 
@@ -34,7 +34,7 @@
 
 ![image-20240808155930084](./My Blender Learning Diary.assets/image-20240808155930084.png)
 
-点击缩放，可对物体大小进行调整（图为陈洪平和肖云云睡觉的床）
+点击缩放，可对物体大小进行调整（图为黎俊杰和肖云云睡觉的床）
 
 
 
