@@ -4,7 +4,7 @@
 
 著名诗人陈洪平曾说，基础概念，要理解。在Blender中也是如此
 
-![image-20240808155548283](./My Blender Learning Diary.assets/image-20240808155548283.png)
+![image-20240808155548283](./blenderlearning/blenderlearning/My Blender Learning Diary.assets/image-20240808155548283.png)
 
 在建模中，主要由 模型，照相机，灯光组成，以下是一些基础操作
 
