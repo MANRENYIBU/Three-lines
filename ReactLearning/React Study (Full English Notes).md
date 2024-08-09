@@ -4,7 +4,7 @@
 
 #### 1.1 Preparation
 
-![image-20240801080929422](./ReactLearning)
+![image-20240801080929422](ReactLearning/React Study (Full English Notes).assets/image-20240801080929422.png)
 
 In Pycharm, create stuff with React as its frame (here names it tccdog) Soon it will create relevant documents automatically
 
