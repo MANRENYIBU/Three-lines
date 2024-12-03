@@ -4068,7 +4068,17 @@ class BookMyShow {
 
 # 灵神题单
 
+资料来源:
+
+- [科学刷题]([分享｜如何科学刷题？ - 力扣（LeetCode）](https://leetcode.cn/circle/discuss/RvFUtj/))
+
 ## 1、滑动窗口
+
+![滑动窗口题单 双指针题单 力扣题目 灵茶山艾府](./img/sql与算法题解-img/1718242805-sqSjqc-lc1456.png)
+
+题目已按照难度分排序，右侧数字为难度分。
+
+如果遇到难度很大，题解都看不懂的题目，建议直接跳过，二刷的时候再来尝试。
 
 ### 1.1 定长滑动窗口
 
@@ -6055,27 +6065,3176 @@ class BookMyShow {
 
 注：也可以把两个滑动窗口合并起来，维护同一个右端点 right 和两个左端点 left~1~和 left~2~，我把这种写法叫做==三指针滑动窗口==。
 
-- [ ] 930.和相同的二元子数组 1592
-- [ ] 1248.统计「优美子数组」 1624
-- [ ] 992.K个不同整数的子数组 2210
+- [x] 930.和相同的二元子数组 1592
+- [x] 1248.统计「优美子数组」 1624
+- [x] 992.K个不同整数的子数组 2210
 - [ ] 3306.元音辅音字符串计数 II ~2300
 
 #### 1.2.4 其他（选做）
 
-- [ ] 930.绝对差不超过限制的最长连续子数组 1672
-- [ ] 2401.最长优雅子数组 1750
+- [x] 930.绝对差不超过限制的最长连续子数组 1672
+- [x] 2401.最长优雅子数组 1750
 - [ ] 1156.单字符重复子串的最大长度 1787 有简单做法
-- [ ] 424.替换后的最长重复字符
+- [x] ==424.替换后的最长重复字符==
+
+>给你一个字符串 `s` 和一个整数 `k` 。你可以选择字符串中的任一字符，并将其更改为任何其他大写英文字符。该操作最多可执行 `k` 次。
+>
+>在执行上述操作后，返回 *包含相同字母的最长子字符串的长度。*
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：s = "ABAB", k = 2
+>输出：4
+>解释：用两个'A'替换为两个'B',反之亦然。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：s = "AABABBA", k = 1
+>输出：4
+>解释：
+>将中间的一个'A'替换为'B',字符串变为 "AABBBBA"。
+>子串 "BBBB" 有最长重复字母, 答案为 4。
+>可能存在其他的方法来得到同样的结果。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= s.length <= 105`
+>- `s` 仅由大写英文字母组成
+>- `0 <= k <= s.length`
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==官方题解:==
+>
+>我们可以枚举字符串中的每一个位置作为右端点，然后找到其最远的左端点的位置，满足该区间内除了出现次数最多的那一类字符之外，剩余的字符（即非最长重复字符）数量不超过 k 个。
+>
+>这样我们可以想到使用双指针维护这些区间，每次右指针右移，如果区间仍然满足条件，那么左指针不移动，否则左指针至多右移一格，保证区间长度不减小。
+>
+>虽然这样的操作会导致部分区间不符合条件，即该区间内非最长重复字符超过了 k 个。但是这样的区间也同样不可能对答案产生贡献。当我们右指针移动到尽头，左右指针对应的区间的长度必然对应一个长度最大的符合条件的区间。
+>
+>实际代码中，由于字符串中仅包含大写字母，我们可以使用一个长度为 26 的数组维护每一个字符的出现次数。每次区间右移，我们更新右移位置的字符出现的次数，然后尝试用它更新重复字符出现次数的历史最大值，最后我们使用该最大值计算出区间内非最长重复字符的数量，以此判断左指针是否需要右移即可。
+>
+>```java
+>class Solution {
+>    public int characterReplacement(String s, int k) {
+>        int[] num = new int[26];
+>        int n = s.length();
+>        int maxn = 0;
+>        int left = 0, right = 0;
+>        while (right < n) {
+>            num[s.charAt(right) - 'A']++;
+>            maxn = Math.max(maxn, num[s.charAt(right) - 'A']);
+>            if (right - left + 1 - maxn > k) {
+>                num[s.charAt(left) - 'A']--;
+>                left++;
+>            }
+>            right++;
+>        }
+>        return right - left;
+>    }
+>}
+>```
+
 - [ ] 1712.将数组分成三个子数组的方案数 2079
 - [ ] 1918.第 K 小的子数组和（会员题）
 
 ### 1.3 单序列双指针
 
+#### 1.3.1 相向双指针
+
+两个指针 left=0, right=n−1，从数组的两端开始，向中间移动，这叫相向双指针。上面的滑动窗口相当于同向双指针。
+
+- [x] 125.验证回文串
+- [x] 1750.删除字符串两端相同字符后的最短长度 1502
+- [x] 2105.给植物浇水 II 1507
+- [x] 128.有序数组的平方 做到 O(n)
+- [x] 658.找到 K 个最接近的元素
+- [x] 1471.数组中的 K 个最强值 用双指针解决
+- [x] 167.两数之和 II - 输入有序数组
+- [x] 2824.统计和小于目标的下标对数目
+- [x] LCP 28.采购方案 同 2824 题
+- [x] ==15.三数之和==
+
+>给你一个整数数组 `nums` ，判断是否存在三元组 `[nums[i], nums[j], nums[k]]` 满足 `i != j`、`i != k` 且 `j != k` ，同时还满足 `nums[i] + nums[j] + nums[k] == 0` 。请你返回所有和为 `0` 且不重复的三元组。
+>
+>**注意：**答案中不可以包含重复的三元组。
+>
+> 
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：nums = [-1,0,1,2,-1,-4]
+>输出：[[-1,-1,2],[-1,0,1]]
+>解释：
+>nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。
+>nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。
+>nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。
+>不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。
+>注意，输出的顺序和三元组的顺序并不重要。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：nums = [0,1,1]
+>输出：[]
+>解释：唯一可能的三元组和不为 0 。
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：nums = [0,0,0]
+>输出：[[0,0,0]]
+>解释：唯一可能的三元组和为 0 。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `3 <= nums.length <= 3000`
+>- `-105 <= nums[i] <= 105`
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==灵茶题解:==
+>
+>请看 [相向双指针【基础算法精讲】](https://leetcode.cn/link/?target=https%3A%2F%2Fwww.bilibili.com%2Fvideo%2FBV1bP411c7oJ%2F)
+>
+>```java
+>class Solution {
+>    public List<List<Integer>> threeSum(int[] nums) {
+>        Arrays.sort(nums);
+>        List<List<Integer>> ans = new ArrayList<>();
+>        int n = nums.length;
+>        for (int i = 0; i < n - 2; i++) {
+>            int x = nums[i];
+>            if (i > 0 && x == nums[i - 1]) continue; // 跳过重复数字
+>            if (x + nums[i + 1] + nums[i + 2] > 0) break; // 优化一
+>            if (x + nums[n - 2] + nums[n - 1] < 0) continue; // 优化二
+>            int j = i + 1;
+>            int k = n - 1;
+>            while (j < k) {
+>                int s = x + nums[j] + nums[k];
+>                if (s > 0) {
+>                    k--;
+>                } else if (s < 0) {
+>                    j++;
+>                } else {
+>                    ans.add(List.of(x, nums[j], nums[k]));
+>                    for (j++; j < k && nums[j] == nums[j - 1]; j++); // 跳过重复数字
+>                    for (k--; k > j && nums[k] == nums[k + 1]; k--); // 跳过重复数字
+>                }
+>            }
+>        }
+>        return ans;
+>    }
+>}
+>```
+
+- [x] 16.最接近的三数之和
+- [x] 18.四数之和
+- [x] ==611.有效三角形的个数==
+
+>给定一个包含非负整数的数组 `nums` ，返回其中可以组成三角形三条边的三元组个数。
+>
+> 
+>
+>**示例 1:**
+>
+>```
+>输入: nums = [2,2,3,4]
+>输出: 3
+>解释:有效的组合是: 
+>2,3,4 (使用第一个 2)
+>2,3,4 (使用第二个 2)
+>2,2,3
+>```
+>
+>**示例 2:**
+>
+>```
+>输入: nums = [4,2,3,4]
+>输出: 4
+>```
+>
+> 
+>
+>**提示:**
+>
+>- `1 <= nums.length <= 1000`
+>- `0 <= nums[i] <= 1000`
+>
+>我的题解:
+>
+>==没做出来==
+>
+>灵茶题解:
+>
+>问题变成，从 nums 中选三个数，满足 1≤a≤b≤c 且 a+b>c 的方案数。
+>
+>算法
+>
+>为了能够使用相向双指针，先对数组从小到大排序。
+>
+>外层循环枚举 c=nums[k]，内层循环用相向双指针枚举 a=nums[i] 和 b=nums[j]，具体如下：
+>
+>1. 初始化左右指针 i=0,j=k−1。
+>
+>2. 如果 nums[i]+nums[j]>c，由于数组是有序的，nums[j] 与下标 i′在 [i,j−1] 中的任何 nums[i′] 相加，都是 >c 的，因此直接找到了 j−i 个合法方案，加到答案中，然后将 j 减一。
+>
+>3. 如果 nums[i]+nums[j]≤c，由于数组是有序的，nums[i] 与下标 j′在 [i+1,j] 中的任何 nums[j‘] 相加，都是 ≤c 的，因此后面无需考虑 nums[i]，将 i 加一。
+>
+>4. 重复上述过程直到 i≥j 为止。
+>
+>```java
+>class Solution {
+>    public int triangleNumber(int[] nums) {
+>        Arrays.sort(nums);
+>        int ans = 0;
+>        for (int k = 2; k < nums.length; k++) {
+>            int c = nums[k];
+>            int i = 0; // a=nums[i]
+>            int j = k - 1; // b=nums[j]
+>            while (i < j) {
+>                if (nums[i] + nums[j] > c) {
+>                    ans += j - i;
+>                    j--;
+>                } else {
+>                    i++;
+>                }
+>            }
+>        }
+>        return ans;
+>    }
+>}
+>```
+>
+>优化：
+>
+>```java
+>class Solution {
+>    public int triangleNumber(int[] nums) {
+>        Arrays.sort(nums);
+>        int ans = 0;
+>        for (int k = nums.length - 1; k > 1; k--) {
+>            int c = nums[k];
+>            if (nums[0] + nums[1] > c) { // 优化一
+>                ans += (k + 1) * k * (k - 1) / 6;
+>                break;
+>            }
+>            if (nums[k - 2] + nums[k - 1] <= c) { // 优化二
+>                continue;
+>            }
+>            int i = 0; // a=nums[i]
+>            int j = k - 1; // b=nums[j]
+>            while (i < j) {
+>                if (nums[i] + nums[j] > c) {
+>                    ans += j - i;
+>                    j--;
+>                } else {
+>                    i++;
+>                }
+>            }
+>        }
+>        return ans;
+>    }
+>}
+>```
+
+- [x] ==1577.数的平方等于两数乘积的方法数 用双指针实现==
+
+>给你两个整数数组 `nums1` 和 `nums2` ，请你返回根据以下规则形成的三元组的数目（类型 1 和类型 2 ）：
+>
+>- 类型 1：三元组 `(i, j, k)` ，如果 `nums1[i]2 == nums2[j] * nums2[k]` 其中 `0 <= i < nums1.length` 且 `0 <= j < k < nums2.length`
+>- 类型 2：三元组 `(i, j, k)` ，如果 `nums2[i]2 == nums1[j] * nums1[k]` 其中 `0 <= i < nums2.length` 且 `0 <= j < k < nums1.length`
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：nums1 = [7,4], nums2 = [5,2,8,9]
+>输出：1
+>解释：类型 1：(1,1,2), nums1[1]^2 = nums2[1] * nums2[2] (4^2 = 2 * 8)
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：nums1 = [1,1], nums2 = [1,1,1]
+>输出：9
+>解释：所有三元组都符合题目要求，因为 1^2 = 1 * 1
+>类型 1：(0,0,1), (0,0,2), (0,1,2), (1,0,1), (1,0,2), (1,1,2), nums1[i]^2 = nums2[j] * nums2[k]
+>类型 2：(0,0,1), (1,0,1), (2,0,1), nums2[i]^2 = nums1[j] * nums1[k]
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：nums1 = [7,7,8,3], nums2 = [1,2,9,7]
+>输出：2
+>解释：有两个符合题目要求的三元组
+>类型 1：(3,0,2), nums1[3]^2 = nums2[0] * nums2[2]
+>类型 2：(3,0,1), nums2[3]^2 = nums1[0] * nums1[1]
+>```
+>
+>**示例 4：**
+>
+>```
+>输入：nums1 = [4,7,9,11,23], nums2 = [3,5,1024,12,18]
+>输出：0
+>解释：不存在符合题目要求的三元组
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= nums1.length, nums2.length <= 1000`
+>- `1 <= nums1[i], nums2[i] <= 10^5`
+>
+>我的题解:
+>
+>此题和三指针类似，使用一个指针i指向nums1,其余两个j，k指针指向nums2。首先需要对nums2排序让其满足非单调递减。
+>
+>这时有三种情况
+>
+>1. nums2[j] * nums[k] > nums1[i] * nums1[i]，这时需要 k--。
+>2. nums2[j] * nums[k] < nums1[i] * nums1[i]，这时需要 j++。
+>3. nums2[j] * nums[k] = nums1[i] * nums1[i]，这个时候就又会有两种情况
+>   1. nums2[j] = nums2[k],又因为nums2是非单调递减的，所以可以使用数学的组合算式$$C^2_{(k-j+1)} = (k-j+1) \times (k-j) \div 2$$ 求得符合条件的对数
+>   2. nums2[j] < nums2[k],则需要统计和nums2[j]相等的个数m1，nums2[k]相等的个数m2,结果就为m1*m2
+>
+>```java
+>class Solution {
+>    public int numTriplets(int[] nums1, int[] nums2) {
+>        return f(nums1,nums2) + f(nums2,nums1);
+>    }
+>
+>
+>    public int f(int[] n1,int[] n2){
+>        int ans =  0;
+>        Arrays.sort(n2);
+>        for(int i = 0;i < n1.length;i++){
+>            long a = (long) n1[i] * n1[i];
+>            int j = 0;
+>            int k = n2.length -1;
+>            while(j < k){
+>                if(a > (long) n2[j] * n2[k]){
+>                    j++;
+>                }else if(a < (long) n2[j] * n2[k]){
+>                    k--;
+>                }else{ 
+>                    // 如果满足条件了 则[j,k]区间内 nums2[j] * nums2[k] <= nums1[i];
+>                    //分为以下两种情况
+>                    //1. 如果nums2[j] == nums2[k],又因为nums2是非单调递减的，则可以得到[j,k]中任选两个都满足条件 ,此时需要添加1+2+3+...+(k-j)
+>                    //2. 如果nums2[j] < nums2[k],则统计和nums2[j]相同的个数m1和nums[k]相同的个数m2，此时需要添加m1*m2
+>                    if(n2[j] == n2[k]){
+>                        ans += (k-j+1)*(k-j)/2;
+>                        break;
+>                    }else{
+>                        int m1 = 1;
+>                        int m2 = 1;
+>                        for(j++;n2[j]==n2[j-1];j++)m1++;
+>                        for(k--;n2[k]==n2[k+1];k--)m2++;
+>                        ans += m1*m2;
+>                    }  
+>                }
+>            }
+>        }
+>        return ans;
+>    }
+>
+>}
+>```
+>
+>
+
+- [x] 923.三数之和的多种可能 1711
+- [x] 948.令牌放置 1762
+- [x] ==11.盛最多水的容器==
+
+>给定一个长度为 `n` 的整数数组 `height` 。有 `n` 条垂线，第 `i` 条线的两个端点是 `(i, 0)` 和 `(i, height[i])` 。
+>
+>找出其中的两条线，使得它们与 `x` 轴共同构成的容器可以容纳最多的水。
+>
+>返回容器可以储存的最大水量。
+>
+>**说明：**你不能倾斜容器。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/question_11.jpg)
+>
+>```
+>输入：[1,8,6,2,5,4,8,3,7]
+>输出：49 
+>解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：height = [1,1]
+>输出：1
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `n == height.length`
+>- `2 <= n <= 105`
+>- `0 <= height[i] <= 104`
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==灵茶题解:==
+>
+>```java
+>class Solution {
+>    public int maxArea(int[] height) {
+>        int ans = 0;
+>        int left = 0;
+>        int right = height.length - 1;
+>        while (left < right) {
+>            int area = (right - left) * Math.min(height[left], height[right]);
+>            ans = Math.max(ans, area);
+>            if (height[left] < height[right]) {
+>                // height[left] 与右边的任意线段都无法组成一个比 ans 更大的面积
+>                left++;
+>            } else {
+>                // height[right] 与左边的任意线段都无法组成一个比 ans 更大的面积
+>                right--;
+>            }
+>        }
+>        return ans;
+>    }
+>}
+>```
+
+- [x] 42.接雨水
+
+>给定 `n` 个非负整数表示每个宽度为 `1` 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/rainwatertrap.png)
+>
+>```
+>输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
+>输出：6
+>解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。 
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：height = [4,2,0,3,2,5]
+>输出：9
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `n == height.length`
+>- `1 <= n <= 2 * 104`
+>- `0 <= height[i] <= 105`
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==灵茶题解:==
+>
+>方法一:前后缀解
+>
+>注：后两个 `for` 循环可以合并成一个循环，这里为了方便大家阅读，没有合并。
+>
+>```java
+>class Solution {
+>    public int trap(int[] height) {
+>        int n = height.length;
+>        int[] preMax = new int[n]; // preMax[i] 表示从 height[0] 到 height[i] 的最大值
+>        preMax[0] = height[0];
+>        for (int i = 1; i < n; i++) {
+>            preMax[i] = Math.max(preMax[i - 1], height[i]);
+>        }
+>
+>        int[] sufMax = new int[n]; // sufMax[i] 表示从 height[i] 到 height[n-1] 的最大值
+>        sufMax[n - 1] = height[n - 1];
+>        for (int i = n - 2; i >= 0; i--) {
+>            sufMax[i] = Math.max(sufMax[i + 1], height[i]);
+>        }
+>
+>        int ans = 0;
+>        for (int i = 0; i < n; i++) {
+>            ans += Math.min(preMax[i], sufMax[i]) - height[i]; // 累加每个水桶能接多少水
+>        }
+>        return ans;
+>    }
+>}
+>```
+>
+>方法二:相向双指针
+>
+>注意 `while` 循环可以不加等号，因为在「谁小移动谁」的规则下，相遇的位置一定是最高的柱子，这个柱子是无法接水的。
+>
+>```java
+>class Solution {
+>    public int trap(int[] height) {
+>        int ans = 0;
+>        int left = 0;
+>        int right = height.length - 1;
+>        int preMax = 0; // 前缀最大值，随着左指针 left 的移动而更新
+>        int sufMax = 0; // 后缀最大值，随着右指针 right 的移动而更新
+>        while (left < right) {
+>            preMax = Math.max(preMax, height[left]);
+>            sufMax = Math.max(sufMax, height[right]);
+>            ans += preMax < sufMax ? preMax - height[left++] : sufMax - height[right--];
+>        }
+>        return ans;
+>    }
+>}
+>```
+
+- [x] ==1616.分割两个字符串得到回文串 1868==
+
+>给你两个字符串 `a` 和 `b` ，它们长度相同。请你选择一个下标，将两个字符串都在 **相同的下标** 分割开。由 `a` 可以得到两个字符串： `aprefix` 和 `asuffix` ，满足 `a = aprefix + asuffix` ，同理，由 `b` 可以得到两个字符串 `bprefix` 和 `bsuffix` ，满足 `b = bprefix + bsuffix` 。请你判断 `aprefix + bsuffix` 或者 `bprefix + asuffix` 能否构成回文串。
+>
+>当你将一个字符串 `s` 分割成 `sprefix` 和 `ssuffix` 时， `ssuffix` 或者 `sprefix` 可以为空。比方说， `s = "abc"` 那么 `"" + "abc"` ， `"a" + "bc" `， `"ab" + "c"` 和 `"abc" + ""` 都是合法分割。
+>
+>如果 **能构成回文字符串** ，那么请返回 `true`，否则返回 `false` 。
+>
+>**注意**， `x + y` 表示连接字符串 `x` 和 `y` 。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：a = "x", b = "y"
+>输出：true
+>解释：如果 a 或者 b 是回文串，那么答案一定为 true ，因为你可以如下分割：
+>aprefix = "", asuffix = "x"
+>bprefix = "", bsuffix = "y"
+>那么 aprefix + bsuffix = "" + "y" = "y" 是回文串。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：a = "xbdef", b = "xecab"
+>输出：false
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：a = "ulacfd", b = "jizalu"
+>输出：true
+>解释：在下标为 3 处分割：
+>aprefix = "ula", asuffix = "cfd"
+>bprefix = "jiz", bsuffix = "alu"
+>那么 aprefix + bsuffix = "ula" + "alu" = "ulaalu" 是回文串。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= a.length, b.length <= 105`
+>- `a.length == b.length`
+>- `a` 和 `b` 都只包含小写英文字母
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==灵茶题解:==
+>
+>![1616-cut.png](./img/sql与算法题解-img/1679061173-ZLMgpw-1616-cut.png)
+>
+>注意，双指针前后缀匹配结束后，两个指针指向的位置恰好就是接下来要判断的回文串的左右边界，所以这两块代码逻辑可以无缝对接。
+>
+>```java
+>class Solution {
+>    public boolean checkPalindromeFormation(String a, String b) {
+>        return check(a, b) || check(b, a);
+>    }
+>
+>    // 如果 a_prefix + b_suffix 可以构成回文串则返回 true，否则返回 false
+>    private boolean check(String a, String b) {
+>        int i = 0, j = a.length() - 1; // 相向双指针
+>        while (i < j && a.charAt(i) == b.charAt(j)) { // 前后缀尽量匹配
+>            ++i;
+>            --j;
+>        }
+>        return isPalindrome(a, i, j) || isPalindrome(b, i, j);
+>    }
+>
+>    // 如果从 s[i] 到 s[j] 是回文串则返回 true，否则返回 false
+>    private boolean isPalindrome(String s, int i, int j) {
+>        while (i < j && s.charAt(i) == s.charAt(j)) {
+>            ++i;
+>            --j;
+>        }
+>        return i >= j;
+>    }
+>}
+>```
+
+- [ ] 1498.满足条件的子序列数目 2276
+- [ ] 1782.统计点对的数目 2457
+- [ ] 1099.小于 K 的两数之和（会员题）
+- [ ] 360.有序转化数组（会员题）
+- [ ] 2422.使用合并操作将数组转换为回文序列（会员题）
+- [ ] 259.较小的三数之和（会员题）
+
+#### 1.3.2 同向双指针
+
+两个指针的移动方向相同（都向右，或者都向左）。
+
+- [x] ==581.最短无序连续子数组==
+
+>给你一个整数数组 `nums` ，你需要找出一个 **连续子数组** ，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
+>
+>请你找出符合题意的 **最短** 子数组，并输出它的长度。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：nums = [2,6,4,8,10,9,15]
+>输出：5
+>解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：nums = [1,2,3,4]
+>输出：0
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：nums = [1]
+>输出：0
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= nums.length <= 104`
+>- `-105 <= nums[i] <= 105`
+>
+> 
+>
+>**进阶：**你可以设计一个时间复杂度为 `O(n)` 的解决方案吗？
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==大佬题解:==
+>
+>我们可以假设把这个数组分成三段，左段和右段是标准的升序数组，中段数组虽是无序的，但满足最小值大于左段的最大值，最大值小于右段的最小值。
+>
+>![微信截图_20200921203355.png](./img/sql与算法题解-img/1600691648-ZCYlql-微信截图_20200921203355.png)
+>
+>那么我们目标就很明确了，找中段的左右边界，我们分别定义为begin 和 end;
+>
+>分两头开始遍历:
+>
+>- 从左到右维护一个最大值max,在进入右段之前，那么遍历到的nums[i]都是小于max的，我们要求的end就是遍历中最后一个小于max元素的位置；
+>- 同理，从右到左维护一个最小值min，在进入左段之前，那么遍历到的nums[i]也都是大于min的，要求的begin也就是最后一个大于min元素的位置。
+>
+>```java
+>class Solution {
+>    public int findUnsortedSubarray(int[] nums) {
+>        //初始化
+>        int len = nums.length;
+>        int min = nums[len-1];
+>        int max = nums[0];
+>        int begin = 0, end = -1;
+>        //遍历
+>        for(int i = 0; i < len; i++){
+>            if(nums[i] < max){      //从左到右维持最大值，寻找右边界end
+>                end = i;
+>            }else{
+>                max = nums[i];
+>            }
+>            
+>            if(nums[len-i-1] > min){    //从右到左维持最小值，寻找左边界begin
+>                begin = len-i-1;
+>            }else{
+>                min = nums[len-i-1];
+>            }            
+>        }
+>        return end-begin+1;
+>    }
+>}
+>```
+
+- [ ] 2972.统计移除递增子数组的数目 II 2153
+- [ ] 2122.还原原数组 2159
+
+#### 1.3.3 背向双指针
+
+两个指针从数组中的同一个位置出发，一个向左，另一个向右，背向移动。
+
+- [ ] 1793.好子数组的最大分数 1946
+
+####   1.3.4 原地修改
+
+- [x] 27.移除元素
+- [x] 26.删除有序数组中的重复项
+- [x] 80.删除有序数组中的重复项 II
+- [x] 283.移动零
+- [x] 905.按奇偶排序数组
+- [x] 922.按奇偶排序数组 II
+- [x] 2460.对数组执行操作
+- [x] 1089.复写零
+
 ### 1.4 双序列双指针
+
+#### 1.4.1 双指针
+
+- [x] 2540.最小公共值 做到 O(n+m)
+- [x] 88.合并两个有序数组 做到 O(n+m)
+- [x] 2570.合并两个二维数组 - 求和法 做到 O(n+m)
+- [x] LCP 18.早餐组合
+- [x] 1385.两个数组间的距离值
+- [x] 1855.下标对中的最大距离 1515
+- [x] ==2545.长按键入 做到 O(n+m)==
+
+>你的朋友正在使用键盘输入他的名字 `name`。偶尔，在键入字符 `c` 时，按键可能会被*长按*，而字符可能被输入 1 次或多次。
+>
+>你将会检查键盘输入的字符 `typed`。如果它对应的可能是你的朋友的名字（其中一些字符可能被长按），那么就返回 `True`。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：name = "alex", typed = "aaleex"
+>输出：true
+>解释：'alex' 中的 'a' 和 'e' 被长按。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：name = "saeed", typed = "ssaaedd"
+>输出：false
+>解释：'e' 一定需要被键入两次，但在 typed 的输出中不是这样。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= name.length, typed.length <= 1000`
+>- `name` 和 `typed` 的字符都是小写字母
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==官方题解:==
+>
+>根据题意能够分析得到：字符串 typed 的每个字符，有且只有两种「用途」：
+>
+>- 作为 name 的一部分。此时会「匹配」name 中的一个字符
+>
+>- 作为长按键入的一部分。此时它应当与前一个字符相同。
+>
+>
+>如果 typed 中存在一个字符，它两个条件均不满足，则应当直接返回 false；否则，当 typed 扫描完毕后，我们再检查 name 的每个字符是否都被「匹配」了。
+>
+>实现上，我们使用两个下标 i,j 追踪 name 和 typed 的位置。
+>
+>- 当 name[i]=typed[j] 时，说明两个字符串存在一对匹配的字符，此时将 i,j 都加 1。
+>
+>- 否则，如果 typed[j]=typed[j−1]，说明存在一次长按键入，此时只将 j 加 1。
+>
+>
+>最后，如果 i=name.length，说明 name 的每个字符都被「匹配」了。
+>
+>```java
+>class Solution {
+>    public boolean isLongPressedName(String name, String typed) {
+>        int i = 0, j = 0;
+>        while (j < typed.length()) {
+>            if (i < name.length() && name.charAt(i) == typed.charAt(j)) {
+>                i++;
+>                j++;
+>            } else if (j > 0 && typed.charAt(j) == typed.charAt(j - 1)) {
+>                j++;
+>            } else {
+>                return false;
+>            }
+>        }
+>        return i == name.length();
+>    }
+>}
+>```
+
+- [x] ==809.情感丰富的文字 1605==
+
+>有时候人们会用重复写一些字母来表示额外的感受，比如 `"hello" -> "heeellooo"`, `"hi" -> "hiii"`。我们将相邻字母都相同的一串字符定义为相同字母组，例如："h", "eee", "ll", "ooo"。
+>
+>对于一个给定的字符串 S ，如果另一个单词能够通过将一些字母组扩张从而使其和 S 相同，我们将这个单词定义为可扩张的（stretchy）。扩张操作定义如下：选择一个字母组（包含字母 `c` ），然后往其中添加相同的字母 `c` 使其长度达到 3 或以上。
+>
+>例如，以 "hello" 为例，我们可以对字母组 "o" 扩张得到 "hellooo"，但是无法以同样的方法得到 "helloo" 因为字母组 "oo" 长度小于 3。此外，我们可以进行另一种扩张 "ll" -> "lllll" 以获得 "helllllooo"。如果 `s = "helllllooo"`，那么查询词 "hello" 是可扩张的，因为可以对它执行这两种扩张操作使得 `query = "hello" -> "hellooo" -> "helllllooo" = s`。
+>
+>输入一组查询单词，输出其中可扩张的单词数量。
+>
+> 
+>
+>**示例：**
+>
+>```
+>输入： 
+>s = "heeellooo"
+>words = ["hello", "hi", "helo"]
+>输出：1
+>解释：
+>我们能通过扩张 "hello" 的 "e" 和 "o" 来得到 "heeellooo"。
+>我们不能通过扩张 "helo" 来得到 "heeellooo" 因为 "ll" 的长度小于 3 。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= s.length, words.length <= 100`
+>- `1 <= words[i].length <= 100`
+>- s 和所有在 `words` 中的单词都只由小写字母组成。
+>
+>我的题解:
+>
+>和上题的`长按键入`很像，我们需要判断`s`和数组中的每一个元素`w`是否符合`w`可以通过增加某个字符来的得到`s`的。我们使用下标`i`和`j`来遍历`s`和`w`的每一个字符就会有一下情况：
+>
+>- 如果`s[i] != w[i]`,证明当前的`w`是绝对不适合`s`的。
+>- 如果`s[i] == w[i]`,我们就直接遍历得到当前字符`d`在`s`的个数`c1`和在`w`中的个数`c2`,这时候又会有两种情况:
+>  - 如果c2大于c1，则说明w的字符不能通过扩展来得到s，因为当前字符的个数已经大于s的了。
+>  - 如果c1小于2，同时c2 != c1，则说明w字符不能满足要扩展到3或者以上这个条件
+>- 最后遍历完成，还需要判断i == s.length && j == w.length，这是因为可能在没有遍历完成就提前结束遍历，而导致有剩余的字符没有遍历到。
+>
+>```java
+>class Solution {
+>    public int expressiveWords(String s, String[] words) {
+>        int ans = 0;
+>        for(String w:words){
+>            if(check(s,w)){
+>                ans++;
+>            }
+>        }
+>        return ans;
+>    }
+>
+>    public boolean check(String s,String w){
+>        int i = 0,j = 0;
+>        while(i < s.length() && j < w.length()){
+>            if(s.charAt(i) != w.charAt(j)){
+>                return false;
+>            }
+>            i++;
+>            j++;
+>            int c1 = 1,c2 = 1;
+>            while(i < s.length() && s.charAt(i) == s.charAt(i-1)){
+>                c1++;
+>                i++;
+>            }
+>            while(j < w.length() && w.charAt(j) == w.charAt(j-1)){
+>                c2++;
+>                j++;
+>            }
+>            if(c2 > c1){
+>                return false;
+>            }
+>            if(c1 < 3 && c2 != c1){
+>                return false;
+>            }
+>        }
+>
+>        return i == s.length() && j == w.length();
+>    }
+>}
+>```
+>
+>==官方题解:==
+>
+>我们可以依次判断数组 words 中的每一个字符串是否可以扩张成给定的字符串 s。
+>
+>假设我们需要判断 t 是否可以扩张成 s，我们可以使用双指针来解决这个问题。两个指针 i 和 j 初始时分别指向字符串 s 和 t 的首个位置。在双指针遍历的过程中：
+>
+>- 首先我们需要保证 s[i]=t[j]，否则这两部分不是相同的字母，无法进行扩张；
+>
+>- 随后我们不断地向右移动两个指针，直到移动到与之前不同的字母，或者超出字符串的边界。假设字符串 s 有 cnt~i~个相同的字母，t 有 cnt~j~个相同的字母，那么我们必须保证 cnt~i~≥cnt~j~ ，因为扩张不可能减少字符的数量。当 cnt~i~=cnt~j~时，我们无需进行扩张，这样也是满足要求的；cnt~i~>cnt~j~，由于扩张至少会达到长度 3 及以上，因此需要保证 cnt~i~≥3 即可。
+>
+>```java
+>class Solution {
+>    public int expressiveWords(String s, String[] words) {
+>        int ans = 0;
+>        for (String word : words) {
+>            if (expand(s, word)) {
+>                ++ans;
+>            }
+>        }
+>        return ans;
+>    }
+>
+>    private boolean expand(String s, String t) {
+>        int i = 0, j = 0;
+>        while (i < s.length() && j < t.length()) {
+>            if (s.charAt(i) != t.charAt(j)) {
+>                return false;
+>            }
+>            char ch = s.charAt(i);
+>            int cnti = 0;
+>            while (i < s.length() && s.charAt(i) == ch) {
+>                ++cnti;
+>                ++i;
+>            }
+>            int cntj = 0;
+>            while (j < t.length() && t.charAt(j) == ch) {
+>                ++cntj;
+>                ++j;
+>            }
+>            if (cnti < cntj) {
+>                return false;
+>            }
+>            if (cnti != cntj && cnti < 3) {
+>                return false;
+>            }
+>        }
+>        return i == s.length() && j == t.length();
+>    }
+>}
+>```
+
+- [x] 2337.移动片段得到字符串 1693
+- [x] 777.在 LR 字符串中交换相邻字符 同 2337 题
+- [x] 2549.比较含退格的字符串 做到 O(1) 额外空间
+- [x] ==2550.区间列表的交集 做到 O(n+m)==
+
+>给定两个由一些 **闭区间** 组成的列表，`firstList` 和 `secondList` ，其中 `firstList[i] = [starti, endi]` 而 `secondList[j] = [startj, endj]` 。每个区间列表都是成对 **不相交** 的，并且 **已经排序** 。
+>
+>返回这 **两个区间列表的交集** 。
+>
+>形式上，**闭区间** `[a, b]`（其中 `a <= b`）表示实数 `x` 的集合，而 `a <= x <= b` 。
+>
+>两个闭区间的 **交集** 是一组实数，要么为空集，要么为闭区间。例如，`[1, 3]` 和 `[2, 4]` 的交集为 `[2, 3]` 。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/interval1.png)
+>
+>```
+>输入：firstList = [[0,2],[5,10],[13,23],[24,25]], secondList = [[1,5],[8,12],[15,24],[25,26]]
+>输出：[[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]]
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：firstList = [[1,3],[5,9]], secondList = []
+>输出：[]
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：firstList = [], secondList = [[4,8],[10,12]]
+>输出：[]
+>```
+>
+>**示例 4：**
+>
+>```
+>输入：firstList = [[1,7]], secondList = [[3,10]]
+>输出：[[3,7]]
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `0 <= firstList.length, secondList.length <= 1000`
+>- `firstList.length + secondList.length >= 1`
+>- `0 <= starti < endi <= 109`
+>- `endi < starti+1`
+>- `0 <= startj < endj <= 109 `
+>- `endj < startj+1`
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==官方题解:==
+>
+>思路
+>
+>我们称 b 为区间 [a, b] 的末端点。
+>
+>在两个数组给定的所有区间中，假设拥有最小末端点的区间是 A[0]。（为了不失一般性，该区间出现在数组 A 中)
+>
+>然后，在数组 B 的区间中， A[0] 只可能与数组 B 中的至多一个区间相交。（如果 B 中存在两个区间均与 A[0] 相交，那么它们将共同包含 A[0] 的末端点，但是 B 中的区间应该是不相交的，所以存在矛盾）
+>
+>算法
+>
+>如果 A[0] 拥有最小的末端点，那么它只可能与 B[0] 相交。然后我们就可以删除区间 A[0]，因为它不能与其他任何区间再相交了。
+>
+>相似的，如果 B[0] 拥有最小的末端点，那么它只可能与区间 A[0] 相交，然后我们就可以将 B[0] 删除，因为它无法再与其他区间相交了。
+>
+>我们用两个指针 i 与 j 来模拟完成删除 A[0] 或 B[0] 的操作。
+>
+>```java
+>class Solution {
+>  public int[][] intervalIntersection(int[][] A, int[][] B) {
+>    List<int[]> ans = new ArrayList();
+>    int i = 0, j = 0;
+>
+>    while (i < A.length && j < B.length) {
+>      // Let's check if A[i] intersects B[j].
+>      // lo - the startpoint of the intersection
+>      // hi - the endpoint of the intersection
+>      int lo = Math.max(A[i][0], B[j][0]);
+>      int hi = Math.min(A[i][1], B[j][1]);
+>      if (lo <= hi)
+>        ans.add(new int[]{lo, hi});
+>
+>      // Remove the interval with the smallest endpoint
+>      if (A[i][1] < B[j][1])
+>        i++;
+>      else
+>        j++;
+>    }
+>
+>    return ans.toArray(new int[ans.size()][]);
+>  }
+>}
+>```
+
+- [ ] 2070.每一个查询的最大美丽值 1724
+- [x] 面试题 16.06.最小差
+- [ ] 1537.最大得分 1961
+- [ ] 244.最短单词距离 II（会员题）
+- [ ] 2838.英雄可以获得的最大金币数（会员题）
+- [ ] 1229.安排会议日程（会员题）
+- [ ] 1570.两个稀疏向量的点积（会员题）
+- [ ] 1868.两个行程编码数组的积（会员题）
+
+#### 1.4.2 判断子序列
+
+- [x] 392.判断子序列
+- [x] 524.通过删除字母匹配到字典里最长单词
+- [x] 2486.追加字符以获得子序列 1363
+- [x] 2825.循环增长使字符串子序列等于另一个字符串 1415
+- [x] 1023.驼峰式匹配 1537
+- [x] ==3132.找出与数组相加的整数 II 1620==
+
+>给你两个整数数组 `nums1` 和 `nums2`。
+>
+>从 `nums1` 中移除两个元素，并且所有其他元素都与变量 `x` 所表示的整数相加。如果 `x` 为负数，则表现为元素值的减少。
+>
+>执行上述操作后，`nums1` 和 `nums2` **相等** 。当两个数组中包含相同的整数，并且这些整数出现的频次相同时，两个数组 **相等** 。
+>
+>返回能够实现数组相等的 **最小** 整数 `x` 。
+>
+> 
+>
+>**示例 1:**
+>
+>**输入：**nums1 = [4,20,16,12,8], nums2 = [14,18,10]
+>
+>**输出：**-2
+>
+>**解释：**
+>
+>移除 `nums1` 中下标为 `[0,4]` 的两个元素，并且每个元素与 `-2` 相加后，`nums1` 变为 `[18,14,10]` ，与 `nums2` 相等。
+>
+>**示例 2:**
+>
+>**输入：**nums1 = [3,5,5,3], nums2 = [7,7]
+>
+>**输出：**2
+>
+>**解释：**
+>
+>移除 `nums1` 中下标为 `[0,3]` 的两个元素，并且每个元素与 `2` 相加后，`nums1` 变为 `[7,7]` ，与 `nums2` 相等。
+>
+> 
+>
+>**提示：**
+>
+>- `3 <= nums1.length <= 200`
+>- `nums2.length == nums1.length - 2`
+>- `0 <= nums1[i], nums2[i] <= 1000`
+>- 测试用例以这样的方式生成：存在一个整数 `x`，`nums1` 中的每个元素都与 `x` 相加后，再移除两个元素，`nums1` 可以与 `nums2` 相等。
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==灵茶题解:==
+>
+>把两个数组都从小到大排序。
+>
+>由于只能移除两个元素，所以 nums~1~的前三小元素必定有一个是保留下来的，我们可以枚举保留下来的最小元素是 nums~1~[0] 还是 nums~1~[1] 还是 nums~1~[2]。
+>
+>⚠注意：保留下来的最小元素绝对不可能是 nums~1~[3] 或者更大的数，因为这意味着我们把 nums~1~[0],nums~1~[1],nums~1~[2] 都移除了，而题目要求只能移除两个元素。
+>
+>例如排序后 nums~1~=[2,5,6,7,8,10], nums~2~=[3,4,5,8]，如果 nums~1~中保留下来的最小元素是 nums~1~[1]=5，那么 x=nums~2~[0]−nums~1~[1]=3−5=−2，这意味着如果我们把 nums~1~的每个数都加上 x=−2，得到 nums~1~=[0,3,4,5,6,8]，问题就变成判断 nums~2~是否为 nums~1~'的子序列，如果是子序列，那么我们就可以放心地移除多余的两个数了。
+>
+>代码实现时，可以先判断保留下来的最小元素是 nums~1~[2]，再判断是 nums~1~[1]，最后判断是 nums~1~[0]。这是因为 nums~1~[i] 越大，答案 x 越小，第一个满足的就是答案。此外，由于题目保证答案一定存在，所以当 nums~1~[2] 和 nums~1~[1] 都不满足时，直接返回 nums~2~[0]−nums~1~[0]，无需判断。
+>
+>```java
+>class Solution {
+>    public int minimumAddedInteger(int[] nums1, int[] nums2) {
+>        Arrays.sort(nums1);
+>        Arrays.sort(nums2);
+>        // 枚举保留 nums1[2] 或者 nums1[1] 或者 nums1[0]
+>        // 倒着枚举是因为 nums1[i] 越大答案越小，第一个满足的就是答案
+>        for (int i = 2; i > 0; i--) {
+>            int x = nums2[0] - nums1[i];
+>            // 在 {nums1[i] + x} 中找子序列 nums2
+>            int j = 0;
+>            for (int k = i; k < nums1.length; k++) {
+>                if (nums2[j] == nums1[k] + x && ++j == nums2.length) {
+>                    // nums2 是 {nums1[i] + x} 的子序列
+>                    return x;
+>                }
+>            }
+>        }
+>        // 题目保证答案一定存在
+>        return nums2[0] - nums1[0];
+>    }
+>}
+>```
+
+- [ ] 522.最长特殊序列 II ~1700
+
+
+
+#### 1.4.3 进阶
+
+- [ ] 1898.可移除字符的最大数目 1913
+- [ ] 2565.最少得分子序列 2432
+- [ ] 3302.字典序最小的合法序列 ~2600
 
 ### 1.5 三指针
 
+注：部分题目已整理到「1.2.3.3 恰好型滑动窗口」中。
+
+- [x] 2367.等差三元组的数目 做到 O(n)
+- [x] ==825.适龄的朋友 1697==
+
+> 在社交媒体网站上有 `n` 个用户。给你一个整数数组 `ages` ，其中 `ages[i]` 是第 `i` 个用户的年龄。
+>
+> 如果下述任意一个条件为真，那么用户 `x` 将不会向用户 `y`（`x != y`）发送好友请求：
+>
+> - `ages[y] <= 0.5 * ages[x] + 7`
+> - `ages[y] > ages[x]`
+> - `ages[y] > 100 && ages[x] < 100`
+>
+> 否则，`x` 将会向 `y` 发送一条好友请求。
+>
+> 注意，如果 `x` 向 `y` 发送一条好友请求，`y` 不必也向 `x` 发送一条好友请求。另外，用户不会向自己发送好友请求。
+>
+> 返回在该社交媒体网站上产生的好友请求总数。
+>
+>  
+>
+> **示例 1：**
+>
+> ```
+> 输入：ages = [16,16]
+> 输出：2
+> 解释：2 人互发好友请求。
+> ```
+>
+> **示例 2：**
+>
+> ```
+> 输入：ages = [16,17,18]
+> 输出：2
+> 解释：产生的好友请求为 17 -> 16 ，18 -> 17 。
+> ```
+>
+> **示例 3：**
+>
+> ```
+> 输入：ages = [20,30,100,110,120]
+> 输出：3
+> 解释：产生的好友请求为 110 -> 100 ，120 -> 110 ，120 -> 100 。
+> ```
+>
+>  
+>
+> **提示：**
+>
+> - `n == ages.length`
+> - `1 <= n <= 2 * 104`
+> - `1 <= ages[i] <= 120`
+>
+> 我的题解：
+>
+> ==没做出来==
+>
+> ==官方题解:==
+>
+> 观察题目中给定的三个条件：
+>
+> - ages[y]≤0.5×ages[x]+7
+>
+> - ages[y]>ages[x]
+>
+> - ages[y]>100∧ages[x]<100
+>
+>
+> 可以发现，条件 3 是蕴含在条件 2 中的，即如果满足条件 3 那么一定满足条件 2。因此，我们当条件 1 和 2 均不满足时，用户 x 就会向用户 y 发送好友请求，也就是用户 y 需要满足：
+>
+> 0.5×ages[x]+7<ages[y]≤ages[x]
+>
+> 当 ages[x]≤14 时，不存在满足要求的 ages[y]。因此我们只需要考虑 ages[x]≥15 的情况，此时满足要求的 ages[y] 的范围为 (0.5×ages[x]+7,ages[x]]。
+>
+> 当 ages[x] 增加时，上述区间的左右边界均单调递增，因此如果我们将数组 ages 进行升序排序，那么就可以在遍历 ages[x] 的同时，使用两个指针 left 和 right 维护满足要求的 ages[y] 的左右边界。当 x 向后移动一个位置时：
+>
+> - 如果左边界指针 left 指向的元素不满足 ages[left]>0.5×ages[x]+7，那么就将左边界向后移动一个位置；
+> - 如果右边界指针 right 指向的下一个元素满足 ages[right+1]≤ages[x]，那么就将右边界向后移动一个位置。
+>
+> 这样一来，[left,right] 就是满足年龄要求的 y 的下标。需要注意的是，x 本身一定在 [left,right] 区间内，因此 x 发送的好友请求数，即为 [left,right] 区间的长度减去 1。
+>
+> 我们将每一个 x 对应的 [left,right] 区间长度减去 1 进行累加，就可以得到最终的答案。
+>
+> ```java
+> class Solution {
+>     public int numFriendRequests(int[] ages) {
+>         int n = ages.length;
+>         Arrays.sort(ages);
+>         int left = 0, right = 0, ans = 0;
+>         for (int age : ages) {
+>             if (age < 15) {
+>                 continue;
+>             }
+>             while (ages[left] <= 0.5 * age + 7) {
+>                 ++left;
+>             }
+>             while (right + 1 < n && ages[right + 1] <= age) {
+>                 ++right;
+>             }
+>             ans += right - left;
+>         }
+>         return ans;
+>     }
+> }
+> ```
+
+- [x] 2563.统计公平数对的数目 1721
+- [x] ==795.区间子数组个数 1817==
+
+>给你一个整数数组 `nums` 和两个整数：`left` 及 `right` 。找出 `nums` 中连续、非空且其中最大元素在范围 `[left, right]` 内的子数组，并返回满足条件的子数组的个数。
+>
+>生成的测试用例保证结果符合 **32-bit** 整数范围。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：nums = [2,1,4,3], left = 2, right = 3
+>输出：3
+>解释：满足条件的三个子数组：[2], [2, 1], [3]
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：nums = [2,9,2,5,6], left = 2, right = 8
+>输出：7
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= nums.length <= 105`
+>- `0 <= nums[i] <= 109`
+>- `0 <= left <= right <= 109`
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==灵茶题解:==
+>
+>![795-6-cut.png](./img/sql与算法题解-img/1669084583-IMnUqE-795-6-cut.png)
+>
+>此外，为了保证 i~1~≥i~0~（否则相减会算出负数），可以在 nums[i]>right 时也更新 i~1~。也就是说，只要nums[i]≥left 就更新 i~1~（即使 >right）。
+>
+>答疑
+>
+>问：i~1~−i~0~是怎么得出来的？
+>
+>答：上一个不能包含的下标为 i~0~，等价于上一个可以包含的下标为 i~0~+1，这是子数组左端点的最小值。
+>
+>设当前遍历到下标 i，那么子数组 [i~0~+1,i],[i~0~+2,i],⋯,[i~1~,i] 都是满足条件的，这有 i~1~−i~0~个。
+>
+>```java
+>class Solution {
+>    public int numSubarrayBoundedMax(int[] nums, int left, int right) {
+>         int n = nums.length,ans = 0,i0 = -1,i1 = -1;
+>         for(int i = 0;i < n;i++){
+>            if(nums[i] > right) i0 = i;
+>            if(nums[i] >= left) i1 = i;
+>            ans += i1 - i0;
+>         }
+>         return ans;
+>    }
+>}
+>```
+
+- [ ] 2444.统计定界子数组的数目 2093
+- [ ] 1213.三个有序数组的交集（会员题）
+
+### 思考
+
+做了一些题目后，请总结：滑动窗口和双指针的区别是什么？
+
+>答:滑动窗口更多关注窗口内的数据特征，而双指针更多关心的是两指针之间的数据特征。以及滑动窗口不是非常依赖数组的特征，而双指针需要依赖数组的依赖特征。
+>
+
 ## 2、二分算法
+
+![二分题单二分查找二分算法二分入门二分题目力扣二分 leetcode 二分](./img/sql与算法题解-img/1711713491-SoiQWc-t2.png)
+
+图：闭区间二分循环结束时的左右指针位置（查找第一个8）
+
+题目已按照难度分排序，右侧数字为难度分。
+
+如果遇到难度很大，题解都看不懂的题目，建议直接跳过，二刷的时候再来尝试。
+
+### 2.1 二分查找
+
+请先学习：[二分查找 红蓝染色法【基础算法精讲 04】](https://leetcode.cn/link/?target=https://www.bilibili.com/video/BV1AP41137w7/)
+
+- [x] 34.在排序数组中查找元素的第一个和最后一个位置
+- [x] 35.搜索插入位置
+- [x] 704.二分查找
+- [x] 744.寻找比目标字母大的最小字母
+- [x] 2529.正整数和负整数的最大计数
+- [x] 1385.两个数组间的距离值
+- [x] 2300.咒语和药水的成功对数 1477
+- [x] ==2389.和有限的最长子序列==
+
+>给你一个长度为 `n` 的整数数组 `nums` ，和一个长度为 `m` 的整数数组 `queries` 。
+>
+>返回一个长度为 `m` 的数组 `answer` ，其中 `answer[i]` 是 `nums` 中 元素之和小于等于 `queries[i]` 的 **子序列** 的 **最大** 长度 。
+>
+>**子序列** 是由一个数组删除某些元素（也可以不删除）但不改变剩余元素顺序得到的一个数组。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：nums = [4,5,2,1], queries = [3,10,21]
+>输出：[2,3,4]
+>解释：queries 对应的 answer 如下：
+>- 子序列 [2,1] 的和小于或等于 3 。可以证明满足题目要求的子序列的最大长度是 2 ，所以 answer[0] = 2 。
+>- 子序列 [4,5,1] 的和小于或等于 10 。可以证明满足题目要求的子序列的最大长度是 3 ，所以 answer[1] = 3 。
+>- 子序列 [4,5,2,1] 的和小于或等于 21 。可以证明满足题目要求的子序列的最大长度是 4 ，所以 answer[2] = 4 。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：nums = [2,3,4,5], queries = [1]
+>输出：[0]
+>解释：空子序列是唯一一个满足元素和小于或等于 1 的子序列，所以 answer[0] = 0 。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `n == nums.length`
+>- `m == queries.length`
+>- `1 <= n, m <= 1000`
+>- `1 <= nums[i], queries[i] <= 106`
+>
+>我的题解:
+>
+>因为题目要求元素和最小序列长度最大，所以我们排序求和获得每个长度的最小元素和，然后通过二分查找得到对应的元素长度。
+>
+>```java
+>class Solution {
+>    public int[] answerQueries(int[] nums, int[] queries) {
+>        Arrays.sort(nums);
+>        int[] temp = new int[nums.length+1];
+>        for(int k = 1;k<nums.length+1;k++) temp[k] = nums[k-1] + temp[k-1];
+>        int[] ans = new int[queries.length];
+>        for(int k = 0;k < queries.length;k++){
+>            int i = 0,j =  nums.length;
+>            while(i <= j){
+>                int m = (i + j) /2;
+>                if(temp[m] < queries[k]){
+>                    i = m+1;
+>                }else if(temp[m] > queries[k]){
+>                    j = m-1;
+>                }else{
+>                   j = m;
+>                   break;
+>                }
+>            }
+>            ans[k] = j;
+>        }
+>        return ans;
+>    }
+>}
+>```
+>
+>==灵茶题解:==
+>
+>==**思路**==
+>
+>贪心：由于元素和有上限，为了能让子序列尽量长，子序列中的元素值越小越好。
+>
+>对于本题来说，元素在数组中的位置是无关紧要的（因为我们计算的是元素和），所以可以排序了。
+>
+>把 nums 从小到大排序后，再从小到大选择尽量多的元素（相当于选择一个前缀），使这些元素的和不超过询问值。
+>
+>==**时间优化**==
+>
+>既然求的是前缀的元素和（前缀和），那么干脆把每个前缀和都算出来。
+>
+>做法是递推：前 i 个数的元素和，等于前 i−1 个数的元素和，加上第 i 个数的值。
+>
+>例如 [4,5,2,1] 排序后为 [1,2,4,5]，从左到右递推计算前缀和，得到 [1,3,7,12]。
+>
+>由于 nums[i] 都是正整数，前缀和是严格单调递增的，这样就能在前缀和上使用二分查找：找到大于 queries[i] 的第一个数的下标，由于下标是从 0 开始的，这个数的下标正好就是前缀和小于等于 queries[i] 的最长前缀的长度。
+>
+>例如在 [1,3,7,12] 二分查找大于 3 的第一个数（7），得到下标 2，这正好就是前缀和小于等于 3 的最长前缀长度。对应到 nums 中，就是选择了 2 个数（1 和 2）作为子序列中的元素。
+>
+>==**空间优化**==
+>
+>前缀和可以直接记到 nums 中。
+>
+>答案可以直接记到 queries 中。
+>
+>```java
+>class Solution {
+>    public int[] answerQueries(int[] nums, int[] queries) {
+>        Arrays.sort(nums);
+>        for (int i = 1; i < nums.length; i++) {
+>            nums[i] += nums[i - 1]; // 原地求前缀和
+>        }
+>        for (int i = 0; i < queries.length; i++) {
+>            queries[i] = upperBound(nums, queries[i]); // 复用 queries 作为答案
+>        }
+>        return queries;
+>    }
+>
+>    // https://www.bilibili.com/video/BV1AP41137w7/
+>    // 返回 nums 中第一个大于 target 的数的下标（注意是大于，不是大于等于）
+>    // 如果这样的数不存在，则返回 nums.length
+>    // 时间复杂度 O(log nums.length)
+>    // 采用开区间写法实现
+>    private int upperBound(int[] nums, int target) {
+>        int left = -1, right = nums.length; // 开区间 (left, right)
+>        while (left + 1 < right) { // 区间不为空
+>            // 循环不变量：
+>            // nums[left] <= target
+>            // nums[right] > target
+>            int mid = left + (right - left) / 2;
+>            if (nums[mid] > target) {
+>                right = mid; // 范围缩小到 (left, mid)
+>            } else {
+>                left = mid; // 范围缩小到 (mid, right)
+>            }
+>        }
+>        return right;
+>    }
+>}
+>```
+
+- [x] 1170.比较字符串最小字母出现频次
+- [x] 2080.区间内查询数字的频率 1702
+- [x] 2563.统计公平数对的数目 1721
+- [x] ==2856.删除数对后的最小数组长度 1750==
+
+>给你一个下标从 **0** 开始的 **非递减** 整数数组 `nums` 。
+>
+>你可以执行以下操作任意次：
+>
+>- 选择 **两个** 下标 `i` 和 `j` ，满足 `nums[i] < nums[j]` 。
+>- 将 `nums` 中下标在 `i` 和 `j` 处的元素删除。剩余元素按照原来的顺序组成新的数组，下标也重新从 **0** 开始编号。
+>
+>请你返回一个整数，表示执行以上操作任意次后（可以执行 **0** 次），`nums` 数组的 **最小** 数组长度。
+>
+>
+>
+>**示例 1：**
+>
+>**输入：**nums = [1,2,3,4]
+>
+>**输出：**0
+>
+>**解释：**
+>
+>![img](./img/sql与算法题解-img/1716779983-AHhkVn-tcase1.gif)
+>
+>**示例 2：**
+>
+>**输入：**nums = [1,1,2,2,3,3]
+>
+>**输出：**0
+>
+>**解释：**
+>
+>![img](./img/sql与算法题解-img/1716779979-GyQhVf-tcase2.gif)
+>
+>**示例 3：**
+>
+>**输入：**nums = [1000000000,1000000000]
+>
+>**输出：**2
+>
+>**解释：**
+>
+>由于两个数字相等，不能删除它们。
+>
+>**示例 4：**
+>
+>**输入：**nums = [2,3,4,4,4]
+>
+>**输出：**1
+>
+>**解释：**
+>
+>![img](./img/sql与算法题解-img/1716779940-qRRlHk-tcase3.gif)
+>
+>
+>
+>**提示：**
+>
+>- `1 <= nums.length <= 105`
+>- `1 <= nums[i] <= 109`
+>- `nums` 是 **非递减** 数组。
+>
+>我的题解:
+>
+>==没做出来==
+>
+>==灵茶题解:==
+>
+>假设 x 出现次数最多，其出现次数为 maxCnt。
+>
+>分类讨论：
+>
+>- 如果 maxCnt*2>n，其余所有 n−maxCnt 个数都要与 x 消除，所以最后剩下 maxCnt⋅2−n 个数。
+>- 如果 maxCnt*2≤n 且 n 是偶数，那么可以把其余数消除至剩下 maxCnt 个数，然后再和 x 消除，最后剩下 0 个数。
+>- 如果 maxCnt*2≤n 且 n 是奇数，同上，最后剩下 1 个数。
+>
+>所以本题核心是计算 maxCnt，这可以遍历一遍 nums 算出来。
+>
+>但我们还可以更快！
+>
+>由于 nums 是有序的，如果 maxCnt 超过数组长度的一半，那么 nums[n/2] 一定是出现次数最多的那个数！
+>
+>按照 34.在排序数组中查找元素的第一个和最后一个位置 的做法，可以用二分查找在 O(logn) 的时间计算 nums[n/2] 第一次和最后一次出现的位置，从而算出 maxCnt。
+>
+>```java
+>class Solution {
+>    public int minLengthAfterRemovals(List<Integer> nums) {
+>        int n = nums.size();
+>        int mid = nums.get(n / 2);
+>        int cnt = f(nums, mid + 1) - f(nums, mid);
+>        if (cnt * 2 > n)
+>            return cnt * 2 - n;
+>        return n % 2;
+>    }
+>
+>    public int f(List<Integer> nums, int target) {
+>        int i = 0, j = nums.size() - 1;
+>        while (i <= j) {
+>            int m = (i + j) / 2;
+>            if (nums.get(m) < target) {
+>                i = m + 1;
+>            } else {
+>                j = m - 1;
+>            }
+>        }
+>        return i;
+>    }
+>}
+>```
+
+- [x] 981.基于时间的键值存储
+- [x] ==1146.快照数组 1771==
+
+>实现支持下列接口的「快照数组」- SnapshotArray：
+>
+>- `SnapshotArray(int length)` - 初始化一个与指定长度相等的 类数组 的数据结构。**初始时，每个元素都等于** **0**。
+>- `void set(index, val)` - 会将指定索引 `index` 处的元素设置为 `val`。
+>- `int snap()` - 获取该数组的快照，并返回快照的编号 `snap_id`（快照号是调用 `snap()` 的总次数减去 `1`）。
+>- `int get(index, snap_id)` - 根据指定的 `snap_id` 选择快照，并返回该快照指定索引 `index` 的值。
+>
+>
+>
+>**示例：**
+>
+>```
+>输入：["SnapshotArray","set","snap","set","get"]
+>    [[3],[0,5],[],[0,6],[0,0]]
+>输出：[null,null,0,null,5]
+>解释：
+>SnapshotArray snapshotArr = new SnapshotArray(3); // 初始化一个长度为 3 的快照数组
+>snapshotArr.set(0,5);  // 令 array[0] = 5
+>snapshotArr.snap();  // 获取快照，返回 snap_id = 0
+>snapshotArr.set(0,6);
+>snapshotArr.get(0,0);  // 获取 snap_id = 0 的快照中 array[0] 的值，返回 5
+>```
+>
+>
+>
+>**提示：**
+>
+>- `1 <= length <= 50000`
+>- 题目最多进行`50000` 次`set`，`snap`，和 `get`的调用 。
+>- `0 <= index < length`
+>- `0 <= snap_id < `我们调用 `snap()` 的总次数
+>- `0 <= val <= 10^9`
+>
+>我的题解:
+>
+>我的思路是，使用数组`arr`存储当前的数据值。使用`snapshot`存储快照，最后使用`lastIndex`来记录上一次快照到这次快照中间修改了的下标，这个值在每次进行快照操作后就会清空。这样可以保证我们快照存储的内存不超限，然后使用二分查找快照中的指定数据。
+>
+>```java
+>class SnapshotArray {
+>
+>   class Snapshot {
+>       int id;
+>       int data;
+>
+>       public Snapshot(int id, int data) {
+>           this.id = id;
+>           this.data = data;
+>       }
+>   }
+>
+>   private final int[] arr;
+>   private int snapId = 0;
+>   private final List<Snapshot>[] snapshot;
+>   private final Set<Integer> lastIndex = new HashSet<>();
+>
+>   public SnapshotArray(int length) {
+>       this.arr = new int[length];
+>       this.snapshot = new List[length];
+>       Arrays.setAll(this.snapshot, k -> new ArrayList<>());
+>   }
+>
+>   public void set(int index, int val) {
+>       this.arr[index] = val;
+>       lastIndex.add(index);
+>   }
+>
+>   public int snap() {
+>       for (int index : lastIndex) {
+>           this.snapshot[index].add(new Snapshot(this.snapId, this.arr[index]));
+>       }
+>       lastIndex.clear();
+>       return this.snapId++;
+>   }
+>
+>   public int get(int index, int snap_id) {
+>       List<Snapshot> list = this.snapshot[index];
+>       int i = -1, j = list.size();
+>       if(j == 0) return 0;
+>       if(snap_id < list.get(0).id) return 0;
+>       while (i + 1 < j) {
+>           int m = (i + j) >>> 1;
+>           if (list.get(m).id < snap_id+1) {
+>               i = m;
+>           } else {
+>               j = m;
+>           }
+>       }
+>       return  list.get(j-1).data;
+>   }
+>
+>}
+>
+>/**
+>* Your SnapshotArray object will be instantiated and called as such:
+>* SnapshotArray obj = new SnapshotArray(length);
+>* obj.set(index,val);
+>* int param_2 = obj.snap();
+>* int param_3 = obj.get(index,snap_id);
+>*/
+>```
+>
+>==灵茶题解:==
+>
+>**思路**
+>
+>假设每调用一次 set，就生成一个快照（复制一份数组）。仅仅是一个元素发生变化，就去复制整个数组，这太浪费了。
+>
+>能否不复制数组呢？
+>
+>换个视角，调用 set(index,val) 时，不去修改数组，而是往 index 的历史修改记录末尾添加一条数据：此时的快照编号和 val。
+>
+>举例说明：
+>
+>- 在快照编号等于 2 时，调用 set(0,6)。
+>- 在快照编号等于 3 时，调用 set(0,1)。
+>- 在快照编号等于 3 时，调用 set(0,7)。
+>- 在快照编号等于 5 时，调用 set(0,2)。
+>- 这四次调用结束后，下标 0 的历史修改记录 history[0]=[(2,6),(3,1),(3,7),(5,2)]，每个数对中的第一个数为调用 set 时的快照编号，第二个数为调用 set 时传入的 val。注意历史修改记录中的快照编号是**有序**的。
+>
+>那么：
+>
+>- 调用 get(0,4)。由于历史修改记录中的快照编号是有序的，我们可以在 history[0] 中二分查找快照编号 ≤4 的最后一条修改记录，即 (3,7)。修改记录中的 val=7 就是答案。
+>- 调用 get(0,1)。在 history[0] 中，快照编号 ≤1 的记录不存在，说明在快照编号 ≤1 时，我们并没有修改下标 0 保存的元素，返回初始值 0。
+>
+>关于二分查找的原理，请看视频讲解：二分查找 红蓝染色法【基础算法精讲 04】
+>
+>对于 snap()，只需把当前快照编号加一（快照编号初始值为 0），返回加一前的快照编号。
+>
+>```java
+>class SnapshotArray {
+>    // 当前快照编号，初始值为 0
+>    private int curSnapId;
+>
+>    // 每个 index 的历史修改记录
+>    private final Map<Integer, List<int[]>> history = new HashMap<>();
+>
+>    public SnapshotArray(int length) {
+>    }
+>
+>    public void set(int index, int val) {
+>        history.computeIfAbsent(index, k -> new ArrayList<>()).add(new int[]{curSnapId, val});
+>    }
+>
+>    public int snap() {
+>        return curSnapId++;
+>    }
+>
+>    public int get(int index, int snapId) {
+>        if (!history.containsKey(index)) {
+>            return 0;
+>        }
+>        List<int[]> h = history.get(index);
+>        int j = search(h, snapId);
+>        return j < 0 ? 0 : h.get(j)[1];
+>    }
+>
+>    // 返回最大的下标 i，满足 h[i][0] <= x
+>    // 如果不存在则返回 -1
+>    private int search(List<int[]> h, int x) {
+>        // 开区间 (left, right)
+>        int left = -1;
+>        int right = h.size();
+>        while (left + 1 < right) { // 区间不为空
+>            // 循环不变量：
+>            // h[left][0] <= x
+>            // h[right][1] > x
+>            int mid = left + (right - left) / 2;
+>            if (h.get(mid)[0] <= x) {
+>                left = mid; // 区间缩小为 (mid, right)
+>            } else {
+>                right = mid; // 区间缩小为 (left, mid)
+>            }
+>        }
+>        // 根据循环不变量，此时 h[left][0] <= x 且 h[left+1][0] = h[right][0] > x
+>        // 所以 left 是最大的满足 h[left][0] <= x 的下标
+>        // 如果不存在，则 left 为其初始值 -1
+>        return left;
+>    }
+>}
+>```
+
+- [x] 658.找到 K 个最接近的元素
+- [x] 1818.绝对差值和 1934
+- [x] 911.在线选举 2001
+- [x] LCP 08.剧情触发时间
+- [ ] 1150.检查一个数是否在数组中占绝大多数（会员题）
+- [ ] 1064.不动点（会员题）
+- [ ] 702.搜索长度未知的有序数组（会员题）
+- [ ] 1182.与目标颜色间的最短距离（会员题）
+- [ ] 2819.购买巧克力后的最小相对损失（会员题）
+- [ ] 2936.包含相等值数字块的数量（会员题）
+
+### 2.2 二分答案：求最小
+
+- [x] ==1283.使结果不超过阈值的最小除数 1542==
+
+>给你一个整数数组 `nums` 和一个正整数 `threshold` ，你需要选择一个正整数作为除数，然后将数组里每个数都除以它，并对除法结果求和。
+>
+>请你找出能够使上述结果小于等于阈值 `threshold` 的除数中 **最小** 的那个。
+>
+>每个数除以除数后都向上取整，比方说 7/3 = 3 ， 10/2 = 5 。
+>
+>题目保证一定有解。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：nums = [1,2,5,9], threshold = 6
+>输出：5
+>解释：如果除数为 1 ，我们可以得到和为 17 （1+2+5+9）。
+>如果除数为 4 ，我们可以得到和为 7 (1+1+2+3) 。如果除数为 5 ，和为 5 (1+1+1+2)。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：nums = [2,3,5,7,11], threshold = 11
+>输出：3
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：nums = [19], threshold = 5
+>输出：4
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= nums.length <= 5 * 10^4`
+>- `1 <= nums[i] <= 10^6`
+>- `nums.length <= threshold <= 10^6`
+>
+>我的题解(==抄有实力==):
+>
+>不用解题上代码
+>
+>```java
+>class Solution {
+>    public int smallestDivisor(int[] nums, int threshold) {
+>        //此题相当于是从 [1,...,max(nums)] 选择一个数作为除数，使用二分查找，如果 check(m) 是 true 则
+>        //在 [1,...,m-1] 中存在最小的除数，否则在 [m+1,...,max(nums)] 中存在。
+>        int i = 1,j = 0;
+>        for(int num:nums){
+>            j = Math.max(j,num);
+>        }
+>        while(i <= j){
+>            int m = (i+j) >>> 1;
+>            if(!check(nums,m,threshold)){
+>                i = m+1;
+>            }else{
+>                j = m-1;
+>            }
+>        }
+>        return i;
+>    }
+>
+>    public boolean check(int[] nums, int dividend, int threshold) {
+>        int sum = 0;
+>        for (int num : nums) {
+>            // 求 ⌈a / b⌉ => ⌊(a + b - 1) / b⌋
+>            sum += (num + dividend - 1) / dividend;
+>            if (sum > threshold) {
+>                return false;
+>            }
+>        }
+>        return true;
+>    }
+>}
+>```
+>
+>==灵茶题解:==
+>
+>==思路==
+>
+>假设除数为 m。
+>
+>根据题意，每个数除以 m 再上取整，元素和为 
+>$$
+>\sum^{n-1}_{i=0}\lceil \frac {nums[i]} {m}  \rceil
+>$$
+>由于 m 越大，上式越小，有单调性，可以二分答案。关于二分的原理，请看视频【基础算法精讲 04】。
+>
+>最小的满足 $\sum^{n-1}_{i=0}\lceil \frac {nums[i]} {m}  \rceil \leq threshold$的 m 就是答案。
+>
+>==细节==
+>
+>1)
+>
+>下面代码采用开区间二分，这仅仅是二分的一种写法，使用闭区间或者半闭半开区间都是可以的。
+>
+>- 开区间左端点初始值：0。一定不满足题目要求
+>- 开区间右端点初始值：max(nums)。此时 $\sum^{n-1}_{i=0}\lceil \frac {nums[i]} {m}  \rceil = n \leq threshold$ 一定成立。（注意题目数据范围保证 n≤threshold）
+>
+>如果你喜欢用闭区间，左右端点可以分别初始化成 1 和 max(nums)−1。
+>
+>> 注：左右端点可以继续优化，留给读者思考，欢迎在评论区发表你的优化思路。
+>
+>2)
+>
+>关于上取整的计算，当 a 和 b 均为正整数时，我们有
+>$$
+>\lceil \frac {a} {b} \rceil  = \lfloor \frac {a+b-1} {b} \rfloor
+>$$
+>讨论 a 被 b 整除，和不被 b 整除两种情况，可以证明上式的正确性。
+>
+>此时 $\sum^{n-1}_{i=0}\lceil \frac {nums[i]} {m}  \rceil \leq threshold$ 变成
+>$$
+>\sum^{n-1}_{i=0} 1 + \lfloor \frac {nums[i]} {m}  \rfloor \leq threshold
+>$$
+>即
+>$$
+>\sum^{n-1}_{i=0} \lfloor \frac {nums[i]} {m}  \rfloor \leq threshold - n
+>$$
+>3)
+>
+>力扣有多台评测机，如果你发现运行时间长，可能是运行在比较慢的那台机子上，可以尝试多提交几次。
+>
+>```java
+>class Solution {
+>    public int smallestDivisor(int[] nums, int threshold) {
+>        int left = 0;
+>        int right = 0;
+>        for (int x : nums) {
+>            right = Math.max(right, x);
+>        }
+>        while (left + 1 < right) {
+>            int mid = (left + right) >>> 1;
+>            if (check(nums, mid, threshold)) {
+>                right = mid;
+>            } else {
+>                left = mid;
+>            }
+>        }
+>        return right;
+>    }
+>
+>    private boolean check(int[] nums, int m, int threshold) {
+>        int sum = 0;
+>        for (int x : nums) {
+>            sum += (x + m - 1) / m;
+>            if (sum > threshold) { // 提前退出循环
+>                return false;
+>            }
+>        }
+>        return true;
+>    }
+>}
+>```
+
+- [x] 2187.完成旅途的最少时间 1641
+- [x] ==1870.准时到达的列车最小时速 1676==
+
+>给你一个浮点数 `hour` ，表示你到达办公室可用的总通勤时间。要到达办公室，你必须按给定次序乘坐 `n` 趟列车。另给你一个长度为 `n` 的整数数组 `dist` ，其中 `dist[i]` 表示第 `i` 趟列车的行驶距离（单位是千米）。
+>
+>每趟列车均只能在整点发车，所以你可能需要在两趟列车之间等待一段时间。
+>
+>- 例如，第 `1` 趟列车需要 `1.5` 小时，那你必须再等待 `0.5` 小时，搭乘在第 2 小时发车的第 `2` 趟列车。
+>
+>返回能满足你在时限前到达办公室所要求全部列车的 **最小正整数** 时速（单位：千米每小时），如果无法准时到达，则返回 `-1` 。
+>
+>生成的测试用例保证答案不超过 `107` ，且 `hour` 的 **小数点后最多存在两位数字** 。
+>
+>
+>
+>**示例 1：**
+>
+>```
+>输入：dist = [1,3,2], hour = 6
+>输出：1
+>解释：速度为 1 时：
+>- 第 1 趟列车运行需要 1/1 = 1 小时。
+>- 由于是在整数时间到达，可以立即换乘在第 1 小时发车的列车。第 2 趟列车运行需要 3/1 = 3 小时。
+>- 由于是在整数时间到达，可以立即换乘在第 4 小时发车的列车。第 3 趟列车运行需要 2/1 = 2 小时。
+>- 你将会恰好在第 6 小时到达。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：dist = [1,3,2], hour = 2.7
+>输出：3
+>解释：速度为 3 时：
+>- 第 1 趟列车运行需要 1/3 = 0.33333 小时。
+>- 由于不是在整数时间到达，故需要等待至第 1 小时才能搭乘列车。第 2 趟列车运行需要 3/3 = 1 小时。
+>- 由于是在整数时间到达，可以立即换乘在第 2 小时发车的列车。第 3 趟列车运行需要 2/3 = 0.66667 小时。
+>- 你将会在第 2.66667 小时到达。
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：dist = [1,3,2], hour = 1.9
+>输出：-1
+>解释：不可能准时到达，因为第 3 趟列车最早是在第 2 小时发车。
+>```
+>
+>
+>
+>**提示：**
+>
+>- `n == dist.length`
+>- `1 <= n <= 105`
+>- `1 <= dist[i] <= 105`
+>- `1 <= hour <= 109`
+>- `hours` 中，小数点后最多存在两位数字
+>
+>我的题解:
+>
+>和之前的二分答案一样，我们需要求速度，需要定速度的范围我这里定的范围是[1,max(dist,max / d)],max为dist中最大值，d为hour小数部分。
+>
+>```java
+>class Solution {
+>   public int minSpeedOnTime(int[] dist, double hour) {
+>       int max = 0;
+>       for (int d : dist) {
+>           max = Math.max(max, d);
+>       }
+>       int h = (int) hour;
+>       double d = hour - h;
+>       int maxSpeed = max;
+>       if (d > 0) {
+>           maxSpeed = Math.max(maxSpeed, (int) Math.ceil(max / d));
+>       }
+>       maxSpeed = Math.min(maxSpeed, 10000000);
+>       int i = 0, j = maxSpeed + 1;
+>       while (i + 1 < j) {
+>           int m = (i + j) >>> 1;
+>           if (!check(dist, hour, m)) {
+>               i = m;
+>           } else {
+>               j = m;
+>           }
+>       }
+>       return j == maxSpeed + 1 ? -1 : j;
+>   }
+>
+>   public boolean check(int[] dist, double hour, int m) {
+>       double sum = 0.0;
+>       for (int i = 0; i < dist.length; i++) {
+>           sum += i == dist.length - 1 ? (double) dist[i] / m : (dist[i] + m - 1) / m;
+>           if (sum > hour) {
+>               return false;
+>           }
+>       }
+>       return true;
+>   }
+>}
+>```
+>
+>==灵茶题解:==
+>
+>==思路==
+>
+>首先，由于除了最后一趟列车，前面的每趟列车至少花费 1 小时（算上等待时间），且最后一趟列车花费的时间严格大于 0，因此 hour 必须严格大于 n−1。若不满足则返回 −1。
+>
+>由于时速越大，花费的时间越少，有单调性，可以二分时速 v。关于二分算法的原理，请看【基础算法精讲 04】。
+>
+>现在问题变成：
+>
+>已知时速 v，计算花费的总时间是否 ≤hour。
+>
+>除了最后一趟列车，前面每趟列车花费的时间为 $\lceil \frac {dist[i]} {v} \rceil$。把前 n−1 趟列车的时间之和记为 t。
+>
+>t 加上最后一趟列车的用时即为总时间，需要满足
+>$$
+>t + \frac {dist[n-1]} {v} \leq hour
+>$$
+>即
+>$$
+>t \times v + dist[n-1] \leq hour \times v
+>$$
+>由于 hour 至多有两位小数，不妨将其乘上 100，得到整数 h~100~ 。上式两边同乘 100 得
+>$$
+>(t \times v + dist[n-1]) \times 100 \leq h_{100} \times v
+>$$
+>这样就和浮点数说拜拜了。
+>
+>==细节==
+>
+>1)
+>
+>由于双精度浮点数无法准确表示 2.01 这样的小数，我们在计算 2.01×100 时，算出的结果不是 201，而是 200.99999999999997 这样的数。
+>
+>所以代码不能直接转成整数，而是要 round 一下。
+>
+>2)
+>
+>为了简化二分边界的计算，我们可以先特判 hour≤n 的情况。
+>
+>这种情况，除了最后一趟列车，前面的每趟列车一定都花费恰好 1 小时（算上等待时间）。所以时速至少是 dist[0] 到 dist[n−2] 的最大值。
+>
+>留给最后一趟列车的时间是 hour−(n−1) 小时，那么有
+>
+>$$
+>(hour - (n -1) \times v \geq dist[n-1])
+>$$
+>即
+>$$
+>(h_{100} -(n-1) \times v \geq dist[n-1] \times 100)
+>$$
+>解得
+>$$
+>v \geq \lceil \frac {dist[n-1] \times 100} {h_{100} - (n-1) \times } \rceil \geq dist[n-1]
+>$$
+>这里注明 ≥dist[n−1] 是想说时速至少是 max(dist)，我们可以取整个 dist 数组的最大值，而不是 dist[0] 到 dist[n−2] 的最大值。
+>
+>综上所述，当 hour≤n 时，v 的最小值为
+>
+>$$
+>max \{ max(dist),\lceil \frac {dist[n-1] \times 100} {h_{100} - (n-1) \times 100} \}
+>$$
+>3)
+>
+>下面代码采用开区间二分，这仅仅是二分的一种写法，使用闭区间或者半闭半开区间都是可以的。
+>
+>- 开区间左端点初始值：0。时速为 0，一定无法到达终点。
+>
+>- 开区间右端点初始值：max(dist)。至多花费 n 小时。由于我们前面特判了 hour≤n 的情况，所以这里 v=max(dist) 是一定可以到达终点的。
+>
+>==优化：==
+>
+>- 开区间左端点初始值：假设不考虑上取整（等待时间），计算不满足要求的最大时速 v，我们有 $h_{100} \times v < s \times 100$ 其中s是dist元素和。解的 $v < \lceil \frac {s \times 100} {h_{100}} \rceil $,故取$\lceil \frac {s \times 100} {h_{100}} \rceil  -1$ 作为开区间左端点。
+>
+>- 开区间右端点初始值：假设所有 dist[i] 都等于 max(dist)，那么每趟列车可以花费的时间至多为 $h = \lfloor \frac {h_{100}} {n \times 100} \rfloor $。时速v需要满足$h\times v\geq max(dist)$，即$v \geq \lceil \frac {max(dist)} {h} \rceil$，该速度一定可以到达终点。
+>
+>```java
+>class Solution {
+>    public int minSpeedOnTime(int[] dist, double hour) {
+>        int n = dist.length;
+>        long h100 = Math.round(hour * 100); // 下面不会用到任何浮点数
+>        long delta = h100 - (n - 1) * 100;
+>        if (delta <= 0) { // 无法到达终点
+>            return -1;
+>        }
+>
+>        int maxDist = 0;
+>        long sumDist = 0;
+>        for (int d : dist) {
+>            maxDist = Math.max(maxDist, d);
+>            sumDist += d;
+>        }
+>        if (h100 <= n * 100) { // 特判
+>            // 见题解中的公式
+>            return Math.max(maxDist, (int) ((dist[n - 1] * 100 - 1) / delta + 1));
+>        }
+>
+>        int left = (int) ((sumDist * 100 - 1) / h100); // 也可以初始化成 0（简单写法）
+>        int h = (int) (h100 / (n * 100));
+>        int right = (maxDist - 1) / h + 1; // 也可以初始化成 maxDist（简单写法）
+>        while (left + 1 < right) {
+>            int mid = (left + right) >>> 1;
+>            if (check(mid, dist, h100)) {
+>                right = mid;
+>            } else {
+>                left = mid;
+>            }
+>        }
+>        return right;
+>    }
+>
+>    private boolean check(int v, int[] dist, long h100) {
+>        int n = dist.length;
+>        long t = 0;
+>        for (int i = 0; i < n - 1; i++) {
+>            t += (dist[i] - 1) / v + 1;
+>        }
+>        return (t * v + dist[n - 1]) * 100 <= h100 * v;
+>    }
+>}
+>```
+
+
+- [x] 1011.在 D 天内送达包裹的能力 1725
+- [x] 875.爱吃香蕉的珂珂 1766
+- [x] 3296.移山所需的最少秒数 注：由于有其他做法，难度分会低一些，二分做法估计 ~1850
+- [x] 475.供暖器
+- [x] 2594.修车的最少时间 1915
+- [ ] 1482.制作 m 束花所需的最少天数 1946
+- [ ] 3048.标记所有下标的最早秒数 I 2263
+- [ ] 3049.标记所有下标的最早秒数 II 3111
+- [ ] 2604.吃掉所有谷子的最短时间（会员题）
+- [ ] 2702.使数字变为非正数的最小操作次数（会员题）
+
+### 2.3 二分答案：求最大
+
+[一图掌握二分答案！四种写法！](https://leetcode.cn/problems/h-index-ii/solution/tu-jie-yi-tu-zhang-wo-er-fen-da-an-si-ch-d15k/)
+
+在练习时，请注意「求最小」和「求最大」的二分写法上的区别。
+
+前面的「求最小」和二分查找求「排序数组中某元素的第一个位置」是类似的，按照红蓝染色法，左边是不满足要求的（红色），右边则是满足要求的（蓝色）。
+
+「求最大」的题目则相反，左边是满足要求的（蓝色），右边是不满足要求的（红色）。这会导致二分写法和上面的「求最小」有一些区别。
+
+以开区间二分为例：
+
+- 求最小：check(mid) == true 时更新 right = mid，反之更新 left = mid，最后返回 right。
+- 求最大：check(mid) == true 时更新 left = mid，反之更新 right = mid，最后返回 left。
+
+对于开区间写法，简单来说 check(mid) == true 时更新的是谁，最后就返回谁。相比其他二分写法，开区间写法不需要思考加一减一等细节，个人推荐使用开区间写二分。
+
+- [x] 275.H 指数 II
+
+>给你一个整数数组 `citations` ，其中 `citations[i]` 表示研究者的第 `i` 篇论文被引用的次数，`citations` 已经按照 **升序排列** 。计算并返回该研究者的 h 指数。
+>
+>[h 指数的定义](https://baike.baidu.com/item/h-index/3991452?fr=aladdin)：h 代表“高引用次数”（high citations），一名科研人员的 `h` 指数是指他（她）的 （`n` 篇论文中）**至少** 有 `h` 篇论文分别被引用了**至少** `h` 次。
+>
+>请你设计并实现对数时间复杂度的算法解决此问题。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：citations = [0,1,3,5,6]
+>输出：3
+>解释：给定数组表示研究者总共有 5 篇论文，每篇论文相应的被引用了 0, 1, 3, 5, 6 次。
+>     由于研究者有3篇论文每篇 至少 被引用了 3 次，其余两篇论文每篇被引用 不多于 3 次，所以她的 h 指数是 3 。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：citations = [1,2,100]
+>输出：2
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `n == citations.length`
+>- `1 <= n <= 105`
+>- `0 <= citations[i] <= 1000`
+>- `citations` 按 **升序排列**
+>
+>我的题解：
+>
+>```java
+>class Solution {
+>    public int hIndex(int[] citations) {
+>        // 指数 h 的范围[1,len(citations)]
+>        int n = citations.length;
+>        int i = 0, j = n + 1;
+>        while(i + 1 < j){
+>            int m = (i+j) >>> 1;
+>            if(citations[n - m] >= m){
+>                i = m;
+>            }else{
+>                j = m;
+>            }
+>        }
+>        return i;
+>    }
+>}
+>```
+>
+>==灵茶题解：==
+>
+>![lc275-c.png](./img/sql与算法题解-img/1698492370-tnIhCf-lc275-c.png)
+>
+>==闭区间==
+>
+>```java
+>class Solution {
+>    public int hIndex(int[] citations) {
+>        // 在区间 [left, right] 内询问
+>        int n = citations.length;
+>        int left = 1;
+>        int right = n;
+>        while (left <= right) { // 区间不为空
+>            // 循环不变量：
+>            // left-1 的回答一定为「是」
+>            // right+1 的回答一定为「否」
+>            int mid = (left + right) >>> 1;
+>            // 引用次数最多的 mid 篇论文，引用次数均 >= mid
+>            if (citations[n - mid] >= mid) {
+>                left = mid + 1; // 询问范围缩小到 [mid+1, right]
+>            } else {
+>                right = mid - 1; // 询问范围缩小到 [left, mid-1]
+>            }
+>        }
+>        // 循环结束后 right 等于 left-1，回答一定为「是」
+>        // 根据循环不变量，right 现在是最大的回答为「是」的数
+>        return right;
+>    }
+>}
+>```
+>
+>==左闭右开区间==
+>
+>```java
+>class Solution {
+>    public int hIndex(int[] citations) {
+>        // 在区间 [left, right) 内询问
+>        int n = citations.length;
+>        int left = 1;
+>        int right = n + 1;
+>        while (left < right) { // 区间不为空
+>            // 循环不变量：
+>            // left-1 的回答一定为「是」
+>            // right 的回答一定为「否」
+>            int mid = (left + right) >>> 1;
+>            // 引用次数最多的 mid 篇论文，引用次数均 >= mid
+>            if (citations[n - mid] >= mid) {
+>                left = mid + 1; // 询问范围缩小到 [mid+1, right)
+>            } else {
+>                right = mid; // 询问范围缩小到 [left, mid)
+>            }
+>        }
+>        // 根据循环不变量，left-1 现在是最大的回答为「是」的数
+>        return left - 1;
+>    }
+>}
+>```
+>
+>==左开右闭区间==
+>
+>```java
+>class Solution {
+>    public int hIndex(int[] citations) {
+>        // 在区间 (left, right] 内询问
+>        int n = citations.length;
+>        int left = 0;
+>        int right = n;
+>        while (left < right) { // 区间不为空
+>            // 循环不变量：
+>            // left 的回答一定为「是」
+>            // right+1 的回答一定为「否」
+>            int mid = (left + right + 1) >>> 1; // 保证 mid 在二分区间内
+>            // 引用次数最多的 mid 篇论文，引用次数均 >= mid
+>            if (citations[n - mid] >= mid) {
+>                left = mid; // 询问范围缩小到 (mid, right]
+>            } else {
+>                right = mid - 1; // 询问范围缩小到 (left, mid-1]
+>            }
+>        }
+>        // 根据循环不变量，left 现在是最大的回答为「是」的数
+>        return left;
+>    }
+>}
+>```
+>
+>==开区间==
+>
+>```java
+>class Solution {
+>    public int hIndex(int[] citations) {
+>        // 在区间 (left, right) 内询问
+>        int n = citations.length;
+>        int left = 0;
+>        int right = n + 1;
+>        while (left + 1 < right) { // 区间不为空
+>            // 循环不变量：
+>            // left 的回答一定为「是」
+>            // right 的回答一定为「否」
+>            int mid = (left + right) >>> 1;
+>            // 引用次数最多的 mid 篇论文，引用次数均 >= mid
+>            if (citations[n - mid] >= mid) {
+>                left = mid; // 询问范围缩小到 (mid, right)
+>            } else {
+>                right = mid; // 询问范围缩小到 (left, mid)
+>            }
+>        }
+>        // 根据循环不变量，left 现在是最大的回答为「是」的数
+>        return left;
+>    }
+>}
+>```
+
+- [x] 2226.每个小孩最多能分到多少糖果 1646
+- [x] ==2982.找出出现至少三次的最长特殊子字符串 II 1773==
+
+>给你一个仅由小写英文字母组成的字符串 `s` 。
+>
+>如果一个字符串仅由单一字符组成，那么它被称为 **特殊** 字符串。例如，字符串 `"abc"` 不是特殊字符串，而字符串 `"ddd"`、`"zz"` 和 `"f"` 是特殊字符串。
+>
+>返回在 `s` 中出现 **至少三次** 的 **最长特殊子字符串** 的长度，如果不存在出现至少三次的特殊子字符串，则返回 `-1` 。
+>
+>**子字符串** 是字符串中的一个连续 **非空** 字符序列。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：s = "aaaa"
+>输出：2
+>解释：出现三次的最长特殊子字符串是 "aa" ：子字符串 "aaaa"、"aaaa" 和 "aaaa"。
+>可以证明最大长度是 2 。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：s = "abcdef"
+>输出：-1
+>解释：不存在出现至少三次的特殊子字符串。因此返回 -1 。
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：s = "abcaba"
+>输出：1
+>解释：出现三次的最长特殊子字符串是 "a" ：子字符串 "abcaba"、"abcaba" 和 "abcaba"。
+>可以证明最大长度是 1 。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `3 <= s.length <= 5 * 105`
+>- `s` 仅由小写英文字母组成。
+>
+>我的题解:
+>
+>使用二分答案，首先需要完成的就是统计字符串中特殊字符的个数，需要一个二维数组`map[x][y]`其中x是特殊字符串的长度，y是特殊字符串的字符，`map[x][y]`就表示字符串中长度为x，字符为y的特殊字符出现的次数。然后我们需要循环判断一下就当前m长度的特殊字符串出现次数是否≥3。代码如下：
+>
+>```java
+>class Solution {
+>    public int maximumLength(String s) {
+>        // 最长特殊子字符串长度m的范围[1,len(s)]
+>        char[] c = s.toCharArray();
+>        int[][] map = new int[c.length + 1][26];
+>        for (int m = 0, n = 0; n <= c.length; n++) { // 这里的map[x][y]表示长度为x特殊字符为y的个数
+>            if (n == c.length || c[m] != c[n]) {
+>                int x = n - m, y = c[m] - 'a';
+>                while (x >= 1) {
+>                    map[x][y] += (n - m) - (x - 1);
+>                    x--;
+>                }
+>                m = n;
+>            }
+>        }
+>        int i = 0, j = c.length - 1;
+>        while (i + 1 < j) {
+>            int m = (i + j) >>> 1;
+>            if (check(map, m)) { // 如果满足条件最长的就在(m,j)中
+>                i = m;
+>            } else { // 如果不满足就在范围(i,m)中
+>                j = m;
+>            }
+>        }
+>        return i == 0 ? -1 : i;
+>    }
+>
+>    public boolean check(int[][] map, int m) {
+>        int[] s = map[m];
+>        for (int cnt : s) {
+>            if (cnt >= 3) {
+>                return true;
+>            }
+>        }
+>        return false;
+>    }
+>}
+>```
+>
+>==灵茶题解:==
+>
+>没有用到二分答案。
+>
+>由于特殊子串只包含单一字母，我们按照相同字母分组，每组统计相同字母连续出现的长度。例如字符串 aaaabbbabb 分成 aaaa+bbb+a+bb 四组，字母 a 有长度 4 和长度 1，字母 b 有长度 3 和长度 2。所以字母 a 的长度列表为 [4,1]，字母 b 的长度列表为 [3,2]。
+>
+>遍历每个字母对应的长度列表 a，把 a 从大到小排序。
+>
+>有哪些取出三个特殊子串的方法呢？
+>
+>- 从最长的特殊子串（a[0]）中取三个长度均为 a[0]−2 的特殊子串。例如示例 1 的 aaaa 可以取三个 aa。
+>
+>- 或者，从最长和次长的特殊子串（a[0],a[1]）中取三个长度一样的特殊子串：
+>  - 如果 a[0]=a[1]，那么可以取三个长度均为 a[0]−1 的特殊子串。
+>  - 如果 a[0]>a[1]，那么可以取三个长度均为 a[1] 的特殊子串：从最长中取两个，从次长中取一个。
+>  - 这两种情况可以合并成 min(a[0]−1,a[1])，如果 a[0]−1<a[1]，这只能是第一种情况，因为 a[0]≥a[1]，我们取二者较小值 a[0]−1；如果 a[0]−1≥a[1]，即 a[0]>a[1]，这是第二种情况，我们也取的是二者较小值 a[1]。
+>
+>- 又或者，从最长、次长、第三长的的特殊子串（a[0],a[1],a[2]）中各取一个长为 a[2] 的特殊子串。
+>  这三种情况取最大值，即
+>
+>$$
+>max(a[0]-1,min(a[0]-1,a[1]),a[2])
+>$$
+>
+>对每个长度列表计算上式，取最大值即为答案。
+>
+>如果答案是 0，返回 −1。
+>
+>代码实现时，在数组末尾加两个 0，就无需特判 a 长度小于 3 的情况了。
+>
+>附：[视频讲解](https://www.bilibili.com/video/BV1XG411B7bX/?t=1m44s&vd_source=6f12eac1da397b0efdd20e02514a56f9) 第二题。
+>
+>```java
+>class Solution {
+>    public int maximumLength(String S) {
+>        char[] s = S.toCharArray();
+>        List<Integer>[] groups = new ArrayList[26];
+>        Arrays.setAll(groups, i -> new ArrayList<>());
+>        int cnt = 0;
+>        for (int i = 0; i < s.length; i++) {
+>            cnt++;
+>            if (i + 1 == s.length || s[i] != s[i + 1]) {
+>                groups[s[i] - 'a'].add(cnt); // 统计连续字符长度
+>                cnt = 0;
+>            }
+>        }
+>
+>        int ans = 0;
+>        for (List<Integer> a : groups) {
+>            if (a.isEmpty()) continue;
+>            a.sort(Collections.reverseOrder());
+>            a.add(0);
+>            a.add(0); // 假设还有两个空串
+>            ans = Math.max(ans, Math.max(a.get(0) - 2, Math.max(Math.min(a.get(0) - 1, a.get(1)), a.get(2))));
+>        }
+>
+>        return ans > 0 ? ans : -1;
+>    }
+>}
+>```
+
+- [x] 2576.求出最多标记下标 1843
+- [x] 1898.可移除字符的最大数目 1913
+- [x] 1802.有界数组中指定下标处的最大值 1929
+- [ ] 1642.可以到达的最远建筑 1962
+- [x] 2861.最大合金数 1981
+- [ ] 3007.价值和小于等于 K 的最大数字 2258
+- [ ] 2141.同时运行 N 台电脑的最长时间 2265
+- [ ] 2258.逃离火灾 2347
+- [ ] 2071.你可以安排的最多任务数目 2648
+- [ ] 1618.找出适应屏幕的最大字号（会员题）
+- [ ] 1891.割绳子（会员题）
+- [ ] 2137.通过倒水操作让所有的水桶所含水量相等（会员题）
+- [ ] 644.子数组最大平均数 II（会员题）
+
+### 2.4 二分间接值
+
+二分的不是答案，而是一个和答案有关的值（间接值）。
+
+- [x] ==3143.正方形中的最多点数 1697==
+
+>给你一个二维数组 `points` 和一个字符串 `s` ，其中 `points[i]` 表示第 `i` 个点的坐标，`s[i]` 表示第 `i` 个点的 **标签** 。
+>
+>如果一个正方形的中心在 `(0, 0)` ，所有边都平行于坐标轴，且正方形内 **不** 存在标签相同的两个点，那么我们称这个正方形是 **合法** 的。
+>
+>请你返回 **合法** 正方形中可以包含的 **最多** 点数。
+>
+>**注意：**
+>
+>- 如果一个点位于正方形的边上或者在边以内，则认为该点位于正方形内。
+>- 正方形的边长可以为零。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/3708-tc1.png)
+>
+>**输入：**points = [[2,2],[-1,-2],[-4,4],[-3,1],[3,-3]], s = "abdca"
+>
+>**输出：**2
+>
+>**解释：**
+>
+>边长为 4 的正方形包含两个点 `points[0]` 和 `points[1]` 。
+>
+>**示例 2：**
+>
+>![img](./img/sql与算法题解-img/3708-tc2.png)
+>
+>**输入：**points = [[1,1],[-2,-2],[-2,2]], s = "abb"
+>
+>**输出：**1
+>
+>**解释：**
+>
+>边长为 2 的正方形包含 1 个点 `points[0]` 。
+>
+>**示例 3：**
+>
+>**输入：**points = [[1,1],[-1,-1],[2,-2]], s = "ccd"
+>
+>**输出：**0
+>
+>**解释：**
+>
+>任何正方形都无法只包含 `points[0]` 和 `points[1]` 中的一个点，所以合法正方形中都不包含任何点。
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= s.length, points.length <= 105`
+>- `points[i].length == 2`
+>- `-109 <= points[i][0], points[i][1] <= 109`
+>- `s.length == points.length`
+>- `points` 中的点坐标互不相同。
+>- `s` 只包含小写英文字母。
+>
+>我的题解:
+>
+>和二分答案一样，但是二分的不是最终的答案，但是可以通过二分的答案得到最终答案，此题求合法正方形内点的数目，此时我们需要二分正方形的边长，范围从`[min(points),max(points)]`，并且当边长越大越不合法，这样就有了单调性。
+>
+>```java
+>class Solution {
+>    public int maxPointsInsideSquare(int[][] points, String S) {
+>        // 正方形边长的范围[min(points),max(points)]
+>        int i = Integer.MAX_VALUE, j = 0;
+>        char[] s = S.toCharArray();
+>        for (int[] p : points) {
+>            i = Math.min(i, Math.max(Math.abs(p[0]), Math.abs(p[1])));
+>            j = Math.max(j, Math.max(Math.abs(p[0]), Math.abs(p[1])));
+>        }
+>        int ans = 0;
+>        i--;
+>        j++;
+>        while (i + 1 < j) {
+>            int m = (i + j) >> 1;
+>            int t = get(points, s, m);
+>            if (t > 0) {
+>                ans = t;
+>                i = m;
+>            } else {
+>                j = m;
+>            }
+>        }
+>        return ans;
+>    }
+>
+>    public int get(int[][] points, char[] s, int m) {
+>        int mark = 0;
+>        for (int i = 0; i < points.length; i++) {
+>            if (Math.abs(points[i][0]) <= m && Math.abs(points[i][1]) <= m) {
+>                // ((S >> i) & 1)=1
+>                if (((mark >> (s[i] - 'a')) & 1) == 1) {
+>                    return 0;
+>                } else {
+>                    mark |= (1 << (s[i] - 'a'));
+>                }
+>            }
+>        }
+>        return Integer.bitCount(mark);
+>    }
+>}
+>```
+>
+>==灵茶题解:==
+>
+>由于正方形边长越大，越不合法，有单调性，所以可以二分边长的一半。
+>
+>在二分中统计遇到的字符，如果没有遇到重复的字符，说明正方形合法，用字符个数更新答案的最大值。
+>
+>==答疑==
+>
+>问：为什么可以直接更新 ans，为什么不需要写 ans = max(ans, ...)？
+>
+>答：更新 ans 时必然会伴随着二分区间左边界 left 的更新，那么下一次更新 ans 的时候，正方形的边长一定更长，包含的点数不会变少，所以可以直接更新，无需写 max。
+>
+>```java
+>class Solution {
+>    private int ans;
+>
+>    public int maxPointsInsideSquare(int[][] points, String S) {
+>        char[] s = S.toCharArray();
+>        int left = -1;
+>        int right = 1_000_000_001;
+>        while (left + 1 < right) {
+>            int mid = (left + right) >>> 1;
+>            if (check(mid, points, s)) {
+>                left = mid;
+>            } else {
+>                right = mid;
+>            }
+>        }
+>        return ans;
+>    }
+>
+>    boolean check(int size, int[][] points, char[] s) {
+>        int vis = 0;
+>        for (int i = 0; i < points.length; i++) {
+>            // 判断点是否在正方形中
+>            if (Math.abs(points[i][0]) <= size && Math.abs(points[i][1]) <= size) {
+>                int c = s[i] - 'a';
+>                if ((vis >> c & 1) > 0) { // c 在集合中
+>                    return false;
+>                }
+>                vis |= 1 << c; // 把 c 加入集合
+>            }
+>        }
+>        ans = Integer.bitCount(vis);
+>        return true;
+>    }
+>}
+>```
+
+- [ ] 1648.销售价值减少的颜色球 2050
+
+### 2.5 最小化最大值
+
+本质是二分答案求最小。二分的 mid 表示上界。
+
+- [x] ==410.分割数组的最大值==
+
+>给定一个非负整数数组 `nums` 和一个整数 `k` ，你需要将这个数组分成 `k` 个非空的连续子数组，使得这 `k` 个子数组各自和的最大值 **最小**。
+>
+>返回分割后最小的和的最大值。
+>
+>**子数组** 是数组中连续的部份。
+>
+>**示例 1：**
+>
+>```
+>输入：nums = [7,2,5,10,8], k = 2
+>输出：18
+>解释：
+>一共有四种方法将 nums 分割为 2 个子数组。 
+>其中最好的方式是将其分为 [7,2,5] 和 [10,8] 。
+>因为此时这两个子数组各自的和的最大值为18，在所有情况中最小。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：nums = [1,2,3,4,5], k = 2
+>输出：9
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：nums = [1,4,4], k = 3
+>输出：4
+>```
+>
+>**提示：**
+>
+>- `1 <= nums.length <= 1000`
+>- `0 <= nums[i] <= 106`
+>- `1 <= k <= min(50, nums.length)`
+>
+>我的题解:
+>
+>没做出来
+>
+>==灵茶题解:==
+>
+>看到「最大化最小值」或者「最小化最大值」就要想到二分答案，这是一个固定的套路。
+>
+>为什么？「元素和的最大值」越小，需要划分出的段数就越多，反之越少。例如示例 1 的 nums=[7,2,5,10,8]，在最大和为 15 时，至少要划分 3 段，比如 [7,2,5],[10],[8]。而在最大和为 18 时，只需要划分 2 段，比如 [7,2,5],[10,8]。
+>
+>一般地，二分的值越小，越不能/能满足要求；二分的值越大，越能/不能满足要求。有单调性的保证，就可以二分答案了。
+>
+>把二分中点 mid 记作 mx，我们可以贪心地计算要划分出的段数：
+>
+>1. 初始化 cnt=1,s=0。
+>2. 遍历 nums。
+>3. 如果 s+nums[i]≤mx，则把 nums[i] 加到 s 中。否则我们必须新划分出一段，把 cnt 加一，s 替换成 nums[i]。如果在 cnt 加一之前有 cnt=k，则说明我们划分了超过 k 段，返回 false。
+>4. 遍历结束，返回 true。
+>
+>最后，如何确定二分的左右边界（开区间）？
+>
+>设 nums 的元素和为 S。
+>
+>- 右边界可以设为 S，必定满足要求。
+>
+>- 左边界可以设为 max(nums)−1，必定不满足要求。更好的写法是考虑平均值 $\frac{S}{K}$，如果每一段的元素和都小于平均值，我们是不可能分出 k 段的。综合考虑，左边界可以设为 $max\{max(nums)-1,\lfloor \frac {S-1} {K} \rfloor \}$
+>
+>==答疑==
+>
+>问：如何保证二分结果一定能划分成 k 段？如果小于 k 段呢？
+>
+>答：题目要求划分成 k 段，但其实如果能划分成小于 k 段，也可以划分成 k 段。比如划分成 k−1 段，那么把其中的一个长度至少为 2 的段分成两段，这两段的元素和都比原来的一段小，也满足要求。所以题目相当于：把数组划分成至多 k 段，分别计算每一段的元素和，最小化元素和的最大值。
+>
+>问：设二分算出来的答案为 ans，如何保证至少有一个子数组的元素和恰好等于 ans？
+>
+>答：反证法。假设所有子数组的元素和都小于 ans，这意味着 check(ans−1)=true，但是二分结束后必定有 check(ans−1)=false，矛盾，所以至少有一个子数组的元素和恰好等于 ans。
+>
+>```java
+>class Solution {
+>    public int splitArray(int[] nums, int k) {
+>        // 二分的值是“元素和的最大值”,当元素和最大值为mid的时候,我们可以求出至少可以分出多少段
+>        // 条件1：我们划分的段数不能大于k,所以mid一定要大于某数,这样划分的段数小于等于k;
+>        // 条件2：题目要求获得最小的mid,所以我们需要获得第一个使得划分的段数小于等于k的mid值;
+>        // mid的范围是(max(max(nums)-1,(sum(nums)-1 / k)),sum(nums))
+>        int sum = 0, max = 0;
+>        for (int num : nums) {
+>            sum += num;
+>            max = Math.max(num, max);
+>        }
+>        int i = Math.max(max - 1, (sum - 1) / k);
+>        int j = sum;
+>        while (i + 1 < j) {
+>            int mid = (i + j) >> 1;
+>            if (!check(nums, k, mid)) { // 如果当前的mid划分出来的段数大于k,说明mid太小了,合法的mid范围是(mid,j)
+>                i = mid;
+>            } else { // 满足分出的段数小于等于k,说明最小的mid范围是(i,mid)
+>                j = mid;
+>            }
+>        }
+>        return j;
+>    }
+>
+>    public boolean check(int[] nums, int k, int mid) {
+>        int s = 0;
+>        int cnt = 1;
+>        for (int num : nums) {
+>            if (s + num <= mid) {
+>                s += num;
+>            } else {
+>                s = num;
+>                cnt++;
+>            }
+>            if (cnt > k)
+>                return false;
+>        }
+>        return true;
+>    }
+>}
+>```
+
+- [x] ==2064.分配给商店的最多商品的最小值 1886==
+
+>给你一个整数 `n` ，表示有 `n` 间零售商店。总共有 `m` 种产品，每种产品的数目用一个下标从 **0** 开始的整数数组 `quantities` 表示，其中 `quantities[i]` 表示第 `i` 种商品的数目。
+>
+>你需要将 **所有商品** 分配到零售商店，并遵守这些规则：
+>
+>- 一间商店 **至多** 只能有 **一种商品** ，但一间商店拥有的商品数目可以为 **任意** 件。
+>- 分配后，每间商店都会被分配一定数目的商品（可能为 `0` 件）。用 `x` 表示所有商店中分配商品数目的最大值，你希望 `x` 越小越好。也就是说，你想 **最小化** 分配给任意商店商品数目的 **最大值** 。
+>
+>请你返回最小的可能的 `x` 。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：n = 6, quantities = [11,6]
+>输出：3
+>解释： 一种最优方案为：
+>- 11 件种类为 0 的商品被分配到前 4 间商店，分配数目分别为：2，3，3，3 。
+>- 6 件种类为 1 的商品被分配到另外 2 间商店，分配数目分别为：3，3 。
+>分配给所有商店的最大商品数目为 max(2, 3, 3, 3, 3, 3) = 3 。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：n = 7, quantities = [15,10,10]
+>输出：5
+>解释：一种最优方案为：
+>- 15 件种类为 0 的商品被分配到前 3 间商店，分配数目为：5，5，5 。
+>- 10 件种类为 1 的商品被分配到接下来 2 间商店，数目为：5，5 。
+>- 10 件种类为 2 的商品被分配到最后 2 间商店，数目为：5，5 。
+>分配给所有商店的最大商品数目为 max(5, 5, 5, 5, 5, 5, 5) = 5 。
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：n = 1, quantities = [100000]
+>输出：100000
+>解释：唯一一种最优方案为：
+>- 所有 100000 件商品 0 都分配到唯一的商店中。
+>分配给所有商店的最大商品数目为 max(100000) = 100000 。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `m == quantities.length`
+>- `1 <= m <= n <= 105`
+>- `1 <= quantities[i] <= 105`
+>
+>我的题解:
+>
+>题目中把`quantities`中的每一个商品分给`n`个零售商，且每个零售商只能获得一种商品，所以我们分配`quantities[i]`的方式是：
+>
+>- 把`quantities[i]`全部分给一个零售商
+>- 把`quantities[i]`分配给多个零售商
+>
+>所以我们需要找到一个让所有零售商获得商品的最大数量`x`最小的分配方式。因为`x`越小就==至少==能分配给零售商的数量`N`就越大，如示例1:`x` = 6时，至少可以分配给3个零售商，也就是说可以分配给4、5、6、7...等零售商。所以当`x`小于某个数，这时至少能分配的零售商数量`N` > `n`，这时的`x`就是不满足条件的。此题就是要寻找使得`N`<=`n`的``x``最小的值。
+>
+>二分范围：
+>
+>- 因为一个零售商只能分配一个商品，所以上届为`max(quantities)`
+>- 最小值因为题目说可以分配0件商品，但是有要求所有商品分配完，所以下届为0
+>
+>```java
+>class Solution {
+>    public int minimizedMaximum(int n, int[] quantities) {
+>        int max = 0;
+>        for (int q : quantities) {
+>            max = Math.max(q, max);
+>        }
+>        int i = 0, j = max;
+>        while (i + 1 < j) {
+>            int m = (i + j) >> 1;
+>            if (!check(quantities, n, m)) {
+>                i = m;
+>            } else {
+>                j = m;
+>            }
+>        }
+>        return j;
+>    }
+>
+>    public boolean check(int[] quantities, int n, int m) {
+>        int cnt = 0;
+>        for (int q : quantities) {
+>            cnt += (q + m - 1) / m;
+>            if (cnt > n)
+>                return false;
+>        }
+>        return true;
+>    }
+>}
+>```
+>
+
+- [x] 1760.袋子里最少数目的球 1940
+- [ ] 1631.最小体力消耗路径 1948
+- [x] 2439.最小化数组中的最大值 1965
+- [x] 2560.打家劫舍 IV 2081
+- [ ] 778.水位上升的泳池中游泳 2097 相当于最小化路径最大值
+- [ ] 2616.最小化数对的最大差值 2155
+- [ ] 2513.最小化两个数组中的最大值 2302
+- [ ] LCP 12.小张刷题计划
+- [ ] 774.最小化去加油站的最大距离（会员题）
+
+### 2.6 最大化最小值
+
+本质是二分答案求最大。二分的 mid 表示下界。
+
+- [x] ==3281.范围内整数的最大得分 1768==
+
+>给你一个整数数组 `start` 和一个整数 `d`，代表 `n` 个区间 `[start[i], start[i] + d]`。
+>
+>你需要选择 `n` 个整数，其中第 `i` 个整数必须属于第 `i` 个区间。所选整数的 **得分** 定义为所选整数两两之间的 **最小** 绝对差。
+>
+>返回所选整数的 **最大可能得分** 。
+>
+> 
+>
+>**示例 1：**
+>
+>**输入：** start = [6,0,3], d = 2
+>
+>**输出：** 4
+>
+>**解释：**
+>
+>可以选择整数 8, 0 和 4 获得最大可能得分，得分为 `min(|8 - 0|, |8 - 4|, |0 - 4|)`，等于 4。
+>
+>**示例 2：**
+>
+>**输入：** start = [2,6,13,13], d = 5
+>
+>**输出：** 5
+>
+>**解释：**
+>
+>可以选择整数 2, 7, 13 和 18 获得最大可能得分，得分为 `min(|2 - 7|, |2 - 13|, |2 - 18|, |7 - 13|, |7 - 18|, |13 - 18|)`，等于 5。
+>
+> 
+>
+>**提示：**
+>
+>- `2 <= start.length <= 105`
+>- `0 <= start[i] <= 109`
+>- `0 <= d <= 109`
+>
+>我的题解:
+>
+>没做出来
+>
+>==灵茶题解:==
+>
+>==题意==
+>
+>给你 n 个一样长的区间，每个区间选一个数，最大化得分。得分即所选数字中的任意两数之差的最小值。
+>
+>==二分答案==
+>
+>假设得分为 score。
+>
+>把区间按照左端点排序。这样我们只需考虑相邻区间所选数字之差。
+>
+>设从第一个区间选了数字 x，那么第二个区间所选的数字至少为 x+score，否则不满足得分的定义。
+>
+>由于得分越大，所选数字越可能不在区间内，有单调性，可以二分答案。
+>
+>> 或者说，看到「最大化最小值」就要先思考二分。
+>
+>==贪心==
+>
+>现在问题变成：
+>
+>- 给定 score，能否从每个区间各选一个数，使得任意两数之差的最小值至少为 score。
+>
+>⚠注意：这里是至少，不是恰好，两数之差的最小值可以不等于 score。由于二分会不断缩小范围，最终一定会缩小到任意两数之差的最小值恰好等于 score 的位置上。
+>
+>把区间按照左端点排序。第一个数选谁？
+>
+>贪心地想，第一个数越小，第二个数就越能在区间内，所以第一个数要选 x~0~=start[0]。
+>
+>如果第二个数 x~1~=x~0~+score 超过了区间右端点 start[1]+d，那么 score 太大了，应当减小二分的右边界 right。
+>
+>如果 x~1~≤start[1]+d，我们还需要保证 x~1~大于等于区间左端点 start[1]，所以最终
+>$$
+>x_1 = max(x_0+score,start[1])
+>$$
+>依此类推，第 i 个区间所选的数为
+>$$
+>x_i = max(x_{i-1}+score,start[i])
+>$$
+>必须满足x~i~<=start[i]+d
+>
+>如果所有选的数都满足上式，那么增大二分的左边界 left。
+>
+>==细节==
+>
+>下面代码采用开区间二分，这仅仅是二分的一种写法，使用闭区间或者半闭半开区间都是可以的。
+>
+>- 开区间左端点初始值：0。一定可以选出 n 个数，两两之差都大于等于 0。
+>
+>- 开区间右端点初始值：$\lfloor \frac {start[n-1]+d-star[0]} {n-1} \rfloor +1$大于平均值，所以比平均值更大的数必然无法满足要求。
+>
+>对于开区间写法，简单来说 check(mid) == true 时更新的是谁，最后就返回谁。相比其他二分写法，开区间写法不需要思考加一减一等细节，更简单。推荐使用开区间写二分。
+>
+>代码实现时，可以假设第一个区间左边还选了一个数 −∞，这样不影响答案且代码更简洁。
+>
+>```java
+>class Solution {
+>    public int maxPossibleScore(int[] start, int d) {
+>        Arrays.sort(start);
+>        int n = start.length;
+>        int left = 0;
+>        int right = (start[n - 1] + d - start[0]) / (n - 1) + 1;
+>        while (left + 1 < right) {
+>            int mid = (left + right) >>> 1;
+>            if (check(start, d, mid)) {
+>                left = mid;
+>            } else {
+>                right = mid;
+>            }
+>        }
+>        return left;
+>    }
+>
+>    private boolean check(int[] start, int d, int score) {
+>        long x = Long.MIN_VALUE;
+>        for (int s : start) {
+>            x = Math.max(x + score, s); // x 必须 >= 区间左端点 s
+>            if (x > s + d) {
+>                return false;
+>            }
+>        }
+>        return true;
+>    }
+>}
+>```
+
+- [ ] 2517.礼盒的最大甜蜜度 2021
+- [ ] 1552.两球之间的磁力 同 2517 题
+- [ ] 2812.找出最安全路径 2154
+- [ ] 2528.最大化城市的最小供电站数目 2236
+- [ ] 1102.得分最高的路径（会员题）
+- [ ] 1231.分享巧克力（会员题）
+
+### 2.7 第k小/大
+
+第 k 小等价于：求最小的 x，满足 ≤x 的数至少有 k 个。第 k 大等价于：求最大的 x，满足 ≥x 的数至少有 k 个。
+
+⚠注意：一般来说，题目规定 k 从 1 开始，而不是像下标那样从 0 开始。
+
+⚠注意：一般来说，题目规定不能去重。例如数组 [1,1,1,2,2]，其中第 1 小、第 2 小和第 3 小的数都是 1，第 4 小和第 5 小的数是 2。
+
+部分题目也可以用堆解决。
+
+- [ ] 668.乘法表中第 K 小的数
+- [ ] 378.有序矩阵中第 K 小的元素
+- [ ] 719.找出第 K 小的数对距离
+- [ ] 878.第 N 个神奇数字 1897
+- [ ] 1201.丑数 III 2039
+- [ ] 793.阶乘函数后 K 个零 2100
+- [ ] 373.查找和最小的 K 对数字
+- [ ] 1439.有序矩阵中的第 k 个最小数组和 2134
+- [ ] 786.第 K 个最小的质数分数 2169
+- [ ] 3116.单面值组合的第 K 小金额 2387
+- [ ] 3134.找出唯一性数组的中位数 2451
+- [ ] 2040.两个有序数组的第 K 小乘积 2518
+- [ ] 2386.找出数组的第 K 大和 2648
+- [ ] 1508.子数组和排序后的区间和 思考：二分做法
+- [ ] 1918.第 K 小的子数组和（会员题）
+
+### 2.8 其他
+
+- [ ] 69.x 的平方根 二分求最大的 m，满足 m^2^≤x（也可以二分求最小的满足 m^2^ > x 的 m，减一得到答案）
+
+- [ ] 74.搜索二维矩阵
+- [ ] 240.搜索二维矩阵 II
+- [ ] 2476.二叉搜索树最近节点查询
+- [ ] 278.第一个错误的版本
+- [ ] 374.猜数字大小
+- [ ] 162.寻找峰值
+- [ ] 1901.寻找峰值 II
+- [ ] 852.山脉数组的峰顶索引
+- [ ] 1095.山脉数组中查找目标值 1827
+- [ ] 153.寻找旋转排序数组中的最小值
+- [ ] 33.搜索旋转排序数组
+- [ ] 222.完全二叉树的节点个数
+- [ ] 1539.第 k 个缺失的正整数
+- [ ] 540.有序数组中的单一元素
+- [ ] 4.寻找两个正序数组的中位数
+- [ ] 1060.有序数组中的缺失元素（会员题）
+- [ ] 1198.找出所有行中最小公共元素（会员题）
+- [ ] 1428.至少有一个 1 的最左端列（会员题）
+- [ ] 1533.找到最大整数的索引（会员题）
+- [ ] 2387.行排序矩阵的中位数（会员题）
+- [ ] 302.包含全部黑色像素的最小矩形（会员题）
+
+### 关联题单
+
+二分答案的一个难点是 `check` 函数怎么写，这会涉及到**贪心**等技巧，可以练练下面的贪心题单（主要是第一章节）。
 
 ## 3、单调栈
 
@@ -6091,4 +9250,8 @@ class BookMyShow {
 
 ## 9、数学算法
 
-## 10、链表、二叉树与一般树
+## 10、贪心与思维
+
+## 11、链表、二叉树与一般树
+
+## 12、字符串
