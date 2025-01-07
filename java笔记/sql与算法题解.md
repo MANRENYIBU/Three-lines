@@ -9173,8 +9173,8 @@ class BookMyShow {
 >}
 >```
 
-- [ ] 2517.礼盒的最大甜蜜度 2021
-- [ ] 1552.两球之间的磁力 同 2517 题
+- [x] 2517.礼盒的最大甜蜜度 2021
+- [x] 1552.两球之间的磁力 同 2517 题
 - [ ] 2812.找出最安全路径 2154
 - [ ] 2528.最大化城市的最小供电站数目 2236
 - [ ] 1102.得分最高的路径（会员题）
@@ -9182,7 +9182,9 @@ class BookMyShow {
 
 ### 2.7 第k小/大
 
-第 k 小等价于：求最小的 x，满足 ≤x 的数至少有 k 个。第 k 大等价于：求最大的 x，满足 ≥x 的数至少有 k 个。
+第 k 小等价于：求最小的 x，满足 ≤x 的数至少有 k 个。
+
+第 k 大等价于：求最大的 x，满足 ≥x 的数至少有 k 个。
 
 ⚠注意：一般来说，题目规定 k 从 1 开始，而不是像下标那样从 0 开始。
 
@@ -9190,8 +9192,120 @@ class BookMyShow {
 
 部分题目也可以用堆解决。
 
-- [ ] 668.乘法表中第 K 小的数
-- [ ] 378.有序矩阵中第 K 小的元素
+- [x] ==668.乘法表中第 K 小的数==
+
+>几乎每一个人都用 [乘法表](https://baike.baidu.com/item/乘法表)。但是你能在乘法表中快速找到第 `k` 小的数字吗？
+>
+>乘法表是大小为 `m x n` 的一个整数矩阵，其中 `mat[i][j] == i * j`（下标从 **1** 开始）。
+>
+>给你三个整数 `m`、`n` 和 `k`，请你在大小为 `m x n` 的乘法表中，找出并返回第 `k` 小的数字。
+>
+>
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/multtable1-grid.jpg)
+>
+>```
+>输入：m = 3, n = 3, k = 5
+>输出：3
+>解释：第 5 小的数字是 3 。
+>```
+>
+>**示例 2：**
+>
+>![img](./img/sql与算法题解-img/multtable2-grid.jpg)
+>
+>```
+>输入：m = 2, n = 3, k = 6
+>输出：6
+>解释：第 6 小的数字是 6 。
+>```
+>
+>
+>
+>**提示：**
+>
+>- `1 <= m, n <= 3 * 104`
+>- `1 <= k <= m * n`
+>
+>我的题解:
+>
+>```java
+>class Solution {
+>   public int findKthNumber(int m, int n, int k) {
+>       //要找第k小数字，就是找到一个数x，使得至少有k个数 <= x
+>       //当前x满足至少有k个数<=x，说明还存在小于x的数使得至少有k个数<=
+>       int i = 0,j = m * n +1;
+>       while(i+1 < j){
+>           int mid = (i+j) >>> 1;
+>           if(!check(m,n,mid,k)){
+>               i = mid;
+>           }else{
+>               j = mid;
+>           }
+>       }
+>       return j;
+>   }
+>
+>   public boolean check(int m, int n, int mid, int k) {
+>       int cnt = 0;
+>       for(int i = 1;i <= m;i++){
+>           cnt += Math.min(mid / i,n);
+>       }
+>       return cnt >= k;
+>   }
+>}
+>```
+>
+>==灵茶题解:==
+>
+>第 k 小/大问题的通用转换方法：
+>
+>- 第 k 小等价于：求最小的 x，满足 ≤x 的数至少有 k 个。
+>
+>- 第 k 大等价于：求最大的 x，满足 ≥x 的数至少有 k 个。
+>
+>对于本题，假设答案为 x，那么有
+>$$
+>\sum^m_{i-1} min(\lfloor \frac x i \rfloor,n)
+>$$
+>个 ≤x 的数。
+>
+>如果写闭区间二分，左右边界是 [1,mn−1]，注意 mn 不需要在二分区间内，因为如果我们没有在 [1,mn−1] 中找到答案，那么答案就一定是 mn。
+>
+>下面代码用的是开区间，即 (0,mn)。
+>
+>- 0 一定不满足要求：≤0 的数有 0<k 个。
+>- mn 一定满足要求：≤mn 的数有 mn≥k 个。
+>
+>```java
+>class Solution {
+>    public int findKthNumber(int m, int n, int k) {
+>        int left = 0;
+>        int right = m * n;
+>        while (left + 1 < right) {
+>            int mid = (left + right) >>> 1;
+>            if (check(mid, m, n, k)) {
+>                right = mid;
+>            } else {
+>                left = mid;
+>            }
+>        }
+>        return right;
+>    }
+>
+>    private boolean check(int x, int m, int n, int k) {
+>        int cnt = 0;
+>        for (int i = 1; i <= m; i++) {
+>            cnt += Math.min(x / i, n);
+>        }
+>        return cnt >= k;
+>    }
+>}
+>```
+
+- [x] 378.有序矩阵中第 K 小的元素
 - [ ] 719.找出第 K 小的数对距离
 - [ ] 878.第 N 个神奇数字 1897
 - [ ] 1201.丑数 III 2039
@@ -9208,19 +9322,19 @@ class BookMyShow {
 
 ### 2.8 其他
 
-- [ ] 69.x 的平方根 二分求最大的 m，满足 m^2^≤x（也可以二分求最小的满足 m^2^ > x 的 m，减一得到答案）
+- [x] 69.x 的平方根 二分求最大的 m，满足 m^2^≤x（也可以二分求最小的满足 m^2^ > x 的 m，减一得到答案）
 
-- [ ] 74.搜索二维矩阵
-- [ ] 240.搜索二维矩阵 II
-- [ ] 2476.二叉搜索树最近节点查询
-- [ ] 278.第一个错误的版本
-- [ ] 374.猜数字大小
-- [ ] 162.寻找峰值
+- [x] 74.搜索二维矩阵
+- [x] 240.搜索二维矩阵 II
+- [x] 2476.二叉搜索树最近节点查询
+- [x] 278.第一个错误的版本
+- [x] 374.猜数字大小
+- [x] 162.寻找峰值
 - [ ] 1901.寻找峰值 II
-- [ ] 852.山脉数组的峰顶索引
+- [x] 852.山脉数组的峰顶索引
 - [ ] 1095.山脉数组中查找目标值 1827
-- [ ] 153.寻找旋转排序数组中的最小值
-- [ ] 33.搜索旋转排序数组
+- [x] 153.寻找旋转排序数组中的最小值
+- [x] 33.搜索旋转排序数组
 - [ ] 222.完全二叉树的节点个数
 - [ ] 1539.第 k 个缺失的正整数
 - [ ] 540.有序数组中的单一元素
@@ -9244,7 +9358,965 @@ class BookMyShow {
 
 ## 6、图论算法
 
+![图论题单 图论算法 图论题目 LeetCode 力扣图论 灵茶山艾府](./img/sql与算法题解-img/1724824379-UOsXIV-dfsbfsnew-c.png)
+
+> DFS 一路到底，BFS 由近及远。
+
+### 6.1 DFS 基础
+
+找连通块、判断是否有环等。部分题目做法不止一种。
+
+- [x] 547.省份数量
+- [x] 1971.寻找图中是否存在路径
+- [x] 797.所有可能的路径 1383
+- [x] 841.钥匙和房间 1412
+- [x] ==2316.统计无向图中无法互相到达点对数 1604==
+
+>[2316. 统计无向图中无法互相到达点对数](https://leetcode.cn/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph/)
+>
+>已解答
+>
+>中等
+>
+>
+>
+>相关标签
+>
+>相关企业
+>
+>
+>
+>提示
+>
+>
+>
+>给你一个整数 `n` ，表示一张 **无向图** 中有 `n` 个节点，编号为 `0` 到 `n - 1` 。同时给你一个二维整数数组 `edges` ，其中 `edges[i] = [ai, bi]` 表示节点 `ai` 和 `bi` 之间有一条 **无向** 边。
+>
+>请你返回 **无法互相到达** 的不同 **点对数目** 。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/tc-3.png)
+>
+>```
+>输入：n = 3, edges = [[0,1],[0,2],[1,2]]
+>输出：0
+>解释：所有点都能互相到达，意味着没有点对无法互相到达，所以我们返回 0 。
+>```
+>
+>**示例 2：**
+>
+>![img](./img/sql与算法题解-img/tc-2.png)
+>
+>```
+>输入：n = 7, edges = [[0,2],[0,5],[2,4],[1,6],[5,4]]
+>输出：14
+>解释：总共有 14 个点对互相无法到达：
+>[[0,1],[0,3],[0,6],[1,2],[1,3],[1,4],[1,5],[2,3],[2,6],[3,4],[3,5],[3,6],[4,6],[5,6]]
+>所以我们返回 14 。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= n <= 105`
+>- `0 <= edges.length <= 2 * 105`
+>- `edges[i].length == 2`
+>- `0 <= ai, bi < n`
+>- `ai != bi`
+>- 不会有重复边。
+>
+>我的题解:
+>
+>`抄人强`
+>
+>```java
+>class Solution {
+>    public long countPairs(int n, int[][] edges) {
+>        int total = 0; // 连通块中节点数
+>        List<Integer>[] sides = new List[n];
+>        Arrays.setAll(sides, k -> new ArrayList<>());
+>        for (int[] edge : edges) {
+>            int i = edge[0], j = edge[1];
+>            sides[i].add(j);
+>            sides[j].add(i);
+>        }
+>        boolean[] vis = new boolean[n];
+>        long ans = 0;
+>        for (int i = 0; i < n; i++) {
+>            if (!vis[i]) {
+>                int d = dfs(sides, i, vis);
+>                ans += (long) d * total;
+>                total += d;
+>            }
+>        }
+>        return ans;
+>    }
+>
+>    public int dfs(List<Integer>[] sides, int i, boolean[] vis) {
+>        vis[i] = true;
+>        int cnt = 1;
+>        for (int side : sides[i]) {
+>            if (!vis[side])
+>                cnt += dfs(sides, side, vis);
+>        }
+>        return cnt;
+>    }
+>}
+>```
+>
+>==灵茶题解==:
+>
+>建图后，用 DFS 可以求出每个连通块的大小。
+>
+>求连通块的大小的同时，用一个变量 total 维护前面求出的连通块的大小之和。
+>
+>设当前连通块的大小为 size，那么这个连通块中的每个点，与前面遍历过的连通块的每个点，都是无法互相到达的，根据乘法原理，这有 size*total 个，加到答案中。
+>
+>```java
+>class Solution {
+>    public long countPairs(int n, int[][] edges) {
+>        List<Integer>[] g = new ArrayList[n];
+>        Arrays.setAll(g, e -> new ArrayList<>());
+>        for (int[] e : edges) {
+>            int x = e[0], y = e[1];
+>            g[x].add(y);
+>            g[y].add(x); // 建图
+>        }
+>
+>        boolean[] vis = new boolean[n];
+>        long ans = 0;
+>        for (int i = 0, total = 0; i < n; i++) {
+>            if (!vis[i]) { // 未访问的点：说明找到了一个新的连通块
+>                int size = dfs(i, g, vis);
+>                ans += (long) size * total;
+>                total += size;
+>            }
+>        }
+>        return ans;
+>    }
+>
+>    private int dfs(int x, List<Integer>[] g, boolean[] vis) {
+>        vis[x] = true; // 避免重复访问同一个点
+>        int size = 1;
+>        for (int y : g[x]) {
+>            if (!vis[y]) {
+>                size += dfs(y, g, vis);
+>            }
+>        }
+>        return size;
+>    }
+>}
+>```
+
+- [x] 1319.连通网络的操作次数 1633
+- [x] 2492.两个城市间路径的最小分数 1680
+- [x] 3310.移除可疑的方法 1711
+- [x] 2685.统计完全连通分量的数量 1769
+- [x] 2192.有向无环图中一个节点的所有祖先 1788
+- [x] 924.尽量减少恶意软件的传播 1869
+- [x] 2101.引爆最多的炸弹 1880
+- [x] ==721.账户合并==
+
+>给定一个列表 `accounts`，每个元素 `accounts[i]` 是一个字符串列表，其中第一个元素 `accounts[i][0]` 是 *名称 (name)*，其余元素是 ***emails*** 表示该账户的邮箱地址。
+>
+>现在，我们想合并这些账户。如果两个账户都有一些共同的邮箱地址，则两个账户必定属于同一个人。请注意，即使两个账户具有相同的名称，它们也可能属于不同的人，因为人们可能具有相同的名称。一个人最初可以拥有任意数量的账户，但其所有账户都具有相同的名称。
+>
+>合并账户后，按以下格式返回账户：每个账户的第一个元素是名称，其余元素是 **按字符 ASCII 顺序排列** 的邮箱地址。账户本身可以以 **任意顺序** 返回。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：accounts = [["John", "johnsmith@mail.com", "john00@mail.com"], ["John", "johnnybravo@mail.com"], ["John", "johnsmith@mail.com", "john_newyork@mail.com"], ["Mary", "mary@mail.com"]]
+>输出：[["John", 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com'],  ["John", "johnnybravo@mail.com"], ["Mary", "mary@mail.com"]]
+>解释：
+>第一个和第三个 John 是同一个人，因为他们有共同的邮箱地址 "johnsmith@mail.com"。 
+>第二个 John 和 Mary 是不同的人，因为他们的邮箱地址没有被其他帐户使用。
+>可以以任何顺序返回这些列表，例如答案 [['Mary'，'mary@mail.com']，['John'，'johnnybravo@mail.com']，
+>['John'，'john00@mail.com'，'john_newyork@mail.com'，'johnsmith@mail.com']] 也是正确的。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：accounts = [["Gabe","Gabe0@m.co","Gabe3@m.co","Gabe1@m.co"],["Kevin","Kevin3@m.co","Kevin5@m.co","Kevin0@m.co"],["Ethan","Ethan5@m.co","Ethan4@m.co","Ethan0@m.co"],["Hanzo","Hanzo3@m.co","Hanzo1@m.co","Hanzo0@m.co"],["Fern","Fern5@m.co","Fern1@m.co","Fern0@m.co"]]
+>输出：[["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co","Gabe1@m.co","Gabe3@m.co"],["Hanzo","Hanzo0@m.co","Hanzo1@m.co","Hanzo3@m.co"],["Kevin","Kevin0@m.co","Kevin3@m.co","Kevin5@m.co"],["Fern","Fern0@m.co","Fern1@m.co","Fern5@m.co"]]
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= accounts.length <= 1000`
+>- `2 <= accounts[i].length <= 10`
+>- `1 <= accounts[i][j].length <= 30`
+>- `accounts[i][0]` 由英文字母组成
+>- `accounts[i][j] (for j > 0)` 是有效的邮箱地址
+>
+>==我的题解:==
+>
+>没做出来
+>
+>==灵茶题解:==
+>
+>![lc721-cut.png](./img/sql与算法题解-img/1721006607-hZyyQx-lc721-cut.png)
+>
+>看示例 1，把每个账户用其在 accounts 中的下标表示，即节点 0 到 3。
+>
+>同时，把每个账户的邮箱地址，也视作节点。我们在账户下标与其邮箱地址之间连边，得到一个无向图（二分图）。
+>
+>题目相当于求出这个图的每个连通块，这可以用 DFS 解决。
+>
+>**算法**
+>
+>1. 把 accounts 中的信息提取到哈希表 emailToIdx 中，key 为邮箱地址，value 为这个邮箱对应的账户下标列表。
+>
+>2. 初始化一个长为 n 的全为 false 的布尔数组 vis，用来标记访问过的账户下标。
+>
+>3. 遍历 vis，如果 i 没有访问过，即 vis[i]=false，则从 i 开始 DFS。
+>
+>- DFS 之前，创建一个哈希集合 emails，用来保存 DFS 中访问到的邮箱地址。
+>
+>- 开始 DFS。首先标记 vis[i]=true。
+>
+>- 遍历 accounts[i] 的邮箱地址 email。
+>
+>- 如果 email 在哈希集合 emails 中，则跳过；否则把 email 加入哈希集合 emails。
+>
+>- 遍历 emailToIdx[email]，也就是所有包含该邮箱地址的账户下标 j，如果 j 没有访问过，即 vis[j]=false，则继续 DFS j。
+>
+>4. DFS 结束后，把 emails 中的元素按照字典序从小到大排序，然后和 `accounts[i][0]` 一起加入答案。
+>
+>5. 返回答案。
+>
+>```java
+>class Solution {
+>    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+>
+>        Map<String, List<Integer>> map = new HashMap<>();
+>        for (int i = 0; i < accounts.size(); i++) {
+>            for (int j = 1; j < accounts.get(i).size(); j++) {
+>                map.computeIfAbsent(accounts.get(i).get(j), e -> new ArrayList<>()).add(i);
+>            }
+>        }
+>        List<List<String>> ans = new ArrayList<>();
+>        boolean[] vis = new boolean[accounts.size()];
+>        Set<String> set = new HashSet<>();
+>        for (int i = 0; i < accounts.size(); i++) {
+>            if (vis[i]) {
+>                continue;
+>            }
+>            set.clear();
+>            dfs(i, accounts, map, vis, set);
+>            List<String> res = new ArrayList<>(set);
+>            Collections.sort(res);
+>            res.add(0, accounts.get(i).get(0));
+>            ans.add(res);
+>        }
+>        return ans;
+>    }
+>
+>    public void dfs(int i, List<List<String>> accounts, Map<String, List<Integer>> map, boolean[] vis,
+>            Set<String> set) {
+>        vis[i] = true;
+>        List<String> account = accounts.get(i);
+>        for (int j = 1; j < account.size(); j++) {
+>            String email = account.get(j);
+>            set.add(email);
+>            for (int id : map.get(email)) {
+>                if (!vis[id]) {
+>                    dfs(id, accounts, map, vis, set);
+>                }
+>            }
+>        }
+>
+>    }
+>}
+>```
+
+- [x] ==207.课程表 三色标记法==
+
+>你这个学期必须选修 `numCourses` 门课程，记为 `0` 到 `numCourses - 1` 。
+>
+>在选修某些课程之前需要一些先修课程。 先修课程按数组 `prerequisites` 给出，其中 `prerequisites[i] = [ai, bi]` ，表示如果要学习课程 `ai` 则 **必须** 先学习课程 `bi` 。
+>
+>- 例如，先修课程对 `[0, 1]` 表示：想要学习课程 `0` ，你需要先完成课程 `1` 。
+>
+>请你判断是否可能完成所有课程的学习？如果可以，返回 `true` ；否则，返回 `false` 。
+>
+>
+>
+>**示例 1：**
+>
+>```
+>输入：numCourses = 2, prerequisites = [[1,0]]
+>输出：true
+>解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：numCourses = 2, prerequisites = [[1,0],[0,1]]
+>输出：false
+>解释：总共有 2 门课程。学习课程 1 之前，你需要先完成课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的。
+>```
+>
+>
+>
+>**提示：**
+>
+>- `1 <= numCourses <= 2000`
+>- `0 <= prerequisites.length <= 5000`
+>- `prerequisites[i].length == 2`
+>- `0 <= ai, bi < numCourses`
+>- `prerequisites[i]` 中的所有课程对 **互不相同**
+>
+>==我的题解:==
+>
+>时间超限
+>
+>```java
+>class Solution {
+>   boolean[] vis;
+>   List<Integer>[] g;
+>   boolean flag = false;
+>
+>   public boolean canFinish(int numCourses, int[][] prerequisites) {
+>       vis = new boolean[numCourses];
+>       g = new List[numCourses];
+>       Arrays.setAll(g, e -> new ArrayList<>());
+>       for (int[] prerequisite : prerequisites) {
+>           g[prerequisite[0]].add(prerequisite[1]);
+>       }
+>       for (int i = 0; i < numCourses; i++) {
+>           dfs(i);
+>           if (flag)
+>               return false;
+>       }
+>       return true;
+>   }
+>
+>   public void dfs(int i) {
+>       vis[i] = true;
+>       for (int j : g[i]) {
+>           if (vis[j]) {
+>               flag = true;
+>               break;
+>           }
+>           dfs(j);
+>       }
+>       vis[i] = false;
+>   }
+>}
+>```
+>
+>==大佬题解:==
+>
+>原理是通过 DFS 判断图中是否有环。
+>
+>==**算法流程：**==
+>
+>1. 借助一个标志列表 flags，用于判断每个节点 i （课程）的状态：
+>
+>  - 未被 DFS 访问：i == 0；
+>
+>  - 已被其他节点启动的 DFS 访问：i == -1；
+>
+>  - 已被当前节点启动的 DFS 访问：i == 1。
+>
+>2. 对 numCourses 个节点依次执行 DFS，判断每个节点起步 DFS 是否存在环，若存在环直接返回 False。DFS 流程；
+>  - 终止条件：
+>    - 当 flag[i] == -1，说明当前访问节点已被其他节点启动的 DFS 访问，无需再重复搜索，直接返回 True。
+>    - 当 flag[i] == 1，说明在本轮 DFS 搜索中节点 i 被第 2 次访问，即 课程安排图有环 ，直接返回 False。
+>
+>  - 将当前访问节点 i 对应 flag[i] 置 1，即标记其被本轮 DFS 访问过；
+>
+>- 递归访问当前节点 i 的所有邻接节点 j，当发现环直接返回 False；
+>
+>- 当前节点所有邻接节点已被遍历，并没有发现环，则将当前节点 flag 置为 −1 并返回 True。
+>
+>3. 若整个图 DFS 结束并未发现环，返回 True。
+>
+>==**复杂度分析：**==
+>
+>- 时间复杂度 O(N+M)： 遍历一个图需要访问所有节点和所有临边，N 和 M 分别为节点数量和临边数量；
+>
+>- 空间复杂度 O(N+M)： 为建立邻接表所需额外空间，adjacency 长度为 N ，并存储 M 条临边的数据。
+>
+>```java
+>class Solution {
+>    public boolean canFinish(int numCourses, int[][] prerequisites) {
+>        List<List<Integer>> adjacency = new ArrayList<>();
+>        for(int i = 0; i < numCourses; i++)
+>            adjacency.add(new ArrayList<>());
+>        int[] flags = new int[numCourses];
+>        for(int[] cp : prerequisites)
+>            adjacency.get(cp[1]).add(cp[0]);
+>        for(int i = 0; i < numCourses; i++)
+>            if(!dfs(adjacency, flags, i)) return false;
+>        return true;
+>    }
+>    private boolean dfs(List<List<Integer>> adjacency, int[] flags, int i) {
+>        if(flags[i] == 1) return false;
+>        if(flags[i] == -1) return true;
+>        flags[i] = 1;
+>        for(Integer j : adjacency.get(i))
+>            if(!dfs(adjacency, flags, j)) return false;
+>        flags[i] = -1;
+>        return true;
+>    }
+>}
+>```
+
+- [x] 802.找到最终的安全状态 1962 三色标记法
+- [x] 928.尽量减少恶意软件的传播 II 1985
+- [ ] 2092.找出知晓秘密的所有专家 2004
+- [ ] 3108.带权图里旅途的最小代价 2109
+- [ ] 261.以图判树（会员题）
+- [ ] 323.无向图中连通分量的数目（会员题）
+
+### 6.2 BFS 基础
+
+求最短路等。
+
+- [x] 3243.新增道路查询后的最短距离 I 1568
+- [x] 1311.获取你好友已观看的视频 1653
+- [x] ==1129.颜色交替的最短路径 1780==
+
+>给定一个整数 `n`，即有向图中的节点数，其中节点标记为 `0` 到 `n - 1`。图中的每条边为红色或者蓝色，并且可能存在自环或平行边。
+>
+>给定两个数组 `redEdges` 和 `blueEdges`，其中：
+>
+>- `redEdges[i] = [ai, bi]` 表示图中存在一条从节点 `ai` 到节点 `bi` 的红色有向边，
+>- `blueEdges[j] = [uj, vj]` 表示图中存在一条从节点 `uj` 到节点 `vj` 的蓝色有向边。
+>
+>返回长度为 `n` 的数组 `answer`，其中 `answer[X]` 是从节点 `0` 到节点 `X` 的红色边和蓝色边交替出现的最短路径的长度。如果不存在这样的路径，那么 `answer[x] = -1`。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：n = 3, red_edges = [[0,1],[1,2]], blue_edges = []
+>输出：[0,1,-1]
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：n = 3, red_edges = [[0,1]], blue_edges = [[2,1]]
+>输出：[0,1,-1]
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= n <= 100`
+>- `0 <= redEdges.length, blueEdges.length <= 400`
+>- `redEdges[i].length == blueEdges[j].length == 2`
+>- `0 <= ai, bi, uj, vj < n`
+>
+>==我的题解：==
+>
+>不会
+>
+>==大佬题解：==
+>
+>题目实际上是最短路问题，我们可以考虑使用 BFS 来解决。
+>
+>首先，我们对所有的边进行预处理，将所有的边按照颜色分类，存储到多维数组 g 中。其中 g[0] 存储所有红色边，而 g[1] 存储所有蓝色边。
+>
+>接着，我们定义以下数据结构或变量：
+>
+>- 队列 q：用来存储当前搜索到的节点，以及当前边的颜色；
+>- 集合 vis：用来存储已经搜索过的节点，以及当前边的颜色；
+>- 变量 d：用来表示当前搜索的层数，即当前搜索到的节点到起点的距离；
+>- 数组 ans：用来存储每个节点到起点的最短距离。初始时，我们将 ans 数组中的所有元素初始化为 −1，表示所有节点到起点的距离都未知。
+>
+>我们首先将起点 0 和起点边的颜色 0 或 1 入队，表示从起点出发，且当前是红色或蓝色边。
+>
+>接下来，我们开始进行 BFS 搜索。我们每次从队列中取出一个节点 (i,c)，如果当前节点的答案还未更新，则将当前节点的答案更新为当前层数 d，即 ans[i]=d。然后，我们将当前边的颜色 c 取反，即如果当前边为红色，则将其变为蓝色，反之亦然。我们取出颜色对应的所有边，如果边的另一端节点 j 未被搜索过，则将其入队。
+>
+>搜索结束后，返回答案数组即可。
+>
+>```java
+>class Solution {
+>    public int[] shortestAlternatingPaths(int n, int[][] redEdges, int[][] blueEdges) {
+>        List<Integer>[] redGraph = buildGraph(n, redEdges);
+>        List<Integer>[] blueGraph = buildGraph(n, blueEdges);
+>
+>        int[] ans = new int[n];
+>        for (int i = 0; i < ans.length; i++) {
+>            ans[i] = -1;
+>        }
+>        // [0] = vertex
+>        // [1] = color of edge: 0 == blue, 1 == red
+>        Queue<int[]> queue = new LinkedList<>();
+>        queue.add(new int[] {0, 0});
+>        queue.add(new int[] {0, 1});
+>        boolean[] visitedRed = new boolean[n];
+>        boolean[] visitedBlue = new boolean[n];
+>        visitedRed[0] = true;
+>        visitedBlue[0] = true;
+>        int steps = 0;
+>        while (!queue.isEmpty()) {
+>            for (int i = queue.size(); i > 0; i--) {
+>                int[] edgeData = queue.poll();
+>                int vertex = edgeData[0];
+>                int color = edgeData[1];
+>                if (ans[vertex] == -1) {
+>                    ans[vertex] = steps;
+>                }
+>                if (color == 0) {
+>                    visitedBlue[vertex] = true;
+>                    for (int nextVertex: redGraph[vertex]) {
+>                        if (visitedRed[nextVertex]) {
+>                            continue;
+>                        }
+>                        queue.add(new int[] {nextVertex, 1});
+>                        visitedRed[nextVertex] = true;
+>                    }
+>                } else {
+>                    visitedRed[vertex] = true;
+>                    for (int nextVertex: blueGraph[vertex]) {
+>                        if (visitedBlue[nextVertex]) {
+>                            continue;
+>                        }
+>                        queue.add(new int[] {nextVertex, 0});
+>                        visitedBlue[nextVertex] = true;
+>                    }
+>                }
+>            }
+>            steps++;
+>        }
+>
+>        return ans;
+>    }
+>
+>    private List<Integer>[] buildGraph(int n, int[][] edges) {
+>        List<Integer> graph[] = new ArrayList[n];
+>        for (int i = 0; i < n; i++) {
+>            graph[i] = new ArrayList<>();
+>        }
+>        for (int[] edge: edges) {
+>            int from = edge[0];
+>            int to = edge[1];
+>            graph[from].add(to);
+>        }
+>        return graph;
+>    }
+>}
+>```
+>
+>
+
+- [x] 1298.你能从盒子里获得的最大糖果数 1825
+- [x] ==2039.网络空闲的时刻 1865==
+
+>给你一个有 `n` 个服务器的计算机网络，服务器编号为 `0` 到 `n - 1` 。同时给你一个二维整数数组 `edges` ，其中 `edges[i] = [ui, vi]` 表示服务器 `ui` 和 `vi` 之间有一条信息线路，在 **一秒** 内它们之间可以传输 **任意** 数目的信息。再给你一个长度为 `n` 且下标从 **0** 开始的整数数组 `patience` 。
+>
+>题目保证所有服务器都是 **相通** 的，也就是说一个信息从任意服务器出发，都可以通过这些信息线路直接或间接地到达任何其他服务器。
+>
+>编号为 `0` 的服务器是 **主** 服务器，其他服务器为 **数据** 服务器。每个数据服务器都要向主服务器发送信息，并等待回复。信息在服务器之间按 **最优** 线路传输，也就是说每个信息都会以 **最少时间** 到达主服务器。主服务器会处理 **所有** 新到达的信息并 **立即** 按照每条信息来时的路线 **反方向** 发送回复信息。
+>
+>在 `0` 秒的开始，所有数据服务器都会发送各自需要处理的信息。从第 `1` 秒开始，**每** 一秒最 **开始** 时，每个数据服务器都会检查它是否收到了主服务器的回复信息（包括新发出信息的回复信息）：
+>
+>- 如果还没收到任何回复信息，那么该服务器会周期性 **重发** 信息。数据服务器 `i` 每 `patience[i]` 秒都会重发一条信息，也就是说，数据服务器 `i` 在上一次发送信息给主服务器后的 `patience[i]` 秒 **后** 会重发一条信息给主服务器。
+>- 否则，该数据服务器 **不会重发** 信息。
+>
+>当没有任何信息在线路上传输或者到达某服务器时，该计算机网络变为 **空闲** 状态。
+>
+>请返回计算机网络变为 **空闲** 状态的 **最早秒数** 。
+>
+> 
+>
+>**示例 1：**
+>
+>![example 1](./img/sql与算法题解-img/quiet-place-example1.png)
+>
+>```
+>输入：edges = [[0,1],[1,2]], patience = [0,2,1]
+>输出：8
+>解释：
+>0 秒最开始时，
+>- 数据服务器 1 给主服务器发出信息（用 1A 表示）。
+>- 数据服务器 2 给主服务器发出信息（用 2A 表示）。
+>
+>1 秒时，
+>- 信息 1A 到达主服务器，主服务器立刻处理信息 1A 并发出 1A 的回复信息。
+>- 数据服务器 1 还没收到任何回复。距离上次发出信息过去了 1 秒（1 < patience[1] = 2），所以不会重发信息。
+>- 数据服务器 2 还没收到任何回复。距离上次发出信息过去了 1 秒（1 == patience[2] = 1），所以它重发一条信息（用 2B 表示）。
+>
+>2 秒时，
+>- 回复信息 1A 到达服务器 1 ，服务器 1 不会再重发信息。
+>- 信息 2A 到达主服务器，主服务器立刻处理信息 2A 并发出 2A 的回复信息。
+>- 服务器 2 重发一条信息（用 2C 表示）。
+>...
+>4 秒时，
+>- 回复信息 2A 到达服务器 2 ，服务器 2 不会再重发信息。
+>...
+>7 秒时，回复信息 2D 到达服务器 2 。
+>
+>从第 8 秒开始，不再有任何信息在服务器之间传输，也不再有信息到达服务器。
+>所以第 8 秒是网络变空闲的最早时刻。
+>```
+>
+>**示例 2：**
+>
+>![example 2](./img/sql与算法题解-img/network_a_quiet_place_2.png)
+>
+>```
+>输入：edges = [[0,1],[0,2],[1,2]], patience = [0,10,10]
+>输出：3
+>解释：数据服务器 1 和 2 第 2 秒初收到回复信息。
+>从第 3 秒开始，网络变空闲。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `n == patience.length`
+>- `2 <= n <= 105`
+>- `patience[0] == 0`
+>- 对于 `1 <= i < n` ，满足 `1 <= patience[i] <= 105`
+>- `1 <= edges.length <= min(105, n * (n - 1) / 2)`
+>- `edges[i].length == 2`
+>- `0 <= ui, vi < n`
+>- `ui != vi`
+>- 不会有重边。
+>- 每个服务器都直接或间接与别的服务器相连。
+>
+>我的题解：
+>
+>抄的
+>
+>```java
+>class Solution {
+>    public int networkBecomesIdle(int[][] edges, int[] patience) {
+>        int n = patience.length;
+>        List<Integer>[] g = new List[n];
+>        Arrays.setAll(g, e -> new ArrayList<>());
+>        for (int[] e : edges) {
+>            g[e[0]].add(e[1]);
+>            g[e[1]].add(e[0]);
+>        }
+>        int[] dis = new int[n]; // 从主服务器到每个服务器的最短距离
+>        Arrays.fill(dis, -1);
+>        Queue<Integer> q = new LinkedList<>();
+>        q.add(0);
+>        dis[0] = 0;
+>        while (!q.isEmpty()) {
+>            int node = q.poll();
+>            for (int j : g[node]) {
+>                if (dis[j] == -1) {
+>                    dis[j] = dis[node] + 1;
+>                    q.add(j);
+>                }
+>            }
+>        }
+>        // 每个服务器i将在dis[i]*2的时间内返回最先发送的数据,并且会patience[i]后周期发送数据
+>        // 1. dis[i]*2 <= patience[i] 该节点能在数据返回前停止发信息,节点的停止时间为dis[i]*2
+>        // 2. dis[i]*2 > patience[i]
+>        // 该节点不能在数据返回前停止发信息,节点的停止时间为(dis[i] * 2 - 1) / patience[i] * patience[i] + dis[i] * 2
+>        // 其中(dis[i] * 2 - 1) / patience[i] * patience[i]是最后一个数据发送的时间
+>        // dis[i]*2是最后一个数据往返的时间
+>        int ans = 0;
+>        for (int i = 0; i < n; i++) {
+>            if (dis[i] * 2 <= patience[i]) {
+>                ans = Math.max(ans, dis[i] * 2);
+>            } else {
+>                ans = Math.max(ans, (dis[i] * 2 - 1) / patience[i] * patience[i] + dis[i] * 2);
+>            }
+>        }
+>        return ans + 1;
+>    }
+>}
+>```
+>
+>==官方题解：==
+>
+>我们可以将整个计算机网络视为一个无向图，服务器为图中的节点。根据图中的边对应的关系 edges 即可求出图中任意节点之间的最短距离。利用广度优先搜索求出节点 0 到其他节点的最短距离，然后依次求出每个节点变为空闲的时间，当所有节点都变为空闲时，整个网络即变空闲状态，因此网络的最早空闲时间即为各个节点中最晚的空闲时间。定义节点的空闲状态定义为该节点不再发送和接收消息。
+>
+>- 求各个节点与 0 号服务器的最短路径，直接利用广度优先搜索即可。
+>
+>- 设节点 v 与节点 0 之间的最短距离为 dist，则此时当节点 v 接收到主服务器节点 0 的最后一个回复后的下一秒，则节点 v 变为空闲状态。节点 v 发送一个消息经过 dist 秒到达节点 0，节点 0 回复消息又经过 dist 秒到达节点 v，因此节点 v 每发送一次消息后，经过 2×dist 秒才能收到回复。由于节点 v 在未收到节点 0 的回复时，会周期性每 patience[v] 秒发送一次消息，一旦收到来自节点 0 的回复后就停止发送消息，需要分以下两种情况进行讨论：
+>
+>当 2×dist≤patience[v] 时，则此时节点 v 还未开始发送第二次消息就已收到回复，因此节点 v 只会发送一次消息，则此时节点 v 变为空闲的时间为 2×dist+1。
+>
+>当 2×dist>patience[v] 时，则此时节点还在等待第一次发送消息的回复时，就会开始再次重发消息，经过计算可以知道在 [1,2×dist) 时间范围内会最多再次发送 $\lfloor \frac{dist[v] \times2 -1}{patience[v]}\rfloor$ 次消息，最后一次发送消息的时间为 $pathience[v] \times \lfloor \frac{dist[v] \times2 -1}{patience[v]}\rfloor$，而节点 v 每发送一次消息就会经过 2×dist[v] 收到回复，因此节点 v 最后一次收到回复的时间为 $pathience[v] \times \lfloor \frac{dist[v] \times2 -1}{patience[v]}\rfloor + 2 \times dist[v]$，则此时可知节点 v 变为空闲的时间为 $pathience[v] \times \lfloor \frac{dist[v] \times2 -1}{patience[v]}\rfloor + 2 \times dist[v] + 1$
+>
+>当 2×dist≤patience[v] 时，$\lfloor \frac{dist[v] \times2 -1}{patience[v]}\rfloor = 0$，因此以上两种情况可以进行合并，即节点 v 变为空闲的时间为 $pathience[v] \times \lfloor \frac{dist[v] \times2 -1}{patience[v]}\rfloor + 2 \times dist[v]+1$
+>
+>依次求出每个节点变为空闲的时间，返回最大值即为答案。
+>
+>```java
+>class Solution {
+>    public int networkBecomesIdle(int[][] edges, int[] patience) {
+>        int n = patience.length;       
+>        List<Integer>[] adj = new List[n];
+>        for (int i = 0; i < n; ++i) {
+>            adj[i] = new ArrayList<Integer>();
+>        }
+>        boolean[] visit = new boolean[n];
+>        for (int[] v : edges) {
+>            adj[v[0]].add(v[1]);
+>            adj[v[1]].add(v[0]);
+>        }
+>
+>        Queue<Integer> queue = new ArrayDeque<Integer>();
+>        queue.offer(0);
+>        visit[0] = true;
+>        int dist = 1;
+>        int ans = 0;
+>        while (!queue.isEmpty()) {
+>            int size = queue.size();
+>            for (int i = 0; i < size; i++) {
+>                int curr = queue.poll();
+>                for (int v : adj[curr]) {
+>                    if (visit[v]) {
+>                        continue;
+>                    }
+>                    queue.offer(v);
+>                    int time = patience[v] * ((2 * dist - 1) / patience[v]) + 2 * dist + 1;
+>                    ans = Math.max(ans, time);
+>                    visit[v] = true;
+>                }
+>            }
+>            dist++;
+>        }
+>        return ans;
+>    }
+>}
+>```
+
+- [ ] 2608.图中的最短环 1904
+- [ ] 815.公交路线 1964
+
+注：关于网格图的 DFS 和 BFS，请看 网格图题单。
+
+### 6.3 拓扑排序
+学习拓扑排序前，请先完成 1557.可以到达所有点的最少点数目，有助于理解拓扑排序。
+
+- [ ] 210.课程表 II
+- [ ] 1462.课程表 IV 1693
+- [ ] 2115.从给定原材料中找到所有可以做出的菜 1679
+- [ ] 851.喧闹和富有 1783
+- [ ] 310.最小高度树
+- [ ] 2392.给定条件下构造矩阵 1961
+- [ ] 802.找到最终的安全状态 1962
+- [ ] 1591.奇怪的打印机 II 2291
+- [ ] 1203.项目管理 2419
+- [ ] 2603.收集树中金币 2712
+- [ ] LCR 114.火星词典
+- [ ] 269.火星词典（会员题）
+- [ ] 444.序列重建（会员题）
+- [ ] 1059.从始点到终点的所有路径（会员题）
+- [ ] 1136.并行课程（会员题）
+
+### 6.4 在拓扑序上 DP
+
+- [ ] 2050.并行课程 III 2084
+- [ ] 1857.有向图中最大颜色值 2313
+
+### 6.5 基环树
+
+[基环树介绍](https://leetcode.cn/problems/maximum-employees-to-be-invited-to-a-meeting/solution/nei-xiang-ji-huan-shu-tuo-bu-pai-xu-fen-c1i1b/)
+
+- [ ] 2359.找到离给定两个节点最近的节点 1715
+- [ ] 2360.图中的最长环 1897
+- [ ] 684.冗余连接 做法不止一种
+- [ ] 685.冗余连接 II
+- [ ] 2876.有向图访问计数 2210
+- [ ] 2127.参加会议的最多员工数 2449
+- [ ] 2836.在传球游戏中最大化函数值 2769
+- [ ] LCP 21.追逐游戏
+- [ ] 2204.无向图中到环的距离（会员题）
+
+### 6.6 单源最短路：Dijkstra
+
+[Dijkstra 算法介绍](https://leetcode.cn/problems/network-delay-time/solution/liang-chong-dijkstra-xie-fa-fu-ti-dan-py-ooe8/)
+
+- [ ] 743.网络延迟时间
+- [ ] 3341.到达最后一个房间的最少时间 I 1721 网格图
+- [ ] 3112.访问消失节点的最少时间 1757 理解原理
+- [ ] 2642.设计可以求最短路径的图类 1811
+- [ ] 1514.概率最大的路径 1846
+- [ ] 3341.到达最后一个房间的最少时间 II 1862 网格图
+- [ ] 1631.最小体力消耗路径 1948 网格图 做法不止一种
+- [ ] 1786.从第一个节点出发到最后一个节点的受限路径数 2079
+- [ ] 3123.最短路径中的边 2093
+- [ ] 1976.到达目的地的方案数 2095
+- [ ] 778.水位上升的泳池中游泳 2097 网格图 做法不止一种
+- [ ] 2662.前往目标的最小代价 2154
+- [ ] 2045.到达目的地的第二短时间 2202 也可以 BFS
+- [ ] 882.细分图中的可到达节点 2328
+- [ ] 2203.得到要求路径的最小带权子图 2364
+- [ ] 2577.在网格图中访问一个格子的最少时间 2382 网格图
+- [ ] 1928.规定时间内到达终点的最小花费 2413
+- [ ] 787.K 站中转内最便宜的航班 类似 1928 题
+- [ ] 2699.修改图中的边权 2874
+- [ ] LCP 35.电动车游城市
+- [ ] 1810.隐藏网格下的最小消耗路径（会员题）
+- [ ] 2093.前往目标城市的最小费用（会员题）
+- [ ] 2473.购买苹果的最低成本（会员题）
+- [ ] 2714.找到最短路径的 K 次跨越（会员题）
+- [ ] 2737.找到最近的标记节点（会员题）
+
+### 6.7 全源最短路：Floyd
+
+带你发明 Floyd 算法：从记忆化搜索到递推
+
+- [ ] 2642.设计可以求最短路径的图类 1811
+- [ ] 1334.阈值距离内邻居最少的城市 1855
+- [ ] 2976.转换字符串的最小成本 I 1882
+- [ ] 2959.关闭分部的可行集合数目 2077
+- [ ] 2977.转换字符串的最小成本 II 2696
+
+#### 6.7.1 Bitset 优化 Floyd
+
+- [ ] 2101.引爆最多的炸弹
+
+### 6.8 最小生成树：Kruskal/Prim
+
+- [ ] 1584.连接所有点的最小费用 1858
+- [ ] 1489.找到最小生成树里的关键边和伪关键边 2572
+- [ ] 1135.最低成本连通所有城市（会员题）
+- [ ] 1168.水资源分配优化（会员题）
+
+### 6.9 欧拉路径/欧拉回路：Hierholzer
+
+- [ ] 332.重新安排行程
+- [ ] 753.破解保险箱 2274
+- [ ] 2097.合法重新排列数对 2651
+
+### 6.10 强连通分量/双连通分量：Tarjan
+
+- [ ] 1192.查找集群内的关键连接 2085
+- [ ] 1568.使陆地分离的最少天数 2209
+- [ ] LCP 54.夺回据点
+
+### 6.11 二分图染色
+
+- [ ] 785.判断二分图 1625
+- [ ] 886.可能的二分法 1795
+
+二分图的最大匹配，见下面网络流的题目。带权二分图的最大匹配，见标有「一对一」的题目。
+
+### 6.12 网络流
+
+由于有其他做法（比如状压 DP），难度分仅供参考。
+
+- [ ] 3376.破解锁的最少时间 I ~1700 一对一
+- [ ] 1947.最大兼容性评分和 1704 一对一
+- [ ] 2850.将石头分散到网格图的最少移动次数 2001 一对多
+- [ ] 1879.两个数组最小的异或值之和 2145 一对一
+- [ ] 1349.参加考试的最大学生数 2386 二分图最大独立集
+- [ ] 2172.数组的最大与和 2392 多对一
+- [ ] 3276.选择矩阵中单元格的最大得分 2403
+- [ ] 1595.连通两组点的最小成本 2538 带权二分图最小边覆盖
+- [ ] 3257.放三个车的价值之和最大 II 2553
+- [ ] LCP 04.覆盖 二分图最大匹配·模板题
+- [ ] LCP 38.守卫城堡 最小割
+- [ ] 1820.最多邀请的个数（会员题）二分图最大匹配·模板题
+- [ ] 2403.杀死所有怪物的最短时间（会员题）同 3376 题
+- [ ] 1066.校园自行车分配 II（会员题）一对一，但不是完美匹配
+- [ ] 2123.使矩阵中的 1 互不相邻的最小操作数（会员题）二分图最大独立集
+
+### 6.13 模拟费用流
+
+- [ ] 2463.最小移动总距离 做到 O((n+m)log(n+m))
+
+### 6.14 其他
+
+- [ ] 1042.不邻接植花 1712
+- [ ] 1761.一个图中连通三元组的最小度数 2005
+- [ ] 2508.添加边使所有节点度数都为偶数 2060
+- [ ] 1579.保证图可完全遍历 2132
+- [ ] 2065.最大化一张图中的路径价值 2178
+- [ ] 1697.检查边长度限制的路径是否存在 2300
+- [ ] 2242.节点序列的最大得分 2304
+- [ ] 2493.将节点分成尽可能多的组 2415 推荐
+- [ ] 1782.统计点对的数目 2457
+- [ ] LCP 16.游乐园的游览计划
+- [ ] 277.搜寻名人（会员题）
+- [ ] 1724.检查边长度限制的路径是否存在 II（会员题）
+- [ ] 2077.殊途同归（会员题）
+
+### 6.15 关联题单
+
+- 关于**网格图**的 DFS 和 BFS，见 [网格图题单](https://leetcode.cn/circle/discuss/YiXPXW/)。
+- 关于**树上算法**，见 [链表、二叉树与回溯](https://leetcode.cn/circle/discuss/K0n2gO/) 的第三章节。
+
 ## 7、动态规划
+
+前言
+掌握动态规划（DP）是没有捷径的，咱们唯一能做的，就是投入时间猛猛刷题。好比学数学，只看书看视频而不做习题，是不能说学会的。
+
+我能做的，是帮你节省找题的时间，并把这些题分类整理好。有着相同套路的题，一起做效率会更高，也更能领悟到 DP 的精髓。所以推荐按照专题刷。
+
+题目已按照难度分排序（右侧数字为难度分）。如果遇到难度很大，题解都看不懂的题目，建议直接跳过，二刷的时候再来尝试。
+
+### 7.1 入门 DP
+
+
+记忆化搜索是新手村神器（甚至可以用到游戏后期），推荐先看 动态规划入门：从记忆化搜索到递推。
+
+但记忆化搜索并不是万能的，某些题目只有写成递推，才能结合数据结构等来优化时间复杂度，多数题目还可以优化空间复杂度。所以尽量在写完记忆化搜索后，把递推的代码也写一下。熟练之后直接写递推也可以。
+
+#### 7.1.1 爬楼梯
+
+- [ ] 70.爬楼梯（题解）
+- [ ] 746.使用最小花费爬楼梯（题解）
+- [ ] 72.组合总和 Ⅳ 本质是爬楼梯，相当于每次往上爬 nums[i] 步
+- [ ] 2466.统计构造好字符串的方案数 1694
+- [ ] 2266.统计打字方案数 1857
+- [ ] 2533.好二进制字符串的数量（会员题）同 2466 题
+
+#### 7.1.2 打家劫舍
+
+- [ ] 198.打家劫舍 ~1500
+- [ ] 740.删除并获得点数 ~1600
+- [ ] 2320.统计放置房子的方式数 1608
+- [ ] 213.打家劫舍 II ~1700
+- [ ] 3186.施咒的最大总伤害 1841
+
+#### 7.1.3 最大子数组和（最大子段和）
+
+有两种做法：
+
+1. 定义状态 f[i] 表示以 a[i] 结尾的最大子数组和，不和 i 左边拼起来就是 f[i]=a[i]，和 i 左边拼起来就是 f[i]=f[i−1]+a[i]，取最大值就得到了状态转移方程 f[i]=max(f[i−1],0)+a[i]，答案为 max(f)。这个做法也叫做 Kadane 算法。
+2. 用前缀和解决。
+
+具体见 [我的题解](https://leetcode.cn/problems/maximum-subarray/solution/qian-zhui-he-zuo-fa-ben-zhi-shi-mai-mai-abu71/)。
+
+- [ ] 53.最大子数组和 ~1400
+- [ ] 2606.找到最大开销的子字符串 1422
+- [ ] 1749.任意子数组和的绝对值的最大值 1542
+- [ ] 1191.K 次串联后最大子数组之和 1748
+- [ ] 918.环形子数组的最大和 1777
+- [ ] 2321.拼接数组的最大分数 1791
+
+思维扩展：
+
+- [ ] 152.乘积最大子数组
+
+
+
+
+
+
+
+
+
+
 
 ## 8、常用数据结构
 
