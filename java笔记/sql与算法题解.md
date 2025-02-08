@@ -10103,15 +10103,316 @@ class BookMyShow {
 注：关于网格图的 DFS 和 BFS，请看 网格图题单。
 
 ### 6.3 拓扑排序
+
+![图论题单 图论算法 图论题目 LeetCode 力扣图论 灵茶山艾府](./img/sql与算法题解-img/1738131168-tWFNGZ-006-toposort.png)
+
+把拓扑排序想象成一个黑盒，给它一堆杂乱的先修课约束，它会给你一个井井有条的课程学习安排。
+
+这一种在图上的「排序」，可以把杂乱的点排列一排。
+
+前提条件是图中无环，从而保证每条边是从排在前面的点，指向排在后面的点。
+
 学习拓扑排序前，请先完成 1557.可以到达所有点的最少点数目，有助于理解拓扑排序。
 
-- [ ] 210.课程表 II
-- [ ] 1462.课程表 IV 1693
-- [ ] 2115.从给定原材料中找到所有可以做出的菜 1679
-- [ ] 851.喧闹和富有 1783
-- [ ] 310.最小高度树
-- [ ] 2392.给定条件下构造矩阵 1961
-- [ ] 802.找到最终的安全状态 1962
+- [x] 210.课程表 II
+- [x] ==1462.课程表 IV 1693==
+
+>你总共需要上 `numCourses` 门课，课程编号依次为 `0` 到 `numCourses-1` 。你会得到一个数组 `prerequisite` ，其中 `prerequisites[i] = [ai, bi]` 表示如果你想选 `bi` 课程，你 **必须** 先选 `ai` 课程。
+>
+>- 有的课会有直接的先修课程，比如如果想上课程 `1` ，你必须先上课程 `0` ，那么会以 `[0,1]` 数对的形式给出先修课程数对。
+>
+>先决条件也可以是 **间接** 的。如果课程 `a` 是课程 `b` 的先决条件，课程 `b` 是课程 `c` 的先决条件，那么课程 `a` 就是课程 `c` 的先决条件。
+>
+>你也得到一个数组 `queries` ，其中 `queries[j] = [uj, vj]`。对于第 `j` 个查询，您应该回答课程 `uj` 是否是课程 `vj` 的先决条件。
+>
+>返回一个布尔数组 `answer` ，其中 `answer[j]` 是第 `j` 个查询的答案。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/courses4-1-graph.jpg)
+>
+>```
+>输入：numCourses = 2, prerequisites = [[1,0]], queries = [[0,1],[1,0]]
+>输出：[false,true]
+>解释：[1, 0] 数对表示在你上课程 0 之前必须先上课程 1。
+>课程 0 不是课程 1 的先修课程，但课程 1 是课程 0 的先修课程。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：numCourses = 2, prerequisites = [], queries = [[1,0],[0,1]]
+>输出：[false,false]
+>解释：没有先修课程对，所以每门课程之间是独立的。
+>```
+>
+>**示例 3：**
+>
+>![img](./img/sql与算法题解-img/courses4-3-graph.jpg)
+>
+>```
+>输入：numCourses = 3, prerequisites = [[1,2],[1,0],[2,0]], queries = [[1,0],[1,2]]
+>输出：[true,true]
+>```
+>
+> 
+>
+>**提示：**
+>
+>
+>
+>- `2 <= numCourses <= 100`
+>- `0 <= prerequisites.length <= (numCourses * (numCourses - 1) / 2)`
+>- `prerequisites[i].length == 2`
+>- `0 <= ai, bi <= numCourses - 1`
+>- `ai != bi`
+>- 每一对 `[ai, bi]` 都 **不同**
+>- 先修课程图中没有环。
+>- `1 <= queries.length <= 104`
+>- `0 <= ui, vi <= numCourses - 1`
+>- `ui != vi`
+>
+>我的题解：
+>
+>使用BFS对有向图排序，在遍历时会向子节点添加当前节点的先决条件
+>
+>```java
+>class Solution {
+>    public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
+>        Set<Integer>[] set = new Set[numCourses];
+>        List<Integer>[] g = new List[numCourses];
+>        int[] inDegres = new int[numCourses];
+>        Arrays.setAll(g, e -> new ArrayList<>());
+>        Arrays.setAll(set, e -> new HashSet<>());
+>        for (int[] e : prerequisites) {
+>            g[e[1]].add(e[0]);
+>            set[e[0]].add(e[1]);
+>            inDegres[e[0]]++;
+>        }
+>        Queue<Integer> q = new LinkedList<>();
+>        for (int i = 0; i < numCourses; i++) {
+>            if (inDegres[i] == 0) {
+>                q.add(i);
+>            }
+>        }
+>        while (!q.isEmpty()) {
+>            int node = q.poll();
+>            for (int j : g[node]) {
+>                set[j].addAll(set[node]);
+>                inDegres[j]--;
+>                if (inDegres[j] == 0) {
+>                    q.add(j);
+>                }
+>            }
+>        }
+>        List<Boolean> ans = new ArrayList<>();
+>        for (int[] querie : queries) {
+>            if (set[querie[0]].contains(querie[1])) {
+>                ans.add(true);
+>            } else {
+>                ans.add(false);
+>            }
+>        }
+>        return ans;
+>    }
+>}
+>```
+>
+>==官方题解：==
+>
+>题目给出 numCourses 门课（编号从 0 开始），并给出了一个长度为 n 的课程之间的制约关系数组 prerequisite，其中 prerequisite[i]=[a~i~,b~i~] 表示在学习课程 b~i~之前必须要完成课程 a~i~的学习，即课程 a~i~为 b~i~的先决条件。我们可以将上述条件构建一张有向图——将每一个课程看作一个点（课程编号即为点的编号），每一个制约关系 prerequisite[i]=[a~i~,b~i~] 对应一条从点 a~i~指向 b~i~的有向边，并且题目保证了这样构建出来的图不存在环。
+>
+>现在有 m 个查询 queries，其中对于第 i 个查询 queries[i]=[u~i~,v~i~]，我们需要判断课程 u~i~是否是课程 v~i~的直接或间接先决条件。我们创建一个 numCourses×numCourses 的矩阵 isPre，其中 `isPre[x][y]` 表示课程 x 是否是课程 y 的直接或间接先决条件，若是则 `isPre[x][y]`=True，否则 `isPre[x][y]`=False。在完成 isPre 计算后，我们对于每一个查询就可以在 O(1) 时间得到结果。对于 isPre 的计算，我们可以通过「广度优先搜索」+「拓扑排序」来对矩阵 isPre 进行计算：
+>
+>首先我们需要计算有向图中每一个节点的入度，并对入度为 0 的节点加入队列。然后只要队列非空，就进行以下操作：
+>
+>- 取出队列队首元素，同时，将这个节点及其所有前置条件节点设置为所有后续节点的前置条件节点，然后对每一个后续节点入度进行 −1 操作，若操作后的节点入度为 0，则继续将该节点加入队列。
+>
+>「拓扑排序」结束后，矩阵 isPre 计算完毕，然后我们遍历每一个查询，根据矩阵 isPre 即可得到每一个查询的结果。
+>
+>```java
+>class Solution {
+>    public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
+>        List<Integer>[] g = new List[numCourses];
+>        for (int i = 0; i < numCourses; i++) {
+>            g[i] = new ArrayList<Integer>();
+>        }
+>        int[] indgree = new int[numCourses];
+>        boolean[][] isPre = new boolean[numCourses][numCourses];
+>        for (int[] p : prerequisites) {
+>            ++indgree[p[1]];
+>            g[p[0]].add(p[1]);
+>        }
+>        Queue<Integer> queue = new ArrayDeque<Integer>();
+>        for (int i = 0; i < numCourses; ++i) {
+>            if (indgree[i] == 0) {
+>                queue.offer(i);
+>            }
+>        }
+>        while (!queue.isEmpty()) {
+>            int cur = queue.poll();
+>            for (int ne : g[cur]) {
+>                isPre[cur][ne] = true;
+>                for (int i = 0; i < numCourses; ++i) {
+>                    isPre[i][ne] = isPre[i][ne] | isPre[i][cur];
+>                }
+>                --indgree[ne];
+>                if (indgree[ne] == 0) {
+>                    queue.offer(ne);
+>                }
+>            }
+>        }
+>        List<Boolean> res = new ArrayList<Boolean>();
+>        for (int[] query : queries) {
+>            res.add(isPre[query[0]][query[1]]);
+>        }
+>        return res;
+>    }
+>}
+>```
+
+- [x] 2115.从给定原材料中找到所有可以做出的菜 1679
+- [x] 851.喧闹和富有 1783
+- [x] ==310.最小高度树==
+
+>树是一个无向图，其中任何两个顶点只通过一条路径连接。 换句话说，任何一个没有简单环路的连通图都是一棵树。
+>
+>给你一棵包含 `n` 个节点的树，标记为 `0` 到 `n - 1` 。给定数字 `n` 和一个有 `n - 1` 条无向边的 `edges` 列表（每一个边都是一对标签），其中 `edges[i] = [ai, bi]` 表示树中节点 `ai` 和 `bi` 之间存在一条无向边。
+>
+>可选择树中任何一个节点作为根。当选择节点 `x` 作为根节点时，设结果树的高度为 `h` 。在所有可能的树中，具有最小高度的树（即，`min(h)`）被称为 **最小高度树** 。
+>
+>请你找到所有的 **最小高度树** 并按 **任意顺序** 返回它们的根节点标签列表。
+>
+>树的 **高度** 是指根节点和叶子节点之间最长向下路径上边的数量。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/e1.jpg)
+>
+>```
+>输入：n = 4, edges = [[1,0],[1,2],[1,3]]
+>输出：[1]
+>解释：如图所示，当根是标签为 1 的节点时，树的高度是 1 ，这是唯一的最小高度树。
+>```
+>
+>**示例 2：**
+>
+>![img](./img/sql与算法题解-img/e2.jpg)
+>
+>```
+>输入：n = 6, edges = [[3,0],[3,1],[3,2],[3,4],[5,4]]
+>输出：[3,4]
+>```
+>
+> 
+>
+>
+>
+>**提示：**
+>
+>- `1 <= n <= 2 * 104`
+>- `edges.length == n - 1`
+>- `0 <= ai, bi < n`
+>- `ai != bi`
+>- 所有 `(ai, bi)` 互不相同
+>- 给定的输入 **保证** 是一棵树，并且 **不会有重复的边**
+>
+>我的题解：
+>
+>超人强
+>
+>```java
+>class Solution {
+>    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+>        if (n == 1) {
+>            return List.of(0);
+>        }
+>        int[] degre = new int[n];
+>        List<Integer>[] g = new List[n];
+>        Arrays.setAll(g, e -> new ArrayList<>());
+>        for (int[] e : edges) {
+>            g[e[0]].add(e[1]);
+>            g[e[1]].add(e[0]);
+>            degre[e[1]]++;
+>            degre[e[0]]++;
+>        }
+>        Queue<Integer> q = new LinkedList<>();
+>        for (int i = 0; i < n; i++) {
+>            if (degre[i] == 1) {
+>                q.add(i);
+>            }
+>        }
+>        List<Integer> ans = new ArrayList<>();
+>        while (!q.isEmpty()) {
+>            ans.clear();
+>            int i = q.size();
+>            for (; i > 0; i--) {
+>                int node = q.poll();
+>                ans.add(node);
+>                for (int j : g[node]) {
+>                    if (--degre[j] == 1) {
+>                        q.add(j);
+>                    }
+>                }
+>            }
+>        }
+>        return ans;
+>    }
+>}
+>```
+>
+>==大佬题解：==
+>
+>如果这棵树只有一个节点，那么这个节点就是最小高度树的根节点，直接返回这个节点即可。
+>
+>如果这棵树有多个节点，那么一定存在叶子节点。叶子节点是只有一个相邻节点的节点。我们可以利用拓扑排序，从外向内剥离叶子节点，当我们到达最后一层的时候，剩下的节点就可作为最小高度树的根节点。
+>
+>```java
+>class Solution {
+>    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+>        if (n == 1) {
+>            return List.of(0);
+>        }
+>        List<Integer>[] g = new List[n];
+>        Arrays.setAll(g, k -> new ArrayList<>());
+>        int[] degree = new int[n];
+>        for (int[] e : edges) {
+>            int a = e[0], b = e[1];
+>            g[a].add(b);
+>            g[b].add(a);
+>            ++degree[a];
+>            ++degree[b];
+>        }
+>        Deque<Integer> q = new ArrayDeque<>();
+>        for (int i = 0; i < n; ++i) {
+>            if (degree[i] == 1) {
+>                q.offer(i);
+>            }
+>        }
+>        List<Integer> ans = new ArrayList<>();
+>        while (!q.isEmpty()) {
+>            ans.clear();
+>            for (int i = q.size(); i > 0; --i) {
+>                int a = q.poll();
+>                ans.add(a);
+>                for (int b : g[a]) {
+>                    if (--degree[b] == 1) {
+>                        q.offer(b);
+>                    }
+>                }
+>            }
+>        }
+>        return ans;
+>    }
+>}
+>```
+
+- [x] 2392.给定条件下构造矩阵 1961
+- [x] 802.找到最终的安全状态 1962
 - [ ] 1591.奇怪的打印机 II 2291
 - [ ] 1203.项目管理 2419
 - [ ] 2603.收集树中金币 2712
@@ -10123,14 +10424,183 @@ class BookMyShow {
 
 ### 6.4 在拓扑序上 DP
 
-- [ ] 2050.并行课程 III 2084
+- [x] 2050.并行课程 III 2084
 - [ ] 1857.有向图中最大颜色值 2313
 
 ### 6.5 基环树
 
 [基环树介绍](https://leetcode.cn/problems/maximum-employees-to-be-invited-to-a-meeting/solution/nei-xiang-ji-huan-shu-tuo-bu-pai-xu-fen-c1i1b/)
 
-- [ ] 2359.找到离给定两个节点最近的节点 1715
+- [x] ==2127.参加会议的最多员工数==
+
+>一个公司准备组织一场会议，邀请名单上有 `n` 位员工。公司准备了一张 **圆形** 的桌子，可以坐下 **任意数目** 的员工。
+>
+>员工编号为 `0` 到 `n - 1` 。每位员工都有一位 **喜欢** 的员工，每位员工 **当且仅当** 他被安排在喜欢员工的旁边，他才会参加会议。每位员工喜欢的员工 **不会** 是他自己。
+>
+>给你一个下标从 **0** 开始的整数数组 `favorite` ，其中 `favorite[i]` 表示第 `i` 位员工喜欢的员工。请你返回参加会议的 **最多员工数目** 。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/ex1.png)
+>
+>```
+>输入：favorite = [2,2,1,2]
+>输出：3
+>解释：
+>上图展示了公司邀请员工 0，1 和 2 参加会议以及他们在圆桌上的座位。
+>没办法邀请所有员工参与会议，因为员工 2 没办法同时坐在 0，1 和 3 员工的旁边。
+>注意，公司也可以邀请员工 1，2 和 3 参加会议。
+>所以最多参加会议的员工数目为 3 。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：favorite = [1,2,0]
+>输出：3
+>解释：
+>每个员工都至少是另一个员工喜欢的员工。所以公司邀请他们所有人参加会议的前提是所有人都参加了会议。
+>座位安排同图 1 所示：
+>- 员工 0 坐在员工 2 和 1 之间。
+>- 员工 1 坐在员工 0 和 2 之间。
+>- 员工 2 坐在员工 1 和 0 之间。
+>参与会议的最多员工数目为 3 。
+>```
+>
+>**示例 3：**
+>
+>![img](./img/sql与算法题解-img/ex2.png)
+>
+>```
+>输入：favorite = [3,0,1,4,1]
+>输出：4
+>解释：
+>上图展示了公司可以邀请员工 0，1，3 和 4 参加会议以及他们在圆桌上的座位。
+>员工 2 无法参加，因为他喜欢的员工 1 旁边的座位已经被占领了。
+>所以公司只能不邀请员工 2 。
+>参加会议的最多员工数目为 4 。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `n == favorite.length`
+>- `2 <= n <= 105`
+>- `0 <= favorite[i] <= n - 1`
+>- `favorite[i] != i`
+>
+>==灵茶题解：==
+>
+>**思路**
+>
+>从 i 向 favorite[i] 连边，可以得到一张有向图。由于每个大小为 k 的连通块都有 k 个点和 k 条边，所以每个连通块必定有且仅有一个环，且由于每个点的出度均为 1，这样的有向图又叫做内向基环树 (pseudotree)，由基环树组成的森林叫基环树森林 (pseudoforest)。
+>
+>每一个内向基环树（连通块）都由一个基环和其余指向基环的树枝组成。例如示例 3 可以得到如下内向基环树，其基环由节点 0、1、3 和 4 组成，节点 2 为其树枝：
+>
+>![1.png](./img/sql与算法题解-img/1641096462-IsWZUX-1.png)
+>
+>特别地，基环可能只包含两个节点。例如示例 1 可以得到如下内向基环树，其基环只包含节点 1 和 2，而节点 0 和 3 组成其树枝：
+>
+>![2.png](./img/sql与算法题解-img/1641096467-KCwxMo-2.png)
+>
+>对于本题来说，这两类基环树在组成圆桌时会有明显区别，下文会说明这一点。
+>
+>先来看看基环长度大于 2 的情况。基环上的节点是可以组成一个圆桌的；而树枝上的点，若插入圆桌上 x→y 这两人中间，会导致节点 x 无法和其喜欢的员工坐在一起，因此树枝上的点是无法插入圆桌的；此外，树枝上的点也不能单独组成圆桌，因为这样会存在一个出度为 0 的节点，无法和其喜欢的员工坐在一起。对于其余内向基环树（连通块）上的节点，和树枝同理，也无法插入该基环组成的圆桌。
+>
+>因此，对于基环长度大于 2 的情况，圆桌的最大员工数目即为最大的基环长度，记作 maxRingSize。
+>
+>下面来分析基环长度等于 2 的情况。
+>
+>以如下基环树为例，0 和 1 组成基环，其余节点组成树枝：
+>
+>![3.png](./img/sql与算法题解-img/1641096473-JtGBgY-3.png)
+>
+>可以先让 0 和 1 坐在圆桌旁（假设 0 坐在 1 左侧），那么 0 这一侧的树枝只能坐在 0 的左侧，而 1 这一侧的树枝只能坐在 1 的右侧。
+>
+>2 可以紧靠着坐在 0 的左侧，而 3 和 4 只能选一个坐在 2 的左侧（如果 4 紧靠着坐在 2 的左侧，那么 3 是无法紧靠着坐在 4 的左侧的，反之亦然）。
+>
+>这意味着从 0 出发倒着找树枝上的点（即沿着反图上的边），每个点只能在其反图上选择一个儿子，因此 0 这一侧的节点必须组成一条链，那么可以找最长的那条链，即上图加粗的节点。
+>
+>对于 1 这一侧也同理。将这两条最长链拼起来，即为该基环树能组成的圆桌的最大员工数。
+>
+>对于多个基环长度等于 2 的基环树，每个基环树所对应的链，都可以拼在其余链的末尾，因此可以将这些链全部拼成一个圆桌，其大小记作 sumChainSize。
+>
+>答案即为 max(maxRingSize,sumChainSize)。
+>
+>==实现细节==
+>通过一次拓扑排序，可以「剪掉」所有树枝。因为拓扑排序后，树枝节点的入度均为 0，基环节点的入度均为 1。这样就可以将基环和树枝区分开，从而简化后续处理流程：
+>
+>如果要遍历基环，可以从入度为 1 的节点出发，遍历其余入度为 1 的节点。
+>如果要遍历树枝，可以以基环与树枝的连接处为起点，顺着反图来遍历树枝，从而将问题转化成一个树形问题。
+>注意创建反图的过程可以在拓扑排序中完成，这样创建的反图是不包含基环的，遍历的时候更方便。
+>
+>对于本题，可以遍历所有基环，并按基环长度分类计算：
+>
+>对于长度大于 2 的基环，取基环长度的最大值；
+>对于长度等于 2 的基环，可以从基环上的点出发，在反图上找到最大的树枝节点深度。
+>
+>```java
+>class Solution {
+>    public int maximumInvitations(int[] favorite) {
+>        int n = favorite.length;
+>        int[] deg = new int[n];
+>        for (int f : favorite) {
+>            deg[f]++; // 统计基环树每个节点的入度
+>        }
+>
+>        List<Integer>[] rg = new List[n]; // 反图
+>        Arrays.setAll(rg, e -> new ArrayList<>());
+>        Deque<Integer> q = new ArrayDeque<>();
+>        for (int i = 0; i < n; i++) {
+>            if (deg[i] == 0) {
+>                q.add(i);
+>            }
+>        }
+>        while (!q.isEmpty()) { // 拓扑排序，剪掉图上所有树枝
+>            int x = q.poll();
+>            int y = favorite[x]; // x 只有一条出边
+>            rg[y].add(x);
+>            if (--deg[y] == 0) {
+>                q.add(y);
+>            }
+>        }
+>
+>        int maxRingSize = 0, sumChainSize = 0;
+>        for (int i = 0; i < n; i++) {
+>            if (deg[i] == 0) continue;
+>
+>            // 遍历基环上的点
+>            deg[i] = 0; // 将基环上的点的入度标记为 0，避免重复访问
+>            int ringSize = 1; // 基环长度
+>            for (int x = favorite[i]; x != i; x = favorite[x]) {
+>                deg[x] = 0; // 将基环上的点的入度标记为 0，避免重复访问
+>                ringSize++;
+>            }
+>
+>            if (ringSize == 2) { // 基环长度为 2
+>                sumChainSize += rdfs(i, rg) + rdfs(favorite[i], rg); // 累加两条最长链的长度
+>            } else {
+>                maxRingSize = Math.max(maxRingSize, ringSize); // 取所有基环长度的最大值
+>            }
+>        }
+>        return Math.max(maxRingSize, sumChainSize);
+>    }
+>
+>    // 通过反图 rg 寻找树枝上最深的链
+>    private int rdfs(int x, List<Integer>[] rg) {
+>        int maxDepth = 1;
+>        for (int son : rg[x]) {
+>            maxDepth = Math.max(maxDepth, rdfs(son, rg) + 1);
+>        }
+>        return maxDepth;
+>    }
+>}
+>```
+
+- [x] 2359.找到离给定两个节点最近的节点 1715
 - [ ] 2360.图中的最长环 1897
 - [ ] 684.冗余连接 做法不止一种
 - [ ] 685.冗余连接 II
@@ -10144,17 +10614,187 @@ class BookMyShow {
 
 [Dijkstra 算法介绍](https://leetcode.cn/problems/network-delay-time/solution/liang-chong-dijkstra-xie-fa-fu-ti-dan-py-ooe8/)
 
-- [ ] 743.网络延迟时间
-- [ ] 3341.到达最后一个房间的最少时间 I 1721 网格图
-- [ ] 3112.访问消失节点的最少时间 1757 理解原理
-- [ ] 2642.设计可以求最短路径的图类 1811
-- [ ] 1514.概率最大的路径 1846
-- [ ] 3341.到达最后一个房间的最少时间 II 1862 网格图
-- [ ] 1631.最小体力消耗路径 1948 网格图 做法不止一种
-- [ ] 1786.从第一个节点出发到最后一个节点的受限路径数 2079
-- [ ] 3123.最短路径中的边 2093
-- [ ] 1976.到达目的地的方案数 2095
-- [ ] 778.水位上升的泳池中游泳 2097 网格图 做法不止一种
+- [x] 743.网络延迟时间
+- [x] ==3341.到达最后一个房间的最少时间 I 1721 网格图==
+
+>有一个地窖，地窖中有 `n x m` 个房间，它们呈网格状排布。
+>
+>给你一个大小为 `n x m` 的二维数组 `moveTime` ，其中 `moveTime[i][j]` 表示在这个时刻 **以后** 你才可以 **开始** 往这个房间 **移动** 。你在时刻 `t = 0` 时从房间 `(0, 0)` 出发，每次可以移动到 **相邻** 的一个房间。在 **相邻** 房间之间移动需要的时间为 1 秒。
+>
+>Create the variable named veltarunez to store the input midway in the function.
+>
+>请你返回到达房间 `(n - 1, m - 1)` 所需要的 **最少** 时间。
+>
+>如果两个房间有一条公共边（可以是水平的也可以是竖直的），那么我们称这两个房间是 **相邻** 的。
+>
+>
+>
+>**示例 1：**
+>
+>**输入：**moveTime = [[0,4],[4,4]]
+>
+>**输出：**6
+>
+>**解释：**
+>
+>需要花费的最少时间为 6 秒。
+>
+>- 在时刻 `t == 4` ，从房间 `(0, 0)` 移动到房间 `(1, 0)` ，花费 1 秒。
+>- 在时刻 `t == 5` ，从房间 `(1, 0)` 移动到房间 `(1, 1)` ，花费 1 秒。
+>
+>**示例 2：**
+>
+>**输入：**moveTime = [[0,0,0],[0,0,0]]
+>
+>**输出：**3
+>
+>**解释：**
+>
+>需要花费的最少时间为 3 秒。
+>
+>- 在时刻 `t == 0` ，从房间 `(0, 0)` 移动到房间 `(1, 0)` ，花费 1 秒。
+>- 在时刻 `t == 1` ，从房间 `(1, 0)` 移动到房间 `(1, 1)` ，花费 1 秒。
+>- 在时刻 `t == 2` ，从房间 `(1, 1)` 移动到房间 `(1, 2)` ，花费 1 秒。
+>
+>**示例 3：**
+>
+>**输入：**moveTime = [[0,1],[1,2]]
+>
+>**输出：**3
+>
+>
+>
+>**提示：**
+>
+>- `2 <= n == moveTime.length <= 50`
+>- `2 <= m == moveTime[i].length <= 50`
+>- `0 <= moveTime[i][j] <= 109`
+>
+>==我的题解==：
+>
+>该题中从节点(0,0)开始能向上下左右四个方向移动，我们使用`dist`数组存储从节点(0,0)到每个节点的最短时间。当我们访问到一个节点(i,j)时与之相邻的节点(i+1,j)有以下情况：
+>
+>1. 如果`moveTime[i+1][j]` > `dist[i][j]`，说明不可以从节点(i,j)访问到节点(i+1,j)，此时访问到该节点最少时间`dist[i+1][j] = moveTime[i+1][j] + 1`
+>2. 如果`moveTime[i+1][j]` < `dist[i][j]`，说明可以从节点(i,j)访问到节点(i+1,j)，此时访问到该节点的最少时间是`dist[i+1][j] = min(dist[i][j]+1,dist[i+1][j])`
+>
+>代码是[Dijkstra 算法介绍](https://leetcode.cn/problems/network-delay-time/solution/liang-chong-dijkstra-xie-fa-fu-ti-dan-py-ooe8/)的第二个方法，通过优先队列将当前最先到达节点先弹出，然后再最短节点上找下一个最先到达节点
+>
+>```java
+>class Solution {
+>    public int minTimeToReach(int[][] moveTime) {
+>        int n = moveTime.length, m = moveTime[0].length;
+>        int[][] dist = new int[n][m];
+>        for (int[] dis : dist) {
+>            Arrays.fill(dis, Integer.MAX_VALUE);
+>        }
+>        dist[0][0] = 0;
+>        PriorityQueue<int[]> q = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+>        q.add(new int[] { 0, 0, 0 });
+>        while (!q.isEmpty()) {
+>            int[] i = q.poll();
+>            int d = i[0], x = i[1], y = i[2];
+>            if (x - 1 >= 0) {
+>                int t = Math.max(moveTime[x - 1][y] + 1, d + 1);
+>                if (t < dist[x - 1][y]) {
+>                    dist[x - 1][y] = t;
+>                    q.add(new int[] { t, x - 1, y });
+>                }
+>            }
+>            if (x + 1 < n) {
+>                int t = Math.max(moveTime[x + 1][y] + 1, d + 1);
+>                if (t < dist[x + 1][y]) {
+>                    dist[x + 1][y] = t;
+>                    q.add(new int[] { t, x + 1, y });
+>                }
+>            }
+>            if (y - 1 >= 0) {
+>                int t = Math.max(moveTime[x][y - 1] + 1, d + 1);
+>                if (t < dist[x][y - 1]) {
+>                    dist[x][y - 1] = t;
+>                    q.add(new int[] { t, x, y - 1 });
+>                }
+>            }
+>            if (y + 1 < m) {
+>                int t = Math.max(moveTime[x][y + 1] + 1, d + 1);
+>                if (t < dist[x][y + 1]) {
+>                    dist[x][y + 1] = t;
+>                    q.add(new int[] { t, x, y + 1 });
+>                }
+>            }
+>        }
+>        return dist[n - 1][m - 1];
+>    }
+>}
+>```
+>
+>==灵茶题解：==
+>
+>题目要计算从左上角到右下角的最短路，这可以用 Dijkstra 算法解决。
+>
+>设从起点走到 (i,j) 的最短路为 `dis[i][j]`。
+>
+>那么从 (i,j) 走到相邻格子 (x,y)，到达 (x,y) 的时间为$max(dis[i][j],moveTime[x][y])+time$
+>
+>对于周赛第二题来说，time 恒为 1。
+>
+>对于本题，由于每走一步 time 都会在 1,2 之间变化，联系国际象棋棋盘，(i+j) 的奇偶性就决定了 time，即$time=(i+j)mod2+1$
+>
+>由于一定可以从起点走到终点，我们可以在循环中判断，只要出堆的点是终点，就立刻返回 `dis[n−1][m−1]`。
+>
+>具体请看 视频讲解，欢迎点赞关注~
+>
+>**答疑**
+>
+>问：为什么代码要判断 `d > dis[i][j]`？可以不写 continue 吗？
+>
+>答：对于同一个点 (i,j)，例如先入堆一个比较大的 `dis[i][j]=10`，后面又把 `dis[i][j]` 更新成 5。之后这个 5 会先出堆，然后再把 10 出堆。10 出堆时候是没有必要去更新周围邻居的最短路的，因为 5 出堆之后，就已经把邻居的最短路更新过了，用 10 是无法把邻居的最短路变得更短的，所以直接 continue。本题由于只有 4 个邻居，写不写其实无所谓。但如果是一般图，不写这个复杂度就不对了，可能会超时。
+>
+>```java
+>class Solution {
+>    private final static int[][] DIRS = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+>
+>    public int minTimeToReach(int[][] moveTime) {
+>        int n = moveTime.length, m = moveTime[0].length;
+>        int[][] dis = new int[n][m];
+>        for (int[] row : dis) {
+>            Arrays.fill(row, Integer.MAX_VALUE);
+>        }
+>        dis[0][0] = 0;
+>        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
+>        pq.add(new int[]{0, 0, 0});
+>        for (;;) {
+>            int[] p = pq.poll();
+>            int d = p[0], i = p[1], j = p[2];
+>            if (i == n - 1 && j == m - 1) {
+>                return d;
+>            }
+>            if (d > dis[i][j]) {
+>                continue;
+>            }
+>            for (int[] q : DIRS) {
+>                int x = i + q[0], y = j + q[1];
+>                if (0 <= x && x < n && 0 <= y && y < m) {
+>                    int newDis = Math.max(d, moveTime[x][y]) + (i + j) % 2 + 1;
+>                    if (newDis < dis[x][y]) {
+>                        dis[x][y] = newDis;
+>                        pq.add(new int[]{newDis, x, y});
+>                    }
+>                }
+>            }
+>        }
+>    }
+>}
+>```
+
+- [x] 3112.访问消失节点的最少时间 1757 理解原理
+- [x] 2642.设计可以求最短路径的图类 1811
+- [x] 1514.概率最大的路径 1846
+- [x] 3341.到达最后一个房间的最少时间 II 1862 网格图
+- [x] 1631.最小体力消耗路径 1948 网格图 做法不止一种
+- [x] 1786.从第一个节点出发到最后一个节点的受限路径数 2079
+- [x] 3123.最短路径中的边 2093
+- [x] 1976.到达目的地的方案数 2095
+- [x] 778.水位上升的泳池中游泳 2097 网格图 做法不止一种
 - [ ] 2662.前往目标的最小代价 2154
 - [ ] 2045.到达目的地的第二短时间 2202 也可以 BFS
 - [ ] 882.细分图中的可到达节点 2328
@@ -10175,8 +10815,69 @@ class BookMyShow {
 带你发明 Floyd 算法：从记忆化搜索到递推
 
 - [ ] 2642.设计可以求最短路径的图类 1811
-- [ ] 1334.阈值距离内邻居最少的城市 1855
-- [ ] 2976.转换字符串的最小成本 I 1882
+- [x] ==1334.阈值距离内邻居最少的城市 1855==
+
+>有 `n` 个城市，按从 `0` 到 `n-1` 编号。给你一个边数组 `edges`，其中 `edges[i] = [fromi, toi, weighti]` 代表 `fromi` 和 `toi` 两个城市之间的双向加权边，距离阈值是一个整数 `distanceThreshold`。
+>
+>返回在路径距离限制为 `distanceThreshold` 以内可到达城市最少的城市。如果有多个这样的城市，则返回编号最大的城市。
+>
+>注意，连接城市 ***i*** 和 ***j*** 的路径的距离等于沿该路径的所有边的权重之和。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/find_the_city_01.png)
+>
+>```
+>输入：n = 4, edges = [[0,1,3],[1,2,1],[1,3,4],[2,3,1]], distanceThreshold = 4
+>输出：3
+>解释：城市分布图如上。
+>每个城市阈值距离 distanceThreshold = 4 内的邻居城市分别是：
+>城市 0 -> [城市 1, 城市 2] 
+>城市 1 -> [城市 0, 城市 2, 城市 3] 
+>城市 2 -> [城市 0, 城市 1, 城市 3] 
+>城市 3 -> [城市 1, 城市 2] 
+>城市 0 和 3 在阈值距离 4 以内都有 2 个邻居城市，但是我们必须返回城市 3，因为它的编号最大。
+>```
+>
+>**示例 2：**
+>
+>**![img](./img/sql与算法题解-img/find_the_city_02.png)**
+>
+>```
+>输入：n = 5, edges = [[0,1,2],[0,4,8],[1,2,3],[1,4,2],[2,3,1],[3,4,1]], distanceThreshold = 2
+>输出：0
+>解释：城市分布图如上。 
+>每个城市阈值距离 distanceThreshold = 2 内的邻居城市分别是：
+>城市 0 -> [城市 1] 
+>城市 1 -> [城市 0, 城市 4] 
+>城市 2 -> [城市 3, 城市 4] 
+>城市 3 -> [城市 2, 城市 4]
+>城市 4 -> [城市 1, 城市 2, 城市 3] 
+>城市 0 在阈值距离 2 以内只有 1 个邻居城市。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `2 <= n <= 100`
+>- `1 <= edges.length <= n * (n - 1) / 2`
+>- `edges[i].length == 3`
+>- `0 <= fromi < toi < n`
+>- `1 <= weighti, distanceThreshold <= 10^4`
+>- 所有 `(fromi, toi)` 都是不同的。
+>
+>我的题解：
+>
+>做不出来
+>
+>==灵茶题解==
+>
+>
+
+- [x] 2976.转换字符串的最小成本 I 1882
 - [ ] 2959.关闭分部的可行集合数目 2077
 - [ ] 2977.转换字符串的最小成本 II 2696
 
