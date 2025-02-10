@@ -1,5 +1,5 @@
-        '''
-        # https://leetcode.cn/problems/cat-and-mouse/
+题目来源：https://leetcode.cn/problems/cat-and-mouse/
+
         dfs(step, i, j):
         step: 已经进行的游戏步数
         i: 老鼠位置
@@ -14,10 +14,9 @@
         所以可以用 已经进行的游戏步数 大于等于 总轮数 来表示平局，
         这可以被理解为有限状态自动机的所有状态都被访问过，从而进入循环（某个环内绕圈）。
         因此，step ≥ 2 * n * (n - 1) return 0
-        参考代码如下（会TEL）：
-        '''
 
-class Solution:
+参考代码如下（会TEL）：
+
     def catMouseGame(self, graph: List[List[int]]) -> int:
         n = len(graph)
 
@@ -69,7 +68,7 @@ class Solution:
 
 # 参考解法：拓扑排序
 
-'''
+
 根据题目描述，游戏中的状态由老鼠的位置、猫的位置和移动方决定。当状态为以下情况，可以直接确定胜负：
 
 当猫和老鼠的位置相同时，猫获胜，这是猫的必胜状态，老鼠的必败状态。
@@ -85,11 +84,9 @@ class Solution:
 如果上一轮的移动方与本轮的获胜方相同，那么上一轮的移动方可以到达当前状态并获胜，直接更新上一轮的状态为本轮的获胜方。
 如果上一轮的移动方与本轮的获胜方不同，且上一轮的移动方可以到达的所有状态都是上一轮的移动方的必败状态，那么我们将上一轮的状态更新为本轮的获胜方。
 对于第 2 个更新逻辑，我们需要记录每个状态的度。初始时，每个状态的度表示该状态的移动方可以移动到的结点数，即移动方所在节点的相邻结点数，如果移动方是猫且所在结点与洞相邻则需要将该状态的度减 1。
-
 当所有状态的结果都更新完毕时，初始状态的结果即为最终结果。
-'''
 
-class Solution:
+
     def catMouseGame(self, graph: List[List[int]]) -> int:
         n = len(graph)
         degree = [[[0]*2 for _ in range(n)] for _ in range(n)]
