@@ -1,8 +1,5 @@
-# https://leetcode.cn/problems/cat-and-mouse/
-
-class Solution:
-    def catMouseGame(self, graph: List[List[int]]) -> int:
         '''
+        # https://leetcode.cn/problems/cat-and-mouse/
         dfs(step, i, j):
         step: 已经进行的游戏步数
         i: 老鼠位置
@@ -19,6 +16,9 @@ class Solution:
         因此，step ≥ 2 * n * (n - 1) return 0
         参考代码如下（会TEL）：
         '''
+
+class Solution:
+    def catMouseGame(self, graph: List[List[int]]) -> int:
         n = len(graph)
 
         @cache
@@ -68,6 +68,7 @@ class Solution:
 
 
 # 参考解法：拓扑排序
+
 '''
 根据题目描述，游戏中的状态由老鼠的位置、猫的位置和移动方决定。当状态为以下情况，可以直接确定胜负：
 
@@ -87,6 +88,7 @@ class Solution:
 
 当所有状态的结果都更新完毕时，初始状态的结果即为最终结果。
 '''
+
 class Solution:
     def catMouseGame(self, graph: List[List[int]]) -> int:
         n = len(graph)
