@@ -1,5 +1,3 @@
-# 题目来源：https://leetcode.cn/problems/trapping-rain-water/
-
 # 题目来源；https://leetcode.cn/problems/trapping-rain-water/description/
 
 # 解法一：前后缀分解
