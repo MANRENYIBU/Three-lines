@@ -1,3 +1,5 @@
+# 题目来源：https://leetcode.cn/problems/design-memory-allocator/description/
+
 # 方法一：模拟
 class Allocator:
     def __init__(self, n):
