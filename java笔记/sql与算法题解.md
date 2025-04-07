@@ -342,3730 +342,6 @@ select user_id,max(time_stamp) last_stamp from Logins where year(time_stamp)=202
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# 算法题解
-
-## [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)(中等)
-
-给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。**子数组**是数组中的一个连续部分。
-
-**示例 1：**
-
-```
-输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
-输出：6
-解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
-```
-
-**示例 2：**
-
-```
-输入：nums = [1]
-输出：1
-```
-
-**示例 3：**
-
-```
-输入：nums = [5,4,-1,7,8]
-输出：23
-```
-
- 
-
-**提示：**
-
-- `1 <= nums.length <= 105`
-- `-104 <= nums[i] <= 104`
-
- 
-
-**进阶：**如果你已经实现复杂度为 `O(n)` 的解法，尝试使用更为精妙的 **分治法** 求解。
-
-使用动态规划解题:
-
-第一步**思考每轮的决策，定义状态，从而得到 dp 表**
-
-每一轮决策为数组nums[i]是否可以放在子数组中，放入和不放入状态i+1
-
-所以状态为[i]对应的子问题:==**数组前i个数中子数组的最大和，记为dp[i]**==
-
-第二步**找出最优子结构，进而推导出状态转移方程**
-
-对于状态dp[i]是由dp[i-1]+nums[i-1]和nums[i]组成的
-$$
-dp[i] = max(dp[i-1]+nums[i-1],nums[i-1])
-$$
-第三步**确定边界条件和状态转移顺序**
-
-此题dp长度为nums的len+1，dp[0]表示数组前0个数中的子数组最大和应该为0,既dp[0] = 0。状态应该由1开始一直到数组长度。
-
- 我的题解:
-
-```py
-def maxNumber(nums: List[int]) -> int:
-    dp = [0] * (len(nums) + 1)
-    dp[1] = nums[0]
-    m = dp[1]
-    for i in range(2, len(nums) + 1):
-        dp[i] = max(dp[i - 1] + nums[i - 1], nums[i - 1])
-        if dp[i] > m:
-            m = dp[i]
-
-    return m
-```
-
-最优题解:
-
-```py
-    def maxSubArray(self, nums: List[int]) -> int:
-        pre = 0  # 以某个数结尾的最大数组和
-        max_nums = nums[0]  # 当前数组的最大子序和
-        for num in nums:
-            pre = max(pre + num, num)  # 不断迭代 pre 十分关键
-            max_nums = max(max_nums, pre)
-        return max_nums
-```
-
-相对于我的优化了空间复杂度。
-
-## [3127. 构造相同颜色的正方形](https://leetcode.cn/problems/make-a-square-with-the-same-color/)(简单)
-
-给你一个二维 `3 x 3` 的矩阵 `grid` ，每个格子都是一个字符，要么是 `'B'` ，要么是 `'W'` 。字符 `'W'` 表示白色，字符 `'B'` 表示黑色。
-
-你的任务是改变 **至多一个** 格子的颜色，使得矩阵中存在一个 `2 x 2` 颜色完全相同的正方形。
-
-如果可以得到一个相同颜色的 `2 x 2` 正方形，那么返回 `true` ，否则返回 `false` 。
-
-**示例 1：**
-
-```
-输入：grid = [["B","W","B"],["B","W","W"],["B","W","B"]]
-输出：true
-解释：
-修改 `grid[0][2]` 的颜色，可以满足要求。
-```
-
-**示例 2：**
-
-```
-输入：grid = [["B","W","B"],["W","B","W"],["B","W","B"]]
-输出：false
-解释：
-只改变一个格子颜色无法满足要求。
-```
-
-**示例 3：**
-
-```
-输入：grid = [["B","W","B"],["B","W","W"],["B","W","W"]]
-输出：true
-解释：
-`grid` 已经包含一个 `2 x 2` 颜色相同的正方形了。
-```
-
-**提示：**
-
-- `grid.length == 3`
-- `grid[i].length == 3`
-- `grid[i][j]` 要么是 `'W'` ，要么是 `'B'` 。
-
-我的题解:
-
-暴力枚举，直接检查四个角的2 x 2正方形颜色是否相同，相同则返回true，不相同检查与中心点颜色不同的个数
-
-```java
-public boolean canMakeSquare1(char[][] grid) {
-        //分别要检查[0,0]、[0,1]、[1,0]、[1,1]这四个点为左上角的2 x 2正方形
-        int[][] cks = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
-        Map<Character, Integer> map = new HashMap<>();
-        for (int[] ck : cks) {
-            int x = ck[0];
-            int y = ck[1];
-            //获取四角的颜色并记录个数
-            map.put(grid[x][y], map.getOrDefault(grid[x][y], 0) + 1);
-            map.put(grid[x + 1][y], map.getOrDefault(grid[x + 1][y], 0) + 1);
-            map.put(grid[x][y + 1], map.getOrDefault(grid[x][y + 1], 0) + 1);
-            map.put(grid[x + 1][y + 1], map.getOrDefault(grid[x + 1][y + 1], 0) + 1);
-            //如果只有一种颜色，则返回true
-            if (map.size() == 1) {
-                return true;
-            }
-            Integer blackNum = map.get('B');
-            Integer whiteNum = map.get('W');
-            //如果四个角只有一个颜色不同，则返回true
-            if (blackNum == 1 || whiteNum == 1) {
-                return true;
-            }
-            map.clear();
-        }
-        return false;
-
-    }
-```
-
-最优题解:官方解法，如果黑色或白色为2那么就不能构成2 x 2正方形，否则可以构成
-
-```java
-public boolean canMakeSquare2(char[][] grid) {
-        for (int i = 0; i <= 1; i++) {
-            for (int j = 0; j <= 1; j++) {
-                int count = 0;
-                for (int k = i; k <= i + 1; k++) {
-                    for (int l = j; l <= j + 1; l++) {
-                        if (grid[k][l] == 'B') {
-                            count++;
-                        }
-                    }
-                }
-                if (count != 2) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-```
-
-## [3153. 所有数对中数位差之和](https://leetcode.cn/problems/sum-of-digit-differences-of-all-pairs/)(中等)
-
-你有一个数组 `nums` ，它只包含 **正** 整数，所有正整数的数位长度都 **相同** 。
-
-两个整数的 **数位差** 指的是两个整数 **相同** 位置上不同数字的数目。
-
-请你返回 `nums` 中 **所有** 整数对里，**数位差之和。**
-
-**示例 1：**
-
->**输入：**nums = [13,23,12]
->
->**输出：**4
->
->**解释：**
->计算过程如下：
->\- **1**3 和 **2**3 的数位差为 1 。
->\- 1**3** 和 1**2** 的数位差为 1 。
->\- **23** 和 **12** 的数位差为 2 。
->所以所有整数数对的数位差之和为 `1 + 1 + 2 = 4` 。
-
-**示例 2：**
-
->**输入：**nums = [10,10,10,10]
->
->**输出：**0
->
->**解释：**
->数组中所有整数都相同，所以所有整数数对的数位不同之和为 0 。
-
-**提示：**
-
-- `2 <= nums.length <= 105`
-- `1 <= nums[i] < 109`
-- `nums` 中的整数都有相同的数位长度。
-
-**我的题解：**
-
-使用双层循环遍历数组，计算每一个数字的数位差，数位差的计算过程为使用循环除10,此方法超时，==不可用==。
-
-```java
-    public long sumDigitDifferences1(int[] nums) {
-        long sum = 0;
-        int l = nums.length;
-        for (int i = 0; i < l - 1; i++) {
-            for (int j = i + 1; j < l; j++) {
-                sum += getDiff(nums[i], nums[j]);
-            }
-        }
-        return sum;
-    }
-
-
-    public static long getDiff(int a, int b) {
-        long diff = 0;
-        while (a > 0 || b > 0) {
-            diff += Math.abs(a % 10 - b % 10) == 0 ? 0 : 1;
-            a /= 10;
-            b /= 10;
-        }
-        return diff;
-    }
-```
-
-**最优题解:**
-
-依次计算每一位数位上所有整数对中，数位不同的次数。然后对所有数位的次数求和。我们从最低位开始，最低位的数字是 num[i]%10。用一个长度为 10 的数组 cnt 统计每个数字出现的次数。那么，这一位上数位不同的次数即为 
-
-$(\sum_{i=1}^9(n-cnt[i])\times cnt[i])\div 2$
-
-其中 n 是数组 num 的长度。举例说明，该数位上，0 出现了 cnt[0] 次，那么其他数字就会出现 n−cnt[0] 次，那么数位不同的次数中，包含 0 的情况就有 cnt[0]×(n−cnt[0]) 次。但是这个次数，会在计算其他数字时也被计算一次，所以最后结果要除以 2。
-
-同时我们将 num[i] 更新为 num[i]/10，方便计算下一数位，直到所有 num[i] 变为 0。
-
-```java
-    public long sumDigitDifferences2(int[] nums) {
-        long res = 0;
-        int n = nums.length;
-        while (nums[0] > 0) {
-            int[] cnt = new int[10];
-            for (int i = 0; i < n; i++) {
-                cnt[nums[i] % 10]++;
-                nums[i] /= 10;
-            }
-            for (int i = 0; i < 10; i++) {
-                res += (long) (n - cnt[i]) * cnt[i];
-            }
-        }
-        return res / 2;
-    }
-```
-
-## [2708. 一个小组的最大实力值](https://leetcode.cn/problems/maximum-strength-of-a-group/)(中等)
-
-给你一个下标从 **0** 开始的整数数组 `nums` ，它表示一个班级中所有学生在一次考试中的成绩。老师想选出一部分同学组成一个 **非空** 小组，且这个小组的 **实力值** 最大，如果这个小组里的学生下标为 `i0`, `i1`, `i2`, ... , `ik` ，那么这个小组的实力值定义为 `nums[i0] * nums[i1] * nums[i2] * ... * nums[ik]` 。
-
-请你返回老师创建的小组能得到的最大实力值为多少。
-
-**示例 1：**
-
->输入：nums = [3,-1,-5,2,5,-9]
->输出：1350
->解释：一种构成最大实力值小组的方案是选择下标为 [0,2,3,4,5] 的学生。实力值为 3 * (-5) * 2 * 5 * (-9) = 1350 ，这是可以得到的最大实力值。
-
-**示例 2：**
-
->输入：nums = [-4,-5,-4]
->输出：20
->解释：选择下标为 [0, 1] 的学生。得到的实力值为 20 。我们没法得到更大的实力值。
-
-**提示：**
-
-- `1 <= nums.length <= 13`
-- `-9 <= nums[i] <= 9`
-
-**我的题解:**
-
-使用枚举遍历数组，要求取最大值，则需要数组中的全部正数和偶数个负数。
-
-```java
-public long maxStrength1(int[] nums) {
-        if (nums.length == 1) {
-            return nums[0];
-        }
-        long times = 1;
-        //排序
-        Arrays.sort(nums);
-        int size = nums.length;
-        int negNumberIndex = -1;
-        for (int i = size - 1; i >= 0; i--) {
-            //处理0出现的情况
-            if (nums[i] == 0) {
-                if (i == size - 1) {
-                    int negIndex = -1;
-                    for (int j = i; j >= 0; j--) {
-                        if (nums[j] < 0) {
-                            negIndex = j;
-                            break;
-                        }
-                    }
-                    if (negIndex == -1 || negIndex == 0) {
-                        return 0;
-                    }
-                }
-                continue;
-            }
-            if (nums[i] < 0) {
-                negNumberIndex = i;
-                break;
-            }
-            times *= nums[i];
-        }
-        if (negNumberIndex == -1 || negNumberIndex == 0) {
-            return times;
-        }
-        int negNumCount = negNumberIndex + 1;
-        if (negNumCount % 2 != 0) {
-            negNumberIndex--;
-        }
-        for (int i = negNumberIndex; i >= 0; i--) {
-            times *= nums[i];
-        }
-        return times;
-    }
-```
-
-**最优题解:**
-
-这道题实际上是求所有元素都为整数的数组的子序列的最大积，从最大积的正负性入手。
-
-- 当数组仅有 1 个元素且为负数时，最大积为负数。
-- 当数组不包含正数，且负数元素小于等于 1 个时，最大积为 0。
-- 其他情况下，最大积为正数。那么如何求这个最大积呢？可以将所有非 0 元素求积，如果乘积为正数，则为最大积。如果乘积为负数，则说明乘积中包含奇数个负数，此时将这个乘积除以最大负数则为最大积。
-
-```java
-    public long maxStrength2(int[] nums) {
-        int negativeCount = 0, zeroCount = 0, positiveCount = 0;
-        long prod = 1;
-        int maxNegative = -9;
-        for (int num : nums) {
-            if (num < 0) {
-                negativeCount++;
-                prod *= num;
-                maxNegative = Math.max(maxNegative, num);
-            } else if (num == 0) {
-                zeroCount++;
-            } else {
-                prod *= num;
-                positiveCount++;
-            }
-        }
-        if (negativeCount == 1 && zeroCount == 0 && positiveCount == 0) {
-            return nums[0];
-        }
-        if (negativeCount <= 1 && positiveCount == 0) {
-            return 0;
-        }
-        if (prod < 0) {
-            return prod / maxNegative;
-        } else {
-            return prod;
-        }
-    }
-```
-
-## [3174. 清除数字](https://leetcode.cn/problems/clear-digits/)(简单)
-
-给你一个字符串 `s` 。
-
-你的任务是重复以下操作删除 **所有** 数字字符：
-
-- 删除 **第一个数字字符** 以及它左边 **最近** 的 **非数字** 字符。
-
-请你返回删除所有数字字符以后剩下的字符串。
-
- 
-
-**示例 1：**
-
-**输入：**s = "abc"
-
-**输出：**"abc"
-
-**解释：**
-
-字符串中没有数字。
-
-**示例 2：**
-
-**输入：**s = "cb34"
-
-**输出：**""
-
-**解释：**
-
-一开始，我们对 `s[2]` 执行操作，`s` 变为 `"c4"` 。
-
-然后对 `s[1]` 执行操作，`s` 变为 `""` 。
-
-**提示：**
-
-- `1 <= s.length <= 100`
-- `s` 只包含小写英文字母和数字字符。
-- 输入保证所有数字都可以按以上操作被删除。
-
-**我的题解:**
-
-因为需要处理重复的操作，从而使用递归来执行删除数字的操作。
-
-```java
-    public String clearDigits1(String s) {
-        return clearDigitsHelp(0, new StringBuilder(s));
-    }
-
-    public String clearDigitsHelp(int startIndex, StringBuilder sb) {
-        int length = sb.length();
-        for (int i = startIndex; i < length; i++) {
-            if (Character.isDigit(sb.charAt(i))) {
-                sb.deleteCharAt(i);
-                if (i - 1 >= 0) {
-                    sb.deleteCharAt(i - 1);
-                }
-                return clearDigitsHelp(i - 1, sb);
-            }
-        }
-        return sb.toString();
-    }
-```
-
-**官方题解:**
-
-根据题意，我们可以使用栈来模拟所有操作。首先遍历字符串 s，令当前访问的字符为 c，有两种情况：
-
-- c 为数字，那么我们将栈顶字符弹出。
-
-- c 不为数字，那么我们将 c 压入栈中。
-
-
-最后返回栈中自底向上的所有字符组成的字符串为结果。
-
-```java
-public String clearDigits2(String s) {
-    StringBuilder res = new StringBuilder();
-    for (char c : s.toCharArray()){
-        if (Character.isDigit(c)) {
-            res.deleteCharAt(res.length() - 1);
-        } else {
-            res.append(c);
-        }
-    }
-    return res.toString();
-}
-```
-
-## [2860. 让所有学生保持开心的分组方法数](https://leetcode.cn/problems/happy-students/)(中等)
-
-给你一个下标从 **0** 开始、长度为 `n` 的整数数组 `nums` ，其中 `n` 是班级中学生的总数。班主任希望能够在让所有学生保持开心的情况下选出一组学生：
-
-如果能够满足下述两个条件之一，则认为第 `i` 位学生将会保持开心：
-
-- 这位学生被选中，并且被选中的学生人数 **严格大于** `nums[i]` 。
-- 这位学生没有被选中，并且被选中的学生人数 **严格小于** `nums[i]` 。
-
-返回能够满足让所有学生保持开心的分组方法的数目。
-
-**示例 1：**
-
->输入：nums = [1,1]
->
->输出：2
->
->解释：
->
->有两种可行的方法：
->
->班主任没有选中学生。
->
->班主任选中所有学生形成一组。 
->
->如果班主任仅选中一个学生来完成分组，那么两个学生都无法保持开心。因此，仅存在两种可行的方法。
-
-**示例 2：**
-
->输入：nums = [6,0,3,3,6,7,2,7]
->
->输出：3
->
->解释：
->
->存在三种可行的方法：
->
->班主任选中下标为 1 的学生形成一组。
->
->班主任选中下标为 1、2、3、6 的学生形成一组。
->
->班主任选中所有学生形成一组。 
-
-**提示：**
-
-- `1 <= nums.length <= 105`
-- `0 <= nums[i] < nums.length`
-
-**我的题解:**
-
-按照题目的要求可以发现我们只能按顺序选中对应数字，不能跳过某些数字，所以我们可以先排序，又因为我们可以现在最多`nums.length`个数字最小可以选择`0`个数字，所以我们使用循环判断每次选中是否可行。注意这里的排序很影响时间复杂度，使用`Collection`的排序要快许多。
-
-```java
-public int countWays1(List<Integer> nums) {
-    //记录方法数
-    int countWay = 0;
-    int size = nums.size();
-    //从小到大排序
-    Collections.sort(nums);
-    int max = nums.get(size - 1);
-    for (int i = 0; i <= max; i++) {
-        //这里的i表示选中的数的个数最小0个，最大size-1个
-        if (i < nums.get(i) && (i == 0 || nums.get(i - 1) < i)) {
-            countWay++;
-        }
-    }
-    if (size > nums.get(size - 1)) {
-        countWay++;
-    }
-    return countWay;
-}
-```
-
-**最优题解:**
-
-根据题意可知，假设数组 nums 的长度为 n，此时设选中学生人数为 k，此时 k∈[0,n]，k 应满足如下：
-
-- 所有满足 nums[i]<k 的学生应被选中；
-
-- 所有满足 nums[i]>k 的学生不应被选中；
-
-- 不能存在 nums[i]=k 的学生；
-
-
-这意味着在确定当前已择中学生人数的前提下，则此时选择方案是唯一的，为方便判断，我们把 nums 从小到大排序。我们枚举选中的人数 k，由于 nums 已有序，此时最优分组一定是前 k 个学生被选中，剩余的 n−k 个学生不被选中，此时只需要检测选中的 k 个学生中的最大值是否满足小于 k，未被选中的学生中的最小值是否满足大于 k 即可，如果同时满足上述两个条件，则该分配方案可行，最终返回可行的方案计数即可，需要注意处理好边界 0 与 n。
-
-```java
-public int countWays2(List<Integer> nums) {
-    int n = nums.size();
-    int res = 0;
-    Collections.sort(nums);
-    for (int k = 0; k <= n; k++) {
-        // 前 k 个元素的最大值是否小于 k
-        if (k > 0 && nums.get(k - 1) >= k) {
-            continue;
-        }
-        // 后 n - k 个元素的最小值是否大于 k
-        if (k < n && nums.get(k) <= k) {
-            continue;
-        }
-        res++;
-    }
-    return res;
-}
-```
-
-## [3176. 求出最长好子序列 I](https://leetcode.cn/problems/find-the-maximum-length-of-a-good-subsequence-i/)(中等)(动态规划)
-
-给你一个整数数组 `nums` 和一个 **非负** 整数 `k` 。如果一个整数序列 `seq` 满足在下标范围 `[0, seq.length - 2]` 中 **最多只有** `k` 个下标 `i` 满足 `seq[i] != seq[i + 1]` ，那么我们称这个整数序列为 **好** 序列。
-
-请你返回 `nums` 中 **好** 子序列的最长长度。
-
-**示例 1：**
-
->**输入：**nums = [1,2,1,1,3], k = 2
->
->**输出：**4
->
->**解释：**
->
->最长好子序列为 [<u>1</u>,<u>2</u>,<u>1</u>,<u>1</u>,3] 。
-
-**示例 2：**
-
->**输入：**nums = [1,2,3,4,5,1], k = 0
->
->**输出：**2
->
->**解释：**
->
->最长好子序列为 [<u>1</u>,2,3,4,5,<u>1</u>]。
-
-**提示：**
-
-- `1 <= nums.length <= 500`
-- `1 <= nums[i] <= 109`
-- `0 <= k <= min(nums.length, 25)`
-
-**我的题解:**
-
-我使用动态规划实现，但是不能构成全部子序列，==不可用==。
-
-```java
-public int maximumLength1(int[] nums, int k) {
-    if (nums.length == 1) {
-        return 1;
-    }
-    int size = nums.length;
-
-    //使用动态规划 dp[i][0]表示以nums[i]开头的子序列的最大长度,dp[i][1]表示比较次数
-    int[][] dp = new int[size][2];
-    //初始状态
-    dp[size - 1] = new int[]{1, 0};
-    if (nums[size - 2] == nums[size - 1]) {
-        dp[size - 2] = new int[]{2, 0};
-    } else {
-        dp[size - 2] = k > 0 ? new int[]{2, 1} : new int[]{1, 0};
-    }
-    int maxLength = Math.max(dp[size - 1][0], dp[size - 2][0]);
-    for (int i = size - 3; i >= 0; i--) {
-        dp[i] = new int[]{1, 0};
-        for (int j = i + 1; j < size; j++) {
-            int count = nums[i] == nums[j] ? 0 : 1;
-            if (count + dp[j][1] <= k) {
-                if (dp[i][0] < dp[j][0]+1) {
-                    dp[i][0] = dp[j][0] + 1;
-                    dp[i][1] = dp[j][1] + count;
-                }
-            }
-        }
-        maxLength = Math.max(maxLength, dp[i][0]);
-    }
-    return maxLength;
-}
-```
-
-**最优题解:**
-
-很容易想到用 `dp[i][j]` 来表示以 nums[i] 结尾组成的最长合法序列的长度，序列中有 j 个数字与其在序列中的后一个数字不相等。其中 i 的取值为 nums 的长度，j 不超过 k。初始时，有 `dp[i][0]=1`。对于转移，可以枚举每一个满足 x<i 的下标，有：
-
-`dp[i][j]` = max~j~`dp[x][j-(nums[x] != nums[i])]`+1
-
-```java
-public int maximumLength2(int[] nums, int k) {
-    int ans = 0;
-    int len = nums.length;
-    int[][] dp = new int[len][51];
-    for (int i = 0; i < len; i++) {
-        Arrays.fill(dp[i], -1);
-    }
-
-    for (int i = 0; i < len; i++) {
-        dp[i][0] = 1;
-        for (int l = 0; l <= k; l++) {
-            for (int j = 0; j < i; j++) {
-                int add = nums[i] != nums[j] ? 1 : 0;
-                if (l - add >= 0 && dp[j][l - add] != -1) {
-                    dp[i][l] = Math.max(dp[i][l], dp[j][l - add] + 1);
-                }
-            }
-            ans = Math.max(ans, dp[i][l]);
-        }
-    }
-
-    return ans;
-}
-```
-
-**优化题解:**
-
-还能对时间复杂度做进一步的优化，实际上，我们只需要枚举两种情况：
-
-- nums[i] != nums[x]，对于此情况可以维护一个长度为 k 的辅助数组 zd。其中 zd[j] 表示枚举到 i 前有 j 个与其在序列中的后一个不相等的合法序列最长长度，有转移 `dp[i][j]`=max~j~zd[j-1]+1 
-
-- nums[i]=nums[x]，假设有下标 a<b<c， 并且 nums[a]=nums[b]=nums[c]，对于 c 来说如果选取由 a 转移过来计算答案，那么一定不如 a→b→c 更优，所以会选取下标最近的相同的数进行转移。针对这种情况，dp 使用哈希表维护能节省一些空间，并且在哈希表中用 nums[i] 替换 i。
-
-
-在每一次遍历 i 计算完后更新 zd，最后的 zd[k] 就是答案。
-
-```java
-public int maximumLength3(int[] nums, int k) {
-    int len = nums.length;
-    Map<Integer, int[]> dp = new HashMap<Integer, int[]>();
-    int[] zd = new int[k + 1];
-
-    for (int i = 0; i < len; i++) {
-        int v = nums[i];
-        dp.putIfAbsent(v, new int[k + 1]);
-
-        int[] tmp = dp.get(v);
-        for (int j = 0; j <= k; j++) {
-            tmp[j] = tmp[j] + 1;
-            if (j > 0) {
-                tmp[j] = Math.max(tmp[j], zd[j - 1] + 1);
-            }
-        }
-        for (int j = 0; j <= k; j++) {
-            zd[j] = Math.max(zd[j], tmp[j]);
-            if (j > 0) {
-                zd[j] = Math.max(zd[j], zd[j - 1]);
-            }
-        }
-    }
-    return zd[k];
-}
-```
-
-## [3177. 求出最长好子序列 II](https://leetcode.cn/problems/find-the-maximum-length-of-a-good-subsequence-ii/)(困难)(动态规划)
-
-给你一个整数数组 `nums` 和一个 **非负** 整数 `k` 。如果一个整数序列 `seq` 满足在范围下标范围 `[0, seq.length - 2]` 中存在 **不超过** `k` 个下标 `i` 满足 `seq[i] != seq[i + 1]` ，那么我们称这个整数序列为 **好** 序列。
-
-请你返回 `nums` 中 **好** 子序列的最长长度
-
-**示例 1：**
-
->**输入：**nums = [1,2,1,1,3], k = 2
->
->**输出：**4
->
->**解释：**
->
->最长好子序列为 [**1**,**2**,**1**,**1**,3] 。
-
-**示例 2：**
-
->**输入：**nums = [1,2,3,4,5,1], k = 0
->
->**输出：**2
->
->**解释：**
->
->最长好子序列为 [**1**,2,3,4,5,**1**] 。
-
-**提示：**
-
-- `1 <= nums.length <= 5 * 10^3^`
-- `1 <= nums[i] <= 109`
-- `0 <= k <= min(50, nums.length)`
-
-**我的题解:**
-
-使用3176动态规划的解法，但是超出时间限制。
-
-```java
-public int maximumLength1(int[] nums, int k) {
-    int ans = 0;
-    int size = nums.length;
-    //这里的dp[i][j]表示以nums[i]结尾，并且存在j个元素与后一个元素不同的最大序列长度。
-    int[][] dp = new int[size][k + 1];
-    for (int i = 0; i < size; i++) {
-        Arrays.fill(dp[i], -1);
-    }
-    for (int i = 0; i < size; i++) {
-        //初始状态为dp[i][0] = 1
-        dp[i][0] = 1;
-        //在以nums[i]结尾的序列中，循环[0,k]表示该序列有[0,k]个元素与后一个元素不同。
-        for (int j = 0; j <= k; j++) {
-            //在这里计算dp[i][j]的值。
-            for (int l = 0; l < i; l++) {
-                int add = nums[i] != nums[l] ? 1 : 0;
-                if (j - add >= 0 && dp[l][j - add] != -1) {
-                    dp[i][j] = Math.max(dp[i][j], dp[l][j - add] + 1);
-                }
-            }
-
-            ans = Math.max(ans, dp[i][j]);
-        }
-    }
-
-    return ans;
-}
-```
-
-**最优题解:**
-
-我们可以想到用 `dp[i][j]` 来表示以 nums[i] 结尾，其中有 j 个数字与其在序列中的后一个数字不相等的最长合法序列的长度。其中 i 的取值小于 n（n 表示 nums 的长度），j 不超过 k。初始时，有 `dp[i][0]`=1。在转移时，可以枚举每一个满足 x<i 的下标，有：
-
-$$
-dp[i][j] = max
-\begin{cases}
-\ dp[i][j-1]+1, & nums[x] != nums[i] \\
-\ dp[i][j]+1, & nums[x] = nums[i]
-\end{cases}
-$$
-但这样的时间复杂度是 $O(n^2k)$，在此题是不可接受的。实际上，我们只需要枚举两种情况：
-
-- nums[x] != nums[i]，对于此情况，可以维护一个长度为 k 的辅助数组 zd。其中 zd[j] 表示枚举到位置 i 之前，有 j 个数字与其在序列中的后一个不相等的最长合法序列的长度，那么可以直接写出转移 `dp[i][j]`=zd[j−1]+1。
-- nums[i]=nums[x]，假设有下标 a<b<c，并且 nums[a]=nums[b]=nums[c]，对于 c 来说如果选取由 a 转移过来计算答案，那么一定不如 a→b→c 更优，所以会选取下标最近的相同的数进行转移。针对这种情况，dp 使用哈希表维护能节省一些空间，并且在哈希表中用 nums[i] 替换 i。
-
-
-在每一次遍历 i 计算完后更新 zd，最后的 zd[k] 就是答案。
-
-```java
-public int maximumLength2(int[] nums, int k) {
-    int len = nums.length;
-    Map<Integer, int[]> dp = new HashMap<Integer, int[]>();
-    int[] zd = new int[k + 1];
-
-    for (int i = 0; i < len; i++) {
-        int v = nums[i];
-        dp.putIfAbsent(v, new int[k + 1]);
-
-        int[] tmp = dp.get(v);
-        for (int j = 0; j <= k; j++) {
-            tmp[j] = tmp[j] + 1;
-            if (j > 0) {
-                tmp[j] = Math.max(tmp[j], zd[j - 1] + 1);
-            }
-        }
-        for (int j = 0; j <= k; j++) {
-            zd[j] = Math.max(zd[j], tmp[j]);
-        }
-    }
-    return zd[k];
-}
-```
-
-## [977. 有序数组的平方](https://leetcode.cn/problems/squares-of-a-sorted-array/)(简单)(双指针)
-
-给你一个按 **非递减顺序** 排序的整数数组 `nums`，返回 **每个数字的平方** 组成的新数组，要求也按 **非递减顺序** 排序。
-
-**示例 1：**
-
->输入：nums = [-4,-1,0,3,10]
->
->输出：[0,1,9,16,100]
->
->解释：平方后，数组变为 [16,1,0,9,100]
->
->排序后，数组变为 [0,1,9,16,100]
-
-**示例 2：**
-
->输入：nums = [-7,-3,2,3,11]
->
->输出：[4,9,9,49,121]
-
-**提示：**
-
-- `1 <= nums.length <= 104`
-- `-104 <= nums[i] <= 104`
-- `nums` 已按 **非递减顺序** 排序
-
-**进阶：**
-
-- 请你设计时间复杂度为 `O(n)` 的算法解决本问题
-
-**我的题解:**
-
-数组有序，并且有正负数，所以平方后最大值两端，我们只需要取两端最大的值填入结果最后。
-
-```java
-public int[] sortedSquares1(int[] nums) {
-    int size = nums.length;
-    int[] res = new int[size];
-    int left = 0;
-    int right = size - 1;
-    //数组有序，并且有正负数，所以平方后最大值在两端用双指针
-    int index = size - 1;
-    while (index >= 0) {
-        int leftNum = nums[left] * nums[left];
-        int rightNum = nums[right] * nums[right];
-        if (leftNum > rightNum) {
-            res[index--] = leftNum;
-            left++;
-        } else {
-            res[index--] = rightNum;
-            right--;
-        }
-
-    }
-    return res;
-}
-```
-
-**最优题解:**
-
-显然，如果数组 nums 中的所有数都是非负数，那么将每个数平方后，数组仍然保持升序；如果数组 nums 中的所有数都是负数，那么将每个数平方后，数组会保持降序。
-
-这样一来，如果我们能够找到数组 nums 中负数与非负数的分界线，那么就可以用类似「归并排序」的方法了。具体地，我们设 neg 为数组 nums 中负数与非负数的分界线，也就是说，nums[0] 到 nums[neg] 均为负数，而 nums[neg+1] 到 nums[n−1] 均为非负数。当我们将数组 nums 中的数平方后，那么 nums[0] 到 nums[neg] 单调递减，nums[neg+1] 到 nums[n−1] 单调递增。
-
-由于我们得到了两个已经有序的子数组，因此就可以使用归并的方法进行排序了。具体地，使用两个指针分别指向位置 neg 和 neg+1，每次比较两个指针对应的数，选择较小的那个放入答案并移动指针。当某一指针移至边界时，将另一指针还未遍历到的数依次放入答案。
-
-```java
-public int[] sortedSquares2(int[] nums) {
-    int n = nums.length;
-    int negative = -1;
-    for (int i = 0; i < n; ++i) {
-        if (nums[i] < 0) {
-            negative = i;
-        } else {
-            break;
-        }
-    }
-
-    int[] ans = new int[n];
-    int index = 0, i = negative, j = negative + 1;
-    while (i >= 0 || j < n) {
-        if (i < 0) {
-            ans[index] = nums[j] * nums[j];
-            ++j;
-        } else if (j == n) {
-            ans[index] = nums[i] * nums[i];
-            --i;
-        } else if (nums[i] * nums[i] < nums[j] * nums[j]) {
-            ans[index] = nums[i] * nums[i];
-            --i;
-        } else {
-            ans[index] = nums[j] * nums[j];
-            ++j;
-        }
-        ++index;
-    }
-
-    return ans;
-}
-```
-
-同样地，我们可以使用两个指针分别指向位置 0 和 n−1，每次比较两个指针对应的数，选择较大的那个逆序放入答案并移动指针。这种方法无需处理某一指针移动至边界的情况，读者可以仔细思考其精髓所在
-
-```java
-public int[] sortedSquares3(int[] nums) {
-    int n = nums.length;
-    int[] ans = new int[n];
-    for (int i = 0, j = n - 1, pos = n - 1; i <= j;) {
-        if (nums[i] * nums[i] > nums[j] * nums[j]) {
-            ans[pos] = nums[i] * nums[i];
-            ++i;
-        } else {
-            ans[pos] = nums[j] * nums[j];
-            --j;
-        }
-        --pos;
-    }
-    return ans;
-}
-```
-
-## [2181. 合并零之间的节点](https://leetcode.cn/problems/merge-nodes-in-between-zeros/)(中等)
-
-给你一个链表的头节点 `head` ，该链表包含由 `0` 分隔开的一连串整数。链表的 **开端** 和 **末尾** 的节点都满足 `Node.val == 0` 。
-
-对于每两个相邻的 `0` ，请你将它们之间的所有节点合并成一个节点，其值是所有已合并节点的值之和。然后将所有 `0` 移除，修改后的链表不应该含有任何 `0` 。
-
- 返回修改后链表的头节点 `head` 。
-
-**示例 1：
-![img](./img/sql与算法题解-img/ex1-1.png)**
-
->输入：head = [0,3,1,0,4,5,2,0]
->
->输出：[4,11]
->
->解释：
->
->上图表示输入的链表。修改后的链表包含：
->
->- 标记为绿色的节点之和：3 + 1 = 4
->- 标记为红色的节点之和：4 + 5 + 2 = 11
-**示例 2：
-![img](./img/sql与算法题解-img/ex2-1.png)**
-
->输入：head = [0,1,0,3,0,2,2,0]
->
->输出：[1,3,4]
->
->解释：
->
->上图表示输入的链表。修改后的链表包含：
->
->- 标记为绿色的节点之和：1 = 1
->- 标记为红色的节点之和：3 = 3
->- 标记为黄色的节点之和：2 + 2 = 4
-
-**提示：**
-
-- 列表中的节点数目在范围 `[3, 2 * 105]` 内
-- `0 <= Node.val <= 1000`
-- **不** 存在连续两个 `Node.val == 0` 的节点
-- 链表的 **开端** 和 **末尾** 节点都满足 `Node.val == 0`
-
-**我的题解:**
-
-直接循环遍历，需要返回头所以我使用一个start来存储头地址，使用temp作为真正的循环链表，当head.val为0时向temp添加新的节点，当不为零时在节点上自增。
-
-```java
-public ListNode mergeNodes1(ListNode head) {
-    ListNode start = new ListNode(0);
-    ListNode temp = new ListNode(0);
-    start.next = temp;
-    head = head.next;
-    while (head.next != null) {
-        if (head.val == 0) {
-            temp.next = new ListNode(head.val);
-            temp = temp.next;
-        } else {
-            temp.val += head.val;
-        }
-        head = head.next;
-    }
-    return start.next;
-}
-```
-
-**最优题解:**
-
-我们从链表头节点 head 的下一个节点开始遍历，并使用一个变量 total 维护当前遍历到的节点的元素之和。
-
-如果当前节点的值为 0，那么我们就新建一个值为 total 的节点，放在答案链表的尾部，并将 total 置零，否则我们将值累加进 total 中。
-
-为了方便维护答案，我们可以在遍历前新建一个伪头节点 dummy，并在遍历完成之后返回 dummy 的下一个节点作为答案。
-
-```java
-public ListNode mergeNodes2(ListNode head) {
-    ListNode dummy = new ListNode();
-    ListNode tail = dummy;
-    int total = 0;
-    for (ListNode cur = head.next; cur != null; cur = cur.next) {
-        if (cur.val == 0) {
-            ListNode node = new ListNode(total);
-            tail.next = node;
-            tail = tail.next;
-            total = 0;
-        } else {
-            total += cur.val;
-        }
-    }
-
-    return dummy.next;
-}
-```
-
-## [2024. 考试的最大困扰度](https://leetcode.cn/problems/maximize-the-confusion-of-an-exam/)(中等)(双指针)
-
-一位老师正在出一场由 `n` 道判断题构成的考试，每道题的答案为 true （用 `'T'` 表示）或者 false （用 `'F'` 表示）。老师想增加学生对自己做出答案的不确定性，方法是 **最大化** 有 **连续相同** 结果的题数。（也就是连续出现 true 或者连续出现 false）。
-
-给你一个字符串 `answerKey` ，其中 `answerKey[i]` 是第 `i` 个问题的正确结果。除此以外，还给你一个整数 `k` ，表示你能进行以下操作的最多次数：
-
-- 每次操作中，将问题的正确答案改为 `'T'` 或者 `'F'` （也就是将 `answerKey[i]` 改为 `'T'` 或者 `'F'` ）。
-
-请你返回在不超过 `k` 次操作的情况下，**最大** 连续 `'T'` 或者 `'F'` 的数目。
-
- 
-
-**示例 1：**
-
->输入：answerKey = "TTFF", k = 2
->
->输出：4
->
->解释：我们可以将两个 'F' 都变为 'T' ，得到 answerKey = "TTTT" 。
->
->总共有四个连续的 'T' 。
-
-**示例 2：**
-
->输入：answerKey = "TFFT", k = 1
->
->输出：3
->
->解释：我们可以将最前面的 'T' 换成 'F' ，得到 answerKey = "FFFT" 。
->
->或者，我们可以将第二个 'T' 换成 'F' ，得到 answerKey = "TFFF" 。
->
->两种情况下，都有三个连续的 'F' 。
-
-**示例 3：**
-
->输入：answerKey = "TTFTTFTT", k = 1
->
->输出：5
->
->解释：我们可以将第一个 'F' 换成 'T' ，得到 answerKey = "TTTTTFTT" 。
->
->或者我们可以将第二个 'F' 换成 'T' ，得到 answerKey = "TTFTTTTT" 。
->
->两种情况下，都有五个连续的 'T' 。
-
-**提示：**
-
-- `n == answerKey.length`
-- `1 <= n <= 5 * 104`
-- `answerKey[i]` 要么是 `'T'` ，要么是 `'F'`
-- `1 <= k <= n`
-
-**我的题解:**
-
-==不可用==
-
-```java
-public int maxConsecutiveAnswers1(String answerKey, int k) {
-    int i = 0;
-    int size = answerKey.length();
-    int ans = 0;
-    while (i < size) {
-        int tempK = k;
-        int j;
-        for (j = i; j < size; j++) {
-            if (answerKey.charAt(i) != answerKey.charAt(j)) {
-                if (tempK == 0) {
-                    break;
-                }
-                tempK--;
-            }
-        }
-        ans = Math.max(ans, j - i);
-
-        i++;
-    }
-
-    return ans;
-}
-```
-
-**最优题解:**
-
-只要求最大连续指定字符的数目时，本题和「1004. 最大连续1的个数 III」完全一致。
-
-在指定字符的情况下，我们可以计算其最大连续数目。具体地，我们使用滑动窗口的方法，从左到右枚举右端点，维护区间中另一种字符的数量为 sum，当 sum 超过 k，我们需要让左端点右移，直到 sum≤k。移动过程中，我们记录滑动窗口的最大长度，即为指定字符的最大连续数目。
-
-本题的答案为分别指定字符为 T 和 F 时的最大连续数目的较大值。
-
-```java
-public int maxConsecutiveAnswers2(String answerKey, int k) {
-    return Math.max(maxConsecutiveChar(answerKey, k, 'T'), maxConsecutiveChar(answerKey, k, 'F'));
-}
-
-public int maxConsecutiveChar(String answerKey, int k, char ch) {
-    int n = answerKey.length();
-    int ans = 0;
-    for (int left = 0, right = 0, sum = 0; right < n; right++) {
-        sum += answerKey.charAt(right) != ch ? 1 : 0;
-        while (sum > k) {
-            sum -= answerKey.charAt(left++) != ch ? 1 : 0;
-        }
-        ans = Math.max(ans, right - left + 1);
-    }
-    return ans;
-}
-```
-
-## [2552. 统计上升四元组](https://leetcode.cn/problems/count-increasing-quadruplets/)(困难)
-
-给你一个长度为 `n` 下标从 **0** 开始的整数数组 `nums` ，它包含 `1` 到 `n` 的所有数字，请你返回上升四元组的数目。
-
-如果一个四元组 `(i, j, k, l)` 满足以下条件，我们称它是上升的：
-
-- `0 <= i < j < k < l < n` 且
-- `nums[i] < nums[k] < nums[j] < nums[l]` 。
-
- 
-
-**示例 1：**
-
->输入：nums = [1,3,2,4,5]
->
->输出：2
->
->解释：
->
->- 当 i = 0 ，j = 1 ，k = 2 且 l = 3 时，有 nums[i] < nums[k] < nums[j] < nums[l] 。
->- 当 i = 0 ，j = 1 ，k = 2 且 l = 4 时，有 nums[i] < nums[k] < nums[j] < nums[l] 。
->没有其他的四元组，所以我们返回 2 。
-
-**示例 2：**
-
-> 输入：nums = [1,2,3,4]
->
-> 输出：0
->
-> 解释：只存在一个四元组 i = 0 ，j = 1 ，k = 2 ，l = 3 ，但是 nums[j] < nums[k] ，所以我们返回 0 。
-
-**提示：**
-
-- `4 <= nums.length <= 4000`
-- `1 <= nums[i] <= nums.length`
-- `nums` 中所有数字 **互不相同** ，`nums` 是一个排列。
-
-**我的题解:**
-
-暴力枚举，循环遍历每一种可能，时间超限，==不可用==
-
-```java
-public long countQuadruplets1(int[] nums) {
-    int length = nums.length;
-    long ans = 0;
-    for (int i = 0; i <= length - 4; i++) {
-        ans += countQuadrupletsHelp(nums, i, length);
-    }
-    return ans;
-}
-
-public long countQuadrupletsHelp(int[] nums, int i, int length) {
-    int ans = 0;
-    for (int j = i; j <= length - 3; j++) {
-        if (nums[j] - nums[i] > 1) {
-            for (int k = j; k <= length - 2; k++) {
-                if (nums[k] < nums[j] && nums[k] > nums[i]) {
-                    for (int l = k; l < length; l++) {
-                        if (nums[l] > nums[j]) {
-                            ans++;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return ans;
-}
-```
-
-**最优题解:**
-
-我们可以枚举四元组 (i,j,k,l) 中的 j 和 k，它们恰好是不等式的中间两项：这样一来，我们只需要统计：
-
-- 满足 i<j 并且 nums[i]<nums[k] 的 i 的个数；
-
-- 满足 k<l 并且 nums[j]<nums[l] 的 l 的个数。
-
-
-根据乘法原理，将它们相乘，即可得到满足要求的四元组的个数。
-
-我们不妨在外层循环递增枚举 j，在内层循环枚举 k。在内层循环中，j 为定值，上述两个需要统计的量：
-
-满足 i<j 的元素集合是固定不变的，变化的仅是 nums[k]。由于题目规定了数组 nums 一定是 1∼n 的一个排列（其中 n 是数组 nums 的长度），那么我们使用一个数组 pre，其中 pre[x] 表示 nums[0] 到 nums[j−1] 中小于 x 的元素个数。这样一来，我们通过 pre[nums[k]]，就可以在 O(1) 的时间得到需要的统计量，并且当内层循环结束，j 即将发生变化时，我们只需要把所有满足 x>nums[j] 的 pre[x] 都增加 1，就可以在 O(n) 的时间更新这个数组。
-
-满足 k<l 的元素集合是随着 k 而变化的。要想变化尽可能要，我们应该按照递增或者递减的顺序枚举 k。由于 nums[j] 是定值，因此按照递减的顺序枚举 k 是比较方便的，这样我们只需要使用一个变量 suf 记录需要的统计量。初始时，它的值为 0，每当 k 即将发生变化时，如果 nums[j]<nums[k]，就讲 suf 增加 1 即可。
-
-需要注意只有当 nums[j]>nums[k] 时，才将 pre[nums[k]]×suf 累加入答案。
-
-```java
-public long countQuadruplets2(int[] nums) {
-    int n = nums.length;
-    int[] pre = new int[n + 1];
-    long ans = 0;
-    for (int j = 0; j < n; ++j) {
-        int suf = 0;
-        for (int k = n - 1; k > j; --k) {
-            if (nums[j] > nums[k]) {
-                ans += (long) pre[nums[k]] * suf;
-            } else {
-                ++suf;
-            }
-        }
-        for (int x = nums[j] + 1; x <= n; ++x) {
-            ++pre[x];
-        }
-    }
-    return ans;
-}
-```
-
-## [2555. 两个线段获得的最多奖品](https://leetcode.cn/problems/maximize-win-from-two-segments/)(中等)(双指针)
-
-在 **X轴** 上有一些奖品。给你一个整数数组 `prizePositions` ，它按照 **非递减** 顺序排列，其中 `prizePositions[i]` 是第 `i` 件奖品的位置。数轴上一个位置可能会有多件奖品。再给你一个整数 `k` 。
-
-你可以同时选择两个端点为整数的线段。每个线段的长度都必须是 `k` 。你可以获得位置在任一线段上的所有奖品（包括线段的两个端点）。注意，两个线段可能会有相交。
-
-- 比方说 `k = 2` ，你可以选择线段 `[1, 3]` 和 `[2, 4]` ，你可以获得满足 `1 <= prizePositions[i] <= 3` 或者 `2 <= prizePositions[i] <= 4` 的所有奖品 i 。
-
-请你返回在选择两个最优线段的前提下，可以获得的 **最多** 奖品数目。
-
-**示例 1：**
-
->输入：prizePositions = [1,1,2,2,3,3,5], k = 2
->
->输出：7
->
->解释：这个例子中，你可以选择线段 [1, 3] 和 [3, 5] ，获得 7 个奖品。
-
-**示例 2：**
-
->输入：prizePositions = [1,2,3,4], k = 0
->
->输出：2
->
->解释：这个例子中，一个选择是选择线段 [3, 3] 和 [4, 4] ，获得 2 个奖品。
-
-**提示：**
-
-- `1 <= prizePositions.length <= 105`
-- `1 <= prizePositions[i] <= 109`
-- `0 <= k <= 109 `
-- `prizePositions` 有序非递减。
-
-**我的题解:**
-
-无思路
-
-```java
-public int maximizeWin1(int[] prizePositions, int k) {
-    return 0;
-}
-```
-
-**最优题解:**
-
-根据解法一可以知道，两条线段不存在重叠部分一定可以保证最优解。同样的思路与方法我们可以使用双指针枚举第二条线段的右端点。
-
-为了计算方便我们可以强制每条线段的左右端点刚好覆盖在某个奖品上，因为对于没有覆盖在奖品上的部分可以忽略。假设第二条线段覆盖的右端点刚好为 prizePositions[right]，设当前线段可以覆盖的最左侧奖品位置为 prizePositions[left]，由于线段长度为 k 且奖品位置有序，此时一定满足 prizePositions[right]−prizePositions[left]≤k，此时第二条线段覆盖的奖品数量则为 right−left+1，若已知处于 prizePositions[left] 左侧的线段可以覆盖奖品的最大数量，即可求出以 prizePositions[right] 为第二条线段的右终点时可以覆盖的最大奖品数量。
-
-设 dp[right] 表示右端点不超过 prizePositions[right] 的线段可以覆盖最大奖品数量，可以得到推论如下：
-
-如果不选择位于 prizePositions[right] 处的奖品，线段的右端点一定不超过 prizePositions[right−1]，当前可以覆盖奖品的最大数量即为：dp[right−1]，此时 dp[right]=dp[right−1]；
-
-如果选择位于 prizePositions[right] 处的奖品，由于线段长度为 k，需要移动左侧指针 left，使得满足 prizePositions[right]−prizePositions[left]≤k 为止，当前可以覆盖的最大奖品数量即为：right−left+1，此时 dp[right]=right−left+1；
-
-取二者的最大值即为右端点不超过 prizePositions[right] 时，可以覆盖的最大奖品数量，递推公式如下：
-
-dp[right]=max(dp[right−1],right−left+1)
-
-依次枚举第二条线段的最右侧端点 prizePositions[right]，此时第二条线段覆盖最左侧的奖品为 prizePositions[left]，则此时最多可以覆盖的奖品数量为：
-
-right−left+1+dp[left−1]
-
-此时 dp[left−1] 表示第一条线段右端点不超过 prizePositions[left−1] 时最多可以覆盖的奖品数量。枚举过程中取最大值即为最终结果，返回即可。
-
-```java
-public int maximizeWin2(int[] prizePositions, int k) {
-    int n = prizePositions.length;
-    int[] dp = new int[n + 1];
-    int ans = 0;
-    for (int left = 0, right = 0; right < n; right++) {
-        while (prizePositions[right] - prizePositions[left] > k) {
-            left++;
-        }
-        ans = Math.max(ans, right - left + 1 + dp[left]);
-        dp[right + 1] = Math.max(dp[right], right - left + 1);
-    }
-    return ans;
-}
-```
-
-## [2576. 求出最多标记下标](https://leetcode.cn/problems/find-the-maximum-number-of-marked-indices/)(中等)(双指针)
-
-给你一个下标从 **0** 开始的整数数组 `nums` 。
-
-一开始，所有下标都没有被标记。你可以执行以下操作任意次：
-
-- 选择两个 **互不相同且未标记** 的下标 `i` 和 `j` ，满足 `2 * nums[i] <= nums[j]` ，标记下标 `i` 和 `j` 。
-
-请你执行上述操作任意次，返回 `nums` 中最多可以标记的下标数目。
-
-**示例 1：**
-
->输入：nums = [3,5,2,4]
->
->输出：2
->
->解释：第一次操作中，选择 i = 2 和 j = 1 ，操作可以执行的原因是 2 * nums[2] <= nums[1] ，标记下标 2 和 1 。
->
->没有其他更多可执行的操作，所以答案为 2 。
-
-**示例 2：**
-
->输入：nums = [9,2,5,4]
->
->输出：4
->
->解释：第一次操作中，选择 i = 3 和 j = 0 ，操作可以执行的原因是 2 * nums[3] <= nums[0] ，标记下标 3 和 0 。
->
->第二次操作中，选择 i = 1 和 j = 2 ，操作可以执行的原因是 2 * nums[1] <= nums[2] ，标记下标 1 和 2 。
->
->没有其他更多可执行的操作，所以答案为 4 。
-
-**示例 3：**
-
->输入：nums = [7,6,8]
->
->输出：0
->
->解释：没有任何可以执行的操作，所以答案为 0 。
-
-**提示：**
-
-- `1 <= nums.length <= 105`
-- `1 <= nums[i] <= 109`
-
-**我的题解:**
-
-题目需要求最大的数量，我们可以想到，当`i`和`j`分别在数组的中间的两边的话就可以取最大的。
-
-```java
-public int maxNumOfMarkedIndices1(int[] nums) {
-    int length = nums.length;
-    int markedNum = 0;
-    Arrays.sort(nums);
-    for (int right = length / 2, left = 0; right < length && left < length / 2; right++) {
-        if(nums[left] * 2 <= nums[right]){
-            markedNum += 2;
-            left++;
-        }
-    }
-    return markedNum;
-}
-```
-
-**最优题解:**
-
-由于长度为 n 的数组最多只会产生 ⌊2/n⌋ 对匹配，因此对数组从小到大排序以后，我们将数组一分为二，左侧元素只会与右侧元素匹配。
-
-具体的，我们令 m=⌊2/n⌋，尝试将下标在 [0,m−1] 范围内的元素 nums[i] 与下标在 [m,n−1] 范围内的元素 nums[j] 进行匹配。我们从小到大枚举 i，然后找到最小的 j 使其满足 2×nums[i]≤nums[j]。那些未满足条件而被跳过的 nums[j] 将被忽略。持续这一过程，直到 i=m 或 j=n。
-
-```java
-public int maxNumOfMarkedIndices2(int[] nums) {
-    Arrays.sort(nums);
-    int n = nums.length;
-    int m = n / 2;
-    int res = 0;
-    for (int i = 0, j = m; i < m && j < n; i++) {
-        while (j < n && 2 * nums[i] > nums[j]) {
-            j++;
-        }
-        if (j < n) {
-            res += 2;
-            j++;
-        }
-    }
-    return res;
-}
-```
-
-## [2398. 预算内的最多机器人数目](https://leetcode.cn/problems/maximum-number-of-robots-within-budget/)(困难)(双指针)
-
-你有 `n` 个机器人，给你两个下标从 **0** 开始的整数数组 `chargeTimes` 和 `runningCosts` ，两者长度都为 `n` 。第 `i` 个机器人充电时间为 `chargeTimes[i]` 单位时间，花费 `runningCosts[i]` 单位时间运行。再给你一个整数 `budget` 。
-
-运行 `k` 个机器人 **总开销** 是 `max(chargeTimes) + k * sum(runningCosts)` ，其中 `max(chargeTimes)` 是这 `k` 个机器人中最大充电时间，`sum(runningCosts)` 是这 `k` 个机器人的运行时间之和。
-
-请你返回在 **不超过** `budget` 的前提下，你 **最多** 可以 **连续** 运行的机器人数目为多少。
-
-**示例 1：**
-
->输入：chargeTimes = [3,6,1,3,4], runningCosts = [2,1,3,4,5], budget = 25
->
->输出：3
->
->解释：
->
->可以在 budget 以内运行所有单个机器人或者连续运行 2 个机器人。
->
->选择前 3 个机器人，可以得到答案最大值 3 。总开销是 max(3,6,1) + 3 * sum(2,1,3) = 6 + 3 * 6 = 24 ，小于 25 。
->
->可以看出无法在 budget 以内连续运行超过 3 个机器人，所以我们返回 3 。
-
-**示例 2：**
-
->输入：chargeTimes = [11,12,19], runningCosts = [10,8,7], budget = 19
->
->输出：0
->
->解释：即使运行任何一个单个机器人，还是会超出 budget，所以我们返回 0 。
-
-**提示：**
-
-- `chargeTimes.length == runningCosts.length == n`
-- `1 <= n <= 5 * 104`
-- `1 <= chargeTimes[i], runningCosts[i] <= 105`
-- `1 <= budget <= 1015`
-
-**我的题解:**
-
-开始使用动态规划，但是时间超限，==不可用==
-
-题目中使用要求连续的机器人运行，所以可以使用滑动窗口，使用`i`、`j`来作为窗口左右，如果当前窗口满足条件右边向后移动，如果不满满足左边后移
-
-```java
-//滑动窗口
-public int maximumRobots2(int[] chargeTimes, int[] runningCosts, long budget) {
-    int n = chargeTimes.length;
-    //当前窗口内的最大运行时间
-    long maxChargeTime = 0;
-    //当前窗口内的最大花费
-    long maxRunningCost = 0;
-    //结果
-    int ans = 0;
-    for (int i = 0, j = 0; i <= j && j < n; j++) {
-        maxChargeTime = Math.max(maxChargeTime, chargeTimes[j]);
-        maxRunningCost += runningCosts[j];
-        if (maxChargeTime +  maxRunningCost * (j - i + 1) <= budget) {
-            ans = Math.max(ans, j - i + 1);
-        } else {
-            maxRunningCost -= runningCosts[i];
-            if (maxChargeTime == chargeTimes[i]) {
-                maxChargeTime = 0;
-                for (int k = i + 1; k <= j; k++) {
-                    maxChargeTime = Math.max(maxChargeTime, chargeTimes[k]);
-                }
-            }
-            i++;
-        }
-    }
-    return ans;
-}
-
-```
-
-**最优题解:**
-
-根据题目的总开销计算公式，显然连续运行的机器人数目越多，总开销越大。假设连续运行的机器人下标区间为 [j,i]：
-
-当我们固定右下标 i 时，总开销随左下标 j 减小而单调递增。
-
-当右下标 i 增大时，使总开销不超过 budget 的区间最小左下标 j 也会增大。
-
-因此我们可以使用双指针来求解本题，同时使用单调队列 q 来维护区间内 chargeTimes 的最大值。
-
-从小到大枚举右下标 i，令 runningCostSum 为区间 [j,i] 的 runningCosts 之和，执行以下操作：
-
-当 q 非空，且 q 的队尾元素对应的 chargeTimes 值小于等于 chargeTimes[i] 时，我们不断地将 q 的队尾元素出队，从而维护 q 的队首元素对应的 chargeTimes 值始终为区间 [j,i] 的最大值。
-
-计算区间 [j,i] 的总开销，如果总开销大于 budget，那么我们需要将 j 右移，即 j=j+1，同时如果 q 的队首元素为 j，那么我们需要将 j 从 q 中移出。
-
-最后 i−j+1 就是以 i 为最右机器人，能连续运行的机器人最大数目。
-
-取所有这些最大数目的最大值为结果。
-
-```java
-public int maximumRobots3(int[] chargeTimes, int[] runningCosts, long budget) {
-    int res = 0, n = chargeTimes.length;
-    long runningCostSum = 0;
-    Deque<Integer> q = new ArrayDeque<>();
-    for (int i = 0, j = 0; i < n; i++) {
-        runningCostSum += runningCosts[i];
-        while (!q.isEmpty() && chargeTimes[q.peekLast()] <= chargeTimes[i]) {
-            q.pollLast();
-        }
-        q.addLast(i);
-        while (j <= i && (i - j + 1) * runningCostSum + chargeTimes[q.peekFirst()] > budget) {
-            if (!q.isEmpty() && q.peekFirst() == j) {
-                q.pollFirst();
-            }
-            runningCostSum -= runningCosts[j];
-            j++;
-        }
-        res = Math.max(res, i - j + 1);
-    }
-    return res;
-}
-```
-
-## [2390. 从字符串中移除星号](https://leetcode.cn/problems/removing-stars-from-a-string/)(中等)(栈)
-
-给你一个包含若干星号 `*` 的字符串 `s` 。
-
-在一步操作中，你可以：
-
-- 选中 `s` 中的一个星号。
-- 移除星号 **左侧** 最近的那个 **非星号** 字符，并移除该星号自身。
-
-返回移除 **所有** 星号之后的字符串**。**
-
-**注意：**
-
-- 生成的输入保证总是可以执行题面中描述的操作。
-- 可以证明结果字符串是唯一的。
-
-**示例 1：**
-
->输入：s = "leet**cod*e"
->
->输出："lecoe"
->
->解释：从左到右执行移除操作：
->
->- 距离第 1 个星号最近的字符是 "leet**cod*e" 中的 't' ，s 变为 "lee*cod*e" 。
->- 距离第 2 个星号最近的字符是 "lee*cod*e" 中的 'e' ，s 变为 "lecod*e" 。
->- 距离第 3 个星号最近的字符是 "lecod*e" 中的 'd' ，s 变为 "lecoe" 。
->不存在其他星号，返回 "lecoe" 。
-
-**示例 2：**
-
->输入：s = "erase*****"
->
->输出：""
->
->解释：整个字符串都会被移除，所以返回空字符串。
-
-**提示：**
-
-- `1 <= s.length <= 105`
-- `s` 由小写英文字母和星号 `*` 组成
-- `s` 可以执行上述操作
-
-**我的题解:**
-
-本题和[3174. 清除数字](https://leetcode.cn/problems/clear-digits/)很类似，可是使用模拟栈这种数据的特性即`先进后出`，当遇到`*`时就出栈最后一个。
-
-```java
-public String removeStars1(String s) {
-    int n = s.length();
-    StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < n; i++) {
-        if (s.charAt(i) == '*') {
-            if (sb.length() > 0) {
-                sb.deleteCharAt(sb.length() - 1);
-            }
-        } else {
-            sb.append(s.charAt(i));
-        }
-    }
-    return sb.toString();
-}
-```
-
-**最优题解:**
-
-用一个字符数组来表示字符串结果，从左到右依次遍历每个字符。
-
-- 如果是英文字母，则加入到数组中。
-- 如果是星号，则删除数组中最后一个字母。
-
-最后返回数组所表示的字符串，即为移除所有星号之后的字符串。
-
-```java
-public String removeStars2(String s) {
-    StringBuilder res = new StringBuilder();
-    for (char c : s.toCharArray()) {
-        if (c != '*') {
-            res.append(c);
-        } else {
-            res.setLength(res.length() - 1);
-        }
-    }
-    return res.toString();
-}
-```
-
-## [2848. 与车相交的点](https://leetcode.cn/problems/points-that-intersect-with-cars/)(简单)
-
-给你一个下标从 **0** 开始的二维整数数组 `nums` 表示汽车停放在数轴上的坐标。对于任意下标 `i`，`nums[i] = [starti, endi]` ，其中 `starti` 是第 `i` 辆车的起点，`endi` 是第 `i` 辆车的终点。
-
-返回数轴上被车 **任意部分** 覆盖的整数点的数目。
-
-**示例 1：**
-
->输入：nums = [[3,6],[1,5],[4,7]]
->
->输出：7
->
->解释：从 1 到 7 的所有点都至少与一辆车相交，因此答案为 7 。
-
-**示例 2：**
-
->输入：nums = [[1,3],[5,8]]
->
->输出：7
->
->解释：1、2、3、5、6、7、8 共计 7 个点满足至少与一辆车相交，因此答案为 7 。
-
-**提示：**
-
-- `1 <= nums.length <= 100`
-- `nums[i].length == 2`
-- `1 <= starti <= endi <= 100`
-
-**我的题解:**
-
-使用暴力枚举数组中的每一个数字
-
-```java
-public int numberOfPoints1(List<List<Integer>> nums) {
-    int ans = 0;
-    int[] isInclude = new int[101];
-    for (List<Integer> num : nums) {
-        int start = num.get(0);
-        int end = num.get(1);
-        for (int i = start; i <= end; i++) {
-            if (isInclude[i] == 0) {
-                isInclude[i]++;
-                ans++;
-            }
-        }
-    }
-    return ans;
-}
-```
-
-**最优题解:**
-
-我们可以根据题目要求直接进行模拟。
-
-首先遍历数组 nums 得到坐标的最大值 C，然后使用一个数组 count 表示每个坐标被覆盖的次数，它的下标范围是 [1,C]（大部分语言的数组下标都需要从 0 开始，因此在代码中下标范围是 [0,C]）。
-
-对于数组 nums 中的每个元素 (x,y)，我们将数组 count 中下标从 x 到 y 的元素均增加 1。最后数组 count 中非零元素的数量即为答案。
-
-```java
-public int numberOfPoints2(List<List<Integer>> nums) {
-    int C = 0;
-    for (List<Integer> interval : nums) {
-        C = Math.max(C, interval.get(1));
-    }
-
-    int[] count = new int[C + 1];
-    for (List<Integer> interval : nums) {
-        for (int i = interval.get(0); i <= interval.get(1); ++i) {
-            ++count[i];
-        }
-    }
-
-    int ans = 0;
-    for (int i = 1; i <= C; ++i) {
-        if (count[i] > 0) {
-            ++ans;
-        }
-    }
-    return ans;
-}
-```
-
-在方法一中，对于每一辆汽车我们都需要 O(C) 的时间更新数组 count。注意到我们一定是对数组 count 的连续一段增加一个相同的值 1，因此可以使用==**差分**==的思想优化时间复杂度。
-
-具体地，我们令数组 diff 中的每个元素是数组 count 中相邻两个元素的差值，即：
-
-$$
-diff[i] = 
-\begin{cases}
-\ count[i], & if & i = 0 \\
-\ count[i]-count[i-1], & if & i > 0
-\end{cases}
-$$
-
-如果我们维护数组 diff，那么 count[i] 可以通过从 diff[0] 累加到 diff[i] 方便地求出。
-
-当我们需要将数组 count 中下标从 x 到 y 的元素均增加 1 时，对应到数组 diff，只需要将 diff[x] 增加 1，并将 diff[y+1] 减少 1，时间复杂度从 O(C) 降低至 O(1)。
-
-最后只需要对数组 diff 求一遍前缀和，就还原出了数组 count，其中非零元素的数量即为答案。
-
-```java
-public int numberOfPoints3(List<List<Integer>> nums) {
-    int C = 0;
-    for (List<Integer> interval : nums) {
-        C = Math.max(C, interval.get(1));
-    }
-
-    int[] diff = new int[C + 2];
-    for (List<Integer> interval : nums) {
-        ++diff[interval.get(0)];
-        --diff[interval.get(1) + 1];
-    }
-
-    int ans = 0, count = 0;
-    for (int i = 1; i <= C; ++i) {
-        count += diff[i];
-        if (count > 0) {
-            ++ans;
-        }
-    }
-    return ans;
-}
-```
-
-## [1184. 公交站间的距离](https://leetcode.cn/problems/distance-between-bus-stops/)(简单)
-
-环形公交路线上有 `n` 个站，按次序从 `0` 到 `n - 1` 进行编号。我们已知每一对相邻公交站之间的距离，`distance[i]` 表示编号为 `i` 的车站和编号为 `(i + 1) % n` 的车站之间的距离。
-
-环线上的公交车都可以按顺时针和逆时针的方向行驶。
-
-返回乘客从出发点 `start` 到目的地 `destination` 之间的最短距离。
-
- 
-
-**示例 1：**
-
-![img](./img/sql与算法题解-img/untitled-diagram-1.jpg)
-
->输入：distance = [1,2,3,4], start = 0, destination = 1
->
->输出：1
->
->解释：公交站 0 和 1 之间的距离是 1 或 9，最小值是 1。
-
- 
-
-**示例 2：**
-
-![img](./img/sql与算法题解-img/untitled-diagram-1-1.jpg)
-
->输入：distance = [1,2,3,4], start = 0, destination = 2
->
->输出：3
->
->解释：公交站 0 和 2 之间的距离是 3 或 7，最小值是 3。
-
- 
-
-**示例 3：**
-
-![img](./img/sql与算法题解-img/untitled-diagram-1-2.jpg)
-
->输入：distance = [1,2,3,4], start = 0, destination = 3
->
->输出：4
->
->解释：公交站 0 和 3 之间的距离是 6 或 4，最小值是 4。
-
- 
-
-**提示：**
-
-- `1 <= n <= 10^4`
-- `distance.length == n`
-- `0 <= start, destination < n`
-- `0 <= distance[i] <= 10^4`
-
-**我的题解:**
-
-暴力枚举
-
-```java
-public int distanceBetweenBusStops1(int[] distance, int start, int destination) {
-    int n = distance.length;
-    int ans1 = 0;
-    int ans2 = 0;
-    if (start > destination) {
-        int temp = destination;
-        destination = start;
-        start = temp;
-    }
-    for (int i = 0; i < n; i++) {
-        if (i >= start && i < destination) {
-            ans1 += distance[i];
-        } else {
-            ans2 += distance[i];
-        }
-    }
-    return Math.min(ans1, ans2);
-}
-```
-
-**最优题解:**
-
-```java
-public int distanceBetweenBusStops2(int[] distance, int start, int destination) {
-    if (start > destination) {
-        int temp = start;
-        start = destination;
-        destination = temp;
-    }
-    int sum1 = 0, sum2 = 0;
-    for (int i = 0; i < distance.length; i++) {
-        if (i >= start && i < destination) {
-            sum1 += distance[i];
-        } else {
-            sum2 += distance[i];
-        }
-    }
-    return Math.min(sum1, sum2);
-}
-```
-
-## [815. 公交路线](https://leetcode.cn/problems/bus-routes/)(困难)(构建图)
-
-给你一个数组 `routes` ，表示一系列公交线路，其中每个 `routes[i]` 表示一条公交线路，第 `i` 辆公交车将会在上面循环行驶。
-
-- 例如，路线 `routes[0] = [1, 5, 7]` 表示第 `0` 辆公交车会一直按序列 `1 -> 5 -> 7 -> 1 -> 5 -> 7 -> 1 -> ...` 这样的车站路线行驶。
-
-现在从 `source` 车站出发（初始时不在公交车上），要前往 `target` 车站。 期间仅可乘坐公交车。
-
-求出 **最少乘坐的公交车数量** 。如果不可能到达终点车站，返回 `-1` 。
-
-**示例 1：**
-
-> 输入：routes = [[1,2,7],[3,6,7]], source = 1, target = 6
->
-> 输出：2
->
-> 解释：最优策略是先乘坐第一辆公交车到达车站 7 , 然后换乘第二辆公交车到车站 6 。
-
-**示例 2：**
-
->输入：routes = [[7,12],[4,5,15],[6],[15,19],[9,12,13]], source = 15, target = 12
->
->输出：-1
-
-**提示：**
-
-- `1 <= routes.length <= 500`.
-- `1 <= routes[i].length <= 105`
-- `routes[i]` 中的所有值 **互不相同**
-- `sum(routes[i].length) <= 105`
-- `0 <= routes[i][j] < 106`
-- `0 <= source, target < 106`
-
-**我的题解:**
-
-题目要求最少车辆，我们需要获取起始站点经过的路线和终点站点经过的路线，然后我们使用map来维护一个某个路线可以到达哪个路线，然后递归遍历，获取最小公交数量，但是时间超限，==不可用==
-
-```java
-//分治法，这里只需要知道起始站点所在的线路和终点所在的线路
-public int numBusesToDestination1(int[][] routes, int source, int target) {
-    if(source == target){
-        return 0;
-    }
-    int busNum = routes.length;
-    int ans = -1;
-    //维护一个数组，记录每个站点可以乘坐的线路
-    Map<Integer, List<Integer>> stationBus = new HashMap<>();
-    for (int i = 0; i < busNum; i++) {
-        for (int j = 0; j < routes[i].length; j++) {
-            int station = routes[i][j];
-            stationBus.putIfAbsent(station, new ArrayList<>());
-            stationBus.get(station).add(i);
-        }
-    }
-    //维护一个线路map,记录每条线路可以转为哪些线路
-    Map<Integer, List<Integer>> routeMap = new HashMap<>();
-    for (int i = 0; i < busNum; i++) {
-        routeMap.putIfAbsent(i, new ArrayList<>());
-        for (int j = 0; j < routes[i].length; j++) {
-            int station = routes[i][j];
-            List<Integer> bus = stationBus.get(station);
-            int finalI = i;
-            List<Integer> collect = bus.stream().filter(integer -> integer != finalI).collect(Collectors.toList());
-            routeMap.get(i).addAll(collect);
-        }
-    }
-    List<Integer> sourceRoute = stationBus.get(source);
-    List<Integer> targetRoute = stationBus.get(target);
-    for (Integer i : sourceRoute) {
-        int[] usedBus = new int[busNum];
-        for (Integer integer : targetRoute) {
-            int i1 = numBusesToDestinationHelp(i, integer, routeMap, usedBus);
-            if (i1 != -1) {
-                ans = ans == -1 ? i1 :
-                Math.min(ans, i1);
-            }
-
-        }
-    }
-
-
-    return ans;
-}
-
-
-public int numBusesToDestinationHelp(int sourceRoute,
-                                     int targetRoute,
-                                     Map<Integer, List<Integer>> routeMap,
-                                     int[] usedBus
-                                    ) {
-    if (sourceRoute == targetRoute) {
-        return 1;
-    }
-    int ans = -1;
-    usedBus[sourceRoute] = 1;
-    List<Integer> nextRoutes = routeMap.get(sourceRoute);
-    for (Integer next : nextRoutes) {
-        if (usedBus[next] == 1) {
-            continue;
-        }
-        int i = numBusesToDestinationHelp(next, targetRoute, routeMap, usedBus);
-        if (i != -1) {
-            ans = ans == -1 ? i + 1 : Math.min(ans, i + 1);
-        }
-    }
-    usedBus[sourceRoute] = 0;
-
-    return ans;
-}
-```
-
-**最优题解:**
-
-由于求解的目标是最少乘坐的公交车数量，对于同一辆公交车，乘客可以在其路线中的任意车站间无代价地移动，于是我们可以把公交路线当作点。如果两条公交路线有相同车站，则可以在这两条路线间换乘公交车，那么这两条公交路线之间可视作有一条长度为 1 的边。这样建出的图包含的点数即为公交路线的数量，记作 n。
-
-完成了建图后，我们需要先明确新的图的起点和终点，然后使用广度优先搜索，计算出的起点和终点的最短路径，从而得到最少换乘次数。
-
-注意到原本的起点车站和终点车站可能同时位于多条公交路线上，因此在新图上可能有多个起点和终点。对于这种情况，我们初始可以同时入队多个点，并在广度优先搜索结束后检查到各个终点的最短路径，取其最小值才是最少换乘次数。
-
-实际建图时，我们有以下两种方案：
-
-- 方案一：我们直接枚举左右两端点，检查两点对应的两公交路线是否有公共车站。利用哈希表，我们可以将单次比较的时间复杂度优化到均摊 O(n)。
-- 方案二：我们遍历所有公交路线，记录每一个车站属于哪些公交路线。然后我们遍历每一个车站，如果有多条公交路线经过该点，则在这些公交路线之间连边。
-
-本题中我们采用方案二，据此还可以直接得到起点和终点在新图中对应的点。
-
-实际代码中，我们使用哈希映射来实时维护「车站所属公交路线列表」。假设当前枚举到公交路线 i 中的车站 site，此时哈希映射中已记录若干条公交路线经过车站 site，我们只需要让点 i 与这些点公交路线对应的点相连即可。完成了连线后，我们再将公交路线 i 加入到「车站 site 所属公交路线列表」中。
-
-特别地，起点和终点相同时，我们可以直接返回 0。
-
-```java
-public int numBusesToDestination2(int[][] routes, int source, int target) {
-    if (source == target) {
-        return 0;
-    }
-
-    int n = routes.length;
-    boolean[][] edge = new boolean[n][n];
-    Map<Integer, List<Integer>> rec = new HashMap<Integer, List<Integer>>();
-    for (int i = 0; i < n; i++) {
-        for (int site : routes[i]) {
-            List<Integer> list = rec.getOrDefault(site, new ArrayList<Integer>());
-            for (int j : list) {
-                edge[i][j] = edge[j][i] = true;
-            }
-            list.add(i);
-            rec.put(site, list);
-        }
-    }
-
-    int[] dis = new int[n];
-    Arrays.fill(dis, -1);
-    Queue<Integer> que = new LinkedList<Integer>();
-    for (int bus : rec.getOrDefault(source, new ArrayList<Integer>())) {
-        dis[bus] = 1;
-        que.offer(bus);
-    }
-    while (!que.isEmpty()) {
-        int x = que.poll();
-        for (int y = 0; y < n; y++) {
-            if (edge[x][y] && dis[y] == -1) {
-                dis[y] = dis[x] + 1;
-                que.offer(y);
-            }
-        }
-    }
-
-    int ret = Integer.MAX_VALUE;
-    for (int bus : rec.getOrDefault(target, new ArrayList<Integer>())) {
-        if (dis[bus] != -1) {
-            ret = Math.min(ret, dis[bus]);
-        }
-    }
-    return ret == Integer.MAX_VALUE ? -1 : ret;
-}
-```
-
-## [2332. 坐上公交的最晚时间](https://leetcode.cn/problems/the-latest-time-to-catch-a-bus/)(中等)
-
-给你一个下标从 **0** 开始长度为 `n` 的整数数组 `buses` ，其中 `buses[i]` 表示第 `i` 辆公交车的出发时间。同时给你一个下标从 **0** 开始长度为 `m` 的整数数组 `passengers` ，其中 `passengers[j]` 表示第 `j` 位乘客的到达时间。所有公交车出发的时间互不相同，所有乘客到达的时间也互不相同。
-
-给你一个整数 `capacity` ，表示每辆公交车 **最多** 能容纳的乘客数目。
-
-每位乘客都会搭乘下一辆有座位的公交车。如果你在 `y` 时刻到达，公交在 `x` 时刻出发，满足 `y <= x` 且公交没有满，那么你可以搭乘这一辆公交。**最早** 到达的乘客优先上车。
-
-返回你可以搭乘公交车的最晚到达公交站时间。你 **不能** 跟别的乘客同时刻到达。
-
-**注意：**数组 `buses` 和 `passengers` 不一定是有序的。
-
-**示例 1：**
-
->输入：buses = [20,30,10], passengers = [19,13,26,4,25,11,21], capacity = 2
->
->输出：20
->
->解释：
->
->第 1 辆公交车载着第 4 位乘客。
->
->第 2 辆公交车载着第 6 位和第 2 位乘客。
->
->第 3 辆公交车载着第 1 位乘客和你。
-
-**示例 2：**
-
->输入：buses = [20,30,10], passengers = [19,13,26,4,25,11,21], capacity = 2
->
->输出：20
->
->解释：
->
->第 1 辆公交车载着第 4 位乘客。
->
->第 2 辆公交车载着第 6 位和第 2 位乘客。
->
->第 3 辆公交车载着第 1 位乘客和你。
-
-**提示：**
-
-- `n == buses.length`
-- `m == passengers.length`
-- `1 <= n, m, capacity <= 105`
-- `2 <= buses[i], passengers[i] <= 109`
-- `buses` 中的元素 **互不相同** 。
-- `passengers` 中的元素 **互不相同** 。
-
-**我的题解:**
-
-```java
-public int latestTimeCatchTheBus1(int[] buses, int[] passengers, int capacity) {
-    return 0;
-}
-```
-
-**最优题解:**
-
-由于最早到达的乘客优先上车，为了方便模拟，我们将公交车到达的时间和乘客到达的时间按照先后顺序进行排序。设第 i 班公交车到达的时间为 buses[i]，此时未上车且在 buses[i] 时刻之前到达的乘客按照时间先后顺序依次上车，直到车辆载客人数达到上限 capacity 为止，则继续模拟第 i+1 班公交车乘客上车，直到所有的车辆均模拟完毕。
-
-此时记录最后一班公交车发车时的空位数为 space，此时有以下两种情形：
-
-- 如果此时 space>0，则表示最后一班公交车发车时车上还有空位，这意味着我们最晚可以在最后一班公交发车时刻到站即可，由于不能跟别的乘客同时刻到达，此时从最后一班发车时刻 buses[n−1] 开始向前找到一个没有乘客到达的时刻即可；
-
-- 如果此时满足 space=0，则表示最后一班公交车发车时车上没有空位，这意味着我们最后一个上车的乘客上车以后载客已满，此时我们从最后一个上车乘客的到达时间往前找到一个没有乘客到达的时刻即可，如果到达时间晚于最后一个上车的乘客的到达时间，则一定无法乘车。
-
-
-```java
-public int latestTimeCatchTheBus2(int[] buses, int[] passengers, int capacity) {
-    Arrays.sort(buses);
-    Arrays.sort(passengers);
-    int pos = 0;
-    int space = 0;
-
-    for (int arrive : buses) {
-        space = capacity;
-        while (space > 0 && pos < passengers.length && passengers[pos] <= arrive) {
-            space--;
-            pos++;
-        }
-    }
-
-    pos--;
-    int lastCatchTime = space > 0 ? buses[buses.length - 1] : passengers[pos];
-    while (pos >= 0 && passengers[pos] == lastCatchTime) {
-        pos--;
-        lastCatchTime--;
-    }
-
-    return lastCatchTime;
-}
-```
-
-## [2414. 最长的字母序连续子字符串的长度](https://leetcode.cn/problems/length-of-the-longest-alphabetical-continuous-substring/)(中等)(双指针)
-
-**字母序连续字符串** 是由字母表中连续字母组成的字符串。换句话说，字符串 `"abcdefghijklmnopqrstuvwxyz"` 的任意子字符串都是 **字母序连续字符串** 。
-
-- 例如，`"abc"` 是一个字母序连续字符串，而 `"acb"` 和 `"za"` 不是。
-
-给你一个仅由小写英文字母组成的字符串 `s` ，返回其 **最长** 的 字母序连续子字符串 的长度。
-
-**示例 1：**
-
->输入：s = "abacaba"
->
->输出：2
->
->解释：共有 4 个不同的字母序连续子字符串 "a"、"b"、"c" 和 "ab" 。
->
->"ab" 是最长的字母序连续子字符串。
-
-**示例 2：**
-
->输入：s = "abcde"
->
->输出：5
->
->解释："abcde" 是最长的字母序连续子字符串。
-
-**提示：**
-
-- `1 <= s.length <= 105`
-- `s` 由小写英文字母组成
-
-**我的题解:**
-
-题目中有==连续==这个需求，则我们可以使用双指针构成滑块
-
-```java
-public int longestContinuousSubstring1(String s) {
-    int n = s.length();
-    int res = 0;
-    for (int i = 0, j = 0; j < n; j++) {
-        if (s.charAt(j) == s.charAt(i) + j - i) {
-            res = Math.max(res, j - i + 1);
-        } else {
-            i = j;
-        }
-    }
-
-    return res;
-}
-```
-
-**最优题解:**
-
-我们从左到右遍历字符串，过程中维护以当前字符结尾的最长「字母序连续子字符串」的长度 cur：
-
-- 若当前字符 s[i] 为上一个字符 s[i−1] 在字母序上的下一个字符，则令 cur 增加 1；
-- 否则令 cur 等于 1，表示新的「字母序连续子字符串」的开头。
-
-取遍历过程中所有 cur 的最大值即为答案。
-
-```java
-public int longestContinuousSubstring2(String s) {
-    int res = 1;
-    int cur = 1;
-    for (int i = 1; i < s.length(); i++) {
-        if (s.charAt(i) == s.charAt(i - 1) + 1) {
-            cur++;
-        } else {
-            cur = 1;
-        }
-        res = Math.max(res, cur);
-    }
-    return res;
-}
-```
-
-## [2376. 统计特殊整数](https://leetcode.cn/problems/count-special-integers/)(困难)(数位DP)
-
-如果一个正整数每一个数位都是 **互不相同** 的，我们称它是 **特殊整数** 。
-
-给你一个 **正** 整数 `n` ，请你返回区间 `[1, n]` 之间特殊整数的数目。
-
- 
-
-**示例 1：**
-
->输入：n = 20
->
->输出：19
->
->解释：1 到 20 之间所有整数除了 11 以外都是特殊整数。所以总共有 19 个特殊整数。
-
-**示例 2：**
-
-> 输入：n = 5
->
-> 输出：5
->
-> 解释：1 到 5 所有整数都是特殊整数。
-
-**示例 3：**
-
->输入：n = 135
->
->输出：110
->
->解释：从 1 到 135 总共有 110 个整数是特殊整数。
->
->不特殊的部分数字为：22 ，114 和 131 。
-
-**提示：**
-
-- `1 <= n <= 2 * 109`
-
-**我的题解:**
-
-使用暴力枚举，时间超限==不可用==
-
-```java
-public int countSpecialNumbers1(int n) {
-    int ans = 0;
-    loop:
-    for (int i = 1; i <= n; i++) {
-        int[] nums = new int[10];
-        int temp = i;
-        while (temp > 0) {
-            int digits = temp % 10;
-            temp /= 10;
-            nums[digits]++;
-            if (nums[digits] > 1) {
-                continue loop;
-            }
-        }
-        if (temp == 0) {
-            ans++;
-        }
-    }
-    return ans;
-}
-```
-
-**最优题解:**
-
-要返回区间 [1, n] 之间的特殊整数的数目，即小于等于 n 的特殊整数的数目。记 n 十进制表示下位数为 k，我们考虑两种情况：
-
-- 位数小于 k 的特殊整数。
-
-- 位数等于 k 的特殊整数。
-
-对于位数小于 k 的情况，分别计算位数为 1 到 k−1 的情况下特殊整数的数量。考虑位数为 k~0~(k~0~<k) 的情况。因为k~0~<k，所以任意放置数位上的数字，都能满足小于等于 n 的条件。只需保证每一数位都互不相同。用组合数学的思路求解特殊整数的数量，从最高位开始考虑，可以有 9 种选择（除 0 外的任何整数），次高位也有 9 种选择（除最高位外的任何整数），接下来的数位的选择则依次减少 1。把这些选择的可能性全部相乘则是位数为 k~0~的特殊整数的数量。
-
-接下来考虑位数等于 k 的特殊整数。相同位数的数字比较大小，是从最高位开始比较，若不同，则最高位大的数字大；若相同，则比较次高位。次高位的比较原则和最高位一样。因此，我们在计算小于等于 n 的特殊整数时，也需要按照这个原则。函数 dp(mask,prefixSmaller) 用来计算以某些数字组合为前缀的特殊整数的数量。整数 mask 即表示了前缀中使用过的数字，二进制表示下，从最低位开始，第 i 为如果为 1 则表示数字 i 已经被使用过，在接下来的后缀中不能使用。布尔值 prefixSmaller 表示当前的前缀是否小于 n 的前缀，如果是，则接下来的数字可以任意选择。如果不是，即当前的前缀等于 n 的前缀，则接下来的数字只能小于或者等于 n 同数位的数字。最后调用 dp(0,false) 则为位数等于 k 的特殊整数的数量。
-
-最后把这两部分相加即可。
-
-```java
-Map<Integer, Integer> memo = new HashMap<Integer, Integer>();
-
-public int countSpecialNumbers2(int n) {
-    String nStr = String.valueOf(n);
-    int res = 0;
-    int prod = 9;
-    for (int i = 0; i < nStr.length() - 1; i++) {
-        res += prod;
-        prod *= 9 - i;
-    }
-    res += dp(0, false, nStr);
-    return res;
-}
-
-public int dp(int mask, boolean prefixSmaller, String nStr) {
-    if (Integer.bitCount(mask) == nStr.length()) {
-        return 1;
-    }
-    int key = mask * 2 + (prefixSmaller ? 1 : 0);
-    if (!memo.containsKey(key)) {
-        int res = 0;
-        int lowerBound = mask == 0 ? 1 : 0;
-        int upperBound = prefixSmaller ? 9 : nStr.charAt(Integer.bitCount(mask)) - '0';
-        for (int i = lowerBound; i <= upperBound; i++) {
-            if (((mask >> i) & 1) == 0) {
-                res += dp(mask | (1 << i), prefixSmaller || i < upperBound, nStr);
-            }
-        }
-        memo.put(key, res);
-    }
-    return memo.get(key);
-}
-```
-
-**灵茶题解:**
-
-请看 [数位 DP 通用模板](https://leetcode.cn/link/?target=https%3A%2F%2Fwww.bilibili.com%2Fvideo%2FBV1rS4y1s721%2F%3Ft%3D20m20s)。+ ==在使用java时需要记忆化操作==
-
-除了讲解模板，还讲了如何使用该模板秒杀相关困难题目。
-
-```java
-public int countSpecialNumbers(int n) {
-    char[] s = Integer.toString(n).toCharArray();
-    int[][] memo = new int[s.length][1 << 10];
-    for (int[] row : memo) {
-        Arrays.fill(row, -1); // -1 表示没有计算过
-    }
-    return dfs(0, 0, true, false, s, memo);
-}
-
-private int dfs(int i, int mask, boolean isLimit, boolean isNum, char[] s, int[][] memo) {
-    if (i == s.length) {
-        return isNum ? 1 : 0; // isNum 为 true 表示得到了一个合法数字
-    }
-    if (!isLimit && isNum && memo[i][mask] != -1) {
-        return memo[i][mask]; // 之前计算过
-    }
-    int res = 0;
-    if (!isNum) { // 可以跳过当前数位
-        res = dfs(i + 1, mask, false, false, s, memo);
-    }
-    // 如果前面填的数字都和 n 的一样，那么这一位至多填数字 s[i]（否则就超过 n 啦）
-    int up = isLimit ? s[i] - '0' : 9;
-    // 枚举要填入的数字 d
-    // 如果前面没有填数字，则必须从 1 开始（因为不能有前导零）
-    for (int d = isNum ? 0 : 1; d <= up; d++) {
-        if ((mask >> d & 1) == 0) { // d 不在 mask 中，说明之前没有填过 d
-            res += dfs(i + 1, mask | (1 << d), isLimit && d == up, true, s, memo);
-        }
-    }
-    if (!isLimit && isNum) {
-        memo[i][mask] = res; // 记忆化
-    }
-    return res;
-}
-```
-
-### 附加知识:集合论到位运算
-
-本文将扫清位运算的迷雾，在集合论与位运算之间建立一座桥梁。
-
-在高中，我们学了集合论（set theory）的相关知识。例如，包含若干整数的集合 S={0,2,3}。在编程中，通常用哈希表（hash table）表示集合。例如 Java 中的 HashSet，C++ 中的 std::unordered_set。
-
-在集合论中，有交集 ∩、并集 ∪、包含于 ⊆ 等等概念。如果编程实现「求两个哈希表的交集」，需要一个一个地遍历哈希表中的元素。那么，有没有效率更高的做法呢？
-
-该二进制登场了！
-
-集合可以用二进制表示，二进制**从低到高**第 i 位为 1 表示 i 在集合中，为 0 表示 i 不在集合中。例如集合 {0，2，3} 可以用二进制数 1101~(2)~ 表示；反过来，二进制数 1101~(2)~ 就对应着集合 {0,2,3}。正式地说，包含非负整数的集合 S 可以用如下方式「压缩」成一个数字：
-$$
-f(S)=\sum_{i \in S}2^i
-$$
-例如集合 {0,2,3} 可以压缩成 2^0^+2^2^+2^3^ = 13，也就是二进制数 1101~(2)~。
-
-利用位运算「并行计算」的特点，我们可以高效地做一些和集合有关的运算。按照常见的应用场景，可以分为以下四类：
-
-1. 集合与集合
-2. 集合与元素
-3. 遍历集合
-4. 枚举集合
-
-#### 1 集合与集合
-
-其中 & 表示按位与，∣ 表示按位或，⊕ 表示按位异或，∼ 表示按位取反。
-
-> 查漏补缺:
->
-> &:表示对比二进制的每一位，如果都为 1 则返回 1，否则返回 0；
->
-> |:表示对比二进制的每一位，如果有一个为 1 则返回 1，全为 0 时返回 0；
->
-> ⊕:表示对比二进制的每一位，如果两位不同则返回 1，如果相同全为 1 或 0 时返回0；
->
-> ∼:对二进制的每一位取反，1 变为 0，0 变为 1；
-
-两个集合的「对称差」是只属于其中一个集合，而不属于另一个集合的元素组成的集合，也就是不在交集中的元素组成的集合。
-
-| 术语       | 集合             | 位运算       | 集合示例                  | 位运算示例                    |
-| ---------- | ---------------- | ------------ | ------------------------- | ----------------------------- |
-| 交集       | A∩B              | a&b          | {0,2,3}∩{0,1,2}={0,2}     | 1101&0111=0101                |
-| 并集       | A∪B              | a\|b         | {0,2,3}∪{0,1,2}={0,1,2,3} | 1101\|0111=1111               |
-| 差         | A-B              | a&∼b         | {0,2,3}-{1,2}={0,3}       | 1101&~0110=1101&1001=1001     |
-| 对称差     | AΔB((A-B)∪(B-A)) | a⊕b          | {0,2,3}Δ{0,1,2}={1,3}     | 1101⊕0111=1010                |
-| 差（子集） | A-B,B⊆A          | a⊕b          | {0,2,3}-{0,2}={3}         | 1101⊕0101=1000                |
-| 包含于     | A⊆B              | a&b=a,a\|b=b | {0,2}⊆{0,2,3}             | 0101&1101=0101,0101\|1101=110 |
-
->注意:
->
->1. 按位取反的例子中，仅列出最低 4 个比特位取反后的结果，即 0110 取反后是 1001。
->2. 包含于的两种位运算写法是等价的，在编程时只需判断其中任意一种。
->3. 注编程时，请注意运算符的优先级。例如 == 在某些语言中优先级比位运算更高。
-
-#### 2 集合与元素
-
-通常会用到移位运算。
-
-其中 << 表示左移，>> 表示右移。
-
-注：左移 i 位相当于乘以 2^i^，右移 i 位相当于除以 2^i^。
-
-| 术语                     | 集合           | 位运算           | 集合示例                    | 位运算示例        |
-| ------------------------ | -------------- | ---------------- | --------------------------- | ----------------- |
-| 空集                     | ∅              | 0                |                             |                   |
-| 单元素集合               | {i}            | 1 << i           | {2}                         | 1 << 2            |
-| 全集                     | U={0,1,2,⋯n−1} | (1 << n)−1       | {0,1,2,3}                   | (1 << 4)−1        |
-| 补集                     | C~∪~S=U-S      | ((1 << n)−1)⊕S   | U={0,1,2,3},C~∪~{1,2}={0,3} | 1111⊕0110=1001    |
-| 属于                     | i∈S            | ((S >> i) & 1)=1 | 2∈{0,2,3}                   | (1101 >> 2) & 1=1 |
-| 不属于                   | i∉S            | ((S >> i) & 1)=0 | 1∉{0,2,3}                   | (1101 >> 1) & 1=0 |
-| 添加元素                 | S∪{i}          | S\|(1 << i)      | {0,3}∪{2}                   | 1001∣(1 << 2)     |
-| 删除元素                 | S-{i}          | S&∼(1 << i)      | {0,2,3}-{2}                 | 1101&∼(1 << 2)    |
-| 删除元素（一定在集合中） | S-{i}, i∈S     | S⊕(1 << i)       | {0,2,3}-{2}                 | 1101⊕(1 << 2)     |
-| 删除最小元素             |                | S&(S−1)          |                             | 见下              |
-
-```java
-      s = 101100
-    s-1 = 101011 // 最低位的 1 变成 0，同时 1 右边的 0 都取反，变成 1
-s&(s-1) = 101000
-```
-
-特别地，如果 S 是 2 的幂，那么 S&(S−1)=0。
-
-此外，编程语言提供了一些和二进制有关的库函数，例如：
-
-- 计算二进制中的 1 的个数，也就是集合大小；
-- 计算二进制长度，减一后得到集合最大元素；
-- 计算二进制尾零个数，也就是集合最小元素。
-
-调用这些函数的时间复杂度都是 O(1)。
-
-| 术语         | Python                  | Java                                 | C++                     | Go                      |
-| ------------ | ----------------------- | ------------------------------------ | ----------------------- | ----------------------- |
-| 集合大小     | `s.bit_count()`         | `Integer.bitCount(s)`                | `__builtin_popcount(s)` | `bits.OnesCount(s)`     |
-| 二进制长度   | `s.bit_length()`        | `32-Integer.numberOfLeadingZeros(s)` | `__lg(s)+1`             | `bits.Len(s)`           |
-| 集合最大元素 | `s.bit_length()-1`      | `31-Integer.numberOfLeadingZeros(s)` | `__lg(s)`               | `bits.Len(s)-1`         |
-| 集合最小元素 | `(s&-s).bit_length()-1` | `Integer.numberOfTrailingZeros(s)`   | `__builtin_ctz(s)`      | `bits.TrailingZeros(s)` |
-
-请特别注意 s=0 的情况。对于 C++ 来说，`__lg(0)` 和 `__builtin_ctz(0)` 是未定义行为。其他语言请查阅 API 文档。
-
-此外，对于 C++ 的 long long，需使用相应的 `__builtin_popcountll` 等函数，即函数名后缀添加 ll（两个小写字母 L）。`__lg` 支持 long long。
-
-特别地，只包含最小元素的子集，即二进制最低 1 及其后面的 0，也叫 lowbit，可以用 s & -s 算出。举例说明：
-
-```java
-     s = 101100
-    ~s = 010011
-(~s)+1 = 010100 // 根据补码的定义，这就是 -s  =>  s 的最低 1 左侧取反，右侧不变
-s & -s = 000100 // lowbit
-```
-
-#### 3 遍历集合
-
-设元素范围从 0 到 n−1，枚举范围中的元素 i，判断 i 是否在集合 s 中。
-
-```java
-for (int i = 0; i < n; i++) {
-    if (((s >> i) & 1) == 1) { // i 在 s 中
-        // 处理 i 的逻辑
-    }
-}
-```
-
-也可以直接遍历集合 s 中的元素：不断地计算集合最小元素、去掉最小元素，直到集合为空。
-
-```java
-for (int t = s; t > 0; t &= t - 1) {
-    int i = Integer.numberOfTrailingZeros(t);
-    // 处理 i 的逻辑
-}
-```
-
-#### 4 枚举集合
-
-##### 4.1 枚举所有集合
-
-设元素范围从 0 到 n−1，从空集 ∅ 枚举到全集 U:
-
-```java
-for (int s = 0; s < (1 << n); s++) {
-    // 处理 s 的逻辑
-}
-```
-
-##### 4.2 枚举非空子集
-
-设集合为 s，**从大到小**枚举 s 的所有**非空**子集 sub:
-
-```java
-for (int sub = s; sub > 0; sub = (sub - 1) & s) {
-    // 处理 sub 的逻辑
-}
-```
-
-为什么要写成 `sub = (sub - 1) & s` 呢？
-
-暴力做法是从 s 出发，不断减一，直到 0。但这样做，中途会遇到很多并不是 s 的子集的情况。例如 s=10101 时，减一得到 10100，这是 s 的子集。但再减一就得到 10011 了，这并不是 s 的子集，下一个子集应该是 10001。
-
-把所有的合法子集按顺序列出来，会发现我们做的相当于「压缩版」的二进制减法，例如
-
-10101→10100→10001→10000→00101→⋯
-
-如果忽略掉 10101中的两个 00，数字的变化和二进制减法是一样的，即
-
-111→110→101→100→011→⋯
-
-如何快速跳到下一个子集呢？比如，怎么从 10100 跳到 10001？
-
-- 普通的二进制减法，是 10100−1=10011,也就是把最低位的 11 变成 00，同时把最低位的 11 右边的 00 都变成 11。
-- 压缩版的二进制减法也是类似的，对于 10100→10001，也会把最低位的 1 变成 0，对于最低位的 1 右边的 0，并不是都变成 1，只有在 s=10101 中的 1 才会变成 1。怎么做到？减一后 & 10101 就行，也就是 (10100−1) & 10101=10001。
-
-##### 4.3 枚举子集(包含空集)
-
-如果要从大到小枚举 s 的所有子集 sub（从 s 枚举到空集 ∅），可以这样写：
-
-```java
-int sub = s;
-do {
-    // 处理 sub 的逻辑
-    sub = (sub - 1) & s;
-} while (sub != s);
-```
-
-原理是当 sub=0 时（空集），再减一就得到 −1，对应的二进制为 111⋯1，再 &s 就得到了 s。所以当循环到 sub=s 时，说明最后一次循环的 sub=0（空集），s 的所有子集都枚举到了，退出循环。
-
-> 注意：还可以枚举全集 U 的所有大小恰好为 k 的子集，这一技巧叫做 Gosper's Hack，具体请看[视频讲解]([【力扣双周赛 86】Gosper's Hack | 单调队列 | LeetCode 算法刷题_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1na41137jv/?t=15m43s))。
-
-##### 4.4 枚举超集
-
-如果 T 是 S 的子集，那么称 S 是 T 的超集（superset）。
-
-枚举超集的原理和上文枚举子集是类似的，这里通过或运算保证枚举的集合 S 一定包含集合 T 中的所有元素。
-
-枚举 S，满足 S 是 T 的超集，也是全集 U={0,1,2,⋯,n−1} 的子集。
-
-```java
-for (int s = t; s < (1 << n); s = (s + 1) | t) {
-    // 处理 s 的逻辑
-}
-```
-
-## [2374. 边积分最高的节点](https://leetcode.cn/problems/node-with-highest-edge-score/)(中等)(模拟)
-
-给你一个有向图，图中有 `n` 个节点，节点编号从 `0` 到 `n - 1` ，其中每个节点都 **恰有一条** 出边。
-
-图由一个下标从 **0** 开始、长度为 `n` 的整数数组 `edges` 表示，其中 `edges[i]` 表示存在一条从节点 `i` 到节点 `edges[i]` 的 **有向** 边。
-
-节点 `i` 的 **边积分** 定义为：所有存在一条指向节点 `i` 的边的节点的 **编号** 总和。
-
-返回 **边积分** 最高的节点。如果多个节点的 **边积分** 相同，返回编号 **最小** 的那个。
-
- 
-
-**示例 1：**
-
-![img](./img/sql与算法题解-img/image-20220620195403-1.png)
-
->输入：edges = [1,0,0,0,0,7,7,5]
->
->输出：7
->
->解释：
->
->- 节点 1、2、3 和 4 都有指向节点 0 的边，节点 0 的边积分等于 1 + 2 + 3 + 4 = 10 。
->- 节点 0 有一条指向节点 1 的边，节点 1 的边积分等于 0 。
->- 节点 7 有一条指向节点 5 的边，节点 5 的边积分等于 7 。
->- 节点 5 和 6 都有指向节点 7 的边，节点 7 的边积分等于 5 + 6 = 11 。
->节点 7 的边积分最高，所以返回 7 。
-
-**示例 2：**
-
-![img](./img/sql与算法题解-img/image-20220620200212-3.png)
-
->输入：edges = [2,0,0,2]
->
->输出：0
->
->解释：
->
->- 节点 1 和 2 都有指向节点 0 的边，节点 0 的边积分等于 1 + 2 = 3 。
->- 节点 0 和 3 都有指向节点 2 的边，节点 2 的边积分等于 0 + 3 = 3 。
->节点 0 和 2 的边积分都是 3 。由于节点 0 的编号更小，返回 0 。
-
- 
-
-**提示：**
-
-- `n == edges.length`
-- `2 <= n <= 105`
-- `0 <= edges[i] < n`
-- `edges[i] != i`
-
-**我的题解:**
-
-模拟枚举解题
-
-```java
-public int edgeScore1(int[] edges) {
-    int curMark = Integer.MAX_VALUE;
-    long maxEdge = Integer.MIN_VALUE;
-    int n = edges.length;
-    int[] edgeIntegrals = new int[n];
-    for (int i = 0; i < n; i++) {
-        //edges[i]表示从节点i到节点edges[i]有向边
-        edgeIntegrals[edges[i]] += i;
-        if (edgeIntegrals[edges[i]] >= maxEdge) {
-            if (edgeIntegrals[edges[i]] > maxEdge) {
-                curMark = edges[i];
-            } else {
-                curMark = Math.min(curMark, edges[i]);
-            }
-            maxEdge = edgeIntegrals[edges[i]];
-        }
-    }
-    return curMark;
-}
-```
-
-**最优题解:**
-
-首先我们要求出所有点的边积分，然后从中找到边积分最高的点，若不止一个，则取编号最小的那个。
-
-在求边积分时，需要用一个哈希表来统计所有点的边积分。具体的，我们每次遍历到一条由 x 指向 y 的有向边时，将 y 的边积分增加 x。因为每个节点有且仅有一条边，因此我们不需要考虑重边的情况。
-
-另外需要注意的是，点的编号数值最大可达 10^5^，因此边积分可能会超出 int32 的范围，在某些语言中需要使用 int64 来存储边积分。
-
-```java
-public int edgeScore(int[] edges) {
-    int n = edges.length;
-    long[] points = new long[n];
-    for (int i = 0; i < n; i++) {
-        points[edges[i]] += i;
-    }
-    long maxPoints = -1;
-    int res = -1;
-    for (int i = 0; i < n; i++) {
-        if (points[i] > maxPoints) {
-            maxPoints = points[i];
-            res = i;
-        }
-    }
-    return res;
-}
-```
-
-## [902. 最大为 N 的数字组合](https://leetcode.cn/problems/numbers-at-most-n-given-digit-set/)(困难)(数位DP)
-
-给定一个按 **非递减顺序** 排列的数字数组 `digits` 。你可以用任意次数 `digits[i]` 来写的数字。例如，如果 `digits = ['1','3','5']`，我们可以写数字，如 `'13'`, `'551'`, 和 `'1351315'`。
-
-返回 *可以生成的小于或等于给定整数 `n` 的正整数的个数* 。
-
- 
-
-**示例 1：**
-
->输入：digits = ["1","3","5","7"], n = 100
->
->输出：20
->
->解释：
->
->可写出的 20 个数字是：
->
->1, 3, 5, 7, 11, 13, 15, 17, 31, 33, 35, 37, 51, 53, 55, 57, 71, 73, 75, 77.
-
-**示例 2：**
-
->输入：digits = ["1","4","9"], n = 1000000000
->
->输出：29523
->
->解释：
->
->我们可以写 3 个一位数字，9 个两位数字，27 个三位数字，
->
->81 个四位数字，243 个五位数字，729 个六位数字，
->
->2187 个七位数字，6561 个八位数字和 19683 个九位数字。
->
->总共，可以使用D中的数字写出 29523 个整数。
-
-**示例 3:**
-
->输入：digits = ["7"], n = 8
->
->输出：1
-
- 
-
-**提示：**
-
-- `1 <= digits.length <= 9`
-- `digits[i].length == 1`
-- `digits[i]` 是从 `'1'` 到 `'9'` 的数
-- `digits` 中的所有值都 **不同** 
-- `digits` 按 **非递减顺序** 排列
-- `1 <= n <= 109`
-
-**我的题解:**
-
-根据2376模板给出解，修改
-
-```java
-String[] digits;
-String str;
-int[] dp; //记忆化搜索
-
-public int atMostNGivenDigitSet(String[] digits, int n) {
-    this.digits = digits;
-    this.str = String.valueOf(n);
-    this.dp = new int[this.str.length()];
-    Arrays.fill(dp, -1);
-    return atMostNGivenDigitSetHelp(0, true, false);
-}
-
-
-/**
-     * 数位dp
-     *
-     * @param i       当前位数
-     * @param isLimit 是否受限，前面数字是否是s上对应的数字，如果true则当前数字最大为s[i]，false则最大为digits[digits.length-1]
-     * @param isNum   前是否为数字，true表示前面是数字，当前只能从digits[0]开始选择，false表示前面不是数字，可以跳过，或者从digits[0]中选择
-     * @return
-     */
-public int atMostNGivenDigitSetHelp(int i, boolean isLimit, boolean isNum) {
-    if (i == this.str.length()) {
-        return isNum ? 1 : 0;
-    }
-    if (!isLimit && isNum && dp[i] >= 0) return dp[i];
-    int res = 0;
-    //如果前面不是合法数字，那么当前位也可以跳过
-    if (!isNum) {
-        res = atMostNGivenDigitSetHelp(i + 1, false, false);
-    }
-    //当前位可以选择的上限，如果没有受限制，则上限位digits[digits.length-1],否则为s[i]
-    int up = isLimit ? this.str.charAt(i) - '0' : digits[digits.length - 1].charAt(0) - '0';
-    //当前位可以选做的下限，如果之前是合法数字，那么下限为0，否则为digits[0]
-    for (String digit : this.digits) {
-        int digitNum = digit.charAt(0) - '0';
-        if (digitNum > up) {
-            break;
-        }
-        res += atMostNGivenDigitSetHelp(i + 1, isLimit && digitNum == up, true);
-    }
-    if (!isLimit && isNum) dp[i] = res;
-    return res;
-}
-```
-
-**最优题解:**
-
-将 n 转换成字符串 s，定义 f(i,isLimit,isNum) 表示构造从左往右第 i 位及其之后数位的合法方案数，其中：
-
-- isLimit 表示当前是否受到了 n 的约束。若为真，则第 i 位填入的数字至多为 s[i]，否则至多为 9。例如 n=234，如果前面填了 23，那么最后一位至多填 4；如果前面填的不是 23，那么最后一位至多填 9。如果在受到约束的情况下填了 s[i]，那么后续填入的数字仍会受到 n 的约束。
-- isNum 表示 i 前面的数位是否填了数字。若为假，则当前位可以跳过（不填数字），或者要填入的数字至少为 1；若为真，则必须填数字，且要填入的数字从 0 开始。这样我们可以控制构造出的是一位数/两位数/三位数等等。对于本题而言，要填入的数字可直接从 digits 中选择。
-
-枚举要填入的数字，具体实现逻辑见代码。
-
-下面代码中 Java/C++/Go 只需要==记忆化 i==，因为：
-
-1. 对于一个固定的 i，它受到 isLimit 或 isNum 的约束在整个递归过程中至多会出现一次，没必要记忆化。比如 n=234，当 i=2 的时候，前面可以填 11,12,13,⋯,23，如果受到 isLimit 的约束，就说明前面填的是 23。「当 i=2 的时候，前面填的是 23」这件事情，在整个递归过程中至多会出现一次。
-2. 另外，如果只记忆化 i，dp 数组的含义就变成在不受到 n 的约束时的合法方案数，所以要在 !isLimit && isNum 成立时才去记忆化。接着上面的例子，在前面填 23 的时候，下一位填的数字不能超过 4，因此算出来的结果是不能套用到前面填的是 11,12,13,⋯ 这些数字上面的。
-
-```java
-
-private String[] digits;
-private char s[];
-private int dp[];
-
-public int atMostNGivenDigitSet(String[] digits, int n) {
-    this.digits = digits;
-    s = Integer.toString(n).toCharArray();
-    dp = new int[s.length];
-    Arrays.fill(dp, -1); // dp[i] = -1 表示 i 这个状态还没被计算出来
-    return f(0, true, false);
-}
-
-private int f(int i, boolean isLimit, boolean isNum) {
-    if (i == s.length) return isNum ? 1 : 0; // 如果填了数字，则为 1 种合法方案
-    if (!isLimit && isNum && dp[i] >= 0) return dp[i]; // 在不受到任何约束的情况下，返回记录的结果，避免重复运算
-    var res = 0;
-    if (!isNum) // 前面不填数字，那么可以跳过当前数位，也不填数字
-        // isLimit 改为 false，因为没有填数字，位数都比 n 要短，自然不会受到 n 的约束
-        // isNum 仍然为 false，因为没有填任何数字
-        res = f(i + 1, false, false);
-    var up = isLimit ? s[i] : '9'; // 根据是否受到约束，决定可以填的数字的上限
-    // 注意：对于一般的题目而言，如果此时 isNum 为 false，则必须从 1 开始枚举，由于本题 digits 没有 0，所以无需处理这种情况
-    for (var d : digits) { // 枚举要填入的数字 d
-        if (d.charAt(0) > up) break; // d 超过上限，由于 digits 是有序的，后面的 d 都会超过上限，故退出循环
-        // isLimit：如果当前受到 n 的约束，且填的数字等于上限，那么后面仍然会受到 n 的约束
-        // isNum 为 true，因为填了数字
-        res += f(i + 1, isLimit && d.charAt(0) == up, true);
-    }
-    if (!isLimit && isNum) dp[i] = res; // 在不受到任何约束的情况下，记录结果
-    return res;
-}
-
-```
-
-## [997. 找到小镇的法官](https://leetcode.cn/problems/find-the-town-judge/)(简单)(有向图)
-
-小镇里有 `n` 个人，按从 `1` 到 `n` 的顺序编号。传言称，这些人中有一个暗地里是小镇法官。
-
-如果小镇法官真的存在，那么：
-
-1. 小镇法官不会信任任何人。
-2. 每个人（除了小镇法官）都信任这位小镇法官。
-3. 只有一个人同时满足属性 **1** 和属性 **2** 。
-
-给你一个数组 `trust` ，其中 `trust[i] = [ai, bi]` 表示编号为 `ai` 的人信任编号为 `bi` 的人。
-
-如果小镇法官存在并且可以确定他的身份，请返回该法官的编号；否则，返回 `-1` 。
-
-**示例 1：**
-
->输入：n = 2, trust = [[1,2]]
->
->输出：2
-
-**示例 2：**
-
->输入：n = 3, trust = [[1,3],[2,3]]
->
->输出：3
-
-**示例 3：**
-
->输入：n = 3, trust = [[1,3],[2,3],[3,1]]
->
->输出：-1
-
-**提示：**
-
-- `1 <= n <= 1000`
-- `0 <= trust.length <= 104`
-- `trust[i].length == 2`
-- `trust` 中的所有`trust[i] = [ai, bi]` **互不相同**
-- `ai != bi`
-- `1 <= ai, bi <= n`
-
-**我的题解:**
-
-维护一个信任数的数组，trustCount[i]表示` i 被信任的次数 - i 信任别人的次数`，题目中警官的trustCount就是为n-1。
-
-```java
-public int findJudge1(int n, int[][] trust) {
-    int[] trustCount = new int[n + 1];
-    for (int[] i : trust) {
-        trustCount[i[0]]--;
-        trustCount[i[1]]++;
-    }
-    int ans = -1;
-    for (int i = 1; i < trustCount.length; i++) {
-        if (trustCount[i] == n - 1) {
-            ans = i;
-            break;
-        }
-    }
-
-    return ans;
-}
-```
-
-**最有题解:**
-
-本题需要用到有向图中节点的入度和出度的概念。在有向图中，一个节点的入度是指向该节点的边的数量；而一个节点的出度是从该节点出发的边的数量。
-
-题干描述了一个有向图。每个人是图的节点，trust 的元素 trust[i] 是图的有向边，从 `trust[i][0]` 指向 `trust[i][1]`。我们可以遍历 trust，统计每个节点的入度和出度，存储在 inDegrees 和 outDegrees 中。
-
-根据题意，在法官存在的情况下，法官不相信任何人，每个人（除了法官外）都信任法官，且只有一名法官。因此法官这个节点的入度是 n−1, 出度是 0。
-
-我们可以遍历每个节点的入度和出度，如果找到一个符合条件的节点，由于题目保证只有一个法官，我们可以直接返回结果；如果不存在符合条件的点，则返回 −1。
-
-```java
-public int findJudge2(int n, int[][] trust) {
-    int[] inDegrees = new int[n + 1];
-    int[] outDegrees = new int[n + 1];
-    for (int[] edge : trust) {
-        int x = edge[0], y = edge[1];
-        ++inDegrees[y];
-        ++outDegrees[x];
-    }
-    for (int i = 1; i <= n; ++i) {
-        if (inDegrees[i] == n - 1 && outDegrees[i] == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-```
-
-## [1014. 最佳观光组合](https://leetcode.cn/problems/best-sightseeing-pair/)(中等)(枚举右，维护左)
-
-给你一个正整数数组 `values`，其中 `values[i]` 表示第 `i` 个观光景点的评分，并且两个景点 `i` 和 `j` 之间的 **距离** 为 `j - i`。
-
-一对景点（`i < j`）组成的观光组合的得分为 `values[i] + values[j] + i - j` ，也就是景点的评分之和 **减去** 它们两者之间的距离。
-
-返回一对观光景点能取得的最高分。
-
-values[i] + values[j] + i - j = values[i] + i + values[j] -j
-
-**示例 1：**
-
->输入：values = [8,1,5,2,6]
->
->输出：11
->
->解释：i = 0, j = 2, values[i] + values[j] + i - j = 8 + 5 + 0 - 2 = 11
-
-**示例 2：**
-
->输入：values = [1,2]
->
->输出：2
-
- 
-
-**提示：**
-
-- `2 <= values.length <= 5 * 104`
-- `1 <= values[i] <= 1000`
-
-**我的题解:**
-
-暴力枚举,超时不可用
-
-```java
-public int maxScoreSightseeingPair1(int[] values) {
-    int n = values.length;
-    int ans = 0;
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
-            ans = Math.max(ans, values[i] + values[j] + i - j);
-        }
-    }
-    return ans;
-}
-```
-
-**最优题解:**
-
-我们考虑从前往后遍历 j 来统计答案，对于每个观光景点 j 而言，我们需要遍历 [0,j−1] 的观光景点 i 来计算组成观光组合 (i,j) 得分的最大值 cnt~j~来作为第 j 个观光景点的值，那么最后的答案无疑就是所有观光景点值的最大值，即 max~j=0..n−1~{cnt~j~}。但是遍历 j 需要 O(n) 的时间复杂度，遍历 [0,j−1] 的观光景点 i 也需要 O(n) 的时间复杂度，因此该方法总复杂度为 O(n^2^)，不能通过所有测试用例，我们需要进一步优化时间复杂度。
-
-我们回过头来看得分公式，我们可以将其拆分成 values[i]+i 和 values[j]−j 两部分，这样对于统计景点 j 答案的时候，由于 values[j]−j 是固定不变的，因此最大化 values[i]+i+values[j]−j 的值其实就等价于求 [0,j−1] 中 values[i]+i 的最大值 mx，景点 j 的答案即为 mx+values[j]−j 。而 mx 的值我们只要从前往后遍历 j 的时候同时维护即可，这样每次遍历到景点 j 的时候，寻找使得得分最大的 i 就能从 O(n) 降至 O(1) 的时间复杂度，总时间复杂度就能从 O(n^2^) 降至 O(n)。
-
-```java
-public int maxScoreSightseeingPair2(int[] values) {
-    int ans = 0, mx = values[0] + 0;
-    for (int j = 1; j < values.length; ++j) {
-        ans = Math.max(ans, mx + values[j] - j);
-        // 边遍历边维护
-        mx = Math.max(mx, values[j] + j);
-    }
-    return ans;
-}
-```
-
-**灵茶题解:**
-
-```java
-public int maxScoreSightseeingPair(int[] values) {
-    int ans = 0;
-    int mx = values[0]; // j 左边的 values[i] + i 的最大值
-    for (int j = 1; j < values.length; j++) {
-        ans = Math.max(ans, mx + values[j] - j);
-        mx = Math.max(mx, values[j] + j);
-    }
-    return ans;
-}
-```
-
-## [2207. 字符串中最多数目的子序列](https://leetcode.cn/problems/maximize-number-of-subsequences-in-a-string/)(中等)(数学)
-
-给你一个下标从 **0** 开始的字符串 `text` 和另一个下标从 **0** 开始且长度为 `2` 的字符串 `pattern` ，两者都只包含小写英文字母。
-
-你可以在 `text` 中任意位置插入 **一个** 字符，这个插入的字符必须是 `pattern[0]` **或者** `pattern[1]` 。注意，这个字符可以插入在 `text` 开头或者结尾的位置。
-
-请你返回插入一个字符后，`text` 中最多包含多少个等于 `pattern` 的 **子序列** 。
-
-**子序列** 指的是将一个字符串删除若干个字符后（也可以不删除），剩余字符保持原本顺序得到的字符串。
-
-**示例 1：**
-
->输入：text = "abdcdbc", pattern = "ac"
->
->输出：4
->
->解释：
->
->如果我们在 text[1] 和 text[2] 之间添加 pattern[0] = 'a' ，那么我们得到 "abadcdbc" 。那么 "ac" 作为子序列出现 4 次。
->
->其他得到 4 个 "ac" 子序列的方案还有 "aabdcdbc" 和 "abdacdbc" 。
->
->但是，"abdcadbc" ，"abdccdbc" 和 "abdcdbcc" 这些字符串虽然是可行的插入方案，但是只出现了 3 次 
->
->"ac" 子序列，所以不是最优解。
->
->可以证明插入一个字符后，无法得到超过 4 个 "ac" 子序列。
-
-**示例 2：**
-
->输入：text = "aabb", pattern = "ab"
->
->输出：6
->
->解释：
->
->可以得到 6 个 "ab" 子序列的部分方案为 "aaabb" ，"aaabb" 和 "aabbb" 。
-
-**提示：**
-
-- `1 <= text.length <= 105`
-- `pattern.length == 2`
-- `text` 和 `pattern` 都只包含小写英文字母。
-
-**我的题解:**
-
-这道题的关键在于如何找到在哪里插入时获得的对数最多，但是题目允许子序列，所以我们只需要统计前后两个字符，哪个字符数量最多，数量多的我们就在另一个字符添加相应的字符，这样就可以添加最多的对数
-
-```java
-public long maximumSubsequenceCount1(String text, String pattern) {
-    int textLength = text.length();
-    char pre = pattern.charAt(0), suf = pattern.charAt(1);
-    long preCount = 0, sufCount = 0;
-    long ans = 0;
-    for (int i = 0; i < textLength; i++) {
-        char cur = text.charAt(i);
-        if (cur == suf) {
-            sufCount++;
-            ans += preCount;
-        }
-        if (cur == pre) {
-            preCount++;
-        }
-    }
-    ans += Math.max(preCount, sufCount);
-    return ans;
-}
-```
-
-**最优题解:**
-
-遍历字符串，并且同时统计两个字符出现的频数。如果遇见 pattern[1]，就可以和前面出现过的 pattern[0] 组成子序列。
-
-然后我们插入字符：
-
-- 如果加上 pattern[0]， 就加在字符串开头，与字符串中的 pattern[1] 组成新的子序列。
-- 如果加上 pattern[1]， 就加在字符串结尾，与字符串中的 pattern[0] 组成新的子序列。
-
-最终新增的子字符串数量为两个字符频数的最大值，加到结果中并返回。
-
-```java
-public long maximumSubsequenceCount2(String s, String pattern) {
-    long res = 0;
-    int cnt1 = 0, cnt2 = 0;
-    for (int i = 0; i < s.length(); ++i) {
-        if (s.charAt(i) == pattern.charAt(1)) {
-            res += cnt1;
-            cnt2++;
-        }
-        if (s.charAt(i) == pattern.charAt(0)) {
-            cnt1++;
-        }
-    }
-    return res + Math.max(cnt1, cnt2);
-}
-```
-
-## [2306. 公司命名](https://leetcode.cn/problems/naming-a-company/)(困难)(数学集合)
-
-给你一个字符串数组 `ideas` 表示在公司命名过程中使用的名字列表。公司命名流程如下：
-
-1. 从 `ideas` 中选择 2 个 **不同** 名字，称为 `ideaA` 和 `ideaB` 。
-2. 交换 `ideaA` 和 `ideaB` 的首字母。
-3. 如果得到的两个新名字 **都** 不在 `ideas` 中，那么 `ideaA ideaB`（**串联** `ideaA` 和 `ideaB` ，中间用一个空格分隔）是一个有效的公司名字。
-4. 否则，不是一个有效的名字。
-
-返回 **不同** 且有效的公司名字的数目。
-
- 
-
-**示例 1：**
-
->输入：ideas = ["coffee","donuts","time","toffee"]
->
->输出：6
->
->解释：下面列出一些有效的选择方案：
->
->- ("coffee", "donuts")：对应的公司名字是 "doffee conuts" 。
->- ("donuts", "coffee")：对应的公司名字是 "conuts doffee" 。
->- ("donuts", "time")：对应的公司名字是 "tonuts dime" 。
->- ("donuts", "toffee")：对应的公司名字是 "tonuts doffee" 。
->- ("time", "donuts")：对应的公司名字是 "dime tonuts" 。
->- ("toffee", "donuts")：对应的公司名字是 "doffee tonuts" 。
->因此，总共有 6 个不同的公司名字。
->
->下面列出一些无效的选择方案：
->
->- ("coffee", "time")：在原数组中存在交换后形成的名字 "toffee" 。
->- ("time", "toffee")：在原数组中存在交换后形成的两个名字。
->- ("coffee", "toffee")：在原数组中存在交换后形成的两个名字。
-
-**示例 2：**
-
->输入：ideas = ["lack","back"]
->
->输出：0
->
->解释：不存在有效的选择方案。因此，返回 0 。
-
-**提示：**
-
-- `2 <= ideas.length <= 5 * 104`
-- `1 <= ideas[i].length <= 10`
-- `ideas[i]` 由小写英文字母组成
-- `ideas` 中的所有字符串 **互不相同**
-
-**我的题解:**
-
-暴力枚举，时间超限==不可用==
-
-```java
-public long distinctNames1(String[] ideas) {
-    int length = ideas.length;
-    long ans = 0;
-    Set<String> mark = new HashSet<>(Arrays.asList(ideas));
-
-    for (int i = 0; i < length; i++) {
-        StringBuilder x = new StringBuilder(ideas[i]);
-        char firstX = x.charAt(0);
-        for (int j = i + 1; j < length; j++) {
-            StringBuilder y = new StringBuilder(ideas[j]);
-            char firstY = y.charAt(0);
-            y.replace(0, 1, String.valueOf(firstX));
-            x.replace(0, 1, String.valueOf(firstY));
-            String newX = x.toString();
-            String newY = y.toString();
-            if (!mark.contains(newX) && !mark.contains(newY)) {
-                ans += 2;
-            }
-        }
-    }
-    return ans;
-}
-```
-
-**最优题解:**
-
-为了方便叙述，我们称数组 idea 中的字符串为「候选名字」，需要求解数目的名字为「公司名字」。
-
-我们选择两个候选名字 idea~A~和 idea~B~，交换它们的首字母，如果得到的两个新的字符串都没有在数组 idea 中出现过，那么它们的拼接就是一个有效的公司名字。
-
-基于上述的交换流程，我们可以考虑将所有的候选名字按照首字母进行分组，这样一来：
-
-- 如果两个候选名字拥有同样的首字母，那么它们一定无法得到有效的公司名字；
-- 如果两个候选名字拥有不同的首字母，那么它们有可能得到有效的公司名字。
-
-我们用哈希映射 names 存储所有的候选名字，它的键是首字母，值是去除首字母后，每个候选名字的剩余部分。因此，我们可以枚举两个不同的首字母 pre~A~和 pre~B~，计算以它们为首字母的有效的公司名字数量：
-
-考虑两个候选名字 idea~A~=(pre~A~,suf~A~) 和 idea~B~=(pre~B~,suf~B~)，交换后会得到 (pre~B~,suf~A~) 和 (pre~A~,suf~B~)。也就是说，只要 suf~A~不在 names[pre~B~] 中出现，以及 suf~B~不在 names[pre~A~] 中出现即可。
-
-而「suf~A~不在names[pre ~B~] 中出现」的部分，就是 names[pre~A~] 与 names[pre~B~] 的差集；
-
-同理，「suf~B~不在 names[pre~A~] 中出现」的部分,就是 names[pre~B~] 与 names[pre~A~] 的差集。这两部分是对称的；
-
-因此，首字母 pre~A~和 pre~B~对应的有效的公司名字数量，就是：
-$$
-|names[pre_A]-names[pre_B]| \times |names[pre_B]-names[pre_A]| 
-$$
-其中 ∣⋅∣ 表示集合大小，− 表示集合的差集运算。
-
-枚举所有不同的 pre~A~和 pre~B~，即可得到最终的答案。
-
-**细节**
-
-在上面公式中需要计算两次集合的差集，但实际上我们只需要知道差集的大小而不是差集本身。对于集合 A,B，有 A−B=A\(A∩B)，其中 \ 表示将元素去除，∩ 表示集合的交集运算。因此，我们只需要计算一次集合的交集即可，通过 ∣A∣−∣A∩B∣ 以及 ∣B∣−∣A∩B∣ 即可快速得到两个差集的大小。
-
-```java
-public long distinctNames2(String[] ideas) {
-    Map<Character, Set<String>> names = new HashMap<Character, Set<String>>();
-    for (String idea : ideas) {
-        names.putIfAbsent(idea.charAt(0), new HashSet<String>());
-        names.get(idea.charAt(0)).add(idea.substring(1));
-    }
-    long ans = 0;
-    for (Map.Entry<Character, Set<String>> entryA : names.entrySet()) {
-        char preA = entryA.getKey();
-        Set<String> setA = entryA.getValue();
-        for (Map.Entry<Character, Set<String>> entryB : names.entrySet()) {
-            char preB = entryB.getKey();
-            Set<String> setB = entryB.getValue();
-            if (preA == preB) {
-                continue;
-            }
-            int intersect = getIntersectSize(setA, setB);
-            ans += (long) (setA.size() - intersect) * (setB.size() - intersect);
-        }
-    }
-    return ans;
-}
-
-public int getIntersectSize(Set<String> a, Set<String> b) {
-    int ans = 0;
-    for (String s : a) {
-        if (b.contains(s)) {
-            ans++;
-        }
-    }
-    return ans;
-}
-```
-
-**灵茶题解:**
-
-```java
-public long distinctNames(String[] ideas) {
-    Set<String>[] groups = new HashSet[26];
-    Arrays.setAll(groups, i -> new HashSet<>());
-    for (String s : ideas) {
-        groups[s.charAt(0) - 'a'].add(s.substring(1)); // 按照首字母分组
-    }
-
-    long ans = 0;
-    for (int a = 1; a < 26; a++) { // 枚举所有组对
-        for (int b = 0; b < a; b++) {
-            int m = 0; // 交集的大小
-            for (String s : groups[a]) {
-                if (groups[b].contains(s)) {
-                    m++;
-                }
-            }
-            ans += (long) (groups[a].size() - m) * (groups[b].size() - m);
-        }
-    }
-    return ans * 2; // 乘 2 放到最后
-}
-```
-
-## [2516. 每种字符至少取 K 个](https://leetcode.cn/problems/take-k-of-each-character-from-left-and-right/)(中等)(滑动窗口)(问题的改编)
-
-给你一个由字符 `'a'`、`'b'`、`'c'` 组成的字符串 `s` 和一个非负整数 `k` 。每分钟，你可以选择取走 `s` **最左侧** 还是 **最右侧** 的那个字符。
-
-你必须取走每种字符 **至少** `k` 个，返回需要的 **最少** 分钟数；如果无法取到，则返回 `-1` 。
-
- 
-
-**示例 1：**
-
->输入：s = "aabaaaacaabc", k = 2
->
->输出：8
->
->解释：
->
->从 s 的左侧取三个字符，现在共取到两个字符 'a' 、一个字符 'b' 。
->
->从 s 的右侧取五个字符，现在共取到四个字符 'a' 、两个字符 'b' 和两个字符 'c' 。
->
->共需要 3 + 5 = 8 分钟。
->
->可以证明需要的最少分钟数是 8 。
-
-**示例 2：**
-
->输入：s = "a", k = 1
->
->输出：-1
->
->解释：无法取到一个字符 'b' 或者 'c'，所以返回 -1 。
-
-**提示：**
-
-- `1 <= s.length <= 105`
-- `s` 仅由字母 `'a'`、`'b'`、`'c'` 组成
-- `0 <= k <= s.length`
-
-**我的题解:**
-
-解题错误，==不可用==
-
-```java
-public int takeCharacters(String s, int k) {
-    int[] count = new int[3];
-    int[] temp = new int[3];
-    int mid = s.length() / 2;
-    int n = s.length();
-    int ans = 0;
-    for (int i = 0; i <= mid; i++) {
-        //不需要，加入待定
-        ans = getAns(s, k, count, temp, ans, i);
-    }
-    temp = new int[3];
-    for (int i = n - 1; i > mid; i--) {
-        ans = getAns(s, k, count, temp, ans, i);
-    }
-
-    return count[0] < k || count[1] < k || count[2] < k ? -1 : ans;
-}
-
-private int getAns(String s, int k, int[] count, int[] temp, int ans, int i) {
-    int index = s.charAt(i) - 'a';
-    if (count[index] >= k) {
-        temp[index]++;
-    } else {
-        count[index]++;
-        ans++;
-        for (int i1 = 0; i1 < temp.length; i1++) {
-            count[i1] += temp[i1];
-            ans += temp[i1];
-            temp[i1] = 0;
-        }
-    }
-    return ans;
-}
-```
-
-**灵茶题解:**
-
-比如 s 中有 3 个 a，4 个 b，5 个 c，k=2，每种字母至少取走 2 个，等价于剩下的字母至多有 1 个 a，2 个 b 和 3 个 c。
-
-由于只能从 s 最左侧和最右侧取走字母，所以剩下的字母是 s 的子串。
-
-设 s 中的 a,b,c 的个数分别为 x,y,z，现在问题变成：
-
-计算 s 的最长子串长度，该子串满足 a,b,c 的个数分别至多为 x−k,y−k,z−k。由于子串越短越能满足要求，越长越不能满足要求，有单调性，可以用**滑动窗口**解决。如果你不了解滑动窗口，可以看视频[基础算法精讲 03](https://www.bilibili.com/video/BV1hd4y1r7Gq/?vd_source=6f12eac1da397b0efdd20e02514a56f9)。
-
-与其维护窗口内的字母个数，不如直接维护窗口外的字母个数，这也是我们取走的字母个数。
-
-- 一开始，假设我们取走了所有的字母。或者说，初始窗口是空的，窗口外的字母个数就是 s 的每个字母的出现次数。
-- 右端点字母进入窗口后，该字母取走的个数减一。
-- 如果减一后，窗口外该字母的个数小于 k，说明子串太长了，或者取走的字母个数太少了，那么就不断右移左端点，把左端点字母移出窗口，相当于我们取走移出窗口的字母，直到该字母个数等于 k，退出内层循环。
-- 内层循环结束后，用窗口长度 right−left+1 更新子串长度的最大值。
-
-最后，原问题的答案为 n 减去子串长度的最大值。
-
-特别地，如果 s 中某个字母的个数不足 k，那么无法满足题目要求，返回 −1。
-
-```java
-
-public int takeCharacters(String S, int k) {
-    char[] s = S.toCharArray();
-    int[] cnt = new int[3];
-    for (char c : s) {
-        cnt[c - 'a']++; // 一开始，把所有字母都取走
-    }
-    if (cnt[0] < k || cnt[1] < k || cnt[2] < k) {
-        return -1; // 字母个数不足 k
-    }
-
-    int mx = 0; // 子串最大长度
-    int left = 0;
-    for (int right = 0; right < s.length; right++) {
-        int c = s[right] - 'a';
-        cnt[c]--; // 移入窗口，相当于不取走 c
-        while (cnt[c] < k) { // 窗口之外的 c 不足 k
-            cnt[s[left] - 'a']++; // 移出窗口，相当于取走 s[left]
-            left++;
-        }
-        mx = Math.max(mx, right - left + 1);
-    }
-    return s.length - mx;
-}
-```
-
-## [209. 长度最小的子数组](https://leetcode.cn/problems/minimum-size-subarray-sum/)(中等)(滑动窗口)
-
-给定一个含有 `n` 个正整数的数组和一个正整数 `target` **。**
-
-找出该数组中满足其总和大于等于 `target` 的长度最小的 
-
-**子数组**
-
-`[numsl, numsl+1, ..., numsr-1, numsr]` ，并返回其长度**。**如果不存在符合条件的子数组，返回 `0` 。
-
-**示例 1：**
-
->输入：target = 7, nums = [2,3,1,2,4,3]
->
->输出：2
->
->解释：子数组 [4,3] 是该条件下的长度最小的子数组。
-
-**示例 2：**
-
->输入：target = 4, nums = [1,4,4]
->
->输出：1
-
-**示例 3：**
-
->输入：target = 11, nums = [1,1,1,1,1,1,1,1]
->
->输出：0
-
-**提示：**
-
-- `1 <= target <= 109`
-- `1 <= nums.length <= 105`
-- `1 <= nums[i] <= 105`
-
-**我的题解:**
-
-适用滑动窗口，当右边端口向右移动后，当前和大于target则我们开始向右移动我们的左端口直到我们的和小于target，在移动的同时记录长度取最小长度。
-
-```java
-    public int minSubArrayLen(int target, int[] nums) {
-        int n = nums.length;
-        int ans = Integer.MAX_VALUE;
-        int curSum = 0;
-        for (int left = 0, right = 0; right < n; right++) {
-            curSum += nums[right];
-            while (curSum >= target && left <= right) {
-                ans = Math.min(ans, right - left + 1);
-                curSum -= nums[left++];
-            }
-        }
-        return ans <= n ? ans : 0;
-    }
-```
-
-**灵茶题解:**
-
-```java
-public int minSubArrayLen(int target, int[] nums) {
-    int n = nums.length;
-    int ans = n + 1;
-    int sum = 0; // 子数组元素和
-    int left = 0; // 子数组左端点
-    for (int right = 0; right < n; right++) { // 枚举子数组右端点
-        sum += nums[right];
-        while (sum >= target) { // 满足要求
-            ans = Math.min(ans, right - left + 1);
-            sum -= nums[left++]; // 左端点右移
-        }
-    }
-    return ans <= n ? ans : 0;
-}
-```
-
-[2286. 以组为单位订音乐会的门票](https://leetcode.cn/problems/booking-concert-tickets-in-groups/)(困难)()
-
-一个音乐会总共有 `n` 排座位，编号从 `0` 到 `n - 1` ，每一排有 `m` 个座椅，编号为 `0` 到 `m - 1` 。你需要设计一个买票系统，针对以下情况进行座位安排：
-
-- 同一组的 `k` 位观众坐在 **同一排座位，且座位连续** 。
-- `k` 位观众中 **每一位** 都有座位坐，但他们 **不一定** 坐在一起。
-
-由于观众非常挑剔，所以：
-
-- 只有当一个组里所有成员座位的排数都 **小于等于** `maxRow` ，这个组才能订座位。每一组的 `maxRow` 可能 **不同** 。
-- 如果有多排座位可以选择，优先选择 **最小** 的排数。如果同一排中有多个座位可以坐，优先选择号码 **最小** 的。
-
-请你实现 `BookMyShow` 类：
-
-- `BookMyShow(int n, int m)` ，初始化对象，`n` 是排数，`m` 是每一排的座位数。
-- `int[] gather(int k, int maxRow)` 返回长度为 `2` 的数组，表示 `k` 个成员中 **第一个座位** 的排数和座位编号，这 `k` 位成员必须坐在 **同一排座位，且座位连续** 。换言之，返回最小可能的 `r` 和 `c` 满足第 `r` 排中 `[c, c + k - 1]` 的座位都是空的，且 `r <= maxRow` 。如果 **无法** 安排座位，返回 `[]` 。
-- `boolean scatter(int k, int maxRow)` 如果组里所有 `k` 个成员 **不一定** 要坐在一起的前提下，都能在第 `0` 排到第 `maxRow` 排之间找到座位，那么请返回 `true` 。这种情况下，每个成员都优先找排数 **最小** ，然后是座位编号最小的座位。如果不能安排所有 `k` 个成员的座位，请返回 `false` 。
-
-**示例 1：**
-
->输入：
->
->["BookMyShow", "gather", "gather", "scatter", "scatter"]
->
->[[2, 5], [4, 0], [2, 0], [5, 1], [5, 1]]
->
->输出：
->
->[null, [0, 0], [], true, false]
->
->解释：
->
->BookMyShow bms = new BookMyShow(2, 5); // 总共有 2 排，每排 5 个座位。
->
->bms.gather(4, 0); // 返回 [0, 0]
->                  // 这一组安排第 0 排 [0, 3] 的座位。
->
->bms.gather(2, 0); // 返回 []
->                  // 第 0 排只剩下 1 个座位。
->                  // 所以无法安排 2 个连续座位。
->
->bms.scatter(5, 1); // 返回 True
->                   // 这一组安排第 0 排第 4 个座位和第 1 排 [0, 3] 的座位。
->
->bms.scatter(5, 1); // 返回 False
->                   // 总共只剩下 2 个座位。
-
-**提示：**
-
-- `1 <= n <= 5 * 104`
-- `1 <= m, k <= 109`
-- `0 <= maxRow <= n - 1`
-- `gather` 和 `scatter` **总** 调用次数不超过 `5 * 104` 次。
-
-**我的题解:**
-
-按照题目求解，但是解答错误，==不可用==
-
-```java
-public class BookMyShow {
-
-    int[] site;
-    int n;
-    int m;
-
-    public BookMyShow(int n, int m) {
-        this.site = new int[n];
-        this.n = n;
-        this.m = m;
-        Arrays.fill(this.site, m);
-    }
-
-    public int[] gather(int k, int maxRow) {
-        int[] res = new int[0];
-        for (int i = 0; i < n && i <= maxRow; i++) {
-            if (site[i] >= k) {
-                res = new int[]{i, m - site[i]};
-                site[i] -= k;
-                break;
-            }
-        }
-        return res;
-    }
-
-    public boolean scatter(int k, int maxRow) {
-        boolean res = false;
-        int mark = 0;
-        for (int i = 0; i < n && i <= maxRow; i++) {
-            if (site[i] >= k) {
-                site[i] -= k;
-                res = true;
-                break;
-            } else {
-                k -= site[i];
-                //添加标记
-                mark |= 1 << i;
-            }
-        }
-        if (res) {
-            for (int t = mark; t > 0; t &= t - 1) {
-                int i = Integer.numberOfTrailingZeros(t);
-                // 处理 i 的逻辑
-                site[i] = 0;
-            }
-        }
-        return res;
-    }
-}
-```
-
-**灵茶题解:**
-
-题意（换一个场景）
-
-一开始有 n 个空水桶，每个水桶的容量都是 m 升。水桶编号从 0 到 n−1。
-
-- gather：在前 maxRow 个水桶中，找第一个还能装至少 k 升水的水桶，往里面倒入 k 升水。如果有这样的水桶，返回水桶编号，以及在倒水前，水桶有多少升水；如果没有这样的水桶，返回空列表。
-- scatter：往前 maxRow 个水桶中倒入总量为 k 升的水。从左到右选择没有装满的水桶依次倒入。如果无法倒入总量为 k 升的水，则不执行操作，并返回 false；否则执行操作，并返回 true。
-
-思路
-
-我们需要：
-
-- 求出前 maxRow 个水桶中，第一个剩余容量 ≥k，也就是接水量 ≤m−k 的水桶。
-- 维护每个水桶的接水量。
-- 维护前 maxRow 个水桶的接水量之和，从而判断 scatter 能否倒入总量为 k 升的水。
-
-这些都可以用线段树解决。线段树维护每个区间的接水量的最小值 min，以及每个区间的接水量之和 sum。
-
-对于 gather，从线段树的根节点开始递归：
-
-- 如果当前区间 min>m−k，则无法倒入 k 升水，返回 0。
-- 如果当前区间长度为 1，返回区间端点。
-- 如果左半区间 min≤m−k，则答案在左半区间中，递归左半区间。
-- 否则如果 maxRow 在右半区间内，递归右半区间。
-- 否则返回 −1，表示没有这样的水桶。
-
-上述过程叫做线段树二分。
-
-对于 scatter，如果区间 [0,maxRow] 的接水量之和大于 m⋅(maxRow+1)−k，则无法执行操作。
-
-否则可以执行操作。从第一个没有装满，也就是接水量 ≤m−1 的水桶开始倒水，这也可以用线段树二分求出。
-
-```java
-class BookMyShow {
-    private int n;
-    private int m;
-    private int[] min;
-    private long[] sum;
-
-    public BookMyShow(int n, int m) {
-        this.n = n;
-        this.m = m;
-        int size = 2 << (32 - Integer.numberOfLeadingZeros(n)); // 比 4n 更小
-        min = new int[size];
-        sum = new long[size];
-    }
-
-    public int[] gather(int k, int maxRow) {
-        // 找第一个能倒入 k 升水的水桶
-        int r = findFirst(1, 0, n - 1, maxRow, m - k);
-        if (r < 0) { // 没有这样的水桶
-            return new int[]{};
-        }
-        int c = (int) querySum(1, 0, n - 1, r, r);
-        update(1, 0, n - 1, r, k); // 倒水
-        return new int[]{r, c};
-    }
-
-    public boolean scatter(int k, int maxRow) {
-        // [0,maxRow] 的接水量之和
-        long s = querySum(1, 0, n - 1, 0, maxRow);
-        if (s > (long) m * (maxRow + 1) - k) {
-            return false; // 水桶已经装了太多的水
-        }
-        // 从第一个没有装满的水桶开始
-        int i = findFirst(1, 0, n - 1, maxRow, m - 1);
-        while (k > 0) {
-            int left = Math.min(m - (int) querySum(1, 0, n - 1, i, i), k);
-            update(1, 0, n - 1, i, left); // 倒水
-            k -= left;
-            i++;
-        }
-        return true;
-    }
-
-    // 把下标 i 上的元素值增加 val
-    private void update(int o, int l, int r, int i, int val) {
-        if (l == r) {
-            min[o] += val;
-            sum[o] += val;
-            return;
-        }
-        int m = (l + r) / 2;
-        if (i <= m) {
-            update(o * 2, l, m, i, val);
-        } else {
-            update(o * 2 + 1, m + 1, r, i, val);
-        }
-        min[o] = Math.min(min[o * 2], min[o * 2 + 1]);
-        sum[o] = sum[o * 2] + sum[o * 2 + 1];
-    }
-
-    // 返回区间 [L,R] 内的元素和
-    private long querySum(int o, int l, int r, int L, int R) {
-        if (L <= l && r <= R) {
-            return sum[o];
-        }
-        long res = 0;
-        int m = (l + r) / 2;
-        if (L <= m) {
-            res = querySum(o * 2, l, m, L, R);
-        }
-        if (R > m) {
-            res += querySum(o * 2 + 1, m + 1, r, L, R);
-        }
-        return res;
-    }
-
-    // 返回区间 [0,R] 中 <= val 的最靠左的位置，不存在时返回 -1
-    private int findFirst(int o, int l, int r, int R, int val) {
-        if (min[o] > val) {
-            return -1; // 整个区间的元素值都大于 val
-        }
-        if (l == r) {
-            return l;
-        }
-        int m = (l + r) / 2;
-        if (min[o * 2] <= val) {
-            return findFirst(o * 2, l, m, R, val);
-        }
-        if (R > m) {
-            return findFirst(o * 2 + 1, m + 1, r, R, val);
-        }
-        return -1;
-    }
-}
-```
-
 # 灵神题单
 
 资料来源:
@@ -9352,6 +5628,77 @@ class BookMyShow {
 
 ## 3、单调栈
 
+![单调栈题单单调栈入门单调栈题目单调栈教程单调栈视频leetcode单调栈 灵茶山艾府 灵神 灵神题单](./img/sql与算法题解-img/1711714526-rMdiIh-t3-c.png)
+
+他向远方望去，无法看到高山背后的矮山，只能看到一座座更高的山峰。
+
+⚠注意：推荐先做做 数据结构题单 中的「枚举右，维护左」以及第三章「栈」的题目后，再来刷本题单。
+
+### 3.1 单调栈
+
+请先学习：[单调栈【基础算法精讲 26】](https://leetcode.cn/link/?target=https://www.bilibili.com/video/BV1VN411J7S7/)
+
+- [ ] 739.每日温度
+- [ ] 1475.商品折扣后的最终价格 1212
+- [ ] 496.下一个更大元素 I
+- [ ] 503.下一个更大元素 II
+- [ ] 1019.链表中的下一个更大节点 1571
+- [ ] 962.最大宽度坡 1608
+- [ ] 853.车队 1678
+- [ ] 901.股票价格跨度 1709
+- [ ] 1124.表现良好的最长时间段 1908
+- [ ] 1793.好子数组的最大分数 1946
+- [ ] 456.132 模式 ~2000
+- [ ] 3113.边界元素是最大值的子数组数目 2046
+- [ ] 2866.美丽塔 II 2072
+- [ ] 1944.队列中可以看到的人数 2105
+- [ ] 2454.下一个更大元素 IV 2175
+- [ ] 1130.叶值的最小代价生成树 O(n) 做法
+- [ ] 2289.使数组按非递减顺序排列 2482
+- [ ] 1776.车队 II 2531
+- [ ] 3221.最大数组跳跃得分 II（会员题）
+- [ ] 1966.未排序数组中的可被二分搜索的数（会员题）
+- [ ] 2832.每个元素为最大值的最大范围（会员题）
+- [ ] 2282.在一个网格中可以看到的人数（会员题）
+
+### 3.2 矩形
+
+- [ ] 84.柱状图中最大的矩形
+- [ ] 1793.好子数组的最大分数 1946
+- [ ] 85.最大矩形
+- [ ] 1504.统计全 1 子矩形
+- [ ] 42.接雨水 做法不止一种
+- [ ] 755.倒水（会员题）
+
+### 3.3 贡献法
+
+- [ ] 907.子数组的最小值之和 1976
+- [ ] 2104.子数组范围和（最大值-最小值） O(n) 做法难度大约 2000
+- [ ] 1856.子数组最小乘积的最大值 2051
+- [ ] 2818.操作使得分最大 2397
+- [ ] 2281.巫师的总力量和（最小值×和） 2621
+- [ ] 3359.查找最大元素不超过 K 的有序子矩阵（会员题）矩形
+
+**思维扩展：**
+
+- [ ] 2334.元素值大于变化阈值的子数组 2381
+
+### 3.4 最小字典序
+
+- [ ] 402.移掉 K 位数字 ~1800
+- [ ] 1673.找出最具竞争力的子序列 1802
+- [ ] 316.去除重复字母 2185
+- [ ] 316 扩展：重复个数不超过 limit
+- [ ] 1081.不同字符的最小子序列 同 316 题
+- [ ] 321.拼接最大数
+- [ ] 2030.含特定字母的最小子序列 2562
+
+### 3.5 关联题单
+
+单调栈优化 DP：见 动态规划题单 中的「§11.2 单调栈优化 DP」。
+
+单调队列：见 数据结构题单 中的「§4.3 单调队列」。
+
 ## 4、网格图
 
 ## 5、位运算
@@ -10887,14 +7234,327 @@ class BookMyShow {
 
 ### 6.8 最小生成树：Kruskal/Prim
 
-- [ ] 1584.连接所有点的最小费用 1858
+- [x] ==1584.连接所有点的最小费用 1858==
+
+>给你一个`points` 数组，表示 2D 平面上的一些点，其中 `points[i] = [xi, yi]` 。
+>
+>连接点 `[xi, yi]` 和点 `[xj, yj]` 的费用为它们之间的 **曼哈顿距离** ：`|xi - xj| + |yi - yj|` ，其中 `|val|` 表示 `val` 的绝对值。
+>
+>请你返回将所有点连接的最小总费用。只有任意两点之间 **有且仅有** 一条简单路径时，才认为所有点都已连接。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/d.png)
+>
+>```
+>输入：points = [[0,0],[2,2],[3,10],[5,2],[7,0]]
+>输出：20
+>解释：
+>
+>我们可以按照上图所示连接所有点得到最小总费用，总费用为 20 。
+>注意到任意两个点之间只有唯一一条路径互相到达。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：points = [[3,12],[-2,5],[-4,1]]
+>输出：18
+>```
+>
+>**示例 3：**
+>
+>```
+>输入：points = [[0,0],[1,1],[1,0],[-1,1]]
+>输出：4
+>```
+>
+>**示例 4：**
+>
+>```
+>输入：points = [[-1000000,-1000000],[1000000,1000000]]
+>输出：4000000
+>```
+>
+>**示例 5：**
+>
+>```
+>输入：points = [[0,0]]
+>输出：0
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= points.length <= 1000`
+>- `-106 <= xi, yi <= 106`
+>- 所有点 `(xi, yi)` 两两不同。
+>
+>==官方题解==
+>
+>**写在前面**
+>根据题意，我们得到了一张 n 个节点的完全图，任意两点之间的距离均为它们的曼哈顿距离。现在我们需要在这个图中取得一个子图，恰满足子图的任意两点之间有且仅有一条简单路径，且这个子图的所有边的总权值之和尽可能小。
+>
+>能够满足任意两点之间有且仅有一条简单路径只有树，且这棵树包含 n 个节点。我们称这棵树为给定的图的生成树，其中总权值最小的生成树，我们称其为最小生成树。
+>
+>最小生成树有一个非常经典的解法：Kruskal。
+>
+>**方法一：Kruskal 算法**
+>
+>思路及解法
+>
+>Kruskal 算法是一种常见并且好写的最小生成树算法，由 Kruskal 发明。该算法的基本思想是从小到大加入边，是一个贪心算法。
+>
+>其算法流程为：
+>
+>1. 将图 G={V,E} 中的所有边按照长度由小到大进行排序，等长的边可以按任意顺序。
+>2. 初始化图 G ′为 {V,∅}，从前向后扫描排序后的边，如果扫描到的边 e 在 G ′  中连接了两个相异的连通块,则将它插入 G ′中。
+>3. 最后得到的图 G ′就是图 G 的最小生成树。
+>
+>
+>在实际代码中，我们首先将这张完全图中的边全部提取到边集数组中，然后对所有边进行排序，从小到大进行枚举，每次贪心选边加入答案。使用并查集维护连通性，若当前边两端不连通即可选择这条边。
+>
+>```Java
+>class Solution {
+>    // 主方法：计算连接所有点的最小成本
+>    public int minCostConnectPoints(int[][] points) {
+>        int n = points.length;
+>        DisjointSetUnion dsu = new DisjointSetUnion(n); // 初始化并查集
+>        List<Edge> edges = new ArrayList<Edge>(); // 存储所有可能的边
+>
+>        // 生成所有点之间的边（无向图，i<j避免重复）
+>        for (int i = 0; i < n; i++) {
+>            for (int j = i + 1; j < n; j++) {
+>                edges.add(new Edge(dist(points, i, j), i, j));
+>            }
+>        }
+>
+>        // 按边的长度升序排序（Kruskal算法核心步骤）
+>        Collections.sort(edges, new Comparator<Edge>() {
+>            public int compare(Edge edge1, Edge edge2) {
+>                return edge1.len - edge2.len;
+>            }
+>        });
+>
+>        int ret = 0; // 总成本
+>        int num = 1; // 已连接的边数（初始为1，因为n个点需要n-1条边）
+>        for (Edge edge : edges) {
+>            int len = edge.len, x = edge.x, y = edge.y;
+>            if (dsu.unionSet(x, y)) { // 如果两个点未连通，合并它们
+>                ret += len; // 累加当前边长度
+>                num++;
+>                if (num == n) { // 已连接所有点，提前退出
+>                    break;
+>                }
+>            }
+>        }
+>        return ret;
+>    }
+>
+>    // 计算两点间的曼哈顿距离
+>    public int dist(int[][] points, int x, int y) {
+>        return Math.abs(points[x][0] - points[y][0]) + Math.abs(points[x][1] - points[y][1]);
+>    }
+>}
+>
+>// 并查集（Disjoint Set Union）实现，用于高效管理连通性
+>class DisjointSetUnion {
+>    int[] f; // 父节点数组，f[i]表示i的父节点
+>    int[] rank; // 秩（树的高度），用于路径优化
+>    int n; // 元素总数
+>
+>    public DisjointSetUnion(int n) {
+>        this.n = n;
+>        this.rank = new int[n];
+>        Arrays.fill(this.rank, 1); // 初始每个集合的秩为1
+>        this.f = new int[n];
+>        for (int i = 0; i < n; i++) {
+>            this.f[i] = i; // 初始每个节点的父节点是自己
+>        }
+>    }
+>
+>    // 查找根节点，带路径压缩
+>    public int find(int x) {
+>        return f[x] == x ? x : (f[x] = find(f[x])); // 路径压缩：将x的父节点直接指向根
+>    }
+>
+>    // 合并两个集合，返回是否成功合并（原本不在同一集合）
+>    public boolean unionSet(int x, int y) {
+>        int fx = find(x), fy = find(y);
+>        if (fx == fy) { // 已在同一集合中，无需合并
+>            return false;
+>        }
+>        // 按秩合并：将小树合并到大树
+>        if (rank[fx] < rank[fy]) {
+>            int temp = fx; // 交换fx和fy，确保fx是较大秩的根
+>            fx = fy;
+>            fy = temp;
+>        }
+>        rank[fx] += rank[fy]; // 更新合并后的秩
+>        f[fy] = fx; // 将fy的父节点指向fx
+>        return true;
+>    }
+>}
+>
+>// 边类，存储边的长度和两个顶点
+>class Edge {
+>    int len, x, y; // len为边的长度，x和y是顶点的索引
+>
+>    public Edge(int len, int x, int y) {
+>        this.len = len;
+>        this.x = x;
+>        this.y = y;
+>    }
+>}
+>```
+
 - [ ] 1489.找到最小生成树里的关键边和伪关键边 2572
 - [ ] 1135.最低成本连通所有城市（会员题）
 - [ ] 1168.水资源分配优化（会员题）
 
 ### 6.9 欧拉路径/欧拉回路：Hierholzer
 
-- [ ] 332.重新安排行程
+- [x] 332.重新安排行程
+
+>给你一份航线列表 `tickets` ，其中 `tickets[i] = [fromi, toi]` 表示飞机出发和降落的机场地点。请你对该行程进行重新规划排序。
+>
+>所有这些机票都属于一个从 `JFK`（肯尼迪国际机场）出发的先生，所以该行程必须从 `JFK` 开始。如果存在多种有效的行程，请你按字典排序返回最小的行程组合。
+>
+>- 例如，行程 `["JFK", "LGA"]` 与 `["JFK", "LGB"]` 相比就更小，排序更靠前。
+>
+>假定所有机票至少存在一种合理的行程。且所有的机票 必须都用一次 且 只能用一次。
+>
+> 
+>
+>**示例 1：**
+>
+>![img](./img/sql与算法题解-img/itinerary1-graph.jpg)
+>
+>```
+>输入：tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]]
+>输出：["JFK","MUC","LHR","SFO","SJC"]
+>```
+>
+>**示例 2：**
+>
+>![img](./img/sql与算法题解-img/itinerary2-graph.jpg)
+>
+>```
+>输入：tickets = [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+>输出：["JFK","ATL","JFK","SFO","ATL","SFO"]
+>解释：另一种有效的行程是 ["JFK","SFO","ATL","JFK","ATL","SFO"] ，但是它字典排序更大更靠后。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= tickets.length <= 300`
+>- `tickets[i].length == 2`
+>- `fromi.length == 3`
+>- `toi.length == 3`
+>- `fromi` 和 `toi` 由大写英文字母组成
+>- `fromi != toi`
+>
+>官方题解：
+>
+>我们化简本题题意：给定一个 n 个点 m 条边的图，要求从指定的顶点出发，经过所有的边恰好一次（可以理解为给定起点的「一笔画」问题），使得路径的字典序最小。
+>
+>这种「一笔画」问题与欧拉图或者半欧拉图有着紧密的联系，下面给出定义：
+>
+>- 通过图中所有边恰好一次且行遍所有顶点的通路称为欧拉通路；
+>
+>- 通过图中所有边恰好一次且行遍所有顶点的回路称为欧拉回路；
+>
+>- 具有欧拉回路的无向图称为欧拉图；
+>- 具有欧拉通路但不具有欧拉回路的无向图称为半欧拉图。
+>
+>因为本题保证至少存在一种合理的路径，也就告诉了我们，这张图是一个欧拉图或者半欧拉图。我们只需要输出这条欧拉通路的路径即可。
+>
+>> 如果没有保证至少存在一种合理的路径，我们需要判别这张图是否是欧拉图或者半欧拉图，具体地：
+>>
+>> - 对于无向图 G，G 是欧拉图当且仅当 G 是连通的且没有奇度顶点。
+>> - 对于无向图 G，G 是半欧拉图当且仅当 G 是连通的且 G 中恰有 0 个或 2 个奇度顶点。
+>> - 对于有向图 G，G 是欧拉图当且仅当 G 的所有顶点属于同一个强连通分量且每个顶点的入度和出度相同。
+>> - 对于有向图 G，G 是半欧拉图当且仅当
+>>   - 如果将 G 中的所有有向边退化为无向边时，那么 G 的所有顶点属于同一个强连通分量；
+>>   - 最多只有一个顶点的出度与入度差为 1；
+>>   - 最多只有一个顶点的入度与出度差为 1；
+>>   - 所有其他顶点的入度和出度相同。
+>
+>让我们考虑下面的这张图：
+>
+>![Graph1](./img/sql与算法题解-img/332_fig1.png)
+>
+>我们从起点 JFK 出发，合法路径有两条： 
+>
+>JFK→AAA→JFK→BBB→JFK
+>
+>JFK→BBB→JFK→AAA→JFK
+>
+>既然要求字典序最小，那么我们每次应该贪心地选择当前节点所连的节点中字典序最小的那一个，并将其入栈。最后栈中就保存了我们遍历的顺序。
+>
+>为了保证我们能够快速找到当前节点所连的节点中字典序最小的那一个，我们可以使用优先队列存储当前节点所连到的点，每次我们 O(1) 地找到最小字典序的节点，并 O(logm) 地删除它。
+>
+>然后我们考虑一种特殊情况：
+>
+>![Graph2](./img/sql与算法题解-img/332_fig2.png)
+>
+>当我们先访问 AAA 时，我们无法回到 JFK，这样我们就无法访问剩余的边了。
+>
+>也就是说，当我们贪心地选择字典序最小的节点前进时，我们可能先走入「死胡同」，从而导致无法遍历到其他还未访问的边。于是我们希望能够遍历完当前节点所连接的其他节点后再进入「死胡同」。
+>
+>> 注意对于每一个节点，它只有最多一个「死胡同」分支。依据前言中对于半欧拉图的描述，只有那个入度与出度差为 1 的节点会导致死胡同。
+>
+>思路及算法
+>
+>Hierholzer 算法用于在连通图中寻找欧拉路径，其流程如下：
+>
+>从起点出发，进行深度优先搜索。
+>
+>每次沿着某条边从某个顶点移动到另外一个顶点的时候，都需要删除这条边。
+>
+>如果没有可移动的路径，则将所在节点加入到栈中，并返回。
+>
+>当我们顺序地考虑该问题时，我们也许很难解决该问题，因为我们无法判断当前节点的哪一个分支是「死胡同」分支。
+>
+>不妨倒过来思考。我们注意到只有那个入度与出度差为 1 的节点会导致死胡同。而该节点必然是最后一个遍历到的节点。我们可以改变入栈的规则，当我们遍历完一个节点所连的所有节点后，我们才将该节点入栈（即逆序入栈）。
+>
+>对于当前节点而言，从它的每一个非「死胡同」分支出发进行深度优先搜索，都将会搜回到当前节点。而从它的「死胡同」分支出发进行深度优先搜索将不会搜回到当前节点。也就是说当前节点的死胡同分支将会优先于其他非「死胡同」分支入栈。
+>
+>这样就能保证我们可以「一笔画」地走完所有边，最终的栈中逆序地保存了「一笔画」的结果。我们只要将栈中的内容反转，即可得到答案。
+>
+>```java
+>class Solution {
+>    Map<String, PriorityQueue<String>> map = new HashMap<String, PriorityQueue<String>>();
+>    List<String> itinerary = new LinkedList<String>();
+>
+>    public List<String> findItinerary(List<List<String>> tickets) {
+>        for (List<String> ticket : tickets) {
+>            String src = ticket.get(0), dst = ticket.get(1);
+>            if (!map.containsKey(src)) {
+>                map.put(src, new PriorityQueue<String>());
+>            }
+>            map.get(src).offer(dst);
+>        }
+>        dfs("JFK");
+>        Collections.reverse(itinerary);
+>        return itinerary;
+>    }
+>
+>    public void dfs(String curr) {
+>        while (map.containsKey(curr) && map.get(curr).size() > 0) {
+>            String tmp = map.get(curr).poll();
+>            dfs(tmp);
+>        }
+>        itinerary.add(curr);
+>    }
+>}
+>```
+
 - [ ] 753.破解保险箱 2274
 - [ ] 2097.合法重新排列数对 2651
 
@@ -10906,8 +7566,8 @@ class BookMyShow {
 
 ### 6.11 二分图染色
 
-- [ ] 785.判断二分图 1625
-- [ ] 886.可能的二分法 1795
+- [x] 785.判断二分图 1625
+- [x] 886.可能的二分法 1795
 
 二分图的最大匹配，见下面网络流的题目。带权二分图的最大匹配，见标有「一对一」的题目。
 
@@ -10958,7 +7618,8 @@ class BookMyShow {
 
 ## 7、动态规划
 
-前言
+**前言**
+
 掌握动态规划（DP）是没有捷径的，咱们唯一能做的，就是投入时间猛猛刷题。好比学数学，只看书看视频而不做习题，是不能说学会的。
 
 我能做的，是帮你节省找题的时间，并把这些题分类整理好。有着相同套路的题，一起做效率会更高，也更能领悟到 DP 的精髓。所以推荐按照专题刷。
@@ -10967,27 +7628,113 @@ class BookMyShow {
 
 ### 7.1 入门 DP
 
+![动态规划算法题DP题单动态规划题单入门动态规划题目动态规划新手教程力扣DP力扣动态规划leetcode动态规划leetcode dp 灵茶山艾府 灵神 灵神题单](./img/sql与算法题解-img/1710769845-JRnIfA-dp-2.jpg)
 
-记忆化搜索是新手村神器（甚至可以用到游戏后期），推荐先看 动态规划入门：从记忆化搜索到递推。
+==记忆化搜索==是新手村神器（甚至可以用到游戏后期），推荐先看 [动态规划入门：从记忆化搜索到递推](https://leetcode.cn/link/?target=https://www.bilibili.com/video/BV1Xj411K7oF/)
 
 但记忆化搜索并不是万能的，某些题目只有写成递推，才能结合数据结构等来优化时间复杂度，多数题目还可以优化空间复杂度。所以尽量在写完记忆化搜索后，把递推的代码也写一下。熟练之后直接写递推也可以。
 
 #### 7.1.1 爬楼梯
 
-- [ ] 70.爬楼梯（题解）
-- [ ] 746.使用最小花费爬楼梯（题解）
-- [ ] 72.组合总和 Ⅳ 本质是爬楼梯，相当于每次往上爬 nums[i] 步
-- [ ] 2466.统计构造好字符串的方案数 1694
-- [ ] 2266.统计打字方案数 1857
+[讲解](https://leetcode.cn/problems/climbing-stairs/solution/jiao-ni-yi-bu-bu-si-kao-dong-tai-gui-hua-7zm1/)
+
+- [x] 70.爬楼梯（题解）
+- [x] 746.使用最小花费爬楼梯（题解）
+- [x] 72.组合总和 Ⅳ 本质是爬楼梯，相当于每次往上爬 nums[i] 步
+- [x] 2466.统计构造好字符串的方案数 1694
+- [x] 2266.统计打字方案数 1857
 - [ ] 2533.好二进制字符串的数量（会员题）同 2466 题
 
 #### 7.1.2 打家劫舍
 
-- [ ] 198.打家劫舍 ~1500
-- [ ] 740.删除并获得点数 ~1600
-- [ ] 2320.统计放置房子的方式数 1608
-- [ ] 213.打家劫舍 II ~1700
-- [ ] 3186.施咒的最大总伤害 1841
+- [x] 198.打家劫舍 ~1500
+- [x] ==740.删除并获得点数 ~1600==
+
+>给你一个整数数组 `nums` ，你可以对它进行一些操作。
+>
+>每次操作中，选择任意一个 `nums[i]` ，删除它并获得 `nums[i]` 的点数。之后，你必须删除 **所有** 等于 `nums[i] - 1` 和 `nums[i] + 1` 的元素。
+>
+>开始你拥有 `0` 个点数。返回你能通过这些操作获得的最大点数。
+>
+> 
+>
+>**示例 1：**
+>
+>```
+>输入：nums = [3,4,2]
+>输出：6
+>解释：
+>删除 4 获得 4 个点数，因此 3 也被删除。
+>之后，删除 2 获得 2 个点数。总共获得 6 个点数。
+>```
+>
+>**示例 2：**
+>
+>```
+>输入：nums = [2,2,3,3,3,4]
+>输出：9
+>解释：
+>删除 3 获得 3 个点数，接着要删除两个 2 和 4 。
+>之后，再次删除 3 获得 3 个点数，再次删除 3 获得 3 个点数。
+>总共获得 9 个点数。
+>```
+>
+> 
+>
+>**提示：**
+>
+>- `1 <= nums.length <= 2 * 104`
+>- `1 <= nums[i] <= 104`
+>
+>我的题解：
+>
+>没做出来
+>
+>==灵神题解：==
+>
+>看示例 2，nums=[2,2,3,3,3,4]。如果我们选了一个等于3的数，那么所有等于2和等于4的数都被删除，也就是都不能选。选了一个3后，剩下的3可以继续选。所以如果要选3，所有的3都要选。
+>
+>这种「相邻数字不能都选」联想到198. 打家劫舍。
+>
+>把nums转换成一个值域数组a，其中a[i]表示nums中的等于i的元素之和。上面的例子中，a=[0,0,4,9,4]。因为nums中有3个3，所以a[3]=3+3+3=9。
+>
+>计算数组a的198. 打家劫舍，即为答案。
+>
+>下面打家劫舍的代码来自我的题解中的方法三。
+>
+>```java
+>class Solution {
+>    public int deleteAndEarn(int[] nums) {
+>        int mx = 0;
+>        for (int x : nums) {
+>            mx = Math.max(mx, x);
+>        }
+>
+>        int[] a = new int[mx + 1];
+>        for (int x : nums) {
+>            a[x] += x; // 统计等于 x 的元素之和
+>        }
+>
+>        return rob(a);
+>    }
+>
+>    // 198. 打家劫舍
+>    private int rob(int[] nums) {
+>        int f0 = 0;
+>        int f1 = 0;
+>        for (int x : nums) {
+>            int newF = Math.max(f1, f0 + x);
+>            f0 = f1;
+>            f1 = newF;
+>        }
+>        return f1;
+>    }
+>}
+>```
+
+- [x] 2320.统计放置房子的方式数 1608
+- [x] 213.打家劫舍 II ~1700
+- [x] 3186.施咒的最大总伤害 1841
 
 #### 7.1.3 最大子数组和（最大子段和）
 
@@ -10998,20 +7745,472 @@ class BookMyShow {
 
 具体见 [我的题解](https://leetcode.cn/problems/maximum-subarray/solution/qian-zhui-he-zuo-fa-ben-zhi-shi-mai-mai-abu71/)。
 
-- [ ] 53.最大子数组和 ~1400
-- [ ] 2606.找到最大开销的子字符串 1422
-- [ ] 1749.任意子数组和的绝对值的最大值 1542
-- [ ] 1191.K 次串联后最大子数组之和 1748
-- [ ] 918.环形子数组的最大和 1777
-- [ ] 2321.拼接数组的最大分数 1791
+- [x] 53.最大子数组和 ~1400
+- [x] 2606.找到最大开销的子字符串 1422
+- [x] 1749.任意子数组和的绝对值的最大值 1542
+- [x] 1191.K 次串联后最大子数组之和 1748
+- [x] ==918.环形子数组的最大和 1777==
+
+>==给定一个长度为 `n` 的**环形整数数组** `nums` ，返回 *`nums` 的非空 **子数组** 的最大可能和* 。==
+>
+>==**环形数组** 意味着数组的末端将会与开头相连呈环状。形式上， `nums[i]` 的下一个元素是 `nums[(i + 1) % n]` ， `nums[i]` 的前一个元素是 `nums[(i - 1 + n) % n]` 。==
+>
+>==**子数组** 最多只能包含固定缓冲区 `nums` 中的每个元素一次。形式上，对于子数组 `nums[i], nums[i + 1], ..., nums[j]` ，不存在 `i <= k1, k2 <= j` 其中 `k1 % n == k2 % n` 。==
+>
+>==== 
+>
+>==**示例 1：**==
+>
+>```
+>输入：nums = [1,-2,3,-2]
+>输出：3
+>解释：从子数组 [3] 得到最大和 3
+>```
+>
+>==**示例 2：**==
+>
+>```
+>输入：nums = [5,-3,5]
+>输出：10
+>解释：从子数组 [5,5] 得到最大和 5 + 5 = 10
+>```
+>
+>==**示例 3：**==
+>
+>```
+>输入：nums = [3,-2,2,-3]
+>输出：3
+>解释：从子数组 [3] 和 [3,-2,2] 都可以得到最大和 3
+>```
+>
+>==== 
+>
+>==**提示：**==
+>
+>- ==`n == nums.length`==
+>- ==`1 <= n <= 3 * 104`==
+>- ==`-3 * 104 <= nums[i] <= 3 * 104`==
+>
+>==灵神题解：==
+>
+>![lc918-c.png](./img/sql与算法题解-img/1689750394-drKSAI-lc918-c.png)
+>
+>答疑
+>
+>问：为什么当 minS=sum(nums) 时，最小子数组可以是整个数组？
+>
+>答：用反证法证明。假设最小子数组一定不是整个数组，这意味着 nums 的某个前缀或者后缀是大于 0 的（包含这个前缀/后缀会让 minS 变大），所以 minS<sum(nums)，矛盾。所以当 minS=sum(nums) 时，最小子数组可以是整个数组。
+>
+>注：对于 nums=[−1,1,−1]，最小子数组可以取 [−1]，也可以取整个数组 [−1,1,−1]。对于这样的 nums，最大子数组一定不会跨过边界，只返回 maxS 仍然是正确的。
+>
+>```java
+>class Solution {
+>    public int maxSubarraySumCircular(int[] nums) {
+>        int maxS = Integer.MIN_VALUE; // 最大子数组和，不能为空
+>        int minS = 0; // 最小子数组和，可以为空
+>        int maxF = 0, minF = 0, sum = 0;
+>        for (int x : nums) {
+>            // 以 nums[i-1] 结尾的子数组选或不选（取 max）+ x = 以 x 结尾的最大子数组和
+>            maxF = Math.max(maxF, 0) + x;
+>            maxS = Math.max(maxS, maxF);
+>            // 以 nums[i-1] 结尾的子数组选或不选（取 min）+ x = 以 x 结尾的最小子数组和
+>            minF = Math.min(minF, 0) + x;
+>            minS = Math.min(minS, minF);
+>            sum += x;
+>        }
+>        return sum == minS ? maxS : Math.max(maxS, sum - minS);
+>    }
+>}
+>```
+
+- [x] 2321.拼接数组的最大分数 1791
 
 思维扩展：
 
-- [ ] 152.乘积最大子数组
+- [x] 152.乘积最大子数组
 
+### 7.2 网格图DP
 
+对于一些二维 DP（例如背包、最长公共子序列），如果把 DP 矩阵画出来，其实状态转移可以视作在网格图上的移动。所以在学习相对更抽象的二维 DP 之前，做一些形象的网格图 DP 会让后续的学习更轻松（比如 0-1 背包的空间优化写法为什么要倒序遍历）。
 
+[讲解](https://leetcode.cn/problems/minimum-path-sum/solutions/3045828/jiao-ni-yi-bu-bu-si-kao-dpcong-ji-yi-hua-zfb2/)
 
+#### 7.2.1 基础
+
+- [ ] 64.最小路径和
+- [ ] 62.不同路径
+- [ ] 63.不同路径 II
+- [ ] 120.三角形最小路径和
+- [ ] 3393.统计异或值为给定值的路径数目 1573
+- [ ] 931.下降路径最小和 1573
+- [ ] 2684.矩阵中移动的最大次数 1626
+- [ ] 2304.网格中的最小路径代价 1658
+- [ ] 1289.下降路径最小和 II 1697
+- [ ] 3418.机器人可以获得的最大金币数 ~1700
+
+#### 7.2.2 进阶
+
+- [ ] 1594.矩阵的最大非负积 1807
+- [ ] 1301.最大得分的路径数目 1853
+- [ ] 2435.矩阵中和能被 K 整除的路径 1952
+- [ ] 174.地下城游戏
+- [ ] 329.矩阵中的最长递增路径
+- [ ] 2328.网格图中递增路径的数目 2001
+- [ ] 2267.检查是否有合法括号字符串路径 2085
+- [ ] 1937.扣分后的最大得分 2106
+- [ ] 3363.最多可收集的水果数目 实际难度 2200
+- [ ] 1463.摘樱桃 II
+- [ ] 741.摘樱桃
+- [ ] 2510.检查是否有路径经过相同数量的 0 和 1（会员题）
+
+### 7.3 背包
+
+讲解：[0-1 背包 完全背包](https://leetcode.cn/link/?target=https://www.bilibili.com/video/BV16Y411v7Y6/)
+
+#### 7.3.1 0-1 背包
+
+每个物品只能选一次。
+
+- [ ] 2915.和为目标值的最长子序列的长度 1659
+- [ ] 416.分割等和子集
+- [ ] 494.目标和
+- [ ] 2787.将一个数字表示成幂的和的方案数 1818
+- [ ] 3180.执行操作可获得的最大总奖励 I 1849
+- [ ] 474.一和零（二维）
+- [ ] 1049.最后一块石头的重量 II 2092
+- [ ] 1774.最接近目标价格的甜点成本
+- [ ] 879.盈利计划 2204
+- [ ] 3082.求出所有子序列的能量和 2242
+- [ ] 956.最高的广告牌 2381
+- [ ] 2518.好分区的数目 2415
+- [ ] 2742.给墙壁刷油漆 2425
+- [ ] 3287.求出数组中最大序列值 2545
+- [ ] LCP 47.入场安检
+- [ ] 2291.最大股票收益（会员题）
+- [ ] 2431.最大限度地提高购买水果的口味（会员题）
+
+#### 7.3.2 完全背包
+
+物品可以重复选，无个数限制。
+
+答疑
+
+问：关于完全背包，有两种写法，一种是外层循环枚举物品，内层循环枚举体积；另一种是外层循环枚举体积，内层循环枚举物品。如何评价这两种写法的优劣？
+
+答：两种写法都可以，但更推荐前者。外层循环枚举物品的写法，只会遍历物品数组一次；而内层循环枚举物品的写法，会遍历物品数组多次。从 cache 的角度分析，多次遍历数组会导致额外的 cache miss，带来额外的开销。所以虽然这两种写法的时间空间复杂度是一样的，但外层循环枚举物品的写法常数更小。
+
+- [ ] 322.零钱兑换
+- [ ] 518.零钱兑换 II
+- [ ] 279.完全平方数
+- [ ] 1449.数位成本和为目标值的最大数字 1927
+- [ ] 3183.达到总和的方法数量（会员题）混合背包
+
+#### 7.3.3 多重背包
+
+物品可以重复选，有个数限制。
+
+注：力扣上只有求方案数的题目。
+
+- [ ] 2585.获得分数的方法数 1910
+- [ ] 3333.找到初始输入字符串 II 2629
+- [ ] 2902.和带限制的子多重集合的数目 2759
+
+#### 7.3.4 分组背包
+
+同一组内的物品至多/恰好选一个。
+
+- [ ] 1155.掷骰子等于目标和的方法数 1654
+- [ ] 1981.最小化目标值与所选元素的差 2010
+- [ ] 2218.从栈中取出 K 个硬币的最大面值和 2158
+
+### 7.4 经典线性DP
+
+#### 7.4.1 最长公共子序列（LCS）
+
+讲解：最长公共子序列 编辑距离
+
+一般定义 `f[i][j]` 表示对 (s[:i],t[:j]) 的求解结果。
+
+- [ ] 1143.最长公共子序列
+- [ ] 583.两个字符串的删除操作
+- [ ] 712.两个字符串的最小 ASCII 删除和
+- [ ] 72.编辑距离
+- [ ] 97.交错字符串
+- [ ] 115.不同的子序列
+- [ ] 1035.不相交的线 1806
+- [ ] 1458.两个子序列的最大点积 1824
+- [ ] 1092.最短公共超序列 1977
+- [ ] 3316.从原字符串里进行删除操作的最多次数 2062
+- [ ] 1639.通过给定词典构造目标字符串的方案数 2082
+- [ ] 44.通配符匹配
+- [ ] 10.正则表达式匹配
+
+思考题
+
+115 题的扩展。给定字符串 s 和 t，你可以在 s 的任意位置插入一个字母，插入后，s 最多有多少个子序列等于 t？
+
+思路和代码见 [评论](https://leetcode.cn/problems/maximize-number-of-subsequences-in-a-string/solutions/1352039/by-endlesscheng-yfyf/comments/2389140)。
+
+#### 7.4.2 最长递增子序列（LIS）
+
+讲解：[最长递增子序列](https://leetcode.cn/link/?target=https://www.bilibili.com/video/BV1ub411Q7sB/)
+
+做法有很多：
+
+1. 枚举选哪个。（见讲解）
+
+2. 贪心+二分。（见讲解）
+3. 计算 a 和把 a 排序后的数组 sortedA 的最长公共子序列。（用 LCS 求 LIS）
+4. 数据结构优化。（见 2407 题）
+
+- [ ] 300.最长递增子序列
+- [ ] 2826.将三个组排序 1721
+- [ ] 1671.得到山形数组的最少删除次数 1913
+- [ ] 1964.找出到每个位置为止最长的有效障碍赛跑路线 1933
+- [ ] 2111.使数组 K 递增的最少操作次数 1941
+- [ ] 673.最长递增子序列的个数
+- [ ] 1626.无矛盾的最佳球队 2027
+- [ ] 354.俄罗斯套娃信封问题（二维 LIS）
+- [ ] 1691.堆叠长方体的最大高度 2172
+- [ ] 960.删列造序 III 2247
+- [ ] 2407.最长递增子序列 II 2280
+- [ ] 1187.使数组严格递增 2316
+- [ ] 1713.得到子序列的最少操作次数 2351 用 LIS 求 LCS
+- [ ] 3288.最长上升路径的长度 2450
+
+**思维扩展**：
+
+- [368. 最大整除子集](https://leetcode.cn/problems/largest-divisible-subset/)
+
+**思考题**：
+
+给定整数 k*k*，构造一个数组 a*a*，使得 a*a* 恰好有 k*k* 个最长递增子序列。
+
+[解答（评论）](https://leetcode.cn/problems/number-of-longest-increasing-subsequence/description/comments/2218054)
+
+### 7.5 划分型 DP
+
+#### 7.5.1 判定能否划分
+
+一般定义f[i] 表示长为 i 的前缀 a[:i] 能否划分。枚举最后一个子数组的左端点 L，从 f[L] 转移到f[i]，并考虑a[L:i] 是否满足要求。
+
+- [ ] 2369.检查数组是否存在有效划分 1780
+- [ ] 139.单词拆分
+
+#### 7.5.2 最优划分
+
+计算最少（最多）可以划分出多少段、最优划分得分等。
+
+一般定义f[i] 表示长为 i 的前缀a[:i] 在题目约束下，分割出的最少（最多）子数组个数（或者定义成分割方案数）。
+
+枚举最后一个子数组的左端点 L，从f[L] 转移到f[i]，并考虑a[L:i] 对最优解的影响。
+
+- [ ] 132.分割回文串 II
+- [ ] 2707.字符串中的额外字符 1736
+- [ ] 3196.最大化子数组的总成本 1847 也有状态机 DP 做法
+- [ ] 2767.将字符串分割为最少的美丽子字符串 1865
+- [ ] 91.解码方法
+- [ ] 639.解码方法 II
+- [ ] LCR 165.解密数字
+- [ ] 1416.恢复数组 1920
+- [ ] 2472.不重叠回文子字符串的最大数目 2013
+- [ ] 1105.填充书架 2014
+- [ ] 2547.拆分数组的最小代价 2020
+- [ ] 2430.对字母串可执行的最大删除数 2102
+- [ ] 2463.最小移动总距离 2454
+- [ ] 2977.转换字符串的最小成本 II 2696
+- [ ] 3441.变成好标题的最少代价 ~2900
+- [ ] 2052.将句子分隔成行的最低成本（会员题）
+- [ ] 2464.有效分割中的最少子数组数目（会员题）
+
+#### 7.5.3 约束划分个数
+
+将数组分成（恰好/至多）k 个连续子数组，计算与这些子数组有关的最优值。
+
+一般定义 `f[i][j]` 表示将长为 j 的前缀 a[:j] 分成 i 个连续子数组所得到的最优解。
+
+枚举最后一个子数组的左端点 L，从 `f[i−1][L]` 转移到 `f[i][j]`，并考虑 a[L:j] 对最优解的影响。
+
+- [ ] 410.分割数组的最大值
+- [ ] 1043.分隔数组以得到最大和 1916
+- [ ] 1745.分割回文串 IV 1925
+- [ ] 813.最大平均值和的分组 1937
+- [ ] 1278.分割回文串 III 1979
+- [ ] 1335.工作计划的最低难度 2035
+- [ ] 1473.粉刷房子 III 2056
+- [ ] 2209.用地毯覆盖后的最少白色砖块 2106
+- [ ] 1478.安排邮筒 2190
+- [ ] 1959.K 次调整数组大小浪费的最小总空间 2310
+- [ ] 2478.完美分割的方案数 2344
+- [ ] 3077.K 个不相交子数组的最大能量值 2557
+- [ ] 2911.得到 K 个半回文串的最少修改次数 2608
+- [ ] 3117.划分数组得到最小的值之和 2735
+
+#### 7.5.4 不相交区间
+
+- [ ] 2830.销售利润最大化 1851
+- [ ] 2008.出租车的最大盈利 1872
+- [ ] 2054.两个最好的不重叠活动 1883
+- [ ] 1235.规划兼职工作 2023 做法不止一种
+- [ ] 1751.最多可以参加的会议数目 II 2041
+- [ ] 3414.不重叠区间的最大得分 2723
+
+### 7.6 状态机 DP
+
+一般定义 `f[i][j]` 表示前缀 a[:i] 在状态 j 下的最优值。j 一般很小。
+
+#### 7.6.1 买卖股票
+
+[讲解](https://leetcode.cn/link/?target=https://www.bilibili.com/video/BV1ho4y1W7QK/)
+
+- [ ] 121.买卖股票的最佳时机 交易一次
+- [ ] 122.买卖股票的最佳时机 II 交易次数不限
+- [ ] 123.买卖股票的最佳时机 III 交易两次
+- [ ] 124.买卖股票的最佳时机 IV 交易 k 次
+- [ ] 309.买卖股票的最佳时机含冷冻期
+- [ ] 714.买卖股票的最佳时机含手续费
+
+#### 7.6.2 基础
+
+- [ ] 3259.超级饮料的最大强化能量 1484
+- [ ] 2222.选择建筑的方案数 1657
+- [ ] 1567.乘积为正数的最长子数组长度 1710
+- [ ] 3262.一个小组的最大实力值 做到O(n) 时间
+- [ ] 2826.将三个组排序 1721
+- [ ] 2786.访问数组中的位置使分数最大 1733
+- [ ] 1911.最大交替子序列和 1786
+- [ ] 3266.摆动序列
+
+#### 7.6.3 进阶
+- [ ] 1262.可被三整除的最大和 1762
+- [ ] 1363.形成三的最大倍数
+- [ ] 2771.构造最长非递减子数组 1792
+- [ ] 1186.删除一次得到子数组最大和 1799 必做题
+- [ ] 1594.矩阵的最大非负积 1807
+- [ ] 3196.最大化子数组的总成本 1847 也有划分型 DP 做法
+- [ ] 935.骑士拨号器
+- [ ] 1537.最大得分 1961
+- [ ] 2919.使数组变美的最小增量运算数 2031
+- [ ] 801.使序列递增的最小交换次数 2066
+- [ ] 3434.子数组操作后的最大频率 ~2100
+- [ ] 1955.统计特殊子序列的数目 2125
+- [ ] 3068.最大节点价值之和 2268
+- [ ] LCP 19.秋叶收藏集
+- [ ] 276.栅栏涂色（会员题）
+- [ ] 1746.经过一次操作后的最大子数组和（会员题）
+- [ ] 2036.最大交替子数组和（会员题）
+- [ ] 2361.乘坐火车路线的最少费用（会员题）
+- [ ] 3269.构建两个递增数组（会员题）
+
+### 7.7 其他线性 DP
+
+#### 7.7.1 一维 DP
+
+发生在前缀/后缀之间的转移，例如从 f[i−1] 转移到 f[i]，或者从 f[j] 转移到 f[i]。
+
+- [ ] 2944.购买水果需要的最少金币数 1709
+- [ ] 2140.解决智力问题 1709
+- [ ] 2946.最低票价 1786 有 O(n) 做法
+- [ ] 2901.最长相邻不相等子序列 II 1899
+- [ ] 3144.分割字符频率相等的最少子字符串 1917
+- [ ] 871.最低加油次数 2074
+- [ ] 2896.执行操作使两个字符串相等 2172
+- [ ] 2167.移除所有载有违禁货物车厢所需的最少时间 2219
+- [ ] 2188.完成比赛的最少时间 2315
+- [ ] 3389.使字符频率相等的最少操作次数 2940
+- [ ] 2954.最大数组跳跃得分 I（会员题）有 O(n) 做法
+- [ ] 1259.不相交的握手（会员题）
+
+#### 7.7.2 合法子序列 DP（特殊子序列 DP）
+计算合法子序列的最长长度、个数、元素和等。
+
+一般定义 f[x] 表示以元素 x 结尾的合法子序列的最长长度/个数/元素和，从子序列的倒数第二个数转移过来。
+
+- [ ] 2501.数组中最长的方波 1480
+- [ ] 1218.最长定差子序列 1597
+- [ ] 1027.最长等差数列 1759
+- [ ] 873.最长的斐波那契子序列的长度 1911
+- [ ] 3202.找出有效子序列的最大长度 II 1974
+- [ ] 446.等差数列划分 II - 子序列 求个数
+- [ ] 3351.好子序列的元素之和 2086 求和
+- [ ] 3041.修改数组后最大化数组中的连续元素数目 2231
+- [ ] 3409.最长相邻绝对差递减子序列 2500 状态设计
+- [ ] 3098.求出所有子序列的能量和 2553
+
+**思维扩展：**
+
+- [ ] 1048.最长字符串链 1599
+
+#### 7.7.3 矩阵快速幂优化 DP
+
+部分题目由于数据范围小，也可以用线性 DP。
+
+- [ ] 70.爬楼梯
+- [ ] 509.斐波那契数
+- [ ] 1137.第 N 个泰波那契数
+- [ ] 1220.统计元音字母序列的数目
+- [ ] 552.学生出勤记录 II
+- [ ] 935.骑士拨号器
+- [ ] 790.多米诺和托米诺平铺
+- [ ] 3337.字符串转换后的长度 II 2412
+- [ ] 2851.字符串转换 2858
+- [ ] 2912.在网格上移动到目的地的方法数（会员题）
+
+#### 7.7.4 子矩形 DP
+
+- [ ] 3148.矩阵中的最大得分 1820
+- [ ] 221.最大正方形
+- [ ] 1277.统计全为 1 的正方形子矩阵
+- [ ] 2088.统计农场中肥沃金字塔的数目 2105
+- [ ] 3197.包含所有 1 的最小矩形面积 II O(mn) 做法
+
+#### 7.7.5 多维 DP
+- [ ] 2400.恰好移动 k 步到达某一位置的方法数目 1751
+- [ ] 1824.最少侧跳次数 1778
+- [ ] 3332.旅客可以得到的最多点数 1828
+- [ ] 2370.最长理想子序列 1835
+- [ ] 3176.求出最长好子序列 I 1849
+- [ ] 1269.停在原地的方案数 1854
+- [ ] 3250.单调数组对的数目 I 1898
+- [ ] 3218.切蛋糕的最小总开销 I 也有贪心做法
+- [ ] 3122.使矩阵满足条件的最少操作次数 1905
+- [ ] 576.出界的路径数
+- [ ] 403.青蛙过河
+- [ ] 1223.掷骰子模拟 2008
+- [ ] 1320.二指输入的的最小距离 2028
+- [ ] 3366.最小数组和 2040
+- [ ] 1575.统计所有可行路径 2055
+- [ ] 3154.到达第 K 级台阶的方案数 2071
+- [ ] 2318.不同骰子序列的数目 2090
+- [ ] 1444.切披萨的方案数 2127
+- [ ] 3320.统计能获胜的出招序列数 2153
+- [ ] 3429.粉刷房子 IV 2166
+- [ ] 1420.生成数组 2176
+- [ ] 3193.统计逆序对的数目 2266
+- [ ] 629.K 个逆序对数组
+- [ ] 1079.活字印刷 计数 DP，做到 O(n^2^)
+- [ ] 1866.恰有 K 根木棍可以看到的排列数目 2333
+- [ ] 2312.卖木头块 2363
+- [ ] 3177.求出最长好子序列 II 2365
+- [ ] 1884.鸡蛋掉落-两枚鸡蛋
+- [ ] 887.鸡蛋掉落 2377
+- [ ] 3448.统计可以被最后一个数位整除的子字符串数目 ~2400
+- [ ] 514.自由之路 做到 O(nm)
+- [ ] 3336.最大公约数相等的子序列数量 2403
+- [ ] 1388.3n 块披萨 2410
+- [ ] 1900.最佳运动员的比拼回合 2455
+- [ ] 1883.准时抵达会议现场的最小跳过休息次数 2588 避免浮点运算的技巧
+- [ ] 3343.统计平衡排列的数目 2615 计数 DP
+- [ ] LCP 57.打地鼠
+- [ ] 3441.变成好标题的最少代价 ~2900
+- [ ] 3225.网格图操作后的最大分数 3028 IOI2022 原题
+- [ ] 256.粉刷房子（会员题）
+- [ ] 265.粉刷房子 II（会员题）
+- [ ] 3339.查找 K 偶数数组的数量（会员题）
+- [ ] 568.最大休假天数（会员题）
+- [ ] 1692.计算分配糖果的不同方式（会员题）
+- [ ] 2143.在两个数组的区间中选取数字（会员题）
+- [ ] 3269.构建两个递增数组（会员题）
 
 
 
@@ -11021,10 +8220,82 @@ class BookMyShow {
 
 ## 8、常用数据结构
 
+题目已按照难度分排序，右侧数字为难度分。
+
+如果遇到难度很大，题解都看不懂的题目，建议直接跳过，二刷的时候再来尝试。
+
+![数据结构题单 数据结构入门 数据结构新手教程 数据结构题目 力扣数据结构 leetcode数据结构 灵茶山艾府 灵神](./img/sql与算法题解-img/1713836847-cDYwhf-Programming.jpeg)
+
+### 8.1 零、常用枚举技巧
+
+#### 8.1.1 枚举右，维护左
+
+对于 双变量问题，例如两数之和 a~i~+a~j~=t，可以枚举右边的 a~j~，转换成 单变量问题，也就是在 a~j~左边查找是否有 a~i~=t−a~j~，这可以用哈希表维护。
+
+我把这个技巧叫做 **枚举右，维护左**。
+
+[讲解](https://leetcode.cn/problems/two-sum/solution/dong-hua-cong-liang-shu-zhi-he-zhong-wo-0yvmj/)
+
+- [ ] 1.两数之和
+- [ ] 2.好数对的数目 1161 做到 O(n)
+- [ ] 2001.可互换矩形的组数 同 1512 题
+- [ ] 219.存在重复元素 II
+- [ ] 121.买卖股票的最佳时机
+- [ ] 624.数组列表中的最大距离
+- [ ] 2815.数组中的最大数对和 1295
+- [ ] 2342.数位和相等数对的最大和 1309
+- [ ] 1679.K 和数对的最大数目 1346
+- [ ] 2260.必须拿起的最小连续卡牌数 1365
+- [ ] 1010.总持续时间可被 60 整除的歌曲 1377
+- [ ] 3185.构成整天的下标对数目 II 同 1010 题
+- [ ] 2506.统计相似字符串对的数目 做到线性复杂度
+- [ ] 2748.美丽下标对的数目 非暴力做法
+- [ ] 2874.有序三元组中的最大值 II 1583
+- [ ] 1014.最佳观光组合 1730
+- [ ] 1814.统计一个数组中好对子的数目 1738
+- [ ] 2905.找出满足差值条件的下标 II 1764
+- [ ] 19.两个非重叠子数组的最大和 ~2000 做到 O(n)
+- [ ] 2555.两个线段获得的最多奖品 2081
+- [ ] 1995.统计特殊四元组 四个数
+- [ ] 3404.统计特殊子序列的数目 2445 四个数
+- [ ] 3267.统计近似相等数对 II 2545
+- [ ] 1214.查找两棵二叉搜索树之和（会员题）
+- [ ] 2964.可被整除的三元组数量（会员题）
+- [ ] 2441.与对应负数同时存在的最大正整数
+- [ ] 面试题 16.24.数对和
+
+
+
+**思维扩展**：
+
+- [ ] 454.四数相加 II
+- [ ] 3371.识别数组中的最大异常值1644
+
+#### 8.1.2 枚举中间
+
+对于三个或者四个变量的问题，枚举中间的变量往往更好算。
+
+- [ ] 2909.元素和最小的山形三元组 II 1479
+- [ ] 1930.长度为 3 的不同回文子序列 1533
+- [ ] 3128.直角三角形 1541
+- [ ] 2874.有序三元组中的最大值 II 1583
+- [ ] 447.回旋镖的数量
+- [ ] 456.132 模式
+- [ ] 3067.在带权树网络中统计可连接服务器对数目 1909
+- [ ] 2242.节点序列的最大得分 2304
+- [ ] 2867.统计树中的合法路径数目 2428
+- [ ] 2552.统计上升四元组 2433
+- [ ] 3257.放三个车的价值之和最大 II 2553
+- [ ] 3073.最大递增三元组（会员题）
+
+
+
+
+
 ## 9、数学算法
 
 ## 10、贪心与思维
 
-## 11、链表、二叉树与一般树
+## 11、链表、二叉树与回溯
 
 ## 12、字符串
