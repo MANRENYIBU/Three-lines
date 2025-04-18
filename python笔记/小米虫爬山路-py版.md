@@ -102,39 +102,39 @@ django-admin startproject 项目名称
 
 Django5 的操作指令共有 31 条，每条指令的说明以表格形式展示。
 
-| **指令**                  | **说明**                                                                                                                                        |
-| :------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------- |
-| changepassword            | 修改内置用户表的用户密码                                                                                                                        |
-| createsuperuser           | 为内置用户表创建超级管理员账号                                                                                                                  |
-| remove_stale_contenttypes | 删除数据库中已不使用的数据表                                                                                                                    |
-| check                     | 检测整个项目是否存在异常问题                                                                                                                    |
-| compilemessages           | 编译语言文件，用于项目的区域语言设置                                                                                                            |
-| createcachetable          | 创建缓存数据表，为内置的缓存机制提供存储功能                                                                                                    |
-| dbshell                   | 进入 Django 配置的数据库，可以执行数据库的 SOL 语句                                                                                             |
-| diffsettings              | 显示当前 settings.py 的配置信息与默认配置的差异                                                                                                 |
+| **指令**                  | **说明**                                                     |
+| :------------------------ | :----------------------------------------------------------- |
+| changepassword            | 修改内置用户表的用户密码                                     |
+| createsuperuser           | 为内置用户表创建超级管理员账号                               |
+| remove_stale_contenttypes | 删除数据库中已不使用的数据表                                 |
+| check                     | 检测整个项目是否存在异常问题                                 |
+| compilemessages           | 编译语言文件，用于项目的区域语言设置                         |
+| createcachetable          | 创建缓存数据表，为内置的缓存机制提供存储功能                 |
+| dbshell                   | 进入 Django 配置的数据库，可以执行数据库的 SOL 语句          |
+| diffsettings              | 显示当前 settings.py 的配置信息与默认配置的差异              |
 | dumpdata                  | 导出数据表的数据并以 JSON 格式存储，如 python manage.py dumpdata index >data.json，这是 index 的模型所对应的数据导出，并保存在 data.json 文件中 |
-| flush                     | 清空数据表的数据信息                                                                                                                            |
-| inspectdb                 | 获取项目所有模型的定义过程                                                                                                                      |
-| loaddata                  | 将数据文件导入数据表，如 python manage.py loaddatadata.,json                                                                                    |
-| makemessages              | 创建语言文件，用于项目的区域语言设置                                                                                                            |
-| makemigrations            | 从模型对象创建数据迁移文件并保存在 App 的 migrations 文件夹                                                                                     |
-| migrate                   | 根据迁移文件的内容，在数据库里生成相应的数据表                                                                                                  |
-| sendtestemail             | 向指定的收件人发送测试的电子邮件                                                                                                                |
-| shell                     | 进入 Django 的 Shell 模式,用于调试项目功能                                                                                                      |
-| showmigrations            | 查看当前项目的所有迁移文件                                                                                                                      |
-| sqlflush                  | 查看清空数据库的 SOL 语句脚本                                                                                                                   |
-| sqlmigrate                | 根据迁移文件内容输出相应的 SQL 语句                                                                                                             |
-| sqlsequencereset          | 重置数据表递增字段的索引值                                                                                                                      |
-| squashmigrations          | 对迁移文件进行压缩处理                                                                                                                          |
-| startapp                  | 创建项目应用 App                                                                                                                                |
-| optimizemigration         | 允许优化迁移操作                                                                                                                                |
-| startproject              | 创建新的 Django 项目                                                                                                                            |
-| test                      | 运行 App 里面的测试程序                                                                                                                         |
-| testserver                | 新建测试数据库并使用该数据库运行项目                                                                                                            |
-| clearsessions             | 清除会话 Session 数据                                                                                                                           |
-| collectstatic             | 收集所有的静态文件                                                                                                                              |
-| findstatic                | 查找静态文件的路径信息                                                                                                                          |
-| runserver                 | 在本地计算机上启动 Django 项目                                                                                                                  |
+| flush                     | 清空数据表的数据信息                                         |
+| inspectdb                 | 获取项目所有模型的定义过程                                   |
+| loaddata                  | 将数据文件导入数据表，如 python manage.py loaddatadata.,json |
+| makemessages              | 创建语言文件，用于项目的区域语言设置                         |
+| makemigrations            | 从模型对象创建数据迁移文件并保存在 App 的 migrations 文件夹  |
+| migrate                   | 根据迁移文件的内容，在数据库里生成相应的数据表               |
+| sendtestemail             | 向指定的收件人发送测试的电子邮件                             |
+| shell                     | 进入 Django 的 Shell 模式,用于调试项目功能                   |
+| showmigrations            | 查看当前项目的所有迁移文件                                   |
+| sqlflush                  | 查看清空数据库的 SOL 语句脚本                                |
+| sqlmigrate                | 根据迁移文件内容输出相应的 SQL 语句                          |
+| sqlsequencereset          | 重置数据表递增字段的索引值                                   |
+| squashmigrations          | 对迁移文件进行压缩处理                                       |
+| startapp                  | 创建项目应用 App                                             |
+| optimizemigration         | 允许优化迁移操作                                             |
+| startproject              | 创建新的 Django 项目                                         |
+| test                      | 运行 App 里面的测试程序                                      |
+| testserver                | 新建测试数据库并使用该数据库运行项目                         |
+| clearsessions             | 清除会话 Session 数据                                        |
+| collectstatic             | 收集所有的静态文件                                           |
+| findstatic                | 查找静态文件的路径信息                                       |
+| runserver                 | 在本地计算机上启动 Django 项目                               |
 
 小技巧，前面每次执行命令都要在 Terminal 终端输入`python manage.py 命令`比较繁琐，我们借助 PyCharm 开发工具，在菜单 Tools 里，有个`Run manage.py Task... `,直接点击
 
@@ -2582,9 +2582,9 @@ Django 内置的模板引擎包含模板上下文（亦可称为模板变量)、
 >- 当模板引擎遇到一个变量，将计算这个变量，然后输出结果
 >- 变量名必须由字母、数字、下划线、点组成，不能由数字和下划线开头
 >- 当模板引擎遇到 “ . ” 的时候，按以下顺序进行解析
->  - 按照 dict 解析 var[key]
->  - 按照对象的属性或方法解析 var.var/func
->  - 按照索引解析 var[index]
+> - 按照 dict 解析 var[key]
+> - 按照对象的属性或方法解析 var.var/func
+> - 按照索引解析 var[index]
 >- 如果变量不存在，不会引发异常，模板会插入空字符串 ''
 >- 在模板中使用变量或方法时，不能出现 ()、[]、{}
 >- 调用方法时，不能传递参数
@@ -3311,18 +3311,18 @@ class BookInfo(models.Model):
 
 ForeignKey 方法参数如下：
 
-| **参数名**       | **参数说明**                                                                              |
-| ---------------- | ----------------------------------------------------------------------------------------- |
-| to               | 指定关联的目标模型类。可以使用字符串表示模型类的路径，也可以直接使用模型类的引用。        |
+| **参数名**       | **参数说明**                                                 |
+| ---------------- | ------------------------------------------------------------ |
+| to               | 指定关联的目标模型类。可以使用字符串表示模型类的路径，也可以直接使用模型类的引用。 |
 | on_delete        | 指定当关联对象被删除时的行为。CASCADE、PROTECT、SET_NULL、SET_DEFAULT、SET0、DO_NOTHING。 |
-| related_name     | 指定反向关联的名称，默认为模型类名\_set。                                                 |
-| to_field         | 指定关联的目标模型类中用于关联的字段名称。默认为主键字段。                                |
-| db_index         | 如果为 True，则在目标模型的关联字段上创建索引。                                           |
-| null             | 指定关联字段是否可以为空。如果 null=True，则数据库中该字段将允许 NULL 值。                |
-| blank            | 指定关联字段是否可以为空。如果 blank=True，则表单中该字段可以为空。                       |
-| limit_choices_to | 指定关联对象的过滤条件。可以是一个字典、一个 QuerySet 或一个函数。                        |
-| verbose_name     | 用于在 Django Admin 后台中显示字段名称。                                                  |
-| help_text        | 用于在 Django Admin 后台中显示帮助文本。                                                  |
+| related_name     | 指定反向关联的名称，默认为模型类名\_set。                    |
+| to_field         | 指定关联的目标模型类中用于关联的字段名称。默认为主键字段。   |
+| db_index         | 如果为 True，则在目标模型的关联字段上创建索引。              |
+| null             | 指定关联字段是否可以为空。如果 null=True，则数据库中该字段将允许 NULL 值。 |
+| blank            | 指定关联字段是否可以为空。如果 blank=True，则表单中该字段可以为空。 |
+| limit_choices_to | 指定关联对象的过滤条件。可以是一个字典、一个 QuerySet 或一个函数。 |
+| verbose_name     | 用于在 Django Admin 后台中显示字段名称。                     |
+| help_text        | 用于在 Django Admin 后台中显示帮助文本。                     |
 
 on_delete 的 models 属性有下面设置选项；
 
@@ -5414,10 +5414,10 @@ RAG 框架的最终输出被设计为一种协同工作模式，将检索到的�
 
 RAG 能够从外部知识库中检索最新、准确的信息，从而提高了答案的质量和时效性。其优势在于可以利用最新的外部信息，从而更好地适应当前事件和知识。
 
-|      | 微调模型                                               | RAG                                                                                     |
-| :--- | :----------------------------------------------------- | --------------------------------------------------------------------------------------- |
+|      | 微调模型                                               | RAG                                                          |
+| :--- | :----------------------------------------------------- | ------------------------------------------------------------ |
 | 优点 | 针对特定任务调整预训练模型。优点是可针对特定任务优化； | 结合检索系统和生成模型。优点是能利用最新信息，提高答案质量，具有更好的可解释性和适应性; |
-| 缺点 | 但缺点是更新成本高，对新信息适应性较差；               | 是可能面临检索质量问题和曾加额外计算资源需求;                                           |
+| 缺点 | 但缺点是更新成本高，对新信息适应性较差；               | 是可能面临检索质量问题和曾加额外计算资源需求;                |
 
 | 特性       | RAG 技术                                   | SFT 模型微调                             |
 | :--------- | :----------------------------------------- | :--------------------------------------- |
@@ -5449,26 +5449,26 @@ RAG 每个步骤都面临一些挑战，这些挑战使得 RAG 的实现变得�
 
 在论文综述[「Retrieval-Augmented Generation for Large Language Models: A Survey」](https://arxiv.org/pdf/2312.10997.pdf)中，作者将 RAG 技术按照复杂度继续划分为 Naive RAG，Advanced RAG、Modular RAG。
 
-| **技术类型**     | **描述**                                                                                                                                                                                                                                                                                                                                                 |
-| :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Naive RAG**    | Naive RAG 是 RAG 技术的最基本形式，也被称为经典 RAG。包括索引、检索、生成三个基本步骤。索引阶段将文档库分割成短的 Chunk，并构建向量索引。检索阶段根据问题和 Chunks 的相似度检索相关文档片段。生成阶段以检索到的上下文为条件，生成问题的回答。                                                                                                            |
+| **技术类型**     | **描述**                                                     |
+| :--------------- | :----------------------------------------------------------- |
+| **Naive RAG**    | Naive RAG 是 RAG 技术的最基本形式，也被称为经典 RAG。包括索引、检索、生成三个基本步骤。索引阶段将文档库分割成短的 Chunk，并构建向量索引。检索阶段根据问题和 Chunks 的相似度检索相关文档片段。生成阶段以检索到的上下文为条件，生成问题的回答。 |
 | **Advanced RAG** | Advanced RAG 在 Naive RAG 的基础上进行优化和增强。包含额外处理步骤，分别在数据索引、检索前和检索后进行。包括更精细的数据清洗、设计文档结构和添加元数据，以提升文本一致性、准确性和检索效率。在检索前使用问题的重写、路由和扩充等方式对齐问题和文档块之间的语义差异。在检索后通过重排序避免“Lost in the Middle”现象，或通过上下文筛选与压缩缩短窗口长度。 |
-| **Modular RAG**  | Modular RAG 引入更多具体功能模块，例如查询搜索引擎、融合多个回答等。技术上融合了检索与微调、强化学习等。流程上对 RAG 模块进行设计和编排，出现多种不同 RAG 模式。提供更大灵活性，系统可以根据应用需求选择合适的功能模块组合。模块化 RAG 的引入使得系统更自由、灵活，适应不同场景和需求。                                                                  |
+| **Modular RAG**  | Modular RAG 引入更多具体功能模块，例如查询搜索引擎、融合多个回答等。技术上融合了检索与微调、强化学习等。流程上对 RAG 模块进行设计和编排，出现多种不同 RAG 模式。提供更大灵活性，系统可以根据应用需求选择合适的功能模块组合。模块化 RAG 的引入使得系统更自由、灵活，适应不同场景和需求。 |
 
 ![img](./img/小米虫爬山路-py版-img/40ee5074aba3c044b65ba0be5783d7d079019819_2_690x371.webp)
 
 在 RAG 技术流程中，涉及多个关键模块，每个模块承担着特定的任务，协同工作以实现准确的知识检索和生成自然语言回答。
 
-| **技术模块**     | **描述**                                                                                                                                      |
-| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------- |
-| **意图理解**     | 意图理解模块负责准确把握用户提出的问题，确定用户的意图和主题。处理用户提问的模糊性和不规范性，为后续流程提供清晰的任务目标。                  |
+| **技术模块**     | **描述**                                                     |
+| :--------------- | :----------------------------------------------------------- |
+| **意图理解**     | 意图理解模块负责准确把握用户提出的问题，确定用户的意图和主题。处理用户提问的模糊性和不规范性，为后续流程提供清晰的任务目标。 |
 | **文档解析**     | 文档解析模块用于处理来自不同来源的文档，包括 PDF、PPT、Neo4j 等格式。该模块负责将文档内容转化为可处理的结构化形式，为知识检索提供合适的输入。 |
-| **文档索引**     | 文档索引模块将解析后的文档分割成短的 Chunk，并构建向量索引。或通过全文索引进行文本检索，使得系统能够更快速地找到与用户问题相关的文档片段。    |
-| **向量嵌入**     | 向量嵌入模块负责将文档索引中的内容映射为向量表示，以便后续的相似度计算。这有助于模型更好地理解文档之间的关系，提高知识检索的准确性。          |
-| **知识检索**     | 知识检索模块根据用户提问和向量嵌入计算的相似度检索或文本检索打分。这一步骤需要解决问题和文档之间的语义关联，确保检索的准确性。                |
-| **重排序**       | 重排序模块在知识检索后对文档库进行重排序，以避免“Lost in the Middle”现象，确保最相关的文档片段在前面。                                        |
-| **大模型回答**   | 大模型回答模块利用大型语言模型生成最终的回答。该模块结合检索到的上下文，以生成连贯、准确的文本回答。                                          |
-| **其他功能模块** | 可根据具体应用需求引入其他功能模块，如查询搜索引擎、融合多个回答等。模块化设计使得系统更加灵活，能够根据不同场景选择合适的功能模块组合。      |
+| **文档索引**     | 文档索引模块将解析后的文档分割成短的 Chunk，并构建向量索引。或通过全文索引进行文本检索，使得系统能够更快速地找到与用户问题相关的文档片段。 |
+| **向量嵌入**     | 向量嵌入模块负责将文档索引中的内容映射为向量表示，以便后续的相似度计算。这有助于模型更好地理解文档之间的关系，提高知识检索的准确性。 |
+| **知识检索**     | 知识检索模块根据用户提问和向量嵌入计算的相似度检索或文本检索打分。这一步骤需要解决问题和文档之间的语义关联，确保检索的准确性。 |
+| **重排序**       | 重排序模块在知识检索后对文档库进行重排序，以避免“Lost in the Middle”现象，确保最相关的文档片段在前面。 |
+| **大模型回答**   | 大模型回答模块利用大型语言模型生成最终的回答。该模块结合检索到的上下文，以生成连贯、准确的文本回答。 |
+| **其他功能模块** | 可根据具体应用需求引入其他功能模块，如查询搜索引擎、融合多个回答等。模块化设计使得系统更加灵活，能够根据不同场景选择合适的功能模块组合。 |
 
 ## 3、ChatGPT/GLM API 使用
 
@@ -5480,11 +5480,11 @@ GLM 是智谱 AI 推出的新一代基座大模型，相比上一代有着显著
 
 虽然这两个大模型都非常有效，但我们希望所有的学习者都需要学会对应的 API 调用。如果在本地使用 ChatGLM3-6B 等开源模型，也可以完成类似功能，但整体效果肯定不如这些费用的 API。在任务 2 中，为了方便所有同学参与，我们将使用在线的 ChatGPT/GLM API 进行开发。这为没有本地 GPU 资源的同学提供了更便捷的方式。**但 ChatGPT/GLM API 都是需要注册账号并付费才能进行使用，如果你没有账号请联系小助手，我们将想要参与学习的同学提供 API token。**
 
-| ** ChatGPT**     | **ChatGLM**                                                                                      |                                                                      |
-| :--------------- | :----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| **官网**         | [https://chat.openai.com/](https://chat.openai.com/)                                             | [https://open.bigmodel.cn/](https://open.bigmodel.cn/)               |
+| ** ChatGPT**     | **ChatGLM**                                                  |                                                              |
+| :--------------- | :----------------------------------------------------------- | ------------------------------------------------------------ |
+| **官网**         | [https://chat.openai.com/](https://chat.openai.com/)         | [https://open.bigmodel.cn/](https://open.bigmodel.cn/)       |
 | **API 文档**     | [https://platform.openai.com/docs/api-reference](https://platform.openai.com/docs/api-reference) | [https://open.bigmodel.cn/dev/api](https://open.bigmodel.cn/dev/api) |
-| **API 计费说明** | [https://openai.com/pricing](https://openai.com/pricing)                                         | [https://open.bigmodel.cn/pricing](https://open.bigmodel.cn/pricing) |
+| **API 计费说明** | [https://openai.com/pricing](https://openai.com/pricing)     | [https://open.bigmodel.cn/pricing](https://open.bigmodel.cn/pricing) |
 
 在继续后续的学习中，有以下注意事项：
 
@@ -5498,33 +5498,33 @@ GLM 是智谱 AI 推出的新一代基座大模型，相比上一代有着显著
 
 - 请求参数说明
 
-| 参数                | 类型                 | 必填 | 描述                                                                                                                                                                                                                                                                                                                                                      |
-| :------------------ | :------------------- | :--- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `messages`          | Array                | 必填 | 包含对话的消息列表。                                                                                                                                                                                                                                                                                                                                      |
-| `model`             | String               | 必填 | 要使用的模型的 ID。                                                                                                                                                                                                                                                                                                                                       |
-| `frequency_penalty` | Number 或 null       | 可选 | 根据文本中已有令牌的频率对新令牌进行惩罚。取值范围在-2.0 到 2.0 之间。                                                                                                                                                                                                                                                                                    |
-| `logit_bias`        | Map                  | 可选 | 修改指定令牌在完成中出现的可能性。接受一个将令牌映射到偏置值（-100 到 100）的 JSON 对象。                                                                                                                                                                                                                                                                 |
-| `logprobs`          | Boolean 或 null      | 可选 | 是否返回输出令牌的对数概率。                                                                                                                                                                                                                                                                                                                              |
-| `top_logprobs`      | Integer 或 null      | 可选 | 如果 `logprobs` 设置为 `true`，则返回每个令牌位置上最有可能的令牌数，每个都带有关联的对数概率。                                                                                                                                                                                                                                                           |
-| `max_tokens`        | Integer 或 null      | 可选 | 可以在聊天完成中生成的最大 [令牌数](https://platform.openai.com/tokenizer)。                                                                                                                                                                                                                                                                              |
-| `n`                 | Integer 或 null      | 可选 | 为每个输入消息生成的聊天完成选择的数量。                                                                                                                                                                                                                                                                                                                  |
-| `presence_penalty`  | Number 或 null       | 可选 | 根据新令牌是否出现在到目前为止的文本中对其进行惩罚，增加模型谈论新主题的可能性。                                                                                                                                                                                                                                                                          |
-| `seed`              | Integer 或 null      | 可选 | 如果指定，系统将尽力进行确定性采样，以使具有相同 `seed` 和参数的重复请求应返回相同的结果。                                                                                                                                                                                                                                                                |
-| `stop`              | String/Array 或 null | 可选 | API 将停止生成进一步的令牌的序列，最多可设置为 4 个。                                                                                                                                                                                                                                                                                                     |
+| 参数                | 类型                 | 必填 | 描述                                                         |
+| :------------------ | :------------------- | :--- | :----------------------------------------------------------- |
+| `messages`          | Array                | 必填 | 包含对话的消息列表。                                         |
+| `model`             | String               | 必填 | 要使用的模型的 ID。                                          |
+| `frequency_penalty` | Number 或 null       | 可选 | 根据文本中已有令牌的频率对新令牌进行惩罚。取值范围在-2.0 到 2.0 之间。 |
+| `logit_bias`        | Map                  | 可选 | 修改指定令牌在完成中出现的可能性。接受一个将令牌映射到偏置值（-100 到 100）的 JSON 对象。 |
+| `logprobs`          | Boolean 或 null      | 可选 | 是否返回输出令牌的对数概率。                                 |
+| `top_logprobs`      | Integer 或 null      | 可选 | 如果 `logprobs` 设置为 `true`，则返回每个令牌位置上最有可能的令牌数，每个都带有关联的对数概率。 |
+| `max_tokens`        | Integer 或 null      | 可选 | 可以在聊天完成中生成的最大 [令牌数](https://platform.openai.com/tokenizer)。 |
+| `n`                 | Integer 或 null      | 可选 | 为每个输入消息生成的聊天完成选择的数量。                     |
+| `presence_penalty`  | Number 或 null       | 可选 | 根据新令牌是否出现在到目前为止的文本中对其进行惩罚，增加模型谈论新主题的可能性。 |
+| `seed`              | Integer 或 null      | 可选 | 如果指定，系统将尽力进行确定性采样，以使具有相同 `seed` 和参数的重复请求应返回相同的结果。 |
+| `stop`              | String/Array 或 null | 可选 | API 将停止生成进一步的令牌的序列，最多可设置为 4 个。        |
 | `stream`            | Boolean 或 null      | 可选 | 如果设置，将发送部分消息增量，就像在 ChatGPT 中一样。令牌将作为数据仅 [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format) 发送，一旦可用，流将以 `data: [DONE]` 消息终止。参考 [Example Python code](https://cookbook.openai.com/examples/how_to_stream_completions)。 |
-| `temperature`       | Number 或 null       | 可选 | 使用的采样温度，介于 0 和 2 之间。较高的值（如 0.8）会使输出更随机，而较低的值（如 0.2）会使其更集中和确定性。                                                                                                                                                                                                                                            |
-| `top_p`             | Number 或 null       | 可选 | 与温度采样的替代方法，称为核采样，其中模型考虑具有 top_p 概率质量的令牌的结果。因此，0.1 表示仅考虑构成前 10% 概率质量的令牌。                                                                                                                                                                                                                            |
+| `temperature`       | Number 或 null       | 可选 | 使用的采样温度，介于 0 和 2 之间。较高的值（如 0.8）会使输出更随机，而较低的值（如 0.2）会使其更集中和确定性。 |
+| `top_p`             | Number 或 null       | 可选 | 与温度采样的替代方法，称为核采样，其中模型考虑具有 top_p 概率质量的令牌的结果。因此，0.1 表示仅考虑构成前 10% 概率质量的令牌。 |
 
 - 返回结果字段
 
-| 参数                 | 类型   | 描述                                                                                                                                                            |
-| :------------------- | :----- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `id`                 | 字符串 | 用于唯一标识聊天完成的标识符。                                                                                                                                  |
-| `choices`            | 数组   | 聊天完成选择的列表。如果 n 大于 1，则可以有多个选择。                                                                                                           |
-| `created`            | 整数   | 聊天完成创建的 Unix 时间戳（以秒为单位）。                                                                                                                      |
-| `model`              | 字符串 | 用于聊天完成的模型。                                                                                                                                            |
-| `system_fingerprint` | 字符串 | 此指纹表示模型运行时的后端配置。可与 seed 请求参数一起使用，了解可能影响确定性的后端更改。                                                                      |
-| `usage`              | 对象   | 完成请求的使用统计信息。                                                                                                                                        |
+| 参数                 | 类型   | 描述                                                         |
+| :------------------- | :----- | :----------------------------------------------------------- |
+| `id`                 | 字符串 | 用于唯一标识聊天完成的标识符。                               |
+| `choices`            | 数组   | 聊天完成选择的列表。如果 n 大于 1，则可以有多个选择。        |
+| `created`            | 整数   | 聊天完成创建的 Unix 时间戳（以秒为单位）。                   |
+| `model`              | 字符串 | 用于聊天完成的模型。                                         |
+| `system_fingerprint` | 字符串 | 此指纹表示模型运行时的后端配置。可与 seed 请求参数一起使用，了解可能影响确定性的后端更改。 |
+| `usage`              | 对象   | 完成请求的使用统计信息。                                     |
 | `finish_reason`      | 字符串 | 表示聊天完成的原因。可能的值包括"stop"（API 返回了完整的聊天完成而没有受到任何限制），“length”（生成超过了 max_tokens 或对话超过了 max context length），等等。 |
 
 - ChatGPT（支持 gpt-3.5-turbo-0613、gpt-3.5-turbo-16k-0613、gpt-4-0613）
@@ -5744,13 +5744,13 @@ for page_idx in range(len(pdf.pages)):
 
 下面是文本检索和语义检索的区别和联系的表格形式：
 
-|              | 文本检索                                                             | 语义检索                                             |
-| :----------- | :------------------------------------------------------------------- | ---------------------------------------------------- |
-| **定义**     | 通过关键词或短语匹配文本数据的过程                                   | 强调理解查询与文本之间的深层语义关系                 |
-| **方法**     | 基于关键词匹配，使用 TFIDF、BM25 等权重计算                          | 使用 NLP 技术，如词嵌入、预训练的语言模型            |
-| **特点**     | 强调字面意义，关注表面文本的匹配                                     | 关注词语之间的关联、语境和含义                       |
-| **应用场景** | 大规模文本数据的快速匹配                                             | 对语义理解要求较高的场景                             |
-| **优势**     | 处理速度较快，适用于大规模文本数据                                   | 能够处理一词多义、近义词等语义上的复杂情况           |
+|              | 文本检索                                                     | 语义检索                                             |
+| :----------- | :----------------------------------------------------------- | ---------------------------------------------------- |
+| **定义**     | 通过关键词或短语匹配文本数据的过程                           | 强调理解查询与文本之间的深层语义关系                 |
+| **方法**     | 基于关键词匹配，使用 TFIDF、BM25 等权重计算                  | 使用 NLP 技术，如词嵌入、预训练的语言模型            |
+| **特点**     | 强调字面意义，关注表面文本的匹配                             | 关注词语之间的关联、语境和含义                       |
+| **应用场景** | 大规模文本数据的快速匹配                                     | 对语义理解要求较高的场景                             |
+| **优势**     | 处理速度较快，适用于大规模文本数据                           | 能够处理一词多义、近义词等语义上的复杂情况           |
 | **联系**     | 结合使用，先使用文本检索筛选出候选文档，然后在这些文档上应用语义检索 | 可以利用语义模型提取关键词的上下文信息，提升检索效果 |
 
 在一些场景中，文本检索和语义检索可以结合使用，以充分利用它们各自的优势。例如，可以先使用文本检索筛选出候选文档，然后在这些文档上应用语义检索来进一步提高检索的准确性。当然具体使用哪种检索方法，需要具体分析，在 RAG 中可以结合两种方法一起进行使用。
@@ -5935,15 +5935,15 @@ model.max_seq_length = 512
 - [https://python.langchain.com/docs/modules/data_connection/document_transformers/](https://python.langchain.com/docs/modules/data_connection/document_transformers/)
 - [https://chunkviz.up.railway.app/](https://chunkviz.up.railway.app/)
 
-| 名称            | 分割依据                   | 描述                                                                                                     |
-| :-------------- | :------------------------- | :------------------------------------------------------------------------------------------------------- |
-| 递归式分割器    | 一组用户定义的字符         | 递归地分割文本。递归分割文本的目的是尽量保持相关的文本段落相邻。这是开始文本分割的推荐方式。             |
-| HTML 分割器     | HTML 特定字符              | 基于 HTML 特定字符进行文本分割。特别地，它会添加有关每个文本块来源的相关信息（基于 HTML 结构）。         |
+| 名称            | 分割依据                   | 描述                                                         |
+| :-------------- | :------------------------- | :----------------------------------------------------------- |
+| 递归式分割器    | 一组用户定义的字符         | 递归地分割文本。递归分割文本的目的是尽量保持相关的文本段落相邻。这是开始文本分割的推荐方式。 |
+| HTML 分割器     | HTML 特定字符              | 基于 HTML 特定字符进行文本分割。特别地，它会添加有关每个文本块来源的相关信息（基于 HTML 结构）。 |
 | Markdown 分割器 | Markdown 特定字符          | 基于 Markdown 特定字符进行文本分割。特别地，它会添加有关每个文本块来源的相关信息（基于 Markdown 结构）。 |
-| 代码分割器      | 代码（Python、JS）特定字符 | 基于特定于编码语言的字符进行文本分割。支持从 15 种不同的编程语言中选择。                                 |
-| Token 分割器    | Tokens                     | 基于 Token 进行文本分割。存在一些不同的 Token 计量方法。                                                 |
-| 字符分割器      | 用户定义的字符             | 基于用户定义的字符进行文本分割。这是较为简单的分割方法之一。                                             |
-| 语义分块器      | 句子                       | 首先基于句子进行分割。然后，如果它们在语义上足够相似，就将相邻的句子组合在一起。                         |
+| 代码分割器      | 代码（Python、JS）特定字符 | 基于特定于编码语言的字符进行文本分割。支持从 15 种不同的编程语言中选择。 |
+| Token 分割器    | Tokens                     | 基于 Token 进行文本分割。存在一些不同的 Token 计量方法。     |
+| 字符分割器      | 用户定义的字符             | 基于用户定义的字符进行文本分割。这是较为简单的分割方法之一。 |
+| 语义分块器      | 句子                       | 首先基于句子进行分割。然后，如果它们在语义上足够相似，就将相邻的句子组合在一起。 |
 
 对于自然语言，可以推荐使用 Token 分割器，结合 Chunk Size 和 Overlap Size 可以得到不同的切分：
 
@@ -6204,17 +6204,17 @@ B, 很高兴见到你, 欢迎问我任何问题。
 
 ==**专业名词介绍**==
 
-| **专业名词**          | **描述**                                                                                                                                                           |
-| :-------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 大型语言模型          | 在自然语言处理领域展示出强大生成能力的模型，如 GPT 系列。但其修改、微调或重新训练困难，成本高。                                                                    |
-| Prompt                | “Prompt”（提示）是指一种引导大型语言模型（LLM）生成特定文本的方法。或可以理解为输给大模型的输入文本。                                                              |
-| 幻觉（Hallucination） | 在自然语言处理领域被定义为生成的内容与提供的源内容无关或不忠实，一种虚假的感知。                                                                                   |
-| 知识库问答（KBQA）    | 早期的对话系统方法，利用结构化的知识库进行自然语言问题的回答。知识库以三元组形式表示<主题，关系，对象>，存储在图数据库中。                                         |
+| **专业名词**          | **描述**                                                     |
+| :-------------------- | :----------------------------------------------------------- |
+| 大型语言模型          | 在自然语言处理领域展示出强大生成能力的模型，如 GPT 系列。但其修改、微调或重新训练困难，成本高。 |
+| Prompt                | “Prompt”（提示）是指一种引导大型语言模型（LLM）生成特定文本的方法。或可以理解为输给大模型的输入文本。 |
+| 幻觉（Hallucination） | 在自然语言处理领域被定义为生成的内容与提供的源内容无关或不忠实，一种虚假的感知。 |
+| 知识库问答（KBQA）    | 早期的对话系统方法，利用结构化的知识库进行自然语言问题的回答。知识库以三元组形式表示<主题，关系，对象>，存储在图数据库中。 |
 | RAG                   | RAG 是检索增强生成（Retrieval-augmented Generation）的缩写，是一种结合了大型语言模型的生成能力和检索系统的精确性的技术，用于提高生成内容的准确性、相关性和时效性。 |
-| 倒排索引              | 倒排索引（Inverted Index）是一种数据结构，用于加速文本检索过程。它将文档中的词汇映射到出现该词汇的文档列表，从而实现根据词汇快速检索相关文档的目的。               |
-| 文本嵌入              | 文本嵌入是将文本信息映射到高维向量空间的过程，使得具有语义相似性的文本在向量空间中距离较近。                                                                       |
-| 文本相似度            | 文本相似度是衡量两段文本之间语义接近程度的度量。通过计算文本在嵌入空间中的相似性，可以评估它们在语义上的相似程度。                                                 |
-| 排序与重排序          | 在信息检索中，排序指的是将检索到的文档按照其与查询的相关性进行排序。重排序则是在排序后的结果基础上再次调整文档的顺序，以进一步提高与用户查询的匹配度。             |
+| 倒排索引              | 倒排索引（Inverted Index）是一种数据结构，用于加速文本检索过程。它将文档中的词汇映射到出现该词汇的文档列表，从而实现根据词汇快速检索相关文档的目的。 |
+| 文本嵌入              | 文本嵌入是将文本信息映射到高维向量空间的过程，使得具有语义相似性的文本在向量空间中距离较近。 |
+| 文本相似度            | 文本相似度是衡量两段文本之间语义接近程度的度量。通过计算文本在嵌入空间中的相似性，可以评估它们在语义上的相似程度。 |
+| 排序与重排序          | 在信息检索中，排序指的是将检索到的文档按照其与查询的相关性进行排序。重排序则是在排序后的结果基础上再次调整文档的顺序，以进一步提高与用户查询的匹配度。 |
 
 ## 13、使用 Langchain + openAI + Mlivus 实现
 
@@ -6305,3 +6305,3418 @@ if __name__ == '__main__':
     rag_llm_chain(query)
 
 ```
+
+# AutoGen
+
+资料来源:[AutoGen — AutoGen](https://microsoft.github.io/autogen/stable/)
+
+## 1、简介
+
+AutoGen 是一个旨在简化使用大型语言模型（LLMs）开发应用程序的过程的框架。它基于促进多代理对话的概念，这些代理可以是 LLMs、工具或甚至人类输入，共同工作以执行任务。该框架强调易用性、模块化以及将人类反馈无缝集成到工作流中的能力，使开发人员能够以显著减少的努力和专业知识创建复杂的 LLM 应用。 本文的代码例子来源于官方文档([Microsoft on GitHub](https://microsoft.github.io/autogen/docs/tutorial/introduction/)) ([Microsoft on GitHub](https://microsoft.github.io/autogen/))。
+
+### 1.2 安装
+
+AutoGen 需要 **Python 3.10 或更高版本** 。
+
+```bash
+# Install AgentChat and OpenAI client from Extensions
+pip install -U "autogen-agentchat" "autogen-ext[openai]"
+```
+
+目前的稳定版本是 v0.4。如果您要从 AutoGen v0.2 升级，请参阅[迁移指南 ](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/migration-guide.html)，了解有关如何更新代码和配置的详细说明。
+
+```bash
+# Install AutoGen Studio for no-code GUI
+pip install -U "autogenstudio"
+```
+
+### 1.3 AgentChat
+
+AgentChat 是用于构建多代理应用程序的高级 API。它构建在 [`autogen-core`](https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html) 包之上。对于初学者用户，AgentChat 是推荐的起点。对于高级用户，[`autogen-core`](https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html) 的事件驱动编程模型提供了更大的灵活性和对底层组件的控制。
+
+AgentChat 提供直观的默认值，例如具有预设行为的 **Agent** 和具有预定义[多代理设计模式的 ](https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/intro.html)**Teams**。
+
+### 1.4 Core
+
+AutoGen 核心提供了一种简单的方法来快速构建事件驱动、分布式、可扩展、弹性的 AI 代理系统。代理是使用 [Actor 模型](https://en.wikipedia.org/wiki/Actor_model)开发的。您可以在本地构建和运行代理系统，并在准备就绪时轻松迁移到云中的分布式系统。
+
+## 2、快速入门
+
+本教程只针对**AutoGenChat**
+
+通过 AgentChat，您可以使用预设代理快速构建应用程序。为了说明这一点，我们将从创建可以使用工具的单个代理开始。
+
+首先，我们需要安装 AgentChat 和 Extension 包。
+
+```bash
+pip install -U "autogen-agentchat" "autogen-ext[openai,azure]"
+```
+
+此示例使用 OpenAI 模型，但是，您也可以使用其他模型。只需使用所需的模型或模型客户端类更新 `model_client`。
+
+要使用 Azure OpenAI 模型和 AAD 身份验证，您可以按照[此处](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html#azure-openai)的说明进行作。要使用其他模型，请参阅[模型 ](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/models.html)。
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+# Define a model client. You can use other model client that implements
+# the `ChatCompletionClient` interface.
+model_client = OpenAIChatCompletionClient(
+    model="gpt-4o",
+    # api_key="YOUR_API_KEY",
+)
+
+
+# Define a simple function tool that the agent can use.
+# For this example, we use a fake weather tool for demonstration purposes.
+async def get_weather(city: str) -> str:
+    """Get the weather for a given city."""
+    return f"The weather in {city} is 73 degrees and Sunny."
+
+
+# Define an AssistantAgent with the model, tool, system message, and reflection enabled.
+# The system message instructs the agent via natural language.
+agent = AssistantAgent(
+    name="weather_agent",
+    model_client=model_client,
+    tools=[get_weather],
+    system_message="You are a helpful assistant.",
+    reflect_on_tool_use=True,
+    model_client_stream=True,  # Enable streaming tokens from the model client.
+)
+
+
+# Run the agent and stream the messages to the console.
+async def main() -> None:
+    await Console(agent.run_stream(task="What is the weather in New York?"))
+    # Close the connection to the model client.
+    await model_client.close()
+
+
+# NOTE: if running this inside a Python script you'll need to use asyncio.run(main()).
+await main()
+
+```
+
+## 3、模型
+
+在许多情况下，代理需要访问LLM模型服务，例如 OpenAI、Azure OpenAI 或本地模型。由于有许多不同的提供商和不同的 `API，autogen-core` 为模型客户端实现了一个协议， 而 `autogen-ext` 为流行的模型服务实现了一组模型客户端。AgentChat 可以使用这些模型客户端与模型服务进行交互。
+
+本节提供了可用模型客户端的快速概述。有关如何直接使用它们的更多详细信息，请参阅 Core API 文档中的 [Model Clients](https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/components/model-clients.html)。
+
+### 3.1 记录模型调用 
+
+AutoGen 使用标准的 Python 日志记录模块来记录模型调用和响应等事件。记录器名称为 [`autogen_core.EVENT_LOGGER_NAME`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html#autogen_core.EVENT_LOGGER_NAME)，事件类型为 `LLMCall`。
+
+```python
+import logging
+
+from autogen_core import EVENT_LOGGER_NAME
+
+logging.basicConfig(level=logging.WARNING)
+logger = logging.getLogger(EVENT_LOGGER_NAME)
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.INFO)
+
+```
+
+### 3.2 OpenAI
+
+要访问 OpenAI 模型，请安装 `openai` 扩展，该扩展允许您使用 [`OpenAIChatCompletionClient`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html#autogen_ext.models.openai.OpenAIChatCompletionClient)。
+
+```bash
+pip install "autogen-ext[openai]"
+```
+
+您还需要从 OpenAI 获取 [API 密钥 ](https://platform.openai.com/account/api-keys)。
+
+```python
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+openai_model_client = OpenAIChatCompletionClient(
+    model="gpt-4o-2024-08-06",
+    # api_key="sk-...", # Optional if you have an OPENAI_API_KEY environment variable set.
+)
+```
+
+要测试模型客户端，您可以使用以下代码：
+
+```python
+from autogen_core.models import UserMessage
+
+result = await openai_model_client.create([UserMessage(content="What is the capital of France?", source="user")])
+print(result)
+await openai_model_client.close()
+```
+
+```
+CreateResult(finish_reason='stop', content='The capital of France is Paris.', usage=RequestUsage(prompt_tokens=15, completion_tokens=7), cached=False, logprobs=None)
+```
+
+### 3.3 Azure OpenAI
+
+同样，安装 `azure` 和 `openai` 扩展以使用 [`AzureOpenAIChatCompletionClient`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html#autogen_ext.models.openai.AzureOpenAIChatCompletionClient).
+
+```bash
+pip install "autogen-ext[openai,azure]"
+```
+
+要使用客户端，您需要提供部署 ID、Azure 认知服务终端节点、API 版本和模型功能。对于身份验证，您可以提供 API 密钥或 Azure Active Directory （AAD） 令牌凭证。
+
+以下代码片段演示如何使用 AAD 身份验证。必须为使用的标识分配认知[服务 OpenAI 用户](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/role-based-access-control#cognitive-services-openai-user)角色。
+
+```python
+from autogen_ext.auth.azure import AzureTokenProvider
+from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
+from azure.identity import DefaultAzureCredential
+
+# Create the token provider
+token_provider = AzureTokenProvider(
+    DefaultAzureCredential(),
+    "https://cognitiveservices.azure.com/.default",
+)
+
+az_model_client = AzureOpenAIChatCompletionClient(
+    azure_deployment="{your-azure-deployment}",
+    model="{model-name, such as gpt-4o}",
+    api_version="2024-06-01",
+    azure_endpoint="https://{your-custom-endpoint}.openai.azure.com/",
+    azure_ad_token_provider=token_provider,  # Optional if you choose key-based authentication.
+    # api_key="sk-...", # For key-based authentication.
+)
+
+result = await az_model_client.create([UserMessage(content="What is the capital of France?", source="user")])
+print(result)
+await az_model_client.close()
+```
+
+### 3.4 Azure AI Foundry
+
+[Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-studio/)（以前称为 Azure AI Studio）提供托管在 Azure 上的模型。若要使用这些模型，请使用 [`AzureAIChatCompletionClient`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.azure.html#autogen_ext.models.azure.AzureAIChatCompletionClient)。
+
+您需要安装 `azure` extra 才能使用此客户端。
+
+```bash
+pip install "autogen-ext[azure]"
+```
+
+以下是将此客户端与 [GitHub Marketplace](https://github.com/marketplace/models) 中的 Phi-4 模型一起使用的示例。
+
+```python
+import os
+
+from autogen_core.models import UserMessage
+from autogen_ext.models.azure import AzureAIChatCompletionClient
+from azure.core.credentials import AzureKeyCredential
+
+client = AzureAIChatCompletionClient(
+    model="Phi-4",
+    endpoint="https://models.inference.ai.azure.com",
+    # To authenticate with the model you will need to generate a personal access token (PAT) in your GitHub settings.
+    # Create your PAT token by following instructions here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+    credential=AzureKeyCredential(os.environ["GITHUB_TOKEN"]),
+    model_info={
+        "json_output": False,
+        "function_calling": False,
+        "vision": False,
+        "family": "unknown",
+        "structured_output": False,
+    },
+)
+
+result = await client.create([UserMessage(content="What is the capital of France?", source="user")])
+print(result)
+await client.close()
+
+```
+
+### 3.5 Anthropic (experimental)
+
+要使用 [`AnthropicChatCompletionClient`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.anthropic.html#autogen_ext.models.anthropic.AnthropicChatCompletionClient)，您需要安装 `anthropic` extra。在底层，它使用 `anthropic` python sdk 来访问模型。您还需要从 Anthropic 获取 [API 密钥 ](https://console.anthropic.com/)。
+
+```bash
+pip install -U "autogen-ext[anthropic]"
+```
+
+```python
+from autogen_core.models import UserMessage
+from autogen_ext.models.anthropic import AnthropicChatCompletionClient
+
+anthropic_client = AnthropicChatCompletionClient(model="claude-3-7-sonnet-20250219")
+result = await anthropic_client.create([UserMessage(content="What is the capital of France?", source="user")])
+print(result)
+await anthropic_client.close()
+```
+
+```
+finish_reason='stop' content="The capital of France is Paris. It's not only the political and administrative capital but also a major global center for art, fashion, gastronomy, and culture. Paris is known for landmarks such as the Eiffel Tower, the Louvre Museum, Notre-Dame Cathedral, and the Champs-Élysées." usage=RequestUsage(prompt_tokens=14, completion_tokens=73) cached=False logprobs=None thought=None
+```
+
+### 3.5 Ollama (experimental)
+
+[Ollama](https://ollama.com/) 是一个本地模型服务器，可以在您的计算机上本地运行模型。
+
+小型本地模型通常不如云上的大型模型强大。对于某些任务，它们可能无法执行，并且输出可能会令人惊讶。
+
+要使用 Ollama，请安装 `ollama` 扩展并使用 [`OllamaChatCompletionClient`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.ollama.html#autogen_ext.models.ollama.OllamaChatCompletionClient)。
+
+```bash
+pip install -U "autogen-ext[ollama]"
+```
+
+```python
+from autogen_core.models import UserMessage
+from autogen_ext.models.ollama import OllamaChatCompletionClient
+
+# Assuming your Ollama server is running locally on port 11434.
+ollama_model_client = OllamaChatCompletionClient(model="llama3.2")
+
+response = await ollama_model_client.create([UserMessage(content="What is the capital of France?", source="user")])
+print(response)
+await ollama_model_client.close()
+```
+
+```
+finish_reason='unknown' content='The capital of France is Paris.' usage=RequestUsage(prompt_tokens=32, completion_tokens=8) cached=False logprobs=None thought=None
+```
+
+### 3.6 Gemini (experimental)
+
+Gemini 目前提供[与 OpenAI 兼容的 API（测试版）。](https://ai.google.dev/gemini-api/docs/openai) 因此，您可以将 [`OpenAIChatCompletionClient`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html#autogen_ext.models.openai.OpenAIChatCompletionClient) 与 Gemini API 一起使用。
+
+>虽然一些模型提供商可能会提供与 OpenAI 兼容的 API，但它们可能仍然存在细微的差异。例如，响应中的 `finish_reason` 字段可能不同。
+
+```python
+from autogen_core.models import UserMessage
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+model_client = OpenAIChatCompletionClient(
+    model="gemini-1.5-flash-8b",
+    # api_key="GEMINI_API_KEY",
+)
+
+response = await model_client.create([UserMessage(content="What is the capital of France?", source="user")])
+print(response)
+await model_client.close()
+```
+
+```
+finish_reason='stop' content='Paris\n' usage=RequestUsage(prompt_tokens=7, completion_tokens=2) cached=False logprobs=None thought=None
+```
+
+### 3.7 Semantic Kernel Adapter
+
+[`SKChatCompletionAdapter`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.semantic_kernel.html#autogen_ext.models.semantic_kernel.SKChatCompletionAdapter) 允许您将语义内核模型客户端用作 [`ChatCompletionClient`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html#autogen_core.models.ChatCompletionClient) 通过使它们适应所需的接口。
+
+您需要安装相关的 provider extras 才能使用此适配器。
+
+可以安装的 extras 列表：
+
+- `semantic-kernel-anthropic`：安装此 extra 以使用 Anthropic 模型。
+- `semantic-kernel-google`：安装此 extra 以使用 Google Gemini 模型。
+- `semantic-kernel-ollama`：安装此 extra 以使用 Ollama 模型。
+- `semantic-kernel-mistralai`：安装此 extra 以使用 MistralAI 模型。
+- `semantic-kernel-aws`：安装此 extra 以使用 AWS 模型。
+- `semantic-kernel-hugging-face`：安装此 extra 以使用 Hugging Face 模型。
+
+例如，要使用 Anthropic 模型，您需要安装 `semantic-kernel-anthropic`。
+
+```bash
+pip install "autogen-ext[semantic-kernel-anthropic]"
+```
+
+要使用此适配器，您需要创建一个 Semantic Kernel 模型客户端并将其传递给适配器。
+
+例如，要使用 Anthropic 模型：
+
+```python
+import os
+
+from autogen_core.models import UserMessage
+from autogen_ext.models.semantic_kernel import SKChatCompletionAdapter
+from semantic_kernel import Kernel
+from semantic_kernel.connectors.ai.anthropic import AnthropicChatCompletion, AnthropicChatPromptExecutionSettings
+from semantic_kernel.memory.null_memory import NullMemory
+
+sk_client = AnthropicChatCompletion(
+    ai_model_id="claude-3-5-sonnet-20241022",
+    api_key=os.environ["ANTHROPIC_API_KEY"],
+    service_id="my-service-id",  # Optional; for targeting specific services within Semantic Kernel
+)
+settings = AnthropicChatPromptExecutionSettings(
+    temperature=0.2,
+)
+
+anthropic_model_client = SKChatCompletionAdapter(
+    sk_client, kernel=Kernel(memory=NullMemory()), prompt_settings=settings
+)
+
+# Call the model directly.
+model_result = await anthropic_model_client.create(
+    messages=[UserMessage(content="What is the capital of France?", source="User")]
+)
+print(model_result)
+await anthropic_model_client.close()
+```
+
+## 4、消息
+
+在 AutoGen-AgentChat 中， *消息*有助于与其他代理、编排器和应用程序进行通信和信息交换。AgentChat 支持各种消息类型，每种类型都是为特定目的而设计的。
+
+### 4.1 消息类型
+
+概括地说，AgentChat 中的消息可以分为两种类型：**代理-代理消息**和**代理的内部事件和消息**。
+
+#### 4.2 代理-代理消息
+
+AgentChat 支持多种消息类型进行代理到代理通信。它们属于基类 [`BaseChatMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.BaseChatMessage) 的子类。具体子类涵盖基本文本和多模态通信，例如 [`TextMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.TextMessage) 和 [`MultiModalMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.MultiModalMessage)。
+
+例如，以下代码片段演示了如何创建接受字符串内容和字符串源的文本消息：
+
+```python
+from autogen_agentchat.messages import TextMessage
+
+text_message = TextMessage(content="Hello, world!", source="User")
+```
+
+同样，以下代码片段演示了如何创建多模式消息，该消息接受字符串或 [`Image`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html#autogen_core.Image) 对象列表：
+
+```python
+from io import BytesIO
+
+import requests
+from autogen_agentchat.messages import MultiModalMessage
+from autogen_core import Image as AGImage
+from PIL import Image
+
+pil_image = Image.open(BytesIO(requests.get("https://picsum.photos/300/200").content))
+img = AGImage(pil_image)
+multi_modal_message = MultiModalMessage(content=["Can you describe the content of this image?", img], source="User")
+img
+```
+
+![image-20250410083427005](./img/小米虫爬山路-py版-img/image-20250410083427005.png)
+
+我们创建的 [`TextMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.TextMessage) 和 [`MultiModalMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.MultiModalMessage) 可以通过 [`on_messages`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.ChatAgent.on_messages) 方法直接传递给代理，也可以作为任务传递给团队 [`run（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run) 方法。消息也用于代理的响应中。我们将在 [Agents](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/agents.html) 和 [Teams](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html) 中更详细地解释这些内容。
+
+### 4.3 内部消息
+
+AgentChat 还支持`事件`的概念 - 代理内部的消息。这些消息用于传达事件和有关代理本身*内*作的信息，并且属于基类 [`BaseAgentEvent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.BaseAgentEvent) 的子类。
+
+这些示例包括 [`ToolCallRequestEvent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.ToolCallRequestEvent)（指示已发出调用工具的请求）和 [`ToolCallExecutionEvent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.ToolCallExecutionEvent)（包含工具调用的结果）。
+
+通常，事件由代理本身创建，并包含在从 [`on_messages`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.ChatAgent.on_messages) 返回的 [`Response`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response) 的 [`inner_messages`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response.inner_messages) 字段中。如果您正在构建自定义代理，并且具有要与其他实体（例如 UI）通信的事件，则可以将这些事件包含在 [`Response`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response) 的 [`inner_messages`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response.inner_messages) 字段中。我们将在 [自定义代理 ](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/custom-agents.html)中展示这方面的示例。
+
+您可以在 [`messages`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#module-autogen_agentchat.messages) 模块中了解 AgentChat 支持的完整消息集。
+
+### 4.4 自定义消息类型
+
+您可以通过子类来创建自定义消息类型 [`BaseChatMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.BaseChatMessage) 或 [`BaseAgentEvent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.BaseAgentEvent)这允许您定义自己的消息格式和行为，为您的应用程序量身定制。在编写自定义代理时，自定义消息类型非常有用。
+
+## 5、代理
+
+AutoGen AgentChat 提供了一组预设的 Agent，每个 Agent 的响应方式都有所不同。所有代理共享以下属性和方法：
+
+- [`name`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.name)：代理的唯一名称。
+- [`description`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.description)：文本中代理的描述。
+- [`on_messages（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages)：向代理发送一系列消息，这些消息将 [`BaseChatMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.BaseChatMessage) 子类化并获取 [`Response`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response)。 **请务必注意，代理应该是有状态的，并且此方法应使用新消息调用，而不是使用完整历史记录**调用。
+- [`on_messages_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages_stream)：与 [`on_messages（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages) 相同，但返回子类 [`BaseAgentEvent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.BaseAgentEvent) 或 [`BaseChatMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.BaseChatMessage) 的消息迭代器，后跟作为最后一项的 [`Response`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response)。
+- [`on_reset（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_reset) ：将代理重置为其初始状态。
+- [`run（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run) 和 [`run_stream（）：`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run_stream) 分别调用 [`on_messages（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages) 和 [`on_messages_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages_stream) 但提供与 [Teams](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html) 相同的接口的便捷方法。
+
+有关 AgentChat 消息类型的更多信息，请参阅 [`autogen_agentchat.messages`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#module-autogen_agentchat.messages)。
+
+### 5.1 助理代理
+
+[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 是一个内置代理，它使用语言模型并具有使用工具的能力。
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.messages import StructuredMessage, TextMessage
+from autogen_agentchat.ui import Console
+from autogen_core import CancellationToken
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+# Define a tool that searches the web for information.
+async def web_search(query: str) -> str:
+    """Find information on the web"""
+    return "AutoGen is a programming framework for building multi-agent applications."
+
+
+# Create an agent that uses the OpenAI GPT-4o model.
+model_client = OpenAIChatCompletionClient(
+    model="gpt-4o",
+    # api_key="YOUR_API_KEY",
+)
+agent = AssistantAgent(
+    name="assistant",
+    model_client=model_client,
+    tools=[web_search],
+    system_message="Use tools to solve tasks.",
+)
+
+```
+
+### 5.2 获取响应
+
+我们可以使用 [`on_messages（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent.on_messages) 方法来获取代理对给定消息的响应。
+
+```python
+async def assistant_run() -> None:
+    response = await agent.on_messages(
+        [TextMessage(content="Find information on AutoGen", source="user")],
+        cancellation_token=CancellationToken(),
+    )
+    print(response.inner_messages)
+    print(response.chat_message)
+
+
+# Use asyncio.run(assistant_run()) when running in a script.
+await assistant_run()
+```
+
+```
+[ToolCallRequestEvent(source='assistant', models_usage=RequestUsage(prompt_tokens=598, completion_tokens=16), content=[FunctionCall(id='call_9UWYM1CgE3ZbnJcSJavNDB79', arguments='{"query":"AutoGen"}', name='web_search')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='assistant', models_usage=None, content=[FunctionExecutionResult(content='AutoGen is a programming framework for building multi-agent applications.', call_id='call_9UWYM1CgE3ZbnJcSJavNDB79', is_error=False)], type='ToolCallExecutionEvent')]
+source='assistant' models_usage=None content='AutoGen is a programming framework for building multi-agent applications.' type='ToolCallSummaryMessage'
+```
+
+对 [`on_messages（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent.on_messages) 方法的调用将返回一个 [`Response`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response) ，该属性中包含代理的最终响应 [`chat_message`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response.chat_message) ，以及 [`inner_messages`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response.inner_messages) 属性中的内部消息列表，该属性存储了导致最终响应的代理的 **“思考过程”** 。
+
+>需要注意的是，[`on_messages（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent.on_messages) 将更新代理的内部状态 – 它会将消息添加到代理的 历史。因此，您应该使用**新消息调用此方法**。 **不应使用相同的消息或完整的历史记录重复调用此方法。**
+>
+>与 v0.2 AgentChat 不同，这些工具由同一代理在对 [`on_messages（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent.on_messages)的同一调用中直接执行。默认情况下，代理将返回工具调用的结果作为最终响应。
+
+您还可以调用 [`run（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run) 方法，这是一种调用 [`on_messages（） 的`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages)便捷方法。它遵循与 [Teams](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html) 相同的接口，并返回 [`TaskResult`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.TaskResult) 对象。
+
+### 5.3 多模态输入
+
+[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 可以通过将输入作为 [`MultiModalMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.MultiModalMessage) 提供来处理多模式输入。
+
+```python
+from io import BytesIO
+
+import PIL
+import requests
+from autogen_agentchat.messages import MultiModalMessage
+from autogen_core import Image
+
+# Create a multi-modal message with random image and text.
+pil_image = PIL.Image.open(BytesIO(requests.get("https://picsum.photos/300/200").content))
+img = Image(pil_image)
+multi_modal_message = MultiModalMessage(content=["Can you describe the content of this image?", img], source="user")
+img
+```
+
+![image-20250410085104681](./img/小米虫爬山路-py版-img/image-20250410085104681.png)
+
+```python
+# Use asyncio.run(...) when running in a script.
+response = await agent.on_messages([multi_modal_message], CancellationToken())
+print(response.chat_message)
+```
+
+```
+The image depicts a vintage car, likely from the 1930s or 1940s, with a sleek, classic design. The car seems to be customized or well-maintained, as indicated by its shiny exterior and lowered stance. It has a prominent grille and round headlights. There's a license plate on the front with the text "FARMER BOY." The setting appears to be a street with old-style buildings in the background, suggesting a historical or retro theme.
+```
+
+您也可以将 [`MultiModalMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.MultiModalMessage) 用作`任务` input 添加到 [`run（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run) 方法中。
+
+### 5.4 流式处理消息
+
+我们还可以使用 [`on_messages_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent.on_messages_stream) 方法，然后使用 [`Console`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html#autogen_agentchat.ui.Console) 打印显示在控制台中的消息。
+
+```python
+async def assistant_run_stream() -> None:
+    # Option 1: read each message from the stream (as shown in the previous example).
+    # async for message in agent.on_messages_stream(
+    #     [TextMessage(content="Find information on AutoGen", source="user")],
+    #     cancellation_token=CancellationToken(),
+    # ):
+    #     print(message)
+
+    # Option 2: use Console to print all messages as they appear.
+    await Console(
+        agent.on_messages_stream(
+            [TextMessage(content="Find information on AutoGen", source="user")],
+            cancellation_token=CancellationToken(),
+        ),
+        output_stats=True,  # Enable stats printing.
+    )
+
+
+# Use asyncio.run(assistant_run_stream()) when running in a script.
+await assistant_run_stream()
+```
+
+```
+---------- assistant ----------
+[FunctionCall(id='call_fSp5iTGVm2FKw5NIvfECSqNd', arguments='{"query":"AutoGen information"}', name='web_search')]
+[Prompt tokens: 61, Completion tokens: 16]
+---------- assistant ----------
+[FunctionExecutionResult(content='AutoGen is a programming framework for building multi-agent applications.', call_id='call_fSp5iTGVm2FKw5NIvfECSqNd')]
+---------- assistant ----------
+AutoGen is a programming framework designed for building multi-agent applications. If you need more detailed information or specific aspects about AutoGen, feel free to ask!
+[Prompt tokens: 93, Completion tokens: 32]
+---------- Summary ----------
+Number of inner messages: 2
+Total prompt tokens: 154
+Total completion tokens: 48
+Duration: 4.30 seconds
+```
+
+[`on_messages_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent.on_messages_stream) 方法返回一个异步生成器，该生成器生成代理生成的每个内部消息，最后一项是 [`chat_message`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response.chat_message) 属性中的响应消息。
+
+从消息中，您可以观察到助理代理使用 `web_search` 工具收集信息并根据搜索结果做出响应。
+
+您还可以使用 [`run_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run_stream) 获得与 [`on_messages_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages_stream) 相同的流式处理行为。它遵循与 [Teams](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html) 相同的界面。
+
+### 5.5 使用工具
+
+大型语言模型 （LLMs）通常仅限于生成文本或代码响应。但是，许多复杂任务都受益于使用执行特定作（例如从 API 或数据库获取数据）的外部工具的能力。
+
+为了解决此限制，modern LLMs 现在可以接受可用工具架构的列表（工具及其参数的描述）并生成工具调用消息。此功能称为**工具调用**或**函数调用**(Function Call) ，并且正在成为构建基于智能代理的应用程序的流行模式。请参阅 [OpenAI](https://platform.openai.com/docs/guides/function-calling) 的文档 和 [Anthropic](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) 了解有关 中的工具调用的更多信息 LLMs。
+
+在 AgentChat 中，[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 可以使用工具来执行特定任务。`web_search` 工具就是这样一种工具，它允许助理代理在 Web 上搜索信息。自定义工具可以是 Python 函数或 [`BaseTool`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html#autogen_core.tools.BaseTool) 的子类。
+
+默认情况下，当[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 执行工具时，它会在其响应的 [`ToolCallSummaryMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.ToolCallSummaryMessage) 中以字符串形式返回工具的输出。如果您的工具没有以自然语言返回格式正确的字符串，则可以通过在 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 构造函数中设置 `reflect_on_tool_use=True` 参数来添加反射步骤，让模型汇总工具的输出。
+
+#### 5.5.1 内置工具
+
+AutoGen Extension 提供了一组可与 Assistant Agent 一起使用的内置工具。前往 [API 文档 ](https://microsoft.github.io/autogen/stable/reference/index.html)，了解 `autogen_ext.tools` 命名空间下的所有可用工具。例如，您可以找到以下工具：
+
+- [`graphrag`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.graphrag.html#module-autogen_ext.tools.graphrag)：使用 GraphRAG 索引的工具。
+- [`http`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.http.html#module-autogen_ext.tools.http)：用于发出 HTTP 请求的工具。
+- [`langchain`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html#module-autogen_ext.tools.langchain)：用于使用 LangChain 工具的适配器。
+- [`mcp`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html#module-autogen_ext.tools.mcp)：用于使用模型聊天协议 （MCP） 服务器的工具。
+
+#### 5.5.2 功能工具
+
+[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 会自动将 Python 函数转换为 [`FunctionTool`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.tools.html#autogen_core.tools.FunctionTool) 该 API 可以被代理用作工具，并自动生成工具架构 从函数签名和文档字符串中。
+
+`web_search_func` 工具是函数工具的一个示例。架构是自动生成的。
+
+```python
+from autogen_core.tools import FunctionTool
+
+
+# Define a tool using a Python function.
+async def web_search_func(query: str) -> str:
+    """Find information on the web"""
+    return "AutoGen is a programming framework for building multi-agent applications."
+
+
+# This step is automatically performed inside the AssistantAgent if the tool is a Python function.
+web_search_function_tool = FunctionTool(web_search_func, description="Find information on the web")
+# The schema is provided to the model during AssistantAgent's on_messages call.
+web_search_function_tool.schema
+```
+
+```
+{'name': 'web_search_func',
+ 'description': 'Find information on the web',
+ 'parameters': {'type': 'object',
+  'properties': {'query': {'description': 'query',
+    'title': 'Query',
+    'type': 'string'}},
+  'required': ['query'],
+  'additionalProperties': False},
+ 'strict': False}
+```
+
+#### 5.5.3 对上下文协议工具
+
+[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 还可以使用使用 [`mcp_server_tools（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.mcp.html#autogen_ext.tools.mcp.mcp_server_tools) 从模型上下文协议 （MCP） 服务器提供的工具。
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+from autogen_ext.tools.mcp import StdioServerParams, mcp_server_tools
+
+# Get the fetch tool from mcp-server-fetch.
+fetch_mcp_server = StdioServerParams(command="uvx", args=["mcp-server-fetch"])
+tools = await mcp_server_tools(fetch_mcp_server)
+
+# Create an agent that can use the fetch tool.
+model_client = OpenAIChatCompletionClient(model="gpt-4o")
+agent = AssistantAgent(name="fetcher", model_client=model_client, tools=tools, reflect_on_tool_use=True)  # type: ignore
+
+# Let the agent fetch the content of a URL and summarize it.
+result = await agent.run(task="Summarize the content of https://en.wikipedia.org/wiki/Seattle")
+assert isinstance(result.messages[-1], TextMessage)
+print(result.messages[-1].content)
+
+# Close the connection to the model client.
+await model_client.close()
+```
+
+```
+Seattle, located in Washington state, is the most populous city in the state and a major city in the Pacific Northwest region of the United States. It's known for its vibrant cultural scene, significant economic presence, and rich history. Here are some key points about Seattle from the Wikipedia page:
+
+1. **History and Geography**: Seattle is situated between Puget Sound and Lake Washington, with the Cascade Range to the east and the Olympic Mountains to the west. Its history is deeply rooted in Native American heritage and its development was accelerated with the arrival of settlers in the 19th century. The city was officially incorporated in 1869.
+
+2. **Economy**: Seattle is a major economic hub with a diverse economy anchored by sectors like aerospace, technology, and retail. It's home to influential companies such as Amazon and Starbucks, and has a significant impact on the tech industry due to companies like Microsoft and other technology enterprises in the surrounding area.
+
+3. **Cultural Significance**: Known for its music scene, Seattle was the birthplace of grunge music in the early 1990s. It also boasts significant attractions like the Space Needle, Pike Place Market, and the Seattle Art Museum. 
+
+4. **Education and Innovation**: The city hosts important educational institutions, with the University of Washington being a leading research university. Seattle is recognized for fostering innovation and is a leader in environmental sustainability efforts.
+
+5. **Demographics and Diversity**: Seattle is noted for its diverse population, reflected in its rich cultural tapestry. It has seen a significant increase in population, leading to urban development and changes in its social landscape.
+
+These points highlight Seattle as a dynamic city with a significant cultural, economic, and educational influence within the United States and beyond.
+```
+
+#### 5.5.4 Langchain 工具
+
+您还可以通过将 Langchain 库中的工具包装在 [`LangChainToolAdapter`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.tools.langchain.html#autogen_ext.tools.langchain.LangChainToolAdapter) 中来使用它们。
+
+```python
+import pandas as pd
+from autogen_ext.tools.langchain import LangChainToolAdapter
+from langchain_experimental.tools.python.tool import PythonAstREPLTool
+
+df = pd.read_csv("https://raw.githubusercontent.com/pandas-dev/pandas/main/doc/data/titanic.csv")
+tool = LangChainToolAdapter(PythonAstREPLTool(locals={"df": df}))
+model_client = OpenAIChatCompletionClient(model="gpt-4o")
+agent = AssistantAgent(
+    "assistant", 
+    tools=[tool], 
+    model_client=model_client, 
+    system_message="Use the `df` variable to access the dataset."
+)
+await Console(
+    agent.on_messages_stream(
+        [TextMessage(content="What's the average age of the passengers?", source="user")], CancellationToken()
+    ),
+    output_stats=True,
+)
+
+await model_client.close()
+```
+
+```
+---------- assistant ----------
+[FunctionCall(id='call_BEYRkf53nBS1G2uG60wHP0zf', arguments='{"query":"df[\'Age\'].mean()"}', name='python_repl_ast')]
+[Prompt tokens: 111, Completion tokens: 22]
+---------- assistant ----------
+[FunctionExecutionResult(content='29.69911764705882', call_id='call_BEYRkf53nBS1G2uG60wHP0zf')]
+---------- assistant ----------
+29.69911764705882
+---------- Summary ----------
+Number of inner messages: 2
+Total prompt tokens: 111
+Total completion tokens: 22
+Duration: 0.62 seconds
+```
+
+```
+Response(chat_message=ToolCallSummaryMessage(source='assistant', models_usage=None, content='29.69911764705882', type='ToolCallSummaryMessage'), inner_messages=[ToolCallRequestEvent(source='assistant', models_usage=RequestUsage(prompt_tokens=111, completion_tokens=22), content=[FunctionCall(id='call_BEYRkf53nBS1G2uG60wHP0zf', arguments='{"query":"df[\'Age\'].mean()"}', name='python_repl_ast')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='assistant', models_usage=None, content=[FunctionExecutionResult(content='29.69911764705882', call_id='call_BEYRkf53nBS1G2uG60wHP0zf')], type='ToolCallExecutionEvent')])
+```
+
+#### 5.5.5 并行工具调用
+
+某些模型支持并行工具调用，这对于需要同时调用多个工具的任务非常有用。默认情况下，如果模型客户端产生多个工具调用，则[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 将并行调用这些工具。
+
+当工具具有可能相互干扰的副作用时，或者当代理行为需要在不同模型之间保持一致时，您可能希望禁用并行工具调用。这应该在模型客户端级别完成。
+
+对于 [`OpenAIChatCompletionClient`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html#autogen_ext.models.openai.OpenAIChatCompletionClient) 和 [`AzureOpenAIChatCompletionClient`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.models.openai.html#autogen_ext.models.openai.AzureOpenAIChatCompletionClient)，设置 `parallel_tool_calls=False` 以禁用并行工具调用。
+
+```python
+model_client_no_parallel_tool_call = OpenAIChatCompletionClient(
+    model="gpt-4o",
+    parallel_tool_calls=False,  # type: ignore
+)
+agent_no_parallel_tool_call = AssistantAgent(
+    name="assistant",
+    model_client=model_client_no_parallel_tool_call,
+    tools=[web_search],
+    system_message="Use tools to solve tasks.",
+)
+```
+
+### 5.6 在循环中运行代理
+
+[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 一次执行一个步骤：一个模型调用，然后是一个工具调用（或并行工具调用），然后是一个可选的反射。
+
+要在循环中运行它，例如，运行它直到它停止产生工具调用，请参考 [Single-Agent Team](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html#single-agent-team)。
+
+### 5.7 结构化输出
+
+**结构化输出:允许模型返回具有应用程序提供的预定义架构的结构化 JSON 文本。**
+
+与 JSON 模式不同，该模式可以作为 [Pydantic BaseModel](https://docs.pydantic.dev/latest/concepts/models/) 提供类，该类也可用于验证输出。
+
+在 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 构造函数的 `output_content_type` 参数中指定基模型类后，代理将使用 [`StructuredMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.StructuredMessage) 进行响应 其 `content`'s type 是 base model 类的类型。
+
+这样，您可以将代理的响应直接集成到您的应用程序中，并将模型的输出用作结构化对象。
+
+> 设置 `output_content_type` 后，默认情况下，它要求代理反映工具使用情况，并根据工具调用结果返回结构化输出消息。您可以通过显式设置 `reflect_on_tool_use=False` 来禁用此行为。
+
+结构化输出对于将 Chain-of-Thought 推理合并到代理的响应中也很有用。有关如何将结构化输出与 Assistant 代理一起使用，请参阅以下示例。
+
+```python
+from typing import Literal
+
+from pydantic import BaseModel
+
+
+# The response format for the agent as a Pydantic base model.
+class AgentResponse(BaseModel):
+    thoughts: str
+    response: Literal["happy", "sad", "neutral"]
+
+
+# Create an agent that uses the OpenAI GPT-4o model.
+model_client = OpenAIChatCompletionClient(model="gpt-4o")
+agent = AssistantAgent(
+    "assistant",
+    model_client=model_client,
+    system_message="Categorize the input as happy, sad, or neutral following the JSON format.",
+    # Define the output content type of the agent.
+    output_content_type=AgentResponse,
+)
+
+result = await Console(agent.run_stream(task="I am happy."))
+
+# Check the last message in the result, validate its type, and print the thoughts and response.
+assert isinstance(result.messages[-1], StructuredMessage)
+assert isinstance(result.messages[-1].content, AgentResponse)
+print("Thought: ", result.messages[-1].content.thoughts)
+print("Response: ", result.messages[-1].content.response)
+await model_client.close()
+```
+
+```
+---------- user ----------
+I am happy.
+---------- assistant ----------
+{
+  "thoughts": "The user explicitly states they are happy.",
+  "response": "happy"
+}
+Thought:  The user explicitly states they are happy.
+Response:  happy
+```
+
+### 5.8 流式处理令牌
+
+您可以通过设置 `model_client_stream=True` 来流式传输模型客户端生成的令牌。这将导致代理在 [`on_messages_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages_stream) 和 [`run_stream（） 中`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run_stream)生成[`ModelClientStreamingChunkEvent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.ModelClientStreamingChunkEvent)消息。
+
+底层模型 API 必须支持流式处理令牌才能正常工作。请与您的模型提供商联系，了解是否支持此功能。
+
+```python
+model_client = OpenAIChatCompletionClient(model="gpt-4o")
+
+streaming_assistant = AssistantAgent(
+    name="assistant",
+    model_client=model_client,
+    system_message="You are a helpful assistant.",
+    model_client_stream=True,  # Enable streaming tokens.
+)
+
+# Use an async function and asyncio.run() in a script.
+async for message in streaming_assistant.on_messages_stream(  # type: ignore
+    [TextMessage(content="Name two cities in South America", source="user")],
+    cancellation_token=CancellationToken(),
+):
+    print(message)
+```
+
+```
+source='assistant' models_usage=None content='Two' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' cities' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' in' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' South' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' America' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' are' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' Buenos' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' Aires' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' in' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' Argentina' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' and' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' São' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' Paulo' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' in' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' Brazil' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content='.' type='ModelClientStreamingChunkEvent'
+Response(chat_message=TextMessage(source='assistant', models_usage=RequestUsage(prompt_tokens=0, completion_tokens=0), content='Two cities in South America are Buenos Aires in Argentina and São Paulo in Brazil.', type='TextMessage'), inner_messages=[])
+```
+
+您可以在上面的输出中看到流数据块。块由模型客户端生成，并在收到时由代理生成。最终响应，即所有块的串联，在最后一个块之后生成。
+
+同样，[`run_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run_stream) 也会产生相同的流式 chunk，并在最后一个 chunk 之后紧跟着一条完整的文本消息。
+
+```python
+async for message in streaming_assistant.run_stream(task="Name two cities in North America."):  # type: ignore
+    print(message)
+```
+
+```
+source='user' models_usage=None content='Name two cities in North America.' type='TextMessage'
+source='assistant' models_usage=None content='Two' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' cities' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' in' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' North' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' America' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' are' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' New' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' York' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' City' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' in' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' the' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' United' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' States' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' and' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' Toronto' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' in' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content=' Canada' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=None content='.' type='ModelClientStreamingChunkEvent'
+source='assistant' models_usage=RequestUsage(prompt_tokens=0, completion_tokens=0) content='Two cities in North America are New York City in the United States and Toronto in Canada.' type='TextMessage'
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Name two cities in North America.', type='TextMessage'), TextMessage(source='assistant', models_usage=RequestUsage(prompt_tokens=0, completion_tokens=0), content='Two cities in North America are New York City in the United States and Toronto in Canada.', type='TextMessage')], stop_reason=None)
+```
+
+### 5.9 使用模型上下文
+
+[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 具有 `model_context` 参数，该参数可用于传入 [`ChatCompletionContext`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html#autogen_core.model_context.ChatCompletionContext) 对象。这允许代理使用不同的模型上下文，例如 [`BufferedChatCompletionContext`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html#autogen_core.model_context.BufferedChatCompletionContext) 来限制发送到模型的上下文。
+
+默认情况下，[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 使用[`UnboundedChatCompletionContext`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html#autogen_core.model_context.UnboundedChatCompletionContext)它将完整的对话历史记录发送到模型。限制上下文 到最后 `n` 条消息，你可以使用 [`BufferedChatCompletionContext`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html#autogen_core.model_context.BufferedChatCompletionContext)。 要通过令牌计数限制上下文，您可以使用 [`TokenLimitedChatCompletionContext`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.model_context.html#autogen_core.model_context.TokenLimitedChatCompletionContext)。
+
+```python
+from autogen_core.model_context import BufferedChatCompletionContext
+
+# Create an agent that uses only the last 5 messages in the context to generate responses.
+agent = AssistantAgent(
+    name="assistant",
+    model_client=model_client,
+    tools=[web_search],
+    system_message="Use tools to solve tasks.",
+    model_context=BufferedChatCompletionContext(buffer_size=5),  # Only use the last 5 messages in the context.
+)
+```
+
+### 5.10 其他预设代理
+
+可以使用以下预设代理：
+
+- [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent)：接受用户输入的代理将其作为响应返回。
+- [`CodeExecutorAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.CodeExecutorAgent)：可以执行代码的代理。
+- [`OpenAIAssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.openai.html#autogen_ext.agents.openai.OpenAIAssistantAgent)：由 OpenAI Assistant 支持的代理，能够使用自定义工具。
+- [`MultimodalWebSurfer`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.web_surfer.html#autogen_ext.agents.web_surfer.MultimodalWebSurfer)：一个多模式代理，可以搜索 Web 并访问网页以获取信息。
+- [`FileSurfer`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.file_surfer.html#autogen_ext.agents.file_surfer.FileSurfer)：可以搜索和浏览本地文件以获取信息的代理。
+- [`VideoSurfer`](https://microsoft.github.io/autogen/stable/reference/python/autogen_ext.agents.video_surfer.html#autogen_ext.agents.video_surfer.VideoSurfer)：可以观看视频以获取信息的代理。
+
+## 6、团队
+
+在本节中，您将学习如何使用 AutoGen 创建***多代理团队*** （或简称团队）。团队是一组为实现共同目标而共同努力的代理。
+
+我们首先将向您展示如何创建和运行团队。然后，我们将解释如何观察团队的行为，这对于调试和理解团队的绩效至关重要，以及控制团队行为的常见作。
+
+AgentChat 支持多种团队预设：
+
+- [`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat)：一个团队，以循环方式与参与者轮流进行群聊（在本页中介绍）。[ 教程](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html#creating-a-team)
+- [`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat)：在每条消息后使用 ChatCompletion 模型选择下一位说话人的团队。[ 教程](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/selector-group-chat.html)
+- [`MagenticOneGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.MagenticOneGroupChat)：一个通用的多代理系统，用于解决跨各种域的开放式 Web 和基于文件的任务。[ 教程](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/magentic-one.html)
+
+>**何时应使用团队？**
+>
+>团队用于需要协作和各种专业知识的复杂任务。但是，与单个代理相比，它们也需要更多的脚手架来纵。虽然 AutoGen 简化了与团队合作的流程，但从单个代理开始以完成更简单的任务，当单个代理证明不够用时，过渡到多代理团队。在转向基于团队的方法之前，请确保您已使用适当的工具和说明优化了您的单个代理。
+
+### 6.1 创建团队
+
+[`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat) 是一种简单而有效的团队配置，其中所有代理共享相同的上下文，并**轮流以循环方式响应**。每个代理在轮到它时，都会向所有其他代理广播其响应，确保整个团队保持一致的上下文。
+
+首先，我们将创建一个具有两个 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 和一个 [`TextMentionTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TextMentionTermination) 条件的团队，当在代理的响应中检测到特定单词时，该条件将停止团队。
+
+双代理团队实施 **Reflection Pattern**，这是一种**多代理设计模式**，其中批评代理评估主要代理的响应。了解有关使用 [Core API](https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/reflection.html) 的反射模式的更多信息。
+
+```python
+import asyncio
+
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.base import TaskResult
+from autogen_agentchat.conditions import ExternalTermination, TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_core import CancellationToken
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+# Create an OpenAI model client.
+model_client = OpenAIChatCompletionClient(
+    model="gpt-4o-2024-08-06",
+    # api_key="sk-...", # Optional if you have an OPENAI_API_KEY env variable set.
+)
+
+# Create the primary agent.
+primary_agent = AssistantAgent(
+    "primary",
+    model_client=model_client,
+    system_message="You are a helpful AI assistant.",
+)
+
+# Create the critic agent.
+critic_agent = AssistantAgent(
+    "critic",
+    model_client=model_client,
+    system_message="Provide constructive feedback. Respond with 'APPROVE' to when your feedbacks are addressed.",
+)
+
+# Define a termination condition that stops the task if the critic approves.
+text_termination = TextMentionTermination("APPROVE")
+
+# Create a team with the primary and critic agents.
+team = RoundRobinGroupChat([primary_agent, critic_agent], termination_condition=text_termination)
+```
+
+### 6.2 运行团队
+
+让我们调用 [`run（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run) 方法以启动具有任务的团队。
+
+```python
+# Use `asyncio.run(...)` when running in a script.
+result = await team.run(task="Write a short poem about the fall season.")
+print(result)
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Write a short poem about the fall season.', type='TextMessage'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=28, completion_tokens=109), content="Leaves of amber, gold, and rust,  \nDance upon the gentle gust.  \nCrisp air whispers tales of old,  \nAs daylight wanes, the night grows bold.  \n\nPumpkin patch and apple treats,  \nLaughter in the street repeats.  \nSweaters warm and fires aglow,  \nIt's time for nature's vibrant show.  \n\nThe harvest moon ascends the sky,  \nWhile geese in formation start to fly.  \nAutumn speaks in colors bright,  \nA fleeting grace, a pure delight.  ", type='TextMessage'), TextMessage(source='critic', models_usage=RequestUsage(prompt_tokens=154, completion_tokens=200), content='Your poem beautifully captures the essence of the fall season with vivid imagery and a rhythmic flow. The use of descriptive language like "amber, gold, and rust" effectively paints a visual picture of the changing leaves. Phrases such as "crisp air whispers tales of old" and "daylight wanes, the night grows bold" add a poetic touch by incorporating seasonal characteristics.\n\nHowever, you might consider exploring other sensory details to deepen the reader\'s immersion. For example, mentioning the sound of crunching leaves underfoot or the scent of cinnamon and spices in the air could enhance the sensory experience.\n\nAdditionally, while the mention of "pumpkin patch and apple treats" is evocative of fall, expanding on these elements or including more personal experiences or emotions associated with the season might make the poem more relatable and engaging.\n\nOverall, you\'ve crafted a lovely poem that celebrates the beauty and traditions of autumn with grace and warmth. A few tweaks to include multisensory details could elevate it even further.', type='TextMessage'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=347, completion_tokens=178), content="Thank you for the thoughtful feedback. Here's a revised version of the poem with additional sensory details:\n\nLeaves of amber, gold, and rust,  \nDance upon the gentle gust.  \nCrisp air whispers tales of old,  \nAs daylight wanes, the night grows bold.  \n\nCrunch beneath the wandering feet,  \nA melody of autumn's beat.  \nCinnamon and spices blend,  \nIn every breeze, nostalgia sends.  \n\nPumpkin patch and apple treats,  \nLaughter in the street repeats.  \nSweaters warm and fires aglow,  \nIt's time for nature's vibrant show.  \n\nThe harvest moon ascends the sky,  \nWhile geese in formation start to fly.  \nAutumn speaks in colors bright,  \nA fleeting grace, a pure delight.  \n\nI hope this version resonates even more with the spirit of fall. Thank you again for your suggestions!", type='TextMessage'), TextMessage(source='critic', models_usage=RequestUsage(prompt_tokens=542, completion_tokens=3), content='APPROVE', type='TextMessage')], stop_reason="Text 'APPROVE' mentioned")
+```
+
+该团队将运行代理，直到满足终止条件。在这种情况下，团队按照循环顺序运行代理，直到在代理的响应中检测到“APPROVE”一词时满足终止条件。当团队停止时，它将返回一个 [`TaskResult`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.TaskResult) 对象，其中包含团队中的代理生成的所有消息。
+
+### 6.3 观察团队
+
+与代理的 [`on_messages_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages_stream) 方法类似，您可以通过调用 [`run_stream（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run_stream) 方法在团队运行时流式传输团队的消息。此方法返回一个生成器，该生成器在生成消息时生成团队中的代理生成的消息，最后一项是 [`TaskResult`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.TaskResult) 对象。
+
+```python
+# When running inside a script, use a async main function and call it from `asyncio.run(...)`.
+await team.reset()  # Reset the team for a new task.
+async for message in team.run_stream(task="Write a short poem about the fall season."):  # type: ignore
+    if isinstance(message, TaskResult):
+        print("Stop Reason:", message.stop_reason)
+    else:
+        print(message)
+```
+
+```
+source='user' models_usage=None content='Write a short poem about the fall season.' type='TextMessage'
+source='primary' models_usage=RequestUsage(prompt_tokens=28, completion_tokens=105) content="Leaves descend in golden dance,  \nWhispering secrets as they fall,  \nCrisp air brings a gentle trance,  \nHeralding Autumn's call.  \n\nPumpkins glow with orange light,  \nFields wear a cloak of amber hue,  \nDays retreat to longer night,  \nSkies shift to deeper blue.  \n\nWinds carry scents of earth and pine,  \nSweaters wrap us, warm and tight,  \nNature's canvas, bold design,  \nIn Fall's embrace, we find delight.  " type='TextMessage'
+source='critic' models_usage=RequestUsage(prompt_tokens=150, completion_tokens=226) content='Your poem beautifully captures the essence of fall with vivid imagery and a soothing rhythm. The imagery of leaves descending, pumpkins glowing, and fields cloaked in amber hues effectively paints a picture of the autumn season. The use of contrasting elements like "Days retreat to longer night" and "Sweaters wrap us, warm and tight" provides a nice balance between the cold and warmth associated with the season. Additionally, the personification of autumn through phrases like "Autumn\'s call" and "Nature\'s canvas, bold design" adds depth to the depiction of fall.\n\nTo enhance the poem further, you might consider focusing on the soundscape of fall, such as the rustling of leaves or the distant call of migrating birds, to engage readers\' auditory senses. Also, varying the line lengths slightly could add a dynamic flow to the reading experience.\n\nOverall, your poem is engaging and effectively encapsulates the beauty and transition of fall. With a few adjustments to explore other sensory details, it could become even more immersive. \n\nIf you incorporate some of these suggestions or find another way to expand the sensory experience, please share your update!' type='TextMessage'
+source='primary' models_usage=RequestUsage(prompt_tokens=369, completion_tokens=143) content="Thank you for the thoughtful critique and suggestions. Here's a revised version of the poem with added attention to auditory senses and varied line lengths:\n\nLeaves descend in golden dance,  \nWhisper secrets in their fall,  \nBreezes hum a gentle trance,  \nHeralding Autumn's call.  \n\nPumpkins glow with orange light,  \nAmber fields beneath wide skies,  \nDays retreat to longer night,  \nChill winds and distant cries.  \n\nRustling whispers of the trees,  \nSweaters wrap us, snug and tight,  \nNature's canvas, bold and free,  \nIn Fall's embrace, pure delight.  \n\nI appreciate your feedback and hope this version better captures the sensory richness of the season!" type='TextMessage'
+source='critic' models_usage=RequestUsage(prompt_tokens=529, completion_tokens=160) content='Your revised poem is a beautiful enhancement of the original. By incorporating auditory elements such as "Breezes hum" and "Rustling whispers of the trees," you\'ve added an engaging soundscape that draws the reader deeper into the experience of fall. The varied line lengths work well to create a more dynamic rhythm throughout the poem, adding interest and variety to each stanza.\n\nThe succinct, yet vivid, lines of "Chill winds and distant cries" wonderfully evoke the atmosphere of the season, adding a touch of mystery and depth. The final stanza wraps up the poem nicely, celebrating the complete sensory embrace of fall with lines like "Nature\'s canvas, bold and free."\n\nYou\'ve successfully infused more sensory richness into the poem, enhancing its overall emotional and atmospheric impact. Great job on the revisions!\n\nAPPROVE' type='TextMessage'
+Stop Reason: Text 'APPROVE' mentioned
+```
+
+如上面的示例所示，您可以通过检查 [`stop_reason`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.TaskResult.stop_reason) 属性来确定团队停止的原因。
+
+[`Console（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.ui.html#autogen_agentchat.ui.Console) 方法提供了一种将消息打印到控制台的便捷方法，格式正确。
+
+```python
+await team.reset()  # Reset the team for a new task.
+await Console(team.run_stream(task="Write a short poem about the fall season."))  # Stream the messages to the console.
+```
+
+```
+---------- user ----------
+Write a short poem about the fall season.
+---------- primary ----------
+Golden leaves in crisp air dance,  
+Whispering tales as they prance.  
+Amber hues paint the ground,  
+Nature's symphony all around.  
+
+Sweaters hug with tender grace,  
+While pumpkins smile, a warm embrace.  
+Chill winds hum through towering trees,  
+A vibrant tapestry in the breeze.  
+
+Harvest moons in twilight glow,  
+Casting magic on fields below.  
+Fall's embrace, a gentle call,  
+To savor beauty before snowfalls.  
+[Prompt tokens: 28, Completion tokens: 99]
+---------- critic ----------
+Your poem beautifully captures the essence of the fall season, creating a vivid and cozy atmosphere. The imagery of golden leaves and amber hues paints a picturesque scene that many can easily relate to. I particularly appreciate the personification of pumpkins and the gentle embrace of sweaters, which adds warmth to your verses. 
+
+To enhance the poem further, you might consider adding more sensory details to make the reader feel even more immersed in the experience. For example, including specific sounds, scents, or textures could deepen the connection to autumn's ambiance. Additionally, you could explore the emotional transitions as the season prepares for winter to provide a reflective element to the piece.
+
+Overall, it's a lovely and evocative depiction of fall, evoking feelings of comfort and appreciation for nature's changing beauty. Great work!
+[Prompt tokens: 144, Completion tokens: 157]
+---------- primary ----------
+Thank you for your thoughtful feedback! I'm glad you enjoyed the imagery and warmth in the poem. To enhance the sensory experience and emotional depth, here's a revised version incorporating your suggestions:
+
+---
+
+Golden leaves in crisp air dance,  
+Whispering tales as they prance.  
+Amber hues paint the crunchy ground,  
+Nature's symphony all around.  
+
+Sweaters hug with tender grace,  
+While pumpkins grin, a warm embrace.  
+Chill winds hum through towering trees,  
+Crackling fires warm the breeze.  
+
+Apples in the orchard's glow,  
+Sweet cider scents that overflow.  
+Crunch of paths beneath our feet,  
+Cinnamon spice and toasty heat.  
+
+Harvest moons in twilight's glow,  
+Casting magic on fields below.  
+Fall's embrace, a gentle call,  
+Reflects on life's inevitable thaw.  
+
+--- 
+
+I hope this version enhances the sensory and emotional elements of the season. Thank you again for your insights!
+[Prompt tokens: 294, Completion tokens: 195]
+---------- critic ----------
+APPROVE
+[Prompt tokens: 506, Completion tokens: 4]
+---------- Summary ----------
+Number of messages: 5
+Finish reason: Text 'APPROVE' mentioned
+Total prompt tokens: 972
+Total completion tokens: 455
+Duration: 11.78 seconds
+
+```
+
+### 6.4 重置团队
+
+您可以通过调用 [`reset（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.reset) 方法来重置团队。此方法将清除团队的状态，包括所有代理。它将调用每个代理的 [`on_reset（）`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.ChatAgent.on_reset) 方法来清除代理的状态。
+
+```python
+await team.reset()  # Reset the team for the next run.
+```
+
+如果下一个任务与上一个任务无关，则重置团队通常是一个好主意。但是，如果下一个任务与上一个任务相关，则无需重置，而是可以恢复团队。
+
+### 6.5 停止团队
+
+除了 [`TextMentionTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TextMentionTermination) 等自动终止条件 根据团队的内部状态停止团队，您也可以停止团队 使用 [`ExternalTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.ExternalTermination)。
+
+调用 [`set()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.ExternalTermination.set) 在 [`ExternalTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.ExternalTermination) 上，当当前代理的回合结束后将停止团队。因此，团队可能不会立即停止。这允许当前代理完成其回合并向团队广播最终消息，以保持团队状态的一致性。
+
+```python
+# Create a new team with an external termination condition.
+external_termination = ExternalTermination()
+team = RoundRobinGroupChat(
+    [primary_agent, critic_agent],
+    termination_condition=external_termination | text_termination,  # Use the bitwise OR operator to combine conditions.
+)
+
+# Run the team in a background task.
+run = asyncio.create_task(Console(team.run_stream(task="Write a short poem about the fall season.")))
+
+# Wait for some time.
+await asyncio.sleep(0.1)
+
+# Stop the team.
+external_termination.set()
+
+# Wait for the team to finish.
+await run
+```
+
+```
+---------- user ----------
+Write a short poem about the fall season.
+---------- primary ----------
+Leaves of amber, gold, and red,  
+Gently drifting from trees overhead.  
+Whispers of wind through the crisp, cool air,  
+Nature's canvas painted with care.  
+
+Harvest moons and evenings that chill,  
+Fields of plenty on every hill.  
+Sweaters wrapped tight as twilight nears,  
+Fall's charming embrace, as warm as it appears.  
+
+Pumpkins aglow with autumn's light,  
+Harvest feasts and stars so bright.  
+In every leaf and breeze that calls,  
+We find the magic of glorious fall.  
+[Prompt tokens: 28, Completion tokens: 114]
+---------- Summary ----------
+Number of messages: 2
+Finish reason: External termination requested
+Total prompt tokens: 28
+Total completion tokens: 114
+Duration: 1.71 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Write a short poem about the fall season.', type='TextMessage'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=28, completion_tokens=114), content="Leaves of amber, gold, and red,  \nGently drifting from trees overhead.  \nWhispers of wind through the crisp, cool air,  \nNature's canvas painted with care.  \n\nHarvest moons and evenings that chill,  \nFields of plenty on every hill.  \nSweaters wrapped tight as twilight nears,  \nFall's charming embrace, as warm as it appears.  \n\nPumpkins aglow with autumn's light,  \nHarvest feasts and stars so bright.  \nIn every leaf and breeze that calls,  \nWe find the magic of glorious fall.  ", type='TextMessage')], stop_reason='External termination requested')
+```
+
+从上面的输出中，您可以看到团队停止了，因为满足了外部终止条件，但是说话的代理能够在团队停止之前完成其回合。
+
+### 6.6 恢复团队
+
+Teams 是有状态的，会在每次运行后保持对话历史和上下文，除非你重置团队。
+
+您可以通过再次调用 [`run()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run) 或 [`run_stream()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run_stream) 方法来恢复团队，以便从上次停止的地方继续。 而不创建新的任务[`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat) 将从轮询顺序中的下一个代理继续。
+
+```python
+await Console(team.run_stream())  # Resume the team to continue the last task.
+```
+
+```
+---------- critic ----------
+This poem beautifully captures the essence of the fall season with vivid imagery and a soothing rhythm. The descriptions of the changing leaves, cool air, and various autumn traditions make it easy for readers to envision and feel the charm of fall. Here are a few suggestions to enhance its impact:
+
+1. **Structure Variation**: Consider breaking some lines with a hyphen or ellipsis for dramatic effect or emphasis. For instance, “Sweaters wrapped tight as twilight nears— / Fall’s charming embrace, as warm as it appears."
+
+2. **Sensory Details**: While the poem already evokes visual and tactile senses, incorporating other senses such as sound or smell could deepen the immersion. For example, include the scent of wood smoke or the crunch of leaves underfoot.
+
+3. **Metaphorical Language**: Adding metaphors or similes can further enrich the imagery. For example, you might compare the leaves falling to a golden rain or the chill in the air to a gentle whisper.
+
+Overall, it’s a lovely depiction of fall. These suggestions are minor tweaks that might elevate the reader's experience even further. Nice work!
+
+Let me know if these feedbacks are addressed.
+[Prompt tokens: 159, Completion tokens: 237]
+---------- primary ----------
+Thank you for the thoughtful feedback! Here’s a revised version, incorporating your suggestions:  
+
+Leaves of amber, gold—drifting like dreams,  
+A golden rain from trees’ canopies.  
+Whispers of wind—a gentle breath,  
+Nature’s scented tapestry embracing earth.  
+
+Harvest moons rise as evenings chill,  
+Fields of plenty paint every hill.  
+Sweaters wrapped tight as twilight nears—  
+Fall’s embrace, warm as whispered years.  
+
+Pumpkins aglow with autumn’s light,  
+Crackling leaves underfoot in flight.  
+In every leaf and breeze that calls,  
+We find the magic of glorious fall.  
+
+I hope these changes enhance the imagery and sensory experience. Thank you again for your feedback!
+[Prompt tokens: 389, Completion tokens: 150]
+---------- critic ----------
+Your revisions have made the poem even more evocative and immersive. The use of sensory details, such as "whispers of wind" and "crackling leaves," beautifully enriches the poem, engaging multiple senses. The metaphorical language, like "a golden rain from trees’ canopies" and "Fall’s embrace, warm as whispered years," adds depth and enhances the emotional warmth of the poem. The structural variation with the inclusion of dashes effectively adds emphasis and flow. 
+
+Overall, these changes bring greater vibrancy and life to the poem, allowing readers to truly experience the wonders of fall. Excellent work on the revisions!
+
+APPROVE
+[Prompt tokens: 556, Completion tokens: 132]
+---------- Summary ----------
+Number of messages: 3
+Finish reason: Text 'APPROVE' mentioned
+Total prompt tokens: 1104
+Total completion tokens: 519
+Duration: 9.79 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='critic', models_usage=RequestUsage(prompt_tokens=159, completion_tokens=237), content='This poem beautifully captures the essence of the fall season with vivid imagery and a soothing rhythm. The descriptions of the changing leaves, cool air, and various autumn traditions make it easy for readers to envision and feel the charm of fall. Here are a few suggestions to enhance its impact:\n\n1. **Structure Variation**: Consider breaking some lines with a hyphen or ellipsis for dramatic effect or emphasis. For instance, “Sweaters wrapped tight as twilight nears— / Fall’s charming embrace, as warm as it appears."\n\n2. **Sensory Details**: While the poem already evokes visual and tactile senses, incorporating other senses such as sound or smell could deepen the immersion. For example, include the scent of wood smoke or the crunch of leaves underfoot.\n\n3. **Metaphorical Language**: Adding metaphors or similes can further enrich the imagery. For example, you might compare the leaves falling to a golden rain or the chill in the air to a gentle whisper.\n\nOverall, it’s a lovely depiction of fall. These suggestions are minor tweaks that might elevate the reader\'s experience even further. Nice work!\n\nLet me know if these feedbacks are addressed.', type='TextMessage'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=389, completion_tokens=150), content='Thank you for the thoughtful feedback! Here’s a revised version, incorporating your suggestions:  \n\nLeaves of amber, gold—drifting like dreams,  \nA golden rain from trees’ canopies.  \nWhispers of wind—a gentle breath,  \nNature’s scented tapestry embracing earth.  \n\nHarvest moons rise as evenings chill,  \nFields of plenty paint every hill.  \nSweaters wrapped tight as twilight nears—  \nFall’s embrace, warm as whispered years.  \n\nPumpkins aglow with autumn’s light,  \nCrackling leaves underfoot in flight.  \nIn every leaf and breeze that calls,  \nWe find the magic of glorious fall.  \n\nI hope these changes enhance the imagery and sensory experience. Thank you again for your feedback!', type='TextMessage'), TextMessage(source='critic', models_usage=RequestUsage(prompt_tokens=556, completion_tokens=132), content='Your revisions have made the poem even more evocative and immersive. The use of sensory details, such as "whispers of wind" and "crackling leaves," beautifully enriches the poem, engaging multiple senses. The metaphorical language, like "a golden rain from trees’ canopies" and "Fall’s embrace, warm as whispered years," adds depth and enhances the emotional warmth of the poem. The structural variation with the inclusion of dashes effectively adds emphasis and flow. \n\nOverall, these changes bring greater vibrancy and life to the poem, allowing readers to truly experience the wonders of fall. Excellent work on the revisions!\n\nAPPROVE', type='TextMessage')], stop_reason="Text 'APPROVE' mentioned")
+```
+
+您可以在上面的输出中看到团队从上次停止的地方恢复，第一条消息来自团队停止前最后发言的代理之后的下一个代理。
+
+让我们在保持前一项任务上下文的情况下，重新开始团队并分配一项新任务。
+
+```python
+# The new task is to translate the same poem to Chinese Tang-style poetry.
+await Console(team.run_stream(task="将这首诗用中文唐诗风格写一遍。"))
+```
+
+```
+---------- user ----------
+将这首诗用中文唐诗风格写一遍。
+---------- primary ----------
+朔风轻拂叶飘金，  
+枝上斜阳染秋林。  
+满山丰收人欢喜，  
+月明归途衣渐紧。  
+
+南瓜影映灯火中，  
+落叶沙沙伴归程。  
+片片秋意随风起，  
+秋韵悠悠心自明。  
+[Prompt tokens: 700, Completion tokens: 77]
+---------- critic ----------
+这首改编的唐诗风格诗作成功地保留了原诗的意境与情感，体现出秋季特有的氛围和美感。通过“朔风轻拂叶飘金”、“枝上斜阳染秋林”等意象，生动地描绘出了秋天的景色，与唐诗中的自然意境相呼应。且“月明归途衣渐紧”、“落叶沙沙伴归程”让人感受到秋天的安宁与温暖。
+
+通过这些诗句，读者能够感受到秋天的惬意与宁静，勾起丰收与团圆的画面，是一次成功的翻译改编。
+
+APPROVE
+[Prompt tokens: 794, Completion tokens: 161]
+---------- Summary ----------
+Number of messages: 3
+Finish reason: Text 'APPROVE' mentioned
+Total prompt tokens: 1494
+Total completion tokens: 238
+Duration: 3.89 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='将这首诗用中文唐诗风格写一遍。', type='TextMessage'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=700, completion_tokens=77), content='朔风轻拂叶飘金，  \n枝上斜阳染秋林。  \n满山丰收人欢喜，  \n月明归途衣渐紧。  \n\n南瓜影映灯火中，  \n落叶沙沙伴归程。  \n片片秋意随风起，  \n秋韵悠悠心自明。  ', type='TextMessage'), TextMessage(source='critic', models_usage=RequestUsage(prompt_tokens=794, completion_tokens=161), content='这首改编的唐诗风格诗作成功地保留了原诗的意境与情感，体现出秋季特有的氛围和美感。通过“朔风轻拂叶飘金”、“枝上斜阳染秋林”等意象，生动地描绘出了秋天的景色，与唐诗中的自然意境相呼应。且“月明归途衣渐紧”、“落叶沙沙伴归程”让人感受到秋天的安宁与温暖。\n\n通过这些诗句，读者能够感受到秋天的惬意与宁静，勾起丰收与团圆的画面，是一次成功的翻译改编。\n\nAPPROVE', type='TextMessage')], stop_reason="Text 'APPROVE' mentioned")
+```
+
+### 6.7 终止一个团队
+
+您可以在执行过程中通过设置传递给 [`run()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run) 或 [`run_stream()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run_stream) 的 [`CancellationToken`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html#autogen_core.CancellationToken) 来终止调用。 通过将 [`CancellationToken`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.html#autogen_core.CancellationToken) 传递给 `cancellation_token` 参数来设置，以在执行期间终止。
+
+与停止一个团队不同，终止一个团队将立即停止团队并引发一个[`已取消错误`](https://docs.python.org/3/library/asyncio-exceptions.html#asyncio.CancelledError)异常。
+
+>当团队被取消时，调用者将接收到一个 [`已取消错误 `](https://docs.python.org/3/library/asyncio-exceptions.html#asyncio.CancelledError)异常。
+
+```
+Task was cancelled.
+```
+
+### 6.8 单代理团队
+
+经常，你可能想在团队配置中运行单个代理。这在循环运行 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 直到满足终止条件时非常有用。
+
+这与使用 [`run()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run) 或 [`run_stream()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run_stream) 方法运行 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 不同，后者只运行代理一步并返回结果。有关单步操作的详细信息，请参阅 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent)。
+
+这里是一个在[`轮询群聊组`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat)团队配置中使用[`文本消息终止`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TextMessageTermination)条件的示例。任务是通过一个工具递增一个数字，直到它达到 10。代理将持续调用该工具，直到数字达到 10，然后返回一个最终的[`文本消息`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.TextMessage) 这将停止运行。
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.conditions import TextMessageTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+model_client = OpenAIChatCompletionClient(
+    model="gpt-4o",
+    # api_key="sk-...", # Optional if you have an OPENAI_API_KEY env variable set.
+    # Disable parallel tool calls for this example.
+    parallel_tool_calls=False,  # type: ignore
+)
+
+
+# Create a tool for incrementing a number.
+def increment_number(number: int) -> int:
+    """Increment a number by 1."""
+    return number + 1
+
+
+# Create a tool agent that uses the increment_number function.
+looped_assistant = AssistantAgent(
+    "looped_assistant",
+    model_client=model_client,
+    tools=[increment_number],  # Register the tool.
+    system_message="You are a helpful AI assistant, use the tool to increment the number.",
+)
+
+# Termination condition that stops the task if the agent responds with a text message.
+termination_condition = TextMessageTermination("looped_assistant")
+
+# Create a team with the looped assistant agent and the termination condition.
+team = RoundRobinGroupChat(
+    [looped_assistant],
+    termination_condition=termination_condition,
+)
+
+# Run the team with a task and print the messages to the console.
+async for message in team.run_stream(task="Increment the number 5 to 10."):  # type: ignore
+    print(type(message).__name__, message)
+
+await model_client.close()
+```
+
+```
+TextMessage source='user' models_usage=None metadata={} content='Increment the number 5 to 10.' type='TextMessage'
+ToolCallRequestEvent source='looped_assistant' models_usage=RequestUsage(prompt_tokens=75, completion_tokens=15) metadata={} content=[FunctionCall(id='call_qTDXSouN3MtGDqa8l0DM1ciD', arguments='{"number":5}', name='increment_number')] type='ToolCallRequestEvent'
+ToolCallExecutionEvent source='looped_assistant' models_usage=None metadata={} content=[FunctionExecutionResult(content='6', name='increment_number', call_id='call_qTDXSouN3MtGDqa8l0DM1ciD', is_error=False)] type='ToolCallExecutionEvent'
+ToolCallSummaryMessage source='looped_assistant' models_usage=None metadata={} content='6' type='ToolCallSummaryMessage'
+ToolCallRequestEvent source='looped_assistant' models_usage=RequestUsage(prompt_tokens=103, completion_tokens=15) metadata={} content=[FunctionCall(id='call_VGZPlsFVVdyxutR63Yr087pt', arguments='{"number":6}', name='increment_number')] type='ToolCallRequestEvent'
+ToolCallExecutionEvent source='looped_assistant' models_usage=None metadata={} content=[FunctionExecutionResult(content='7', name='increment_number', call_id='call_VGZPlsFVVdyxutR63Yr087pt', is_error=False)] type='ToolCallExecutionEvent'
+ToolCallSummaryMessage source='looped_assistant' models_usage=None metadata={} content='7' type='ToolCallSummaryMessage'
+ToolCallRequestEvent source='looped_assistant' models_usage=RequestUsage(prompt_tokens=131, completion_tokens=15) metadata={} content=[FunctionCall(id='call_VRKGPqPM9AHoef2g2kgsKwZe', arguments='{"number":7}', name='increment_number')] type='ToolCallRequestEvent'
+ToolCallExecutionEvent source='looped_assistant' models_usage=None metadata={} content=[FunctionExecutionResult(content='8', name='increment_number', call_id='call_VRKGPqPM9AHoef2g2kgsKwZe', is_error=False)] type='ToolCallExecutionEvent'
+ToolCallSummaryMessage source='looped_assistant' models_usage=None metadata={} content='8' type='ToolCallSummaryMessage'
+ToolCallRequestEvent source='looped_assistant' models_usage=RequestUsage(prompt_tokens=159, completion_tokens=15) metadata={} content=[FunctionCall(id='call_TOUMjSCG2kVdFcw2CMeb5DYX', arguments='{"number":8}', name='increment_number')] type='ToolCallRequestEvent'
+ToolCallExecutionEvent source='looped_assistant' models_usage=None metadata={} content=[FunctionExecutionResult(content='9', name='increment_number', call_id='call_TOUMjSCG2kVdFcw2CMeb5DYX', is_error=False)] type='ToolCallExecutionEvent'
+ToolCallSummaryMessage source='looped_assistant' models_usage=None metadata={} content='9' type='ToolCallSummaryMessage'
+ToolCallRequestEvent source='looped_assistant' models_usage=RequestUsage(prompt_tokens=187, completion_tokens=15) metadata={} content=[FunctionCall(id='call_wjq7OO9Kf5YYurWGc5lsqttJ', arguments='{"number":9}', name='increment_number')] type='ToolCallRequestEvent'
+ToolCallExecutionEvent source='looped_assistant' models_usage=None metadata={} content=[FunctionExecutionResult(content='10', name='increment_number', call_id='call_wjq7OO9Kf5YYurWGc5lsqttJ', is_error=False)] type='ToolCallExecutionEvent'
+ToolCallSummaryMessage source='looped_assistant' models_usage=None metadata={} content='10' type='ToolCallSummaryMessage'
+TextMessage source='looped_assistant' models_usage=RequestUsage(prompt_tokens=215, completion_tokens=15) metadata={} content='The number 5 incremented to 10 is 10.' type='TextMessage'
+TaskResult TaskResult(messages=[TextMessage(source='user', models_usage=None, metadata={}, content='Increment the number 5 to 10.', type='TextMessage'), ToolCallRequestEvent(source='looped_assistant', models_usage=RequestUsage(prompt_tokens=75, completion_tokens=15), metadata={}, content=[FunctionCall(id='call_qTDXSouN3MtGDqa8l0DM1ciD', arguments='{"number":5}', name='increment_number')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='looped_assistant', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='6', name='increment_number', call_id='call_qTDXSouN3MtGDqa8l0DM1ciD', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='looped_assistant', models_usage=None, metadata={}, content='6', type='ToolCallSummaryMessage'), ToolCallRequestEvent(source='looped_assistant', models_usage=RequestUsage(prompt_tokens=103, completion_tokens=15), metadata={}, content=[FunctionCall(id='call_VGZPlsFVVdyxutR63Yr087pt', arguments='{"number":6}', name='increment_number')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='looped_assistant', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='7', name='increment_number', call_id='call_VGZPlsFVVdyxutR63Yr087pt', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='looped_assistant', models_usage=None, metadata={}, content='7', type='ToolCallSummaryMessage'), ToolCallRequestEvent(source='looped_assistant', models_usage=RequestUsage(prompt_tokens=131, completion_tokens=15), metadata={}, content=[FunctionCall(id='call_VRKGPqPM9AHoef2g2kgsKwZe', arguments='{"number":7}', name='increment_number')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='looped_assistant', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='8', name='increment_number', call_id='call_VRKGPqPM9AHoef2g2kgsKwZe', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='looped_assistant', models_usage=None, metadata={}, content='8', type='ToolCallSummaryMessage'), ToolCallRequestEvent(source='looped_assistant', models_usage=RequestUsage(prompt_tokens=159, completion_tokens=15), metadata={}, content=[FunctionCall(id='call_TOUMjSCG2kVdFcw2CMeb5DYX', arguments='{"number":8}', name='increment_number')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='looped_assistant', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='9', name='increment_number', call_id='call_TOUMjSCG2kVdFcw2CMeb5DYX', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='looped_assistant', models_usage=None, metadata={}, content='9', type='ToolCallSummaryMessage'), ToolCallRequestEvent(source='looped_assistant', models_usage=RequestUsage(prompt_tokens=187, completion_tokens=15), metadata={}, content=[FunctionCall(id='call_wjq7OO9Kf5YYurWGc5lsqttJ', arguments='{"number":9}', name='increment_number')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='looped_assistant', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='10', name='increment_number', call_id='call_wjq7OO9Kf5YYurWGc5lsqttJ', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='looped_assistant', models_usage=None, metadata={}, content='10', type='ToolCallSummaryMessage'), 
+TextMessage(source='looped_assistant', models_usage=RequestUsage(prompt_tokens=215, completion_tokens=15), metadata={}, content='The number 5 incremented to 10 is 10.', type='TextMessage')], stop_reason="Text message received from 'looped_assistant'")
+```
+
+关键在于关注终止条件。在这个例子中，我们使用了一个当代理停止生成[`工具调用摘要消息`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.ToolCallSummaryMessage)时停止团队的[`文本消息终止`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TextMessageTermination)条件。团队将继续运行，直到代理生成一个包含最终结果的[`文本消息 `](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.TextMessage)。
+
+您还可以使用其他终止条件来控制代理。有关详细信息，请参阅[终止条件 ](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/termination.html)。
+
+## 7、人工介入
+
+在上一节[团队](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/teams.html)中，我们学习了如何创建、观察和控制一组智能体。本节将重点介绍如何从您的应用程序与团队交互，并为团队提供人工反馈。
+
+从您的应用程序与团队交互主要有两种方式：
+
+1. 在团队运行期间——执行 [`run()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run) 或 [`run_stream()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run_stream)，可以通过 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) 提供反馈。
+2. 运行结束后，通过输入向下一个调用 [`run()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run) 或 [`run_stream()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run_stream) 提供反馈。
+
+本节我们将介绍这两种方法。
+
+要直接跳转到与 Web 和 UI 框架集成的代码示例，请参阅以下链接：
+
+- [智能体聊天 + FastAPI](https://github.com/microsoft/autogen/tree/main/python/samples/agentchat_fastapi)
+- [AgentChat + ChainLit](https://github.com/microsoft/autogen/tree/main/python/samples/agentchat_chainlit)
+- [AgentChat + Streamlit](https://github.com/microsoft/autogen/tree/main/python/samples/agentchat_streamlit)
+
+### 7.1 运行期间提供反馈
+
+[`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent)是一个特殊的内置智能体，它作为用户的代理，为团队提供反馈。
+
+使用 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent)，您可以在运行团队之前创建其实例并将其包含在团队中。团队将决定何时调用 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) 以获取用户反馈。 从用户那里获取反馈。
+
+例如，在一个 [`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat) 团队中，[`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) 按照传递给团队的顺序被调用，而在一个 [`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat) 团队中， 选择器提示或选择器函数将决定何时调用。 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent)被调用。
+
+以下图表说明了您如何使用 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) 获取团队运行过程中的用户反馈：
+
+![image-20250413234748603](./img/小米虫爬山路-py版-img/image-20250413234748603.png)
+
+粗箭头表示团队运行中的控制流程：当团队调用 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) 时，控制权转移到应用程序/用户，并等待反馈；一旦提供反馈，控制权将返回到团队，团队继续执行。
+
+>当在运行过程中调用 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) 时，它会阻塞团队的执行，直到用户提供反馈或出错。这将阻碍团队的进度，使团队处于无法保存或恢复的不稳定状态。
+
+由于这种方法具有阻塞性，建议仅用于需要用户立即反馈的短交互，例如通过按钮点击请求批准或拒绝，或需要立即注意的警报，否则任务将失败。
+
+下面是使用 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) 的示例 在一个 [`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat) 中进行诗歌生成任务：
+
+```python
+from autogen_agentchat.agents import AssistantAgent, UserProxyAgent
+from autogen_agentchat.conditions import TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+# Create the agents.
+model_client = OpenAIChatCompletionClient(model="gpt-4o-mini")
+assistant = AssistantAgent("assistant", model_client=model_client)
+user_proxy = UserProxyAgent("user_proxy", input_func=input)  # Use input() to get user input from console.
+
+# Create the termination condition which will end the conversation when the user says "APPROVE".
+termination = TextMentionTermination("APPROVE")
+
+# Create the team.
+team = RoundRobinGroupChat([assistant, user_proxy], termination_condition=termination)
+
+# Run the conversation and stream to the console.
+stream = team.run_stream(task="Write a 4-line poem about the ocean.")
+# Use asyncio.run(...) when running in a script.
+await Console(stream)
+await model_client.close()
+```
+
+```
+---------- user ----------
+Write a 4-line poem about the ocean.
+---------- assistant ----------
+In endless blue where whispers play,  
+The ocean's waves dance night and day.  
+A world of depths, both calm and wild,  
+Nature's heart, forever beguiled.  
+TERMINATE
+---------- user_proxy ----------
+APPROVE
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, metadata={}, content='Write a 4-line poem about the ocean.', type='TextMessage'), TextMessage(source='assistant', models_usage=RequestUsage(prompt_tokens=46, completion_tokens=43), metadata={}, content="In endless blue where whispers play,  \nThe ocean's waves dance night and day.  \nA world of depths, both calm and wild,  \nNature's heart, forever beguiled.  \nTERMINATE", type='TextMessage'), UserInputRequestedEvent(source='user_proxy', models_usage=None, metadata={}, request_id='2622a0aa-b776-4e54-9e8f-4ecbdf14b78d', content='', type='UserInputRequestedEvent'), TextMessage(source='user_proxy', models_usage=None, metadata={}, content='APPROVE', type='TextMessage')], stop_reason="Text 'APPROVE' mentioned")
+```
+
+从控制台输出中，您可以看到团队通过 `user_proxy `向用户征求反馈以批准生成的诗歌。
+
+您可以为[`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent)提供自己的输入函数 以自定义反馈过程。 例如，当团队作为 Web 服务运行时，您可以使用自定义 输入函数等待来自 WebSocket 连接的消息。 以下代码片段展示了自定义输入函数的示例 当使用 [FastAPI](https://fastapi.tiangolo.com/) 网络框架时：
+
+```python
+@app.websocket("/ws/chat")
+async def chat(websocket: WebSocket):
+    await websocket.accept()
+
+    async def _user_input(prompt: str, cancellation_token: CancellationToken | None) -> str:
+        data = await websocket.receive_json() # Wait for user message from websocket.
+        message = TextMessage.model_validate(data) # Assume user message is a TextMessage.
+        return message.content
+    
+    # Create user proxy with custom input function
+    # Run the team with the user proxy
+    # ...
+```
+
+查看以下 [AgentChat FastAPI 示例](https://github.com/microsoft/autogen/blob/main/python/samples/agentchat_fastapi)以获取完整示例。
+
+有关 [ChainLit](https://github.com/Chainlit/chainlit) 与 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) 的集成，请参阅 [AgentChat ChainLit 示例 ](https://github.com/microsoft/autogen/blob/main/python/samples/agentchat_chainlit)。
+
+### 7.2 提供下一次运行的反馈 
+
+通常情况下，应用程序或用户会与一组智能代理在交互循环中进行交互：团队运行直到终止，应用程序或用户提供反馈，然后团队再次运行并使用反馈。
+
+这种方法适用于团队与应用程序/用户之间具有异步通信的持久会话：一旦团队完成一次运行，应用程序就会保存团队的状态，将其放入持久存储，并在收到反馈时恢复团队。
+
+>关于如何保存和加载团队状态，请参阅[管理状态 ](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/state.html)。本节将重点介绍反馈机制。
+
+以下图表展示了该方法的控制流程：
+
+![image-20250414000331867](./img/小米虫爬山路-py版-img/image-20250414000331867.png)
+
+有两种方法来实现这种方法：
+
+- 设置最大轮数，以确保团队在指定轮数后总是停止。
+- 使用如 [`TextMentionTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TextMentionTermination) 和 [`HandoffTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.HandoffTermination) 这样的终止条件，允许团队根据内部状态决定何时停止并交回控制权。
+
+您可以将这两种方法结合起来以实现所需的行为。
+
+#### 7.2.1 使用最大轮数
+
+此方法允许您通过设置最大回合数来暂停团队以获取用户输入。例如，您可以将团队配置为在第一个代理响应后停止，通过将 `max_turns` 设置为 1。这在需要持续用户参与的场景中特别有用，例如在聊天机器人中。
+
+要实现此功能，请在 [`RoundRobinGroupChat()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat) 构造函数中将 `max_turns` 参数设置。
+
+```python
+team = RoundRobinGroupChat([...], max_turns=1)
+```
+
+一旦团队停止，轮数将重置。当你恢复团队时，它将从 0 开始。然而，团队内部状态将保持不变，例如，[`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat)将从列表中下一个具有相同会话历史的代理处恢复。
+
+>`max_turn` 是团队类特有的，目前仅由 [`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat)、[`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat) 和 [`Swarm`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.Swarm) 支持。当与终止条件一起使用时，团队会在满足任一条件时停止。
+
+这里是一个如何在诗歌生成任务中使用 `max_turns` 在 `RoundRobinGroupChat` 中的示例，该任务最多包含 1 次回合：
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+# Create the agents.
+model_client = OpenAIChatCompletionClient(model="gpt-4o-mini")
+assistant = AssistantAgent("assistant", model_client=model_client)
+
+# Create the team setting a maximum number of turns to 1.
+team = RoundRobinGroupChat([assistant], max_turns=1)
+
+task = "Write a 4-line poem about the ocean."
+while True:
+    # Run the conversation and stream to the console.
+    stream = team.run_stream(task=task)
+    # Use asyncio.run(...) when running in a script.
+    await Console(stream)
+    # Get the user response.
+    task = input("Enter your feedback (type 'exit' to leave): ")
+    if task.lower().strip() == "exit":
+        break
+await model_client.close()
+```
+
+```
+---------- user ----------
+Write a 4-line poem about the ocean.
+---------- assistant ----------
+Endless waves in a dance with the shore,  
+Whispers of secrets in tales from the roar,  
+Beneath the vast sky, where horizons blend,  
+The ocean’s embrace is a timeless friend.  
+TERMINATE
+[Prompt tokens: 46, Completion tokens: 48]
+---------- Summary ----------
+Number of messages: 2
+Finish reason: Maximum number of turns 1 reached.
+Total prompt tokens: 46
+Total completion tokens: 48
+Duration: 1.63 seconds
+---------- user ----------
+Can you make it about a person and its relationship with the ocean
+---------- assistant ----------
+She walks along the tide, where dreams intertwine,  
+With every crashing wave, her heart feels aligned,  
+In the ocean's embrace, her worries dissolve,  
+A symphony of solace, where her spirit evolves.  
+TERMINATE
+[Prompt tokens: 117, Completion tokens: 49]
+---------- Summary ----------
+Number of messages: 2
+Finish reason: Maximum number of turns 1 reached.
+Total prompt tokens: 117
+Total completion tokens: 49
+Duration: 1.21 seconds
+```
+
+您可以看到，在一名代理回应后，团队立即停止了。
+
+#### 7.2.3 使用终止条件
+
+在前面的章节中，我们已经看到了几个终止条件的例子。在本节中，我们重点关注 [`HandoffTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.HandoffTermination) 它会在代理发送一个 [`HandoffMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.HandoffMessage) 消息时停止团队。
+
+让我们创建一个包含单个 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 代理的团队，并运行一个需要用户额外输入的任务，因为代理没有相关的工具来继续处理任务。
+
+>该模型必须支持工具调用以使用交接功能，其中使用的模型为 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent)。
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.base import Handoff
+from autogen_agentchat.conditions import HandoffTermination, TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+# Create an OpenAI model client.
+model_client = OpenAIChatCompletionClient(
+    model="gpt-4o",
+    # api_key="sk-...", # Optional if you have an OPENAI_API_KEY env variable set.
+)
+
+# Create a lazy assistant agent that always hands off to the user.
+lazy_agent = AssistantAgent(
+    "lazy_assistant",
+    model_client=model_client,
+    handoffs=[Handoff(target="user", message="Transfer to user.")],
+    system_message="If you cannot complete the task, transfer to user. Otherwise, when finished, respond with 'TERMINATE'.",
+)
+
+# Define a termination condition that checks for handoff messages.
+handoff_termination = HandoffTermination(target="user")
+# Define a termination condition that checks for a specific text mention.
+text_termination = TextMentionTermination("TERMINATE")
+
+# Create a single-agent team with the lazy assistant and both termination conditions.
+lazy_agent_team = RoundRobinGroupChat([lazy_agent], termination_condition=handoff_termination | text_termination)
+
+# Run the team and stream to the console.
+task = "What is the weather in New York?"
+await Console(lazy_agent_team.run_stream(task=task), output_stats=True)
+```
+
+```
+---------- user ----------
+What is the weather in New York?
+---------- lazy_assistant ----------
+[FunctionCall(id='call_EAcMgrLGHdLw0e7iJGoMgxuu', arguments='{}', name='transfer_to_user')]
+[Prompt tokens: 69, Completion tokens: 12]
+---------- lazy_assistant ----------
+[FunctionExecutionResult(content='Transfer to user.', call_id='call_EAcMgrLGHdLw0e7iJGoMgxuu')]
+---------- lazy_assistant ----------
+Transfer to user.
+---------- Summary ----------
+Number of messages: 4
+Finish reason: Handoff to user from lazy_assistant detected.
+Total prompt tokens: 69
+Total completion tokens: 12
+Duration: 0.69 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='What is the weather in New York?', type='TextMessage'), ToolCallRequestEvent(source='lazy_assistant', models_usage=RequestUsage(prompt_tokens=69, completion_tokens=12), content=[FunctionCall(id='call_EAcMgrLGHdLw0e7iJGoMgxuu', arguments='{}', name='transfer_to_user')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='lazy_assistant', models_usage=None, content=[FunctionExecutionResult(content='Transfer to user.', call_id='call_EAcMgrLGHdLw0e7iJGoMgxuu')], type='ToolCallExecutionEvent'), HandoffMessage(source='lazy_assistant', models_usage=None, target='user', content='Transfer to user.', context=[], type='HandoffMessage')], stop_reason='Handoff to user from lazy_assistant detected.')
+```
+
+您可以看到团队因检测到交接信息而停止。让我们通过提供代理所需的信息来继续团队。
+
+```python
+await Console(lazy_agent_team.run_stream(task="The weather in New York is sunny."))
+```
+
+```
+---------- user ----------
+The weather in New York is sunny.
+---------- lazy_assistant ----------
+Great! Enjoy the sunny weather in New York! Is there anything else you'd like to know?
+---------- lazy_assistant ----------
+TERMINATE
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='The weather in New York is sunny.', type='TextMessage'), TextMessage(source='lazy_assistant', models_usage=RequestUsage(prompt_tokens=110, completion_tokens=21), content="Great! Enjoy the sunny weather in New York! Is there anything else you'd like to know?", type='TextMessage'), TextMessage(source='lazy_assistant', models_usage=RequestUsage(prompt_tokens=137, completion_tokens=5), content='TERMINATE', type='TextMessage')], stop_reason="Text 'TERMINATE' mentioned")
+```
+
+您可以看到，在用户提供了信息后，团队继续进行。
+
+>如果你正在使用 [`Swarm`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.Swarm) 团队， [`HandoffTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.HandoffTermination) 定位到用户，要恢复团队，你需要将 `task `设置为 [`HandoffMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.HandoffMessage) 将 `目标 `设置为你想要运行的下一个代理。有关详细信息，请参阅 [Swarm](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/swarm.html)。
+
+## 8、终止
+
+在上一节中，我们探讨了如何定义智能体，并将它们组织成能够解决任务的团队。然而，一个运行可能会无限进行下去，在许多情况下，我们需要知道*何时*停止它们。这就是终止条件的作用。
+
+AgentChat 支持多种终止条件，通过提供基类 `TerminationCondition` 和几个继承自它的实现。
+
+终止条件是一个可调用的对象，它接受自上次调用条件以来的一系列 `BaseAgentEvent` 或 [`BaseChatMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.BaseChatMessage) 对象，如果对话应该终止，则返回一个 [`StopMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.StopMessage)，否则返回 `None`。一旦达到终止条件，必须通过调用[`reset()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.TerminationCondition.reset) 来重置它，然后才能再次使用。
+
+关于终止条件的注意事项：
+
+- 它们是状态性的，但在每次运行（[`run()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.TaskRunner.run) 或 [`run_stream()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.TaskRunner.run_stream)）完成后会自动重置。
+- 它们可以使用 AND 和 OR 运算符进行组合。
+
+>对于群聊团队（例如，[`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat)， [`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat)和[`Swarm `](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.Swarm)），每个代理响应后都会调用终止条件。虽然一个响应可能包含多个内部消息，但团队只为单个响应中的所有消息调用一次终止条件。因此，条件是使用自上次调用以来消息的“delta 序列”来调用的。
+
+内置终止条件：
+
+1. [`MaxMessageTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.MaxMessageTermination): 在产生指定数量的消息后停止，包括代理和任务消息。
+2. [`TextMentionTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TextMentionTermination): 当消息中提及特定文本或字符串时停止（例如，“终止”）。
+3. [`TokenUsageTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TokenUsageTermination)：当使用一定数量的提示或完成令牌时停止。这要求代理在其消息中报告令牌使用情况。
+4. [`TimeoutTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TimeoutTermination)：在指定秒数后停止。
+5. [`HandoffTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.HandoffTermination)：在请求将工作转交给特定目标时停止。可以使用转交消息构建如 [`Swarm`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.Swarm) 之类的模式。当您希望在代理将工作转交给应用或用户时暂停运行并允许他们提供输入时，这很有用。
+6. [`SourceMatchTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.SourceMatchTermination)：在特定代理响应后停止。
+7. [`ExternalTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.ExternalTermination): 从外部运行中启用程序化控制终止。这对于 UI 集成很有用（例如，聊天界面中的“停止”按钮）。
+8. [`StopMessageTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.StopMessageTermination): 当代理产生一个 [`StopMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.StopMessage) 时停止。
+9. [`TextMessageTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TextMessageTermination): 当代理产生一个 [`TextMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.TextMessage) 时停止。
+10. [`FunctionCallTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.FunctionCallTermination): 当代理产生一个包含匹配名称的 [`FunctionExecutionResult`](https://microsoft.github.io/autogen/stable/reference/python/autogen_core.models.html#autogen_core.models.FunctionExecutionResult) 的 [`ToolCallExecutionEvent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.ToolCallExecutionEvent) 时停止。
+
+### 8.1 基本用法
+
+为了展示终止条件的特性，我们将创建一个由两个智能体组成的团队：一个负责文本生成的主体智能体和一个负责审查并给出反馈的批评家智能体。
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.conditions import MaxMessageTermination, TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+model_client = OpenAIChatCompletionClient(
+    model="gpt-4o",
+    temperature=1,
+    # api_key="sk-...", # Optional if you have an OPENAI_API_KEY env variable set.
+)
+
+# Create the primary agent.
+primary_agent = AssistantAgent(
+    "primary",
+    model_client=model_client,
+    system_message="You are a helpful AI assistant.",
+)
+
+# Create the critic agent.
+critic_agent = AssistantAgent(
+    "critic",
+    model_client=model_client,
+    system_message="Provide constructive feedback for every message. Respond with 'APPROVE' to when your feedbacks are addressed.",
+)
+```
+
+让我们探索在每次 `run`或 `run_stream`调用后，终止条件如何自动重置，从而使团队能够从上次停止的地方继续对话。
+
+```python
+max_msg_termination = MaxMessageTermination(max_messages=3)
+round_robin_team = RoundRobinGroupChat([primary_agent, critic_agent], termination_condition=max_msg_termination)
+
+# Use asyncio.run(...) if you are running this script as a standalone script.
+await Console(round_robin_team.run_stream(task="Write a unique, Haiku about the weather in Paris"))
+```
+
+```
+---------- user ----------
+Write a unique, Haiku about the weather in Paris
+---------- primary ----------
+Gentle rain whispers,  
+Cobblestones glisten softly—  
+Paris dreams in gray.
+[Prompt tokens: 30, Completion tokens: 19]
+---------- critic ----------
+The Haiku captures the essence of a rainy day in Paris beautifully, and the imagery is vivid. However, it's important to ensure the use of the traditional 5-7-5 syllable structure for Haikus. Your current Haiku lines are composed of 4-7-5 syllables, which slightly deviates from the form. Consider revising the first line to fit the structure.
+
+For example:
+Soft rain whispers down,  
+Cobblestones glisten softly —  
+Paris dreams in gray.
+
+This revision maintains the essence of your original lines while adhering to the traditional Haiku structure.
+[Prompt tokens: 70, Completion tokens: 120]
+---------- Summary ----------
+Number of messages: 3
+Finish reason: Maximum number of messages 3 reached, current message count: 3
+Total prompt tokens: 100
+Total completion tokens: 139
+Duration: 3.34 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Write a unique, Haiku about the weather in Paris'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=30, completion_tokens=19), content='Gentle rain whispers,  \nCobblestones glisten softly—  \nParis dreams in gray.'), TextMessage(source='critic', models_usage=RequestUsage(prompt_tokens=70, completion_tokens=120), content="The Haiku captures the essence of a rainy day in Paris beautifully, and the imagery is vivid. However, it's important to ensure the use of the traditional 5-7-5 syllable structure for Haikus. Your current Haiku lines are composed of 4-7-5 syllables, which slightly deviates from the form. Consider revising the first line to fit the structure.\n\nFor example:\nSoft rain whispers down,  \nCobblestones glisten softly —  \nParis dreams in gray.\n\nThis revision maintains the essence of your original lines while adhering to the traditional Haiku structure.")], stop_reason='Maximum number of messages 3 reached, current message count: 3')
+```
+
+对话在达到最大消息限制后停止。由于主要代理未能对反馈做出回应，让我们继续对话。
+
+```python
+# Use asyncio.run(...) if you are running this script as a standalone script.
+await Console(round_robin_team.run_stream())
+```
+
+```
+---------- primary ----------
+Thank you for your feedback. Here is the revised Haiku:
+
+Soft rain whispers down,  
+Cobblestones glisten softly —  
+Paris dreams in gray.
+[Prompt tokens: 181, Completion tokens: 32]
+---------- critic ----------
+The revised Haiku now follows the traditional 5-7-5 syllable pattern, and it still beautifully captures the atmospheric mood of Paris in the rain. The imagery and flow are both clear and evocative. Well done on making the adjustment! 
+
+APPROVE
+[Prompt tokens: 234, Completion tokens: 54]
+---------- primary ----------
+Thank you for your kind words and approval. I'm glad the revision meets your expectations and captures the essence of Paris. If you have any more requests or need further assistance, feel free to ask!
+[Prompt tokens: 279, Completion tokens: 39]
+---------- Summary ----------
+Number of messages: 3
+Finish reason: Maximum number of messages 3 reached, current message count: 3
+Total prompt tokens: 694
+Total completion tokens: 125
+Duration: 6.43 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=181, completion_tokens=32), content='Thank you for your feedback. Here is the revised Haiku:\n\nSoft rain whispers down,  \nCobblestones glisten softly —  \nParis dreams in gray.'), TextMessage(source='critic', models_usage=RequestUsage(prompt_tokens=234, completion_tokens=54), content='The revised Haiku now follows the traditional 5-7-5 syllable pattern, and it still beautifully captures the atmospheric mood of Paris in the rain. The imagery and flow are both clear and evocative. Well done on making the adjustment! \n\nAPPROVE'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=279, completion_tokens=39), content="Thank you for your kind words and approval. I'm glad the revision meets your expectations and captures the essence of Paris. If you have any more requests or need further assistance, feel free to ask!")], stop_reason='Maximum number of messages 3 reached, current message count: 3')
+```
+
+团队从上次停止的地方继续，允许主要代理响应反馈。
+
+### 8.2 结合终止条件
+
+让我们展示如何使用 AND（`&`）和 OR（`|`）运算符结合终止条件，以创建更复杂的终止逻辑。例如，我们将创建一个团队，该团队在生成 10 条消息后停止，或者当评论代理批准一条消息时停止。
+
+```python
+max_msg_termination = MaxMessageTermination(max_messages=10)
+text_termination = TextMentionTermination("APPROVE")
+combined_termination = max_msg_termination | text_termination
+
+round_robin_team = RoundRobinGroupChat([primary_agent, critic_agent], termination_condition=combined_termination)
+
+# Use asyncio.run(...) if you are running this script as a standalone script.
+await Console(round_robin_team.run_stream(task="Write a unique, Haiku about the weather in Paris"))
+```
+
+```
+---------- user ----------
+Write a unique, Haiku about the weather in Paris
+---------- primary ----------
+Spring breeze gently hums,  
+Cherry blossoms in full bloom—  
+Paris wakes to life.
+[Prompt tokens: 467, Completion tokens: 19]
+---------- critic ----------
+The Haiku beautifully captures the awakening of Paris in the spring. The imagery of a gentle spring breeze and cherry blossoms in full bloom effectively conveys the rejuvenating feel of the season. The final line, "Paris wakes to life," encapsulates the renewed energy and vibrancy of the city. The Haiku adheres to the 5-7-5 syllable structure and portrays a vivid seasonal transformation in a concise and poetic manner. Excellent work!
+
+APPROVE
+[Prompt tokens: 746, Completion tokens: 93]
+---------- Summary ----------
+Number of messages: 3
+Finish reason: Text 'APPROVE' mentioned
+Total prompt tokens: 1213
+Total completion tokens: 112
+Duration: 2.75 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Write a unique, Haiku about the weather in Paris'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=467, completion_tokens=19), content='Spring breeze gently hums,  \nCherry blossoms in full bloom—  \nParis wakes to life.'), TextMessage(source='critic', models_usage=RequestUsage(prompt_tokens=746, completion_tokens=93), content='The Haiku beautifully captures the awakening of Paris in the spring. The imagery of a gentle spring breeze and cherry blossoms in full bloom effectively conveys the rejuvenating feel of the season. The final line, "Paris wakes to life," encapsulates the renewed energy and vibrancy of the city. The Haiku adheres to the 5-7-5 syllable structure and portrays a vivid seasonal transformation in a concise and poetic manner. Excellent work!\n\nAPPROVE')], stop_reason="Text 'APPROVE' mentioned")
+```
+
+对话在评论代理批准信息后停止，尽管如果生成了10条信息，对话也可能停止。
+
+如果我们只想在两个条件都满足时停止运行，可以使用 AND (和 `&`) 操作符。
+
+```python
+combined_termination = max_msg_termination & text_termination
+```
+
+### 8.3 自定义终止条件
+
+内置的终止条件对于大多数用例来说已经足够。然而，可能存在需要实现一个不适用于现有条件的自定义终止条件的情况。您可以通过继承 [`TerminationCondition`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.TerminationCondition) 类来完成此操作。
+
+在这个例子中，我们创建了一个自定义终止条件，当调用特定函数时停止对话。
+
+```python
+from typing import Sequence
+
+from autogen_agentchat.base import TerminatedException, TerminationCondition
+from autogen_agentchat.messages import BaseAgentEvent, BaseChatMessage, StopMessage, ToolCallExecutionEvent
+from autogen_core import Component
+from pydantic import BaseModel
+from typing_extensions import Self
+
+
+class FunctionCallTerminationConfig(BaseModel):
+    """Configuration for the termination condition to allow for serialization
+    and deserialization of the component.
+    """
+
+    function_name: str
+
+
+class FunctionCallTermination(TerminationCondition, Component[FunctionCallTerminationConfig]):
+    """Terminate the conversation if a FunctionExecutionResult with a specific name is received."""
+
+    component_config_schema = FunctionCallTerminationConfig
+    """The schema for the component configuration."""
+
+    def __init__(self, function_name: str) -> None:
+        self._terminated = False
+        self._function_name = function_name
+
+    @property
+    def terminated(self) -> bool:
+        return self._terminated
+
+    async def __call__(self, messages: Sequence[BaseAgentEvent | BaseChatMessage]) -> StopMessage | None:
+        if self._terminated:
+            raise TerminatedException("Termination condition has already been reached")
+        for message in messages:
+            if isinstance(message, ToolCallExecutionEvent):
+                for execution in message.content:
+                    if execution.name == self._function_name:
+                        self._terminated = True
+                        return StopMessage(
+                            content=f"Function '{self._function_name}' was executed.",
+                            source="FunctionCallTermination",
+                        )
+        return None
+
+    async def reset(self) -> None:
+        self._terminated = False
+
+    def _to_config(self) -> FunctionCallTerminationConfig:
+        return FunctionCallTerminationConfig(
+            function_name=self._function_name,
+        )
+
+    @classmethod
+    def _from_config(cls, config: FunctionCallTerminationConfig) -> Self:
+        return cls(
+            function_name=config.function_name,
+        )
+```
+
+让我们使用这个新的终止条件，当评论代理使用`approve `函数调用批准一条消息时停止对话。
+
+首先，我们创建一个简单的函数，当评论代理批准一条消息时将被调用。
+
+```python
+def approve() -> None:
+    """Approve the message when all feedbacks have been addressed."""
+    pass
+```
+
+然后我们创建代理。评论家代理配备了 `approve `工具。
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+model_client = OpenAIChatCompletionClient(
+    model="gpt-4o",
+    temperature=1,
+    # api_key="sk-...", # Optional if you have an OPENAI_API_KEY env variable set.
+)
+
+# Create the primary agent.
+primary_agent = AssistantAgent(
+    "primary",
+    model_client=model_client,
+    system_message="You are a helpful AI assistant.",
+)
+
+# Create the critic agent with the approve function as a tool.
+critic_agent = AssistantAgent(
+    "critic",
+    model_client=model_client,
+    tools=[approve],  # Register the approve function as a tool.
+    system_message="Provide constructive feedback. Use the approve tool to approve when all feedbacks are addressed.",
+)
+```
+
+现在，我们创建终止条件和团队。我们用写诗任务运行团队。
+
+```python
+function_call_termination = FunctionCallTermination(function_name="approve")
+round_robin_team = RoundRobinGroupChat([primary_agent, critic_agent], termination_condition=function_call_termination)
+
+# Use asyncio.run(...) if you are running this script as a standalone script.
+await Console(round_robin_team.run_stream(task="Write a unique, Haiku about the weather in Paris"))
+await model_client.close()
+```
+
+```
+---------- user ----------
+Write a unique, Haiku about the weather in Paris
+---------- primary ----------
+Raindrops gently fall,  
+Cobblestones shine in dim light—  
+Paris dreams in grey.  
+---------- critic ----------
+This Haiku beautifully captures a melancholic yet romantic image of Paris in the rain. The use of sensory imagery like "Raindrops gently fall" and "Cobblestones shine" effectively paints a vivid picture. It could be interesting to experiment with more distinct seasonal elements of Paris, such as incorporating the Seine River or iconic landmarks in the context of the weather. Overall, it successfully conveys the atmosphere of Paris in subtle, poetic imagery.
+---------- primary ----------
+Thank you for your feedback! I’m glad you enjoyed the imagery. Here’s another Haiku that incorporates iconic Parisian elements:
+
+Eiffel stands in mist,  
+Seine's ripple mirrors the sky—  
+Spring whispers anew.  
+---------- critic ----------
+[FunctionCall(id='call_QEWJZ873EG4UIEpsQHi1HsAu', arguments='{}', name='approve')]
+---------- critic ----------
+[FunctionExecutionResult(content='None', name='approve', call_id='call_QEWJZ873EG4UIEpsQHi1HsAu', is_error=False)]
+---------- critic ----------
+None
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, metadata={}, content='Write a unique, Haiku about the weather in Paris', type='TextMessage'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=30, completion_tokens=23), metadata={}, content='Raindrops gently fall,  \nCobblestones shine in dim light—  \nParis dreams in grey.  ', type='TextMessage'), TextMessage(source='critic', models_usage=RequestUsage(prompt_tokens=99, completion_tokens=90), metadata={}, content='This Haiku beautifully captures a melancholic yet romantic image of Paris in the rain. The use of sensory imagery like "Raindrops gently fall" and "Cobblestones shine" effectively paints a vivid picture. It could be interesting to experiment with more distinct seasonal elements of Paris, such as incorporating the Seine River or iconic landmarks in the context of the weather. Overall, it successfully conveys the atmosphere of Paris in subtle, poetic imagery.', type='TextMessage'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=152, completion_tokens=48), metadata={}, content="Thank you for your feedback! I’m glad you enjoyed the imagery. Here’s another Haiku that incorporates iconic Parisian elements:\n\nEiffel stands in mist,  \nSeine's ripple mirrors the sky—  \nSpring whispers anew.  ", type='TextMessage'), ToolCallRequestEvent(source='critic', models_usage=RequestUsage(prompt_tokens=246, completion_tokens=11), metadata={}, content=[FunctionCall(id='call_QEWJZ873EG4UIEpsQHi1HsAu', arguments='{}', name='approve')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='critic', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='None', name='approve', call_id='call_QEWJZ873EG4UIEpsQHi1HsAu', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='critic', models_usage=None, metadata={}, content='None', type='ToolCallSummaryMessage')], stop_reason="Function 'approve' was executed.")
+```
+
+您可以看到，当评论代理使用`approve`函数调用批准消息时，对话停止了。
+
+## 9、管理状态
+
+到目前为止，我们已经讨论了如何在多智能体应用程序中构建组件——智能体、团队、终止条件。在许多情况下，将这些组件的状态保存到磁盘并在稍后加载它们非常有用。这在 Web 应用程序中尤其有用，因为无状态端点响应请求并需要从持久存储中加载应用程序的状态。
+
+在这个笔记本中，我们将讨论如何保存和加载智能体、团队和终止条件的状态。
+
+### 9.1 保存和加载智能体
+
+我们可以通过调用 [`save_state()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent.save_state) 方法来获取代理的状态，该方法位于 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 上。
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.conditions import MaxMessageTermination
+from autogen_agentchat.messages import TextMessage
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+from autogen_core import CancellationToken
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+model_client = OpenAIChatCompletionClient(model="gpt-4o-2024-08-06")
+
+assistant_agent = AssistantAgent(
+    name="assistant_agent",
+    system_message="You are a helpful assistant",
+    model_client=model_client,
+)
+
+# Use asyncio.run(...) when running in a script.
+response = await assistant_agent.on_messages(
+    [TextMessage(content="Write a 3 line poem on lake tangayika", source="user")], CancellationToken()
+)
+print(response.chat_message)
+await model_client.close()
+```
+
+```
+In Tanganyika's embrace so wide and deep,  
+Ancient waters cradle secrets they keep,  
+Echoes of time where horizons sleep.  
+```
+
+```python
+agent_state = await assistant_agent.save_state()
+print(agent_state)
+```
+
+```
+{'type': 'AssistantAgentState', 'version': '1.0.0', 'llm_messages': [{'content': 'Write a 3 line poem on lake tangayika', 'source': 'user', 'type': 'UserMessage'}, {'content': "In Tanganyika's embrace so wide and deep,  \nAncient waters cradle secrets they keep,  \nEchoes of time where horizons sleep.  ", 'source': 'assistant_agent', 'type': 'AssistantMessage'}]}
+```
+
+```python
+model_client = OpenAIChatCompletionClient(model="gpt-4o-2024-08-06")
+
+new_assistant_agent = AssistantAgent(
+    name="assistant_agent",
+    system_message="You are a helpful assistant",
+    model_client=model_client,
+)
+await new_assistant_agent.load_state(agent_state)
+
+# Use asyncio.run(...) when running in a script.
+response = await new_assistant_agent.on_messages(
+    [TextMessage(content="What was the last line of the previous poem you wrote", source="user")], CancellationToken()
+)
+print(response.chat_message)
+await model_client.close()
+```
+
+```
+The last line of the poem was: "Echoes of time where horizons sleep."
+```
+
+>对于 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 来说，其状态由 model_context 组成。如果您编写自己的自定义代理，请考虑重写 [`save_state()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.save_state) 和 [`load_state()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.load_state) 方法来自定义行为。默认实现保存和加载一个空状态。
+
+### 9.2 保存和加载团队
+
+我们可以通过在团队上调用 `save_state` 方法来获取团队的状态，并通过在团队上调用 `load_state` 方法来重新加载它。
+
+当我们在团队上调用 `save_state` 时，它会保存团队中所有代理的状态。
+
+我们将首先创建一个简单的 [`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat) 团队，并要求它写一首诗。
+
+```python
+model_client = OpenAIChatCompletionClient(model="gpt-4o-2024-08-06")
+
+# Define a team.
+assistant_agent = AssistantAgent(
+    name="assistant_agent",
+    system_message="You are a helpful assistant",
+    model_client=model_client,
+)
+agent_team = RoundRobinGroupChat([assistant_agent], termination_condition=MaxMessageTermination(max_messages=2))
+
+# Run the team and stream messages to the console.
+stream = agent_team.run_stream(task="Write a beautiful poem 3-line about lake tangayika")
+
+# Use asyncio.run(...) when running in a script.
+await Console(stream)
+
+# Save the state of the agent team.
+team_state = await agent_team.save_state()
+```
+
+```
+---------- user ----------
+Write a beautiful poem 3-line about lake tangayika
+---------- assistant_agent ----------
+In Tanganyika's gleam, beneath the azure skies,  
+Whispers of ancient waters, in tranquil guise,  
+Nature's mirror, where dreams and serenity lie.
+[Prompt tokens: 29, Completion tokens: 34]
+---------- Summary ----------
+Number of messages: 2
+Finish reason: Maximum number of messages 2 reached, current message count: 2
+Total prompt tokens: 29
+Total completion tokens: 34
+Duration: 0.71 seconds
+```
+
+如果我们重置团队（模拟团队的实例化），然后询问问题 `What was the last line of the poem you wrote?` ，我们会看到团队无法完成这项任务，因为没有引用之前的运行。
+
+```python
+await agent_team.reset()
+stream = agent_team.run_stream(task="What was the last line of the poem you wrote?")
+await Console(stream)
+```
+
+```
+---------- user ----------
+What was the last line of the poem you wrote?
+---------- assistant_agent ----------
+I'm sorry, but I am unable to recall or access previous interactions, including any specific poem I may have composed in our past conversations. If you like, I can write a new poem for you.
+[Prompt tokens: 28, Completion tokens: 40]
+---------- Summary ----------
+Number of messages: 2
+Finish reason: Maximum number of messages 2 reached, current message count: 2
+Total prompt tokens: 28
+Total completion tokens: 40
+Duration: 0.70 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='What was the last line of the poem you wrote?', type='TextMessage'), TextMessage(source='assistant_agent', models_usage=RequestUsage(prompt_tokens=28, completion_tokens=40), content="I'm sorry, but I am unable to recall or access previous interactions, including any specific poem I may have composed in our past conversations. If you like, I can write a new poem for you.", type='TextMessage')], stop_reason='Maximum number of messages 2 reached, current message count: 2')
+```
+
+接下来，我们加载队伍的状态并询问同样的问题。我们看到队伍能够准确地返回它所写的最后一行诗。
+
+```python
+print(team_state)
+
+# Load team state.
+await agent_team.load_state(team_state)
+stream = agent_team.run_stream(task="What was the last line of the poem you wrote?")
+await Console(stream)
+```
+
+```
+{'type': 'TeamState', 'version': '1.0.0', 'agent_states': {'group_chat_manager/a55364ad-86fd-46ab-9449-dcb5260b1e06': {'type': 'RoundRobinManagerState', 'version': '1.0.0', 'message_thread': [{'source': 'user', 'models_usage': None, 'content': 'Write a beautiful poem 3-line about lake tangayika', 'type': 'TextMessage'}, {'source': 'assistant_agent', 'models_usage': {'prompt_tokens': 29, 'completion_tokens': 34}, 'content': "In Tanganyika's gleam, beneath the azure skies,  \nWhispers of ancient waters, in tranquil guise,  \nNature's mirror, where dreams and serenity lie.", 'type': 'TextMessage'}], 'current_turn': 0, 'next_speaker_index': 0}, 'collect_output_messages/a55364ad-86fd-46ab-9449-dcb5260b1e06': {}, 'assistant_agent/a55364ad-86fd-46ab-9449-dcb5260b1e06': {'type': 'ChatAgentContainerState', 'version': '1.0.0', 'agent_state': {'type': 'AssistantAgentState', 'version': '1.0.0', 'llm_messages': [{'content': 'Write a beautiful poem 3-line about lake tangayika', 'source': 'user', 'type': 'UserMessage'}, {'content': "In Tanganyika's gleam, beneath the azure skies,  \nWhispers of ancient waters, in tranquil guise,  \nNature's mirror, where dreams and serenity lie.", 'source': 'assistant_agent', 'type': 'AssistantMessage'}]}, 'message_buffer': []}}, 'team_id': 'a55364ad-86fd-46ab-9449-dcb5260b1e06'}
+---------- user ----------
+What was the last line of the poem you wrote?
+---------- assistant_agent ----------
+The last line of the poem I wrote is:  
+"Nature's mirror, where dreams and serenity lie."
+[Prompt tokens: 86, Completion tokens: 22]
+---------- Summary ----------
+Number of messages: 2
+Finish reason: Maximum number of messages 2 reached, current message count: 2
+Total prompt tokens: 86
+Total completion tokens: 22
+Duration: 0.96 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='What was the last line of the poem you wrote?', type='TextMessage'), TextMessage(source='assistant_agent', models_usage=RequestUsage(prompt_tokens=86, completion_tokens=22), content='The last line of the poem I wrote is:  \n"Nature\'s mirror, where dreams and serenity lie."', type='TextMessage')], stop_reason='Maximum number of messages 2 reached, current message count: 2')
+```
+
+### 9.3 持久化状态（文件或数据库）
+
+在许多情况下，我们可能希望将团队的状态持久化到磁盘（或数据库）中，并在稍后重新加载。状态是一个可以序列化到文件或写入数据库的字典。
+
+```python
+import json
+
+## save state to disk
+
+with open("coding/team_state.json", "w") as f:
+    json.dump(team_state, f)
+
+## load state from disk
+with open("coding/team_state.json", "r") as f:
+    team_state = json.load(f)
+
+new_agent_team = RoundRobinGroupChat([assistant_agent], termination_condition=MaxMessageTermination(max_messages=2))
+await new_agent_team.load_state(team_state)
+stream = new_agent_team.run_stream(task="What was the last line of the poem you wrote?")
+await Console(stream)
+await model_client.close()
+```
+
+```
+---------- user ----------
+What was the last line of the poem you wrote?
+---------- assistant_agent ----------
+The last line of the poem I wrote is:  
+"Nature's mirror, where dreams and serenity lie."
+[Prompt tokens: 86, Completion tokens: 22]
+---------- Summary ----------
+Number of messages: 2
+Finish reason: Maximum number of messages 2 reached, current message count: 2
+Total prompt tokens: 86
+Total completion tokens: 22
+Duration: 0.72 seconds
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='What was the last line of the poem you wrote?', type='TextMessage'), TextMessage(source='assistant_agent', models_usage=RequestUsage(prompt_tokens=86, completion_tokens=22), content='The last line of the poem I wrote is:  \n"Nature\'s mirror, where dreams and serenity lie."', type='TextMessage')], stop_reason='Maximum number of messages 2 reached, current message count: 2')
+```
+
+## 10、自定义代理
+
+您可能拥有不符合预设行为的代理。在这种情况下，您可以构建自定义代理。
+
+所有 AgentChat 中的代理都继承自 `BaseChatAgent` 类并实现以下抽象方法和属性：
+
+- [`on_messages()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages)：定义代理在接收到消息时行为的抽象方法。当代理被要求在 [`run()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.run) 中提供响应时，会调用此方法。它返回一个 [`Response`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.Response) 对象。
+- [`on_reset()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_reset)：将代理重置为其初始状态的抽象方法。当代理被要求重置自身时，会调用此方法。
+- [`produced_message_types`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.produced_message_types)：代理在其响应中可以生成的可能的 [`BaseChatMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.BaseChatMessage) 消息类型的列表。
+
+可选，您可以实现 [`on_messages_stream()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages_stream) 方法以流式传输代理生成的消息。如果此方法未实现，代理将使用 [`on_messages_stream()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages_stream) 的默认实现。 调用 [`on_messages()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent.on_messages) 方法并产生响应中的所有消息。
+
+### 10.1 CountDownAgent
+
+在此示例中，我们创建了一个简单的计数器代理，从给定的数字倒数到零，并产生包含当前计数的消息流。
+
+```python
+from typing import AsyncGenerator, List, Sequence
+
+from autogen_agentchat.agents import BaseChatAgent
+from autogen_agentchat.base import Response
+from autogen_agentchat.messages import BaseAgentEvent, BaseChatMessage, TextMessage
+from autogen_core import CancellationToken
+
+
+class CountDownAgent(BaseChatAgent):
+    def __init__(self, name: str, count: int = 3):
+        super().__init__(name, "A simple agent that counts down.")
+        self._count = count
+
+    @property
+    def produced_message_types(self) -> Sequence[type[BaseChatMessage]]:
+        return (TextMessage,)
+
+    async def on_messages(self, messages: Sequence[BaseChatMessage], cancellation_token: CancellationToken) -> Response:
+        # Calls the on_messages_stream.
+        response: Response | None = None
+        async for message in self.on_messages_stream(messages, cancellation_token):
+            if isinstance(message, Response):
+                response = message
+        assert response is not None
+        return response
+
+    async def on_messages_stream(
+        self, messages: Sequence[BaseChatMessage], cancellation_token: CancellationToken
+    ) -> AsyncGenerator[BaseAgentEvent | BaseChatMessage | Response, None]:
+        inner_messages: List[BaseAgentEvent | BaseChatMessage] = []
+        for i in range(self._count, 0, -1):
+            msg = TextMessage(content=f"{i}...", source=self.name)
+            inner_messages.append(msg)
+            yield msg
+        # The response is returned at the end of the stream.
+        # It contains the final message and all the inner messages.
+        yield Response(chat_message=TextMessage(content="Done!", source=self.name), inner_messages=inner_messages)
+
+    async def on_reset(self, cancellation_token: CancellationToken) -> None:
+        pass
+
+
+async def run_countdown_agent() -> None:
+    # Create a countdown agent.
+    countdown_agent = CountDownAgent("countdown")
+
+    # Run the agent with a given task and stream the response.
+    async for message in countdown_agent.on_messages_stream([], CancellationToken()):
+        if isinstance(message, Response):
+            print(message.chat_message)
+        else:
+            print(message)
+
+
+# Use asyncio.run(run_countdown_agent()) when running in a script.
+await run_countdown_agent()
+```
+
+```
+3...
+2...
+1...
+Done!
+```
+
+### 10.2 ArithmeticAgent
+
+在本例中，我们创建一个可以执行给定整数简单算术运算的代理类。然后，我们将使用这个代理类的不同实例在 [`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat) 中。 通过应用一系列算术运算将给定的整数转换成另一个整数。
+
+`ArithmeticAgent` 类接受一个 `operator_func`，该函数接受一个整数并返回一个整数，在执行算术运算后。在其 `on_messages` 方法中，它将 `operator_func` 应用到输入消息中的整数上，并返回一个包含结果的响应。
+
+```python
+from typing import Callable, Sequence
+
+from autogen_agentchat.agents import BaseChatAgent
+from autogen_agentchat.base import Response
+from autogen_agentchat.conditions import MaxMessageTermination
+from autogen_agentchat.messages import BaseChatMessage
+from autogen_agentchat.teams import SelectorGroupChat
+from autogen_agentchat.ui import Console
+from autogen_core import CancellationToken
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+
+class ArithmeticAgent(BaseChatAgent):
+    def __init__(self, name: str, description: str, operator_func: Callable[[int], int]) -> None:
+        super().__init__(name, description=description)
+        self._operator_func = operator_func
+        self._message_history: List[BaseChatMessage] = []
+
+    @property
+    def produced_message_types(self) -> Sequence[type[BaseChatMessage]]:
+        return (TextMessage,)
+
+    async def on_messages(self, messages: Sequence[BaseChatMessage], cancellation_token: CancellationToken) -> Response:
+        # Update the message history.
+        # NOTE: it is possible the messages is an empty list, which means the agent was selected previously.
+        self._message_history.extend(messages)
+        # Parse the number in the last message.
+        assert isinstance(self._message_history[-1], TextMessage)
+        number = int(self._message_history[-1].content)
+        # Apply the operator function to the number.
+        result = self._operator_func(number)
+        # Create a new message with the result.
+        response_message = TextMessage(content=str(result), source=self.name)
+        # Update the message history.
+        self._message_history.append(response_message)
+        # Return the response.
+        return Response(chat_message=response_message)
+
+    async def on_reset(self, cancellation_token: CancellationToken) -> None:
+        pass
+```
+
+> `on_messages` 方法可能被调用时传入一个空消息列表，在这种情况下，这意味着代理之前已被调用，现在再次被调用，而没有来自调用者的新消息。因此，保留代理之前接收到的消息历史很重要，并使用该历史来生成响应。
+
+现在我们可以创建一个 [`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat)，包含 5 个实例的 `ArithmeticAgent`：
+
+- 一个将输入整数加1的，
+- 一个将输入整数减1的，
+- 一个将输入整数乘以2的，
+- 一个将输入整数除以2并向下取整的函数，并且
+- 一个返回输入整数不变的函数。
+
+然后我们使用这些代理创建一个 [`选择器组聊天 `](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat)，并设置适当的选择器设置：
+
+- 允许连续选择相同的代理，以便进行重复操作，并且
+- 自定义选择提示以使模型响应适应特定任务。
+
+```python
+async def run_number_agents() -> None:
+    # Create agents for number operations.
+    add_agent = ArithmeticAgent("add_agent", "Adds 1 to the number.", lambda x: x + 1)
+    multiply_agent = ArithmeticAgent("multiply_agent", "Multiplies the number by 2.", lambda x: x * 2)
+    subtract_agent = ArithmeticAgent("subtract_agent", "Subtracts 1 from the number.", lambda x: x - 1)
+    divide_agent = ArithmeticAgent("divide_agent", "Divides the number by 2 and rounds down.", lambda x: x // 2)
+    identity_agent = ArithmeticAgent("identity_agent", "Returns the number as is.", lambda x: x)
+
+    # The termination condition is to stop after 10 messages.
+    termination_condition = MaxMessageTermination(10)
+
+    # Create a selector group chat.
+    selector_group_chat = SelectorGroupChat(
+        [add_agent, multiply_agent, subtract_agent, divide_agent, identity_agent],
+        model_client=OpenAIChatCompletionClient(model="gpt-4o"),
+        termination_condition=termination_condition,
+        allow_repeated_speaker=True,  # Allow the same agent to speak multiple times, necessary for this task.
+        selector_prompt=(
+            "Available roles:\n{roles}\nTheir job descriptions:\n{participants}\n"
+            "Current conversation history:\n{history}\n"
+            "Please select the most appropriate role for the next message, and only return the role name."
+        ),
+    )
+
+    # Run the selector group chat with a given task and stream the response.
+    task: List[BaseChatMessage] = [
+        TextMessage(content="Apply the operations to turn the given number into 25.", source="user"),
+        TextMessage(content="10", source="user"),
+    ]
+    stream = selector_group_chat.run_stream(task=task)
+    await Console(stream)
+
+
+# Use asyncio.run(run_number_agents()) when running in a script.
+await run_number_agents()
+```
+
+```
+---------- user ----------
+Apply the operations to turn the given number into 25.
+---------- user ----------
+10
+---------- multiply_agent ----------
+20
+---------- add_agent ----------
+21
+---------- multiply_agent ----------
+42
+---------- divide_agent ----------
+21
+---------- add_agent ----------
+22
+---------- add_agent ----------
+23
+---------- add_agent ----------
+24
+---------- add_agent ----------
+25
+---------- Summary ----------
+Number of messages: 10
+Finish reason: Maximum number of messages 10 reached, current message count: 10
+Total prompt tokens: 0
+Total completion tokens: 0
+Duration: 2.40 seconds
+```
+
+从输出中我们可以看到，代理已成功将输入整数从10转换为25，通过选择合适的代理按顺序应用算术运算。
+
+### 10.3 在自定义代理中使用自定义模型客户端
+
+[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent)预设在 AgentChat 中的一个关键特性是它接受一个 `model_client` 参数，并可以在回复消息时使用它。然而，在某些情况下，您可能希望您的代理使用当前不支持的自定义模型客户端（参见[支持的模型客户端 ](https://microsoft.github.io/autogen/dev/user-guide/core-user-guide/components/model-clients.html)）或自定义模型行为。
+
+您可以通过实现一个自定义代理来完成此操作，该代理实现了 *您的自定义模型客户端* 。
+
+在下面的示例中，我们将通过一个自定义代理的示例来展示如何直接使用 [Google Gemini SDK](https://github.com/googleapis/python-genai) 来响应消息。
+
+> 注意：您需要安装 [Google Gemini SDK](https://github.com/googleapis/python-genai) 来运行此示例。您可以使用以下命令进行安装：
+
+```
+pip install google-genai
+```
+
+```python
+# !pip install google-genai
+import os
+from typing import AsyncGenerator, Sequence
+
+from autogen_agentchat.agents import BaseChatAgent
+from autogen_agentchat.base import Response
+from autogen_agentchat.messages import BaseAgentEvent, BaseChatMessage
+from autogen_core import CancellationToken
+from autogen_core.model_context import UnboundedChatCompletionContext
+from autogen_core.models import AssistantMessage, RequestUsage, UserMessage
+from google import genai
+from google.genai import types
+
+
+class GeminiAssistantAgent(BaseChatAgent):
+    def __init__(
+        self,
+        name: str,
+        description: str = "An agent that provides assistance with ability to use tools.",
+        model: str = "gemini-1.5-flash-002",
+        api_key: str = os.environ["GEMINI_API_KEY"],
+        system_message: str
+        | None = "You are a helpful assistant that can respond to messages. Reply with TERMINATE when the task has been completed.",
+    ):
+        super().__init__(name=name, description=description)
+        self._model_context = UnboundedChatCompletionContext()
+        self._model_client = genai.Client(api_key=api_key)
+        self._system_message = system_message
+        self._model = model
+
+    @property
+    def produced_message_types(self) -> Sequence[type[BaseChatMessage]]:
+        return (TextMessage,)
+
+    async def on_messages(self, messages: Sequence[BaseChatMessage], cancellation_token: CancellationToken) -> Response:
+        final_response = None
+        async for message in self.on_messages_stream(messages, cancellation_token):
+            if isinstance(message, Response):
+                final_response = message
+
+        if final_response is None:
+            raise AssertionError("The stream should have returned the final result.")
+
+        return final_response
+
+    async def on_messages_stream(
+        self, messages: Sequence[BaseChatMessage], cancellation_token: CancellationToken
+    ) -> AsyncGenerator[BaseAgentEvent | BaseChatMessage | Response, None]:
+        # Add messages to the model context
+        for msg in messages:
+            await self._model_context.add_message(msg.to_model_message())
+
+        # Get conversation history
+        history = [
+            (msg.source if hasattr(msg, "source") else "system")
+            + ": "
+            + (msg.content if isinstance(msg.content, str) else "")
+            + "\n"
+            for msg in await self._model_context.get_messages()
+        ]
+        # Generate response using Gemini
+        response = self._model_client.models.generate_content(
+            model=self._model,
+            contents=f"History: {history}\nGiven the history, please provide a response",
+            config=types.GenerateContentConfig(
+                system_instruction=self._system_message,
+                temperature=0.3,
+            ),
+        )
+
+        # Create usage metadata
+        usage = RequestUsage(
+            prompt_tokens=response.usage_metadata.prompt_token_count,
+            completion_tokens=response.usage_metadata.candidates_token_count,
+        )
+
+        # Add response to model context
+        await self._model_context.add_message(AssistantMessage(content=response.text, source=self.name))
+
+        # Yield the final response
+        yield Response(
+            chat_message=TextMessage(content=response.text, source=self.name, models_usage=usage),
+            inner_messages=[],
+        )
+
+    async def on_reset(self, cancellation_token: CancellationToken) -> None:
+        """Reset the assistant by clearing the model context."""
+        await self._model_context.clear()
+```
+
+```python
+gemini_assistant = GeminiAssistantAgent("gemini_assistant")
+await Console(gemini_assistant.run_stream(task="What is the capital of New York?"))
+```
+
+```
+---------- user ----------
+What is the capital of New York?
+---------- gemini_assistant ----------
+Albany
+TERMINATE
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='What is the capital of New York?', type='TextMessage'), TextMessage(source='gemini_assistant', models_usage=RequestUsage(prompt_tokens=46, completion_tokens=5), content='Albany\nTERMINATE\n', type='TextMessage')], stop_reason=None)
+```
+
+在上述示例中，我们选择了提供 `模型 `、`API 密钥 `和 `系统消息 `作为参数 - 您可以选择提供您使用的模型客户端所需的任何其他参数，或者与您的应用程序设计相匹配的参数。
+
+现在，让我们探索如何在 AgentChat 中将这个自定义代理作为团队的一部分来使用。
+
+```python
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.conditions import TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_agentchat.ui import Console
+
+model_client = OpenAIChatCompletionClient(model="gpt-4o-mini")
+
+# Create the primary agent.
+primary_agent = AssistantAgent(
+    "primary",
+    model_client=model_client,
+    system_message="You are a helpful AI assistant.",
+)
+
+# Create a critic agent based on our new GeminiAssistantAgent.
+gemini_critic_agent = GeminiAssistantAgent(
+    "gemini_critic",
+    system_message="Provide constructive feedback. Respond with 'APPROVE' to when your feedbacks are addressed.",
+)
+
+
+# Define a termination condition that stops the task if the critic approves or after 10 messages.
+termination = TextMentionTermination("APPROVE") | MaxMessageTermination(10)
+
+# Create a team with the primary and critic agents.
+team = RoundRobinGroupChat([primary_agent, gemini_critic_agent], termination_condition=termination)
+
+await Console(team.run_stream(task="Write a Haiku poem with 4 lines about the fall season."))
+await model_client.close()
+```
+
+```
+---------- user ----------
+Write a Haiku poem with 4 lines about the fall season.
+---------- primary ----------
+Crimson leaves cascade,  
+Whispering winds sing of change,  
+Chill wraps the fading,  
+Nature's quilt, rich and warm.
+---------- gemini_critic ----------
+The poem is good, but it has four lines instead of three.  A haiku must have three lines with a 5-7-5 syllable structure.  The content is evocative of autumn, but the form is incorrect.  Please revise to adhere to the haiku's syllable structure.
+
+---------- primary ----------
+Thank you for your feedback! Here’s a revised haiku that follows the 5-7-5 syllable structure:
+
+Crimson leaves drift down,  
+Chill winds whisper through the gold,  
+Autumn’s breath is near.
+---------- gemini_critic ----------
+The revised haiku is much improved.  It correctly follows the 5-7-5 syllable structure and maintains the evocative imagery of autumn.  APPROVE
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Write a Haiku poem with 4 lines about the fall season.', type='TextMessage'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=33, completion_tokens=31), content="Crimson leaves cascade,  \nWhispering winds sing of change,  \nChill wraps the fading,  \nNature's quilt, rich and warm.", type='TextMessage'), TextMessage(source='gemini_critic', models_usage=RequestUsage(prompt_tokens=86, completion_tokens=60), content="The poem is good, but it has four lines instead of three.  A haiku must have three lines with a 5-7-5 syllable structure.  The content is evocative of autumn, but the form is incorrect.  Please revise to adhere to the haiku's syllable structure.\n", type='TextMessage'), TextMessage(source='primary', models_usage=RequestUsage(prompt_tokens=141, completion_tokens=49), content='Thank you for your feedback! Here’s a revised haiku that follows the 5-7-5 syllable structure:\n\nCrimson leaves drift down,  \nChill winds whisper through the gold,  \nAutumn’s breath is near.', type='TextMessage'), TextMessage(source='gemini_critic', models_usage=RequestUsage(prompt_tokens=211, completion_tokens=32), content='The revised haiku is much improved.  It correctly follows the 5-7-5 syllable structure and maintains the evocative imagery of autumn.  APPROVE\n', type='TextMessage')], stop_reason="Text 'APPROVE' mentioned")
+```
+
+在上述章节中，我们展示了几个非常重要的概念：
+
+- 我们开发了一个自定义代理，该代理使用 Google Gemini SDK 来响应消息。
+- 我们表明，这个自定义代理可以作为更广泛的 AgentChat 生态系统的一部分使用——在这种情况下，作为[`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat) 的参与者，只要它继承自 [`BaseChatAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.BaseChatAgent)。
+
+### 10.4 制作声明式自定义代理
+
+Autogen 提供了一个[组件](https://microsoft.github.io/autogen/dev/user-guide/core-user-guide/framework/component-config.html)接口，用于将组件配置序列化为声明性格式。这对于保存和加载配置以及与他人共享配置非常有用。
+
+我们通过继承自 `Component` 类并实现 `_from_config` 和 `_to_config` 方法来完成此操作。声明性类可以使用 `dump_component` 方法序列化为 JSON 格式，并使用 `load_component` 方法从 JSON 格式反序列化。
+
+```python
+import os
+from typing import AsyncGenerator, Sequence
+
+from autogen_agentchat.agents import BaseChatAgent
+from autogen_agentchat.base import Response
+from autogen_agentchat.messages import BaseAgentEvent, BaseChatMessage
+from autogen_core import CancellationToken, Component
+from pydantic import BaseModel
+from typing_extensions import Self
+
+
+class GeminiAssistantAgentConfig(BaseModel):
+    name: str
+    description: str = "An agent that provides assistance with ability to use tools."
+    model: str = "gemini-1.5-flash-002"
+    system_message: str | None = None
+
+
+class GeminiAssistantAgent(BaseChatAgent, Component[GeminiAssistantAgentConfig]):  # type: ignore[no-redef]
+    component_config_schema = GeminiAssistantAgentConfig
+    # component_provider_override = "mypackage.agents.GeminiAssistantAgent"
+
+    def __init__(
+        self,
+        name: str,
+        description: str = "An agent that provides assistance with ability to use tools.",
+        model: str = "gemini-1.5-flash-002",
+        api_key: str = os.environ["GEMINI_API_KEY"],
+        system_message: str
+        | None = "You are a helpful assistant that can respond to messages. Reply with TERMINATE when the task has been completed.",
+    ):
+        super().__init__(name=name, description=description)
+        self._model_context = UnboundedChatCompletionContext()
+        self._model_client = genai.Client(api_key=api_key)
+        self._system_message = system_message
+        self._model = model
+
+    @property
+    def produced_message_types(self) -> Sequence[type[BaseChatMessage]]:
+        return (TextMessage,)
+
+    async def on_messages(self, messages: Sequence[BaseChatMessage], cancellation_token: CancellationToken) -> Response:
+        final_response = None
+        async for message in self.on_messages_stream(messages, cancellation_token):
+            if isinstance(message, Response):
+                final_response = message
+
+        if final_response is None:
+            raise AssertionError("The stream should have returned the final result.")
+
+        return final_response
+
+    async def on_messages_stream(
+        self, messages: Sequence[BaseChatMessage], cancellation_token: CancellationToken
+    ) -> AsyncGenerator[BaseAgentEvent | BaseChatMessage | Response, None]:
+        # Add messages to the model context
+        for msg in messages:
+            await self._model_context.add_message(msg.to_model_message())
+
+        # Get conversation history
+        history = [
+            (msg.source if hasattr(msg, "source") else "system")
+            + ": "
+            + (msg.content if isinstance(msg.content, str) else "")
+            + "\n"
+            for msg in await self._model_context.get_messages()
+        ]
+
+        # Generate response using Gemini
+        response = self._model_client.models.generate_content(
+            model=self._model,
+            contents=f"History: {history}\nGiven the history, please provide a response",
+            config=types.GenerateContentConfig(
+                system_instruction=self._system_message,
+                temperature=0.3,
+            ),
+        )
+
+        # Create usage metadata
+        usage = RequestUsage(
+            prompt_tokens=response.usage_metadata.prompt_token_count,
+            completion_tokens=response.usage_metadata.candidates_token_count,
+        )
+
+        # Add response to model context
+        await self._model_context.add_message(AssistantMessage(content=response.text, source=self.name))
+
+        # Yield the final response
+        yield Response(
+            chat_message=TextMessage(content=response.text, source=self.name, models_usage=usage),
+            inner_messages=[],
+        )
+
+    async def on_reset(self, cancellation_token: CancellationToken) -> None:
+        """Reset the assistant by clearing the model context."""
+        await self._model_context.clear()
+
+    @classmethod
+    def _from_config(cls, config: GeminiAssistantAgentConfig) -> Self:
+        return cls(
+            name=config.name, description=config.description, model=config.model, system_message=config.system_message
+        )
+
+    def _to_config(self) -> GeminiAssistantAgentConfig:
+        return GeminiAssistantAgentConfig(
+            name=self.name,
+            description=self.description,
+            model=self._model,
+            system_message=self._system_message,
+        )
+```
+
+现在我们已经实现了所需的方法，我们可以将自定义代理加载和导出为 JSON 格式，然后再从 JSON 格式加载代理。
+
+>注意：您应将 `component_provider_override` 类变量设置为包含自定义代理类的模块的完整路径，例如（ `mypackage.agents.GeminiAssistantAgent` ）。此变量由 `load_component` 方法用于确定如何实例化该类。
+
+```python
+gemini_assistant = GeminiAssistantAgent("gemini_assistant")
+config = gemini_assistant.dump_component()
+print(config.model_dump_json(indent=2))
+loaded_agent = GeminiAssistantAgent.load_component(config)
+print(loaded_agent)
+```
+
+```
+{
+  "provider": "__main__.GeminiAssistantAgent",
+  "component_type": "agent",
+  "version": 1,
+  "component_version": 1,
+  "description": null,
+  "label": "GeminiAssistantAgent",
+  "config": {
+    "name": "gemini_assistant",
+    "description": "An agent that provides assistance with ability to use tools.",
+    "model": "gemini-1.5-flash-002",
+    "system_message": "You are a helpful assistant that can respond to messages. Reply with TERMINATE when the task has been completed."
+  }
+}
+<__main__.GeminiAssistantAgent object at 0x11a5c5a90>
+```
+
+## 11、选择器群聊
+
+[`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat)实现了一个团队，团队成员轮流向所有其他成员广播消息。一个生成模型（例如，LLM）根据共享上下文选择下一个发言者，从而实现动态、上下文感知的协作。
+
+关键特性包括：
+
+- 基于模型的说话人选择
+- 可配置的参与者角色和描述
+- 防止同一说话人连续发言（可选）
+- 可定制的选择提示
+- 可定制的选择功能以覆盖默认基于模型的选取
+- 可定制的候选函数，用于通过模型缩小选择代理的集合
+
+>[`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat) 是一个高级 API。若需更多控制和定制，请参阅核心 API 文档中的 [ 群聊模式 ](https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/design-patterns/group-chat.html) 以实现您自己的群聊逻辑。
+
+### 11.1 它是如何工作的？
+
+[`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat) 是一个群聊，类似于 [`RoundRobinGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.RoundRobinGroupChat)，但具有基于模型的下一位发言者选择机制。当团队通过 [`run()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run)或 [`run_stream()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.run_stream) 接收到任务时，将执行以下步骤：
+
+1. 团队分析当前对话上下文，包括对话历史和参与者[`姓名`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.ChatAgent.name)和[`描述`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.ChatAgent.description)属性，以确定下一个说话者。默认情况下，除非是唯一可用的代理，否则团队不会连续选择相同的说话者。这可以通过设置 `allow_repeated_speaker=True` 来更改。您还可以通过提供自定义选择函数来覆盖模型。
+2. 团队提示选定的说话者代理提供响应，然后将其 ***\*broadcasted\** 广播给所有其他参与者。**
+3. 检查终止条件以确定对话是否应该结束，如果没有，则从步骤1重复该过程。
+4. 当对话结束时，团队返回包含此任务对话历史的 [`TaskResult`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.TaskResult)。
+
+一旦团队完成任务，对话上下文将保留在团队和所有参与者之间，以便下一个任务可以从之前的对话上下文继续。您可以通过调用 [`reset()`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.BaseGroupChat.reset) 来重置对话上下文。
+
+在本节中，我们将通过一个简单的示例来演示如何使用 [`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat) 进行网络搜索和数据分析任务。
+
+### 11.2 示例：网络搜索/分析
+
+```python
+from typing import List, Sequence
+
+from autogen_agentchat.agents import AssistantAgent, UserProxyAgent
+from autogen_agentchat.conditions import MaxMessageTermination, TextMentionTermination
+from autogen_agentchat.messages import BaseAgentEvent, BaseChatMessage
+from autogen_agentchat.teams import SelectorGroupChat
+from autogen_agentchat.ui import Console
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+```
+
+#### 11.2.1 代理
+
+![image-20250414230500831](./img/小米虫爬山路-py版-img/image-20250414230500831.png)
+
+该系统使用三个专业代理：
+
+- **规划代理** ：将复杂任务分解为可管理子任务的策略协调器。
+- **网络搜索代理** ：与 `search_web_tool` 交互的信息检索专家。
+- **数据分析代理** ：配备 `percentage_change_tool` 的计算专家代理。
+
+工具 `search_web_tool` 和 `percentage_change_tool` 是代理可以使用的用于执行任务的第三方工具。
+
+```python
+# Note: This example uses mock tools instead of real APIs for demonstration purposes
+def search_web_tool(query: str) -> str:
+    if "2006-2007" in query:
+        return """Here are the total points scored by Miami Heat players in the 2006-2007 season:
+        Udonis Haslem: 844 points
+        Dwayne Wade: 1397 points
+        James Posey: 550 points
+        ...
+        """
+    elif "2007-2008" in query:
+        return "The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214."
+    elif "2008-2009" in query:
+        return "The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398."
+    return "No data found."
+
+
+def percentage_change_tool(start: float, end: float) -> float:
+    return ((end - start) / start) * 100
+```
+
+让我们使用 `AssistantAgent` 类创建专门的代理。需要注意的是，代理的 `name` 和 `description` 属性被模型用来确定下一个说话者，因此建议提供有意义的名称和描述。
+
+```python
+model_client = OpenAIChatCompletionClient(model="gpt-4o")
+
+planning_agent = AssistantAgent(
+    "PlanningAgent",
+    description="An agent for planning tasks, this agent should be the first to engage when given a new task.",
+    model_client=model_client,
+    system_message="""
+    You are a planning agent.
+    Your job is to break down complex tasks into smaller, manageable subtasks.
+    Your team members are:
+        WebSearchAgent: Searches for information
+        DataAnalystAgent: Performs calculations
+
+    You only plan and delegate tasks - you do not execute them yourself.
+
+    When assigning tasks, use this format:
+    1. <agent> : <task>
+
+    After all tasks are complete, summarize the findings and end with "TERMINATE".
+    """,
+)
+
+web_search_agent = AssistantAgent(
+    "WebSearchAgent",
+    description="An agent for searching information on the web.",
+    tools=[search_web_tool],
+    model_client=model_client,
+    system_message="""
+    You are a web search agent.
+    Your only tool is search_tool - use it to find information.
+    You make only one search call at a time.
+    Once you have the results, you never do calculations based on them.
+    """,
+)
+
+data_analyst_agent = AssistantAgent(
+    "DataAnalystAgent",
+    description="An agent for performing calculations.",
+    model_client=model_client,
+    tools=[percentage_change_tool],
+    system_message="""
+    You are a data analyst.
+    Given the tasks you have been assigned, you should analyze the data and provide results using the tools provided.
+    If you have not seen the data, ask for it.
+    """,
+)
+```
+
+>默认情况下，[`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 返回工具输出作为响应。如果您的工具不返回自然语言格式的良好格式化字符串，您可能希望在创建代理时通过设置 `reflect_on_tool_use=True` 在代理中添加一个反射步骤。这将允许代理对工具输出进行反思并提供自然语言响应。
+
+#### 11.2.2 工作流程
+
+1. 任务由 [`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat) 接收，该组件根据代理描述选择最合适的代理来处理初始任务（通常是规划代理）。
+2. **规划代理**分析任务并将其分解为子任务，将每个子任务分配给最合适的代理，格式如下： `代理 : 任务`
+3. 根据对话上下文和代理描述，` 选择器群聊 `管理员动态选择下一个处理分配子任务的代理。
+4. **网页搜索代理** 逐个执行搜索，并将结果存储在共享的对话历史中。
+5. **数据分析员** 在被选中时，使用可用的计算工具处理收集到的信息。
+6. 工作流程继续，直到动态选择代理人员，直到以下任一情况：
+   - 计划代理确定所有子任务已完成并发送“终止”
+   - 达到替代终止条件（例如，最大消息数）
+
+在定义您的代理时，请确保包括一个有用的 [`description`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.base.html#autogen_agentchat.base.ChatAgent.description) ，因为这将用于决定下一个选择哪个代理。
+
+#### 11.2.3 终止条件 
+
+让我们使用两个终止条件： [`TextMentionTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.TextMentionTermination) 当规划代理发送“TERMINATE”时结束对话，以及 [`MaxMessageTermination`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.conditions.html#autogen_agentchat.conditions.MaxMessageTermination) 限制对话为 25 条消息以避免无限循环。
+
+```python
+text_mention_termination = TextMentionTermination("TERMINATE")
+max_messages_termination = MaxMessageTermination(max_messages=25)
+termination = text_mention_termination | max_messages_termination
+```
+
+#### 11.2.4 选择器提示
+
+[`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat)使用模型根据对话上下文选择下一个说话者。我们将使用自定义选择器提示以正确匹配工作流程。
+
+```python
+selector_prompt = """Select an agent to perform task.
+
+{roles}
+
+Current conversation context:
+{history}
+
+Read the above conversation, then select an agent from {participants} to perform the next task.
+Make sure the planner agent has assigned tasks before other agents start working.
+Only select one agent.
+"""
+```
+
+>尽量不要在选择器提示中添加过多指令。
+>
+>什么是过多？这取决于你使用的模型能力。对于 GPT-4o 及其等效模型，你可以使用带有条件的选择器提示，以确定何时选择每个说话者。对于 Phi-4 等较小模型，你应该尽可能简化选择器提示，如本例所示。
+>
+>通常，如果你发现自己为每个代理编写多个条件，这可能意味着你应该考虑使用自定义选择函数，或者将任务分解成更小的、按顺序处理的子任务，由不同的代理或团队处理。
+
+#### 11.2.5 运行团队
+
+让我们创建一个包含代理、终止条件和自定义选择提示的团队。
+
+```python
+team = SelectorGroupChat(
+    [planning_agent, web_search_agent, data_analyst_agent],
+    model_client=model_client,
+    termination_condition=termination,
+    selector_prompt=selector_prompt,
+    allow_repeated_speaker=True,  # Allow an agent to speak multiple turns in a row.
+)
+```
+
+现在我们给团队分配了一个任务，去查找关于一名 NBA 球员的信息。
+
+```python
+task = "Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?"
+# Use asyncio.run(...) if you are running this in a script.
+await Console(team.run_stream(task=task))
+```
+
+```
+---------- user ----------
+Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?
+---------- PlanningAgent ----------
+To complete this task, we need to perform the following subtasks:
+
+1. Find out which Miami Heat player had the highest points in the 2006-2007 season.
+2. Gather data on this player's total rebounds for the 2007-2008 season.
+3. Gather data on this player's total rebounds for the 2008-2009 season.
+4. Calculate the percentage change in the player's total rebounds between the 2007-2008 and 2008-2009 seasons.
+
+I'll assign these tasks accordingly:
+
+1. WebSearchAgent: Search for the Miami Heat player with the highest points in the 2006-2007 NBA season.
+2. WebSearchAgent: Find the total rebounds for this player in the 2007-2008 NBA season.
+3. WebSearchAgent: Find the total rebounds for this player in the 2008-2009 NBA season.
+4. DataAnalystAgent: Calculate the percentage change in total rebounds from the 2007-2008 season to the 2008-2009 season for this player.
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_89tUNHaAM0kKQYPJLleGUKK7', arguments='{"query":"Miami Heat player highest points 2006-2007 season"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', name='search_web_tool', call_id='call_89tUNHaAM0kKQYPJLleGUKK7', is_error=False)]
+---------- WebSearchAgent ----------
+Here are the total points scored by Miami Heat players in the 2006-2007 season:
+        Udonis Haslem: 844 points
+        Dwayne Wade: 1397 points
+        James Posey: 550 points
+        ...
+        
+---------- WebSearchAgent ----------
+The Miami Heat player with the highest points in the 2006-2007 season was Dwyane Wade, with 1,397 points.
+
+Next, I will search for Dwyane Wade's total rebounds for the 2007-2008 season.
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_RC55TkSjG3JXRuVOTPrcE1RL', arguments='{"query":"Dwyane Wade total rebounds 2007-2008 season"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', name='search_web_tool', call_id='call_RC55TkSjG3JXRuVOTPrcE1RL', is_error=False)]
+---------- WebSearchAgent ----------
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_pBXoABrErDow0rZjw3tjOZol', arguments='{"query":"Dwyane Wade total rebounds 2008-2009 season"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', name='search_web_tool', call_id='call_pBXoABrErDow0rZjw3tjOZol', is_error=False)]
+---------- WebSearchAgent ----------
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.
+---------- DataAnalystAgent ----------
+[FunctionCall(id='call_qMxxXtcJsiK8KFSSCx3zm0is', arguments='{"start":214,"end":398}', name='percentage_change_tool')]
+---------- DataAnalystAgent ----------
+[FunctionExecutionResult(content='85.98130841121495', name='percentage_change_tool', call_id='call_qMxxXtcJsiK8KFSSCx3zm0is', is_error=False)]
+---------- DataAnalystAgent ----------
+85.98130841121495
+---------- PlanningAgent ----------
+The player with the highest points for the Miami Heat in the 2006-2007 NBA season was Dwyane Wade, who scored 1,397 points. The percentage change in Dwyane Wade's total rebounds from 214 in the 2007-2008 season to 398 in the 2008-2009 season is approximately 85.98%.
+
+TERMINATE
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, metadata={}, content='Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?', type='TextMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=161, completion_tokens=220), metadata={}, content="To complete this task, we need to perform the following subtasks:\n\n1. Find out which Miami Heat player had the highest points in the 2006-2007 season.\n2. Gather data on this player's total rebounds for the 2007-2008 season.\n3. Gather data on this player's total rebounds for the 2008-2009 season.\n4. Calculate the percentage change in the player's total rebounds between the 2007-2008 and 2008-2009 seasons.\n\nI'll assign these tasks accordingly:\n\n1. WebSearchAgent: Search for the Miami Heat player with the highest points in the 2006-2007 NBA season.\n2. WebSearchAgent: Find the total rebounds for this player in the 2007-2008 NBA season.\n3. WebSearchAgent: Find the total rebounds for this player in the 2008-2009 NBA season.\n4. DataAnalystAgent: Calculate the percentage change in total rebounds from the 2007-2008 season to the 2008-2009 season for this player.", type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=368, completion_tokens=27), metadata={}, content=[FunctionCall(id='call_89tUNHaAM0kKQYPJLleGUKK7', arguments='{"query":"Miami Heat player highest points 2006-2007 season"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', name='search_web_tool', call_id='call_89tUNHaAM0kKQYPJLleGUKK7', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, metadata={}, content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', type='ToolCallSummaryMessage'), ThoughtEvent(source='WebSearchAgent', models_usage=None, metadata={}, content="The Miami Heat player with the highest points in the 2006-2007 season was Dwyane Wade, with 1,397 points.\n\nNext, I will search for Dwyane Wade's total rebounds for the 2007-2008 season.", type='ThoughtEvent'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=460, completion_tokens=83), metadata={}, content=[FunctionCall(id='call_RC55TkSjG3JXRuVOTPrcE1RL', arguments='{"query":"Dwyane Wade total rebounds 2007-2008 season"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', name='search_web_tool', call_id='call_RC55TkSjG3JXRuVOTPrcE1RL', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, metadata={}, content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', type='ToolCallSummaryMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=585, completion_tokens=28), metadata={}, content=[FunctionCall(id='call_pBXoABrErDow0rZjw3tjOZol', arguments='{"query":"Dwyane Wade total rebounds 2008-2009 season"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', name='search_web_tool', call_id='call_pBXoABrErDow0rZjw3tjOZol', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, metadata={}, content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', type='ToolCallSummaryMessage'), ToolCallRequestEvent(source='DataAnalystAgent', models_usage=RequestUsage(prompt_tokens=496, completion_tokens=21), metadata={}, content=[FunctionCall(id='call_qMxxXtcJsiK8KFSSCx3zm0is', arguments='{"start":214,"end":398}', name='percentage_change_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='DataAnalystAgent', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='85.98130841121495', name='percentage_change_tool', call_id='call_qMxxXtcJsiK8KFSSCx3zm0is', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='DataAnalystAgent', models_usage=None, metadata={}, content='85.98130841121495', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=528, completion_tokens=80), metadata={}, content="The player with the highest points for the Miami Heat in the 2006-2007 NBA season was Dwyane Wade, who scored 1,397 points. The percentage change in Dwyane Wade's total rebounds from 214 in the 2007-2008 season to 398 in the 2008-2009 season is approximately 85.98%.\n\nTERMINATE", type='TextMessage')], stop_reason="Text 'TERMINATE' mentioned")
+```
+
+正如我们所见，在 Web 搜索代理进行必要的搜索和数据分析师代理完成必要的计算后，我们发现德维恩·韦德是 2006-2007 赛季迈阿密热火队得分最高的球员，他在 2007-2008 赛季和 2008-2009 赛季总篮板数的百分比变化为 85.98%！
+
+### 11.3 自定义选择器函数
+
+通常我们希望对选择过程有更好的控制。为此，我们可以设置 `selector_func` 参数，使用自定义选择函数来覆盖基于模型的默认选择。这允许我们实现更复杂的选择逻辑和基于状态的变化。
+
+例如，我们希望规划代理在任何专业代理之后立即发言，以检查进度。
+
+>返回自定义选择器函数中的 `None` 将使用基于模型的默认选择。
+
+```python
+def selector_func(messages: Sequence[BaseAgentEvent | BaseChatMessage]) -> str | None:
+    if messages[-1].source != planning_agent.name:
+        return planning_agent.name
+    return None
+
+
+# Reset the previous team and run the chat again with the selector function.
+await team.reset()
+team = SelectorGroupChat(
+    [planning_agent, web_search_agent, data_analyst_agent],
+    model_client=model_client,
+    termination_condition=termination,
+    selector_prompt=selector_prompt,
+    allow_repeated_speaker=True,
+    selector_func=selector_func,
+)
+
+await Console(team.run_stream(task=task))
+```
+
+```
+---------- user ----------
+Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?
+---------- PlanningAgent ----------
+To answer this question, we need to follow these steps: 
+
+1. Identify the Miami Heat player with the highest points in the 2006-2007 season.
+2. Retrieve the total rebounds of that player for the 2007-2008 and 2008-2009 seasons.
+3. Calculate the percentage change in his total rebounds between the two seasons.
+
+Let's delegate these tasks:
+
+1. WebSearchAgent: Find the Miami Heat player with the highest points in the 2006-2007 NBA season.
+2. WebSearchAgent: Retrieve the total rebounds for the identified player during the 2007-2008 NBA season.
+3. WebSearchAgent: Retrieve the total rebounds for the identified player during the 2008-2009 NBA season.
+4. DataAnalystAgent: Calculate the percentage change in total rebounds between the 2007-2008 and 2008-2009 seasons for the player found.
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_Pz82ndNLSV4cH0Sg6g7ArP4L', arguments='{"query":"Miami Heat player highest points 2006-2007 season"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', call_id='call_Pz82ndNLSV4cH0Sg6g7ArP4L')]
+---------- WebSearchAgent ----------
+Here are the total points scored by Miami Heat players in the 2006-2007 season:
+        Udonis Haslem: 844 points
+        Dwayne Wade: 1397 points
+        James Posey: 550 points
+        ...
+        
+---------- PlanningAgent ----------
+Great! Dwyane Wade was the Miami Heat player with the highest points in the 2006-2007 season. Now, let's continue with the next tasks:
+
+2. WebSearchAgent: Retrieve the total rebounds for Dwyane Wade during the 2007-2008 NBA season.
+3. WebSearchAgent: Retrieve the total rebounds for Dwyane Wade during the 2008-2009 NBA season.
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_3qv9so2DXFZIHtzqDIfXoFID', arguments='{"query": "Dwyane Wade total rebounds 2007-2008 season"}', name='search_web_tool'), FunctionCall(id='call_Vh7zzzWUeiUAvaYjP0If0k1k', arguments='{"query": "Dwyane Wade total rebounds 2008-2009 season"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', call_id='call_3qv9so2DXFZIHtzqDIfXoFID'), FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', call_id='call_Vh7zzzWUeiUAvaYjP0If0k1k')]
+---------- WebSearchAgent ----------
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.
+---------- PlanningAgent ----------
+Now let's calculate the percentage change in total rebounds between the 2007-2008 and 2008-2009 seasons for Dwyane Wade.
+
+4. DataAnalystAgent: Calculate the percentage change in total rebounds for Dwyane Wade between the 2007-2008 and 2008-2009 seasons.
+---------- DataAnalystAgent ----------
+[FunctionCall(id='call_FXnPSr6JVGfAWs3StIizbt2V', arguments='{"start":214,"end":398}', name='percentage_change_tool')]
+---------- DataAnalystAgent ----------
+[FunctionExecutionResult(content='85.98130841121495', call_id='call_FXnPSr6JVGfAWs3StIizbt2V')]
+---------- DataAnalystAgent ----------
+85.98130841121495
+---------- PlanningAgent ----------
+Dwyane Wade was the Miami Heat player with the highest points in the 2006-2007 season, scoring a total of 1397 points. The percentage change in his total rebounds from the 2007-2008 season (214 rebounds) to the 2008-2009 season (398 rebounds) is approximately 86.0%.
+
+TERMINATE
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?', type='TextMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=161, completion_tokens=192), content="To answer this question, we need to follow these steps: \n\n1. Identify the Miami Heat player with the highest points in the 2006-2007 season.\n2. Retrieve the total rebounds of that player for the 2007-2008 and 2008-2009 seasons.\n3. Calculate the percentage change in his total rebounds between the two seasons.\n\nLet's delegate these tasks:\n\n1. WebSearchAgent: Find the Miami Heat player with the highest points in the 2006-2007 NBA season.\n2. WebSearchAgent: Retrieve the total rebounds for the identified player during the 2007-2008 NBA season.\n3. WebSearchAgent: Retrieve the total rebounds for the identified player during the 2008-2009 NBA season.\n4. DataAnalystAgent: Calculate the percentage change in total rebounds between the 2007-2008 and 2008-2009 seasons for the player found.", type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=340, completion_tokens=27), content=[FunctionCall(id='call_Pz82ndNLSV4cH0Sg6g7ArP4L', arguments='{"query":"Miami Heat player highest points 2006-2007 season"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, content=[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', call_id='call_Pz82ndNLSV4cH0Sg6g7ArP4L')], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=420, completion_tokens=87), content="Great! Dwyane Wade was the Miami Heat player with the highest points in the 2006-2007 season. Now, let's continue with the next tasks:\n\n2. WebSearchAgent: Retrieve the total rebounds for Dwyane Wade during the 2007-2008 NBA season.\n3. WebSearchAgent: Retrieve the total rebounds for Dwyane Wade during the 2008-2009 NBA season.", type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=525, completion_tokens=71), content=[FunctionCall(id='call_3qv9so2DXFZIHtzqDIfXoFID', arguments='{"query": "Dwyane Wade total rebounds 2007-2008 season"}', name='search_web_tool'), FunctionCall(id='call_Vh7zzzWUeiUAvaYjP0If0k1k', arguments='{"query": "Dwyane Wade total rebounds 2008-2009 season"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, content=[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', call_id='call_3qv9so2DXFZIHtzqDIfXoFID'), FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', call_id='call_Vh7zzzWUeiUAvaYjP0If0k1k')], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.\nThe number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=569, completion_tokens=68), content="Now let's calculate the percentage change in total rebounds between the 2007-2008 and 2008-2009 seasons for Dwyane Wade.\n\n4. DataAnalystAgent: Calculate the percentage change in total rebounds for Dwyane Wade between the 2007-2008 and 2008-2009 seasons.", type='TextMessage'), ToolCallRequestEvent(source='DataAnalystAgent', models_usage=RequestUsage(prompt_tokens=627, completion_tokens=21), content=[FunctionCall(id='call_FXnPSr6JVGfAWs3StIizbt2V', arguments='{"start":214,"end":398}', name='percentage_change_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='DataAnalystAgent', models_usage=None, content=[FunctionExecutionResult(content='85.98130841121495', call_id='call_FXnPSr6JVGfAWs3StIizbt2V')], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='DataAnalystAgent', models_usage=None, content='85.98130841121495', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=659, completion_tokens=76), content='Dwyane Wade was the Miami Heat player with the highest points in the 2006-2007 season, scoring a total of 1397 points. The percentage change in his total rebounds from the 2007-2008 season (214 rebounds) to the 2008-2009 season (398 rebounds) is approximately 86.0%.\n\nTERMINATE', type='TextMessage')], stop_reason="Text 'TERMINATE' mentioned")
+```
+
+您可以从对话记录中看到，规划代理总是在专业代理之后立即发言。
+
+>每个参与者代理在每个回合中只执行一步（执行工具、生成响应等）。如果您想让 [`AssistantAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.AssistantAgent) 重复执行，直到它停止返回[`ToolCallSummaryMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.ToolCallSummaryMessage) 当它运行完所有需要运行的工具后，您可以这样做 通过检查最后一条消息，如果它是一个[`ToolCallSummaryMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.ToolCallSummaryMessage)，则返回代理 [`ToolCallSummaryMessage`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.messages.html#autogen_agentchat.messages.ToolCallSummaryMessage)。
+
+### 11.4 自定义选择器函数
+
+可能还有一个要求是自动从过滤后的代理列表中选择下一个说话者。为此，我们可以设置 `candidate_func` 参数，使用自定义的候选函数来过滤每个轮次群聊中潜在代理的列表。
+
+这允许我们在指定代理之后将说话者选择限制在特定的一组代理中。
+
+> 候选人函数 `candidate_func` 仅在 `selector_func` 未设置时有效。从自定义候选人函数返回 `None` 或空列表 `[]` 将引发 `ValueError` 异常。
+
+```python
+def candidate_func(messages: Sequence[BaseAgentEvent | BaseChatMessage]) -> List[str]:
+    # keep planning_agent first one to plan out the tasks
+    if messages[-1].source == "user":
+        return [planning_agent.name]
+
+    # if previous agent is planning_agent and if it explicitely asks for web_search_agent
+    # or data_analyst_agent or both (in-case of re-planning or re-assignment of tasks)
+    # then return those specific agents
+    last_message = messages[-1]
+    if last_message.source == planning_agent.name:
+        participants = []
+        if web_search_agent.name in last_message.to_text():
+            participants.append(web_search_agent.name)
+        if data_analyst_agent.name in last_message.to_text():
+            participants.append(data_analyst_agent.name)
+        if participants:
+            return participants  # SelectorGroupChat will select from the remaining two agents.
+
+    # we can assume that the task is finished once the web_search_agent
+    # and data_analyst_agent have took their turns, thus we send
+    # in planning_agent to terminate the chat
+    previous_set_of_agents = set(message.source for message in messages)
+    if web_search_agent.name in previous_set_of_agents and data_analyst_agent.name in previous_set_of_agents:
+        return [planning_agent.name]
+
+    # if no-conditions are met then return all the agents
+    return [planning_agent.name, web_search_agent.name, data_analyst_agent.name]
+
+
+# Reset the previous team and run the chat again with the selector function.
+await team.reset()
+team = SelectorGroupChat(
+    [planning_agent, web_search_agent, data_analyst_agent],
+    model_client=model_client,
+    termination_condition=termination,
+    candidate_func=candidate_func,
+)
+
+await Console(team.run_stream(task=task))
+```
+
+```
+---------- user ----------
+Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?
+---------- PlanningAgent ----------
+To answer this question, we'll break it down into two main subtasks:
+
+1. Identify the Miami Heat player with the highest points in the 2006-2007 season.
+2. Calculate the percentage change in that player's total rebounds between the 2007-2008 and 2008-2009 seasons.
+
+Let's assign these tasks:
+
+1. WebSearchAgent: Search for the Miami Heat player with the highest points in the 2006-2007 NBA season.
+2. WebSearchAgent: Find the total rebound statistics for that identified player for both the 2007-2008 and 2008-2009 NBA seasons.
+3. DataAnalystAgent: Calculate the percentage change in the player's total rebounds between the 2007-2008 and 2008-2009 seasons once the data is retrieved.
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_WtR5KTfEIxs3jIO25gjAw7dF', arguments='{"query":"Miami Heat highest points scorer 2006-2007 NBA season"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', name='search_web_tool', call_id='call_WtR5KTfEIxs3jIO25gjAw7dF', is_error=False)]
+---------- WebSearchAgent ----------
+Here are the total points scored by Miami Heat players in the 2006-2007 season:
+        Udonis Haslem: 844 points
+        Dwayne Wade: 1397 points
+        James Posey: 550 points
+        ...
+        
+---------- DataAnalystAgent ----------
+[FunctionCall(id='call_9HA3DEacUl4WuG2G2PtRkXAO', arguments='{"start": 432, "end": 527}', name='percentage_change_tool')]
+---------- DataAnalystAgent ----------
+[FunctionExecutionResult(content='21.99074074074074', name='percentage_change_tool', call_id='call_9HA3DEacUl4WuG2G2PtRkXAO', is_error=False)]
+---------- DataAnalystAgent ----------
+21.99074074074074
+---------- PlanningAgent ----------
+It seems we've missed some context there, so let's assign the subtasks again for clarity:
+
+Based on the search results, Dwyane Wade had the highest points for the Miami Heat in the 2006-2007 season with 1397 points.
+
+Now, let's find the necessary rebound statistics:
+
+2. WebSearchAgent: Find Dwyane Wade's total rebound statistics for both the 2007-2008 and 2008-2009 NBA seasons.
+3. DataAnalystAgent: Once the data is retrieved, calculate the percentage change in Dwyane Wade's total rebounds between the 2007-2008 and 2008-2009 seasons.
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_3i1wTDSjkGg6Ev8YKYWkZK55', arguments='{"query": "Dwyane Wade total rebounds 2007-2008 NBA season"}', name='search_web_tool'), FunctionCall(id='call_NRAs6jHxXRi8zsvpW5WlHAaU', arguments='{"query": "Dwyane Wade total rebounds 2008-2009 NBA season"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', name='search_web_tool', call_id='call_3i1wTDSjkGg6Ev8YKYWkZK55', is_error=False), FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', name='search_web_tool', call_id='call_NRAs6jHxXRi8zsvpW5WlHAaU', is_error=False)]
+---------- WebSearchAgent ----------
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.
+---------- PlanningAgent ----------
+The total rebounds for Dwyane Wade in the 2007-2008 season were 214, and in the 2008-2009 season, they were 398.
+
+Now, let's calculate the percentage change.
+
+3. DataAnalystAgent: Calculate the percentage change in Dwyane Wade's total rebounds from the 2007-2008 season to the 2008-2009 season.
+---------- DataAnalystAgent ----------
+[FunctionCall(id='call_XECA7ezz7VIKbf8IbZYSCSpI', arguments='{"start":214,"end":398}', name='percentage_change_tool')]
+---------- DataAnalystAgent ----------
+[FunctionExecutionResult(content='85.98130841121495', name='percentage_change_tool', call_id='call_XECA7ezz7VIKbf8IbZYSCSpI', is_error=False)]
+---------- DataAnalystAgent ----------
+85.98130841121495
+---------- PlanningAgent ----------
+The Miami Heat player with the highest points in the 2006-2007 season was Dwyane Wade, with 1397 points. The percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons was approximately 85.98%.
+
+TERMINATE
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, metadata={}, content='Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?', type='TextMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=161, completion_tokens=169), metadata={}, content="To answer this question, we'll break it down into two main subtasks:\n\n1. Identify the Miami Heat player with the highest points in the 2006-2007 season.\n2. Calculate the percentage change in that player's total rebounds between the 2007-2008 and 2008-2009 seasons.\n\nLet's assign these tasks:\n\n1. WebSearchAgent: Search for the Miami Heat player with the highest points in the 2006-2007 NBA season.\n2. WebSearchAgent: Find the total rebound statistics for that identified player for both the 2007-2008 and 2008-2009 NBA seasons.\n3. DataAnalystAgent: Calculate the percentage change in the player's total rebounds between the 2007-2008 and 2008-2009 seasons once the data is retrieved.", type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=324, completion_tokens=28), metadata={}, content=[FunctionCall(id='call_WtR5KTfEIxs3jIO25gjAw7dF', arguments='{"query":"Miami Heat highest points scorer 2006-2007 NBA season"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', name='search_web_tool', call_id='call_WtR5KTfEIxs3jIO25gjAw7dF', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, metadata={}, content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', type='ToolCallSummaryMessage'), ToolCallRequestEvent(source='DataAnalystAgent', models_usage=RequestUsage(prompt_tokens=390, completion_tokens=37), metadata={}, content=[FunctionCall(id='call_9HA3DEacUl4WuG2G2PtRkXAO', arguments='{"start": 432, "end": 527}', name='percentage_change_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='DataAnalystAgent', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='21.99074074074074', name='percentage_change_tool', call_id='call_9HA3DEacUl4WuG2G2PtRkXAO', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='DataAnalystAgent', models_usage=None, metadata={}, content='21.99074074074074', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=413, completion_tokens=137), metadata={}, content="It seems we've missed some context there, so let's assign the subtasks again for clarity:\n\nBased on the search results, Dwyane Wade had the highest points for the Miami Heat in the 2006-2007 season with 1397 points.\n\nNow, let's find the necessary rebound statistics:\n\n2. WebSearchAgent: Find Dwyane Wade's total rebound statistics for both the 2007-2008 and 2008-2009 NBA seasons.\n3. DataAnalystAgent: Once the data is retrieved, calculate the percentage change in Dwyane Wade's total rebounds between the 2007-2008 and 2008-2009 seasons.", type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=576, completion_tokens=73), metadata={}, content=[FunctionCall(id='call_3i1wTDSjkGg6Ev8YKYWkZK55', arguments='{"query": "Dwyane Wade total rebounds 2007-2008 NBA season"}', name='search_web_tool'), FunctionCall(id='call_NRAs6jHxXRi8zsvpW5WlHAaU', arguments='{"query": "Dwyane Wade total rebounds 2008-2009 NBA season"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', name='search_web_tool', call_id='call_3i1wTDSjkGg6Ev8YKYWkZK55', is_error=False), FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', name='search_web_tool', call_id='call_NRAs6jHxXRi8zsvpW5WlHAaU', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, metadata={}, content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.\nThe number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=612, completion_tokens=84), metadata={}, content="The total rebounds for Dwyane Wade in the 2007-2008 season were 214, and in the 2008-2009 season, they were 398.\n\nNow, let's calculate the percentage change.\n\n3. DataAnalystAgent: Calculate the percentage change in Dwyane Wade's total rebounds from the 2007-2008 season to the 2008-2009 season.", type='TextMessage'), ToolCallRequestEvent(source='DataAnalystAgent', models_usage=RequestUsage(prompt_tokens=720, completion_tokens=21), metadata={}, content=[FunctionCall(id='call_XECA7ezz7VIKbf8IbZYSCSpI', arguments='{"start":214,"end":398}', name='percentage_change_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='DataAnalystAgent', models_usage=None, metadata={}, content=[FunctionExecutionResult(content='85.98130841121495', name='percentage_change_tool', call_id='call_XECA7ezz7VIKbf8IbZYSCSpI', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='DataAnalystAgent', models_usage=None, metadata={}, content='85.98130841121495', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=718, completion_tokens=63), metadata={}, content='The Miami Heat player with the highest points in the 2006-2007 season was Dwyane Wade, with 1397 points. The percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons was approximately 85.98%.\n\nTERMINATE', type='TextMessage')], stop_reason="Text 'TERMINATE' mentioned")
+```
+
+您可以从对话记录中看到，在 Web 搜索代理和数据分析师代理轮换之后，规划代理再次回到对话中，因为它发现任务没有按预期完成，所以它再次调用 WebSearchAgent 以获取反弹值，然后调用 DataAnalysetAgent 以获取百分比变化。
+
+### 11.5 用户反馈
+
+我们可以在运行期间添加 [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) 到团队中，以提供用户反馈。有关 [人机交互 ](https://microsoft.github.io/autogen/stable/user-guide/agentchat-user-guide/tutorial/human-in-the-loop.html)的更多详细信息，请参阅  [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent)。
+
+在网络搜索示例中，要使用  [`UserProxyAgent`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.agents.html#autogen_agentchat.agents.UserProxyAgent) ，我们只需将其添加到团队中，并更新选择器函数，使其在规划代理发言后始终检查用户反馈。如果用户响应 `"批准"`，则对话继续，否则，规划代理将再次尝试，直到用户批准。
+
+```python
+user_proxy_agent = UserProxyAgent("UserProxyAgent", description="A proxy for the user to approve or disapprove tasks.")
+
+
+def selector_func_with_user_proxy(messages: Sequence[BaseAgentEvent | BaseChatMessage]) -> str | None:
+    if messages[-1].source != planning_agent.name and messages[-1].source != user_proxy_agent.name:
+        # Planning agent should be the first to engage when given a new task, or check progress.
+        return planning_agent.name
+    if messages[-1].source == planning_agent.name:
+        if messages[-2].source == user_proxy_agent.name and "APPROVE" in messages[-1].content.upper():  # type: ignore
+            # User has approved the plan, proceed to the next agent.
+            return None
+        # Use the user proxy agent to get the user's approval to proceed.
+        return user_proxy_agent.name
+    if messages[-1].source == user_proxy_agent.name:
+        # If the user does not approve, return to the planning agent.
+        if "APPROVE" not in messages[-1].content.upper():  # type: ignore
+            return planning_agent.name
+    return None
+
+
+# Reset the previous agents and run the chat again with the user proxy agent and selector function.
+await team.reset()
+team = SelectorGroupChat(
+    [planning_agent, web_search_agent, data_analyst_agent, user_proxy_agent],
+    model_client=model_client,
+    termination_condition=termination,
+    selector_prompt=selector_prompt,
+    selector_func=selector_func_with_user_proxy,
+    allow_repeated_speaker=True,
+)
+
+await Console(team.run_stream(task=task))
+```
+
+```
+---------- user ----------
+Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?
+---------- PlanningAgent ----------
+To address the user's query, we will need to perform the following tasks:
+
+1. Identify the Miami Heat player with the highest points in the 2006-2007 season.
+2. Find the total rebounds for that player in the 2007-2008 season.
+3. Find the total rebounds for that player in the 2008-2009 season.
+4. Calculate the percentage change in the total rebounds between the 2007-2008 and 2008-2009 seasons.
+
+Let's assign these tasks:
+
+1. **WebSearchAgent**: Identify the Miami Heat player with the highest points in the 2006-2007 season.
+   
+(Task 2 and 3 depend on the result of Task 1. We'll proceed with Tasks 2 and 3 once Task 1 is complete.)
+---------- UserProxyAgent ----------
+approve
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_0prr3fUnG5CtisUG7QeygW0w', arguments='{"query":"Miami Heat highest points scorer 2006-2007 NBA season"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', call_id='call_0prr3fUnG5CtisUG7QeygW0w')]
+---------- WebSearchAgent ----------
+Here are the total points scored by Miami Heat players in the 2006-2007 season:
+        Udonis Haslem: 844 points
+        Dwayne Wade: 1397 points
+        James Posey: 550 points
+        ...
+        
+---------- PlanningAgent ----------
+Dwyane Wade was the Miami Heat player with the highest points in the 2006-2007 season, scoring 1397 points.
+
+Next, we need to find Dwyane Wade's total rebounds for the 2007-2008 and 2008-2009 seasons:
+
+2. **WebSearchAgent**: Find Dwyane Wade's total rebounds for the 2007-2008 season.
+3. **WebSearchAgent**: Find Dwyane Wade's total rebounds for the 2008-2009 season.
+---------- UserProxyAgent ----------
+approve
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_fBZe80NaBfruOVGwRWbhXyRm', arguments='{"query": "Dwyane Wade total rebounds 2007-2008 NBA season"}', name='search_web_tool'), FunctionCall(id='call_cURYibna4fGxySiL7IYt0c3s', arguments='{"query": "Dwyane Wade total rebounds 2008-2009 NBA season"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', call_id='call_fBZe80NaBfruOVGwRWbhXyRm'), FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', call_id='call_cURYibna4fGxySiL7IYt0c3s')]
+---------- WebSearchAgent ----------
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.
+---------- PlanningAgent ----------
+Now that we have Dwyane Wade's total rebounds for both seasons, we can calculate the percentage change:
+
+4. **DataAnalystAgent**: Calculate the percentage change in Dwyane Wade's total rebounds from the 2007-2008 season (214 rebounds) to the 2008-2009 season (398 rebounds).
+---------- UserProxyAgent ----------
+approve
+---------- DataAnalystAgent ----------
+[FunctionCall(id='call_z3uog7t2x0z1Suzl5hACF9hY', arguments='{"start":214,"end":398}', name='percentage_change_tool')]
+---------- DataAnalystAgent ----------
+[FunctionExecutionResult(content='85.98130841121495', call_id='call_z3uog7t2x0z1Suzl5hACF9hY')]
+---------- DataAnalystAgent ----------
+85.98130841121495
+---------- PlanningAgent ----------
+Dwyane Wade was the Miami Heat player with the highest points in the 2006-2007 season, scoring 1397 points. His total rebounds increased from 214 in the 2007-2008 season to 398 in the 2008-2009 season, which is a percentage change of approximately 85.98%.
+
+TERMINATE
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?', type='TextMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=161, completion_tokens=166), content="To address the user's query, we will need to perform the following tasks:\n\n1. Identify the Miami Heat player with the highest points in the 2006-2007 season.\n2. Find the total rebounds for that player in the 2007-2008 season.\n3. Find the total rebounds for that player in the 2008-2009 season.\n4. Calculate the percentage change in the total rebounds between the 2007-2008 and 2008-2009 seasons.\n\nLet's assign these tasks:\n\n1. **WebSearchAgent**: Identify the Miami Heat player with the highest points in the 2006-2007 season.\n   \n(Task 2 and 3 depend on the result of Task 1. We'll proceed with Tasks 2 and 3 once Task 1 is complete.)", type='TextMessage'), UserInputRequestedEvent(source='UserProxyAgent', models_usage=None, request_id='2a433f88-f886-4b39-a078-ea1acdcb2f9d', content='', type='UserInputRequestedEvent'), TextMessage(source='UserProxyAgent', models_usage=None, content='approve', type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=323, completion_tokens=28), content=[FunctionCall(id='call_0prr3fUnG5CtisUG7QeygW0w', arguments='{"query":"Miami Heat highest points scorer 2006-2007 NBA season"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, content=[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', call_id='call_0prr3fUnG5CtisUG7QeygW0w')], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=403, completion_tokens=112), content="Dwyane Wade was the Miami Heat player with the highest points in the 2006-2007 season, scoring 1397 points.\n\nNext, we need to find Dwyane Wade's total rebounds for the 2007-2008 and 2008-2009 seasons:\n\n2. **WebSearchAgent**: Find Dwyane Wade's total rebounds for the 2007-2008 season.\n3. **WebSearchAgent**: Find Dwyane Wade's total rebounds for the 2008-2009 season.", type='TextMessage'), UserInputRequestedEvent(source='UserProxyAgent', models_usage=None, request_id='23dd4570-2391-41e9-aeea-86598499792c', content='', type='UserInputRequestedEvent'), TextMessage(source='UserProxyAgent', models_usage=None, content='approve', type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=543, completion_tokens=73), content=[FunctionCall(id='call_fBZe80NaBfruOVGwRWbhXyRm', arguments='{"query": "Dwyane Wade total rebounds 2007-2008 NBA season"}', name='search_web_tool'), FunctionCall(id='call_cURYibna4fGxySiL7IYt0c3s', arguments='{"query": "Dwyane Wade total rebounds 2008-2009 NBA season"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, content=[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', call_id='call_fBZe80NaBfruOVGwRWbhXyRm'), FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', call_id='call_cURYibna4fGxySiL7IYt0c3s')], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.\nThe number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=586, completion_tokens=70), content="Now that we have Dwyane Wade's total rebounds for both seasons, we can calculate the percentage change:\n\n4. **DataAnalystAgent**: Calculate the percentage change in Dwyane Wade's total rebounds from the 2007-2008 season (214 rebounds) to the 2008-2009 season (398 rebounds).", type='TextMessage'), UserInputRequestedEvent(source='UserProxyAgent', models_usage=None, request_id='e849d193-4ab3-4558-8560-7dbc062a0aee', content='', type='UserInputRequestedEvent'), TextMessage(source='UserProxyAgent', models_usage=None, content='approve', type='TextMessage'), ToolCallRequestEvent(source='DataAnalystAgent', models_usage=RequestUsage(prompt_tokens=655, completion_tokens=21), content=[FunctionCall(id='call_z3uog7t2x0z1Suzl5hACF9hY', arguments='{"start":214,"end":398}', name='percentage_change_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='DataAnalystAgent', models_usage=None, content=[FunctionExecutionResult(content='85.98130841121495', call_id='call_z3uog7t2x0z1Suzl5hACF9hY')], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='DataAnalystAgent', models_usage=None, content='85.98130841121495', type='ToolCallSummaryMessage'), TextMessage(source='PlanningAgent', models_usage=RequestUsage(prompt_tokens=687, completion_tokens=74), content='Dwyane Wade was the Miami Heat player with the highest points in the 2006-2007 season, scoring 1397 points. His total rebounds increased from 214 in the 2007-2008 season to 398 in the 2008-2009 season, which is a percentage change of approximately 85.98%.\n\nTERMINATE', type='TextMessage')], stop_reason="Text 'TERMINATE' mentioned")
+```
+
+现在，用户的反馈被纳入对话流程中，用户可以批准或拒绝规划代理的决定。
+
+### 11.6 使用推理模型
+
+到目前为止，在示例中，我们使用了 `gpt-4o` 模型。像 `gpt-4o` 这样的模型 和 `gemini-1.5-flash` 在遵循指令方面非常出色，因此您可以在选择提示中为团队提供相对详细的指令，以及为每个代理的系统消息来指导他们的行为。
+
+然而，如果您正在使用像 `o3-mini` 这样的推理模型，您需要尽可能使选择器提示和系统消息简单明了。这是因为推理模型已经擅长根据提供的上下文自己生成指令。
+
+这也意味着我们不再需要规划代理来分解任务，因为使用推理模型的 [`SelectorGroupChat`](https://microsoft.github.io/autogen/stable/reference/python/autogen_agentchat.teams.html#autogen_agentchat.teams.SelectorGroupChat) 可以自行完成这项工作。
+
+在以下示例中，我们将使用 `o3-mini` 作为代理和团队的模型，并且我们不会使用规划代理。同时，我们也将选择器提示和系统消息保持得尽可能简单。
+
+```python
+model_client = OpenAIChatCompletionClient(model="o3-mini")
+
+web_search_agent = AssistantAgent(
+    "WebSearchAgent",
+    description="An agent for searching information on the web.",
+    tools=[search_web_tool],
+    model_client=model_client,
+    system_message="""Use web search tool to find information.""",
+)
+
+data_analyst_agent = AssistantAgent(
+    "DataAnalystAgent",
+    description="An agent for performing calculations.",
+    model_client=model_client,
+    tools=[percentage_change_tool],
+    system_message="""Use tool to perform calculation. If you have not seen the data, ask for it.""",
+)
+
+user_proxy_agent = UserProxyAgent(
+    "UserProxyAgent",
+    description="A user to approve or disapprove tasks.",
+)
+
+selector_prompt = """Select an agent to perform task.
+
+{roles}
+
+Current conversation context:
+{history}
+
+Read the above conversation, then select an agent from {participants} to perform the next task.
+When the task is complete, let the user approve or disapprove the task.
+"""
+
+team = SelectorGroupChat(
+    [web_search_agent, data_analyst_agent, user_proxy_agent],
+    model_client=model_client,
+    termination_condition=termination,  # Use the same termination condition as before.
+    selector_prompt=selector_prompt,
+    allow_repeated_speaker=True,
+)
+await Console(team.run_stream(task=task))
+```
+
+```
+---------- user ----------
+Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_hl7EP6Lp5jj5wEdxeNHTwUVG', arguments='{"query": "Who was the Miami Heat player with the highest points in the 2006-2007 season Miami Heat statistics Dwyane Wade rebounds percentage change 2007-2008 2008-2009 seasons"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', call_id='call_hl7EP6Lp5jj5wEdxeNHTwUVG', is_error=False)]
+---------- WebSearchAgent ----------
+Here are the total points scored by Miami Heat players in the 2006-2007 season:
+        Udonis Haslem: 844 points
+        Dwayne Wade: 1397 points
+        James Posey: 550 points
+        ...
+        
+---------- DataAnalystAgent ----------
+I found that in the 2006–2007 season the player with the highest points was Dwyane Wade (with 1,397 points). Could you please provide Dwyane Wade’s total rebounds for the 2007–2008 and the 2008–2009 seasons so I can calculate the percentage change?
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_lppGTILXDvO9waPwKO66ehK6', arguments='{"query": "Dwyane Wade total rebounds 2007-2008 and 2008-2009 seasons for Miami Heat"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', call_id='call_lppGTILXDvO9waPwKO66ehK6', is_error=False)]
+---------- WebSearchAgent ----------
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.
+---------- DataAnalystAgent ----------
+Could you please provide Dwyane Wade’s total rebounds in the 2008-2009 season?
+---------- WebSearchAgent ----------
+[FunctionCall(id='call_r8DBcbJtQfdtugLtyTrqOvoK', arguments='{"query": "Dwyane Wade total rebounds 2008-2009 season Miami Heat"}', name='search_web_tool')]
+---------- WebSearchAgent ----------
+[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', call_id='call_r8DBcbJtQfdtugLtyTrqOvoK', is_error=False)]
+---------- WebSearchAgent ----------
+The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.
+---------- DataAnalystAgent ----------
+[FunctionCall(id='call_4jejv1wM7V1osbBCxJze8aQM', arguments='{"start": 214, "end": 398}', name='percentage_change_tool')]
+---------- DataAnalystAgent ----------
+[FunctionExecutionResult(content='85.98130841121495', call_id='call_4jejv1wM7V1osbBCxJze8aQM', is_error=False)]
+---------- DataAnalystAgent ----------
+85.98130841121495
+---------- DataAnalystAgent ----------
+Dwyane Wade was the Miami Heat player with the highest total points (1,397) during the 2006-2007 season. His total rebounds increased by approximately 86% from 214 in the 2007-2008 season to 398 in the 2008-2009 season.
+---------- UserProxyAgent ----------
+Approve. TERMINATE
+```
+
+```
+TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Who was the Miami Heat player with the highest points in the 2006-2007 season, and what was the percentage change in his total rebounds between the 2007-2008 and 2008-2009 seasons?', type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=103, completion_tokens=384), content=[FunctionCall(id='call_hl7EP6Lp5jj5wEdxeNHTwUVG', arguments='{"query": "Who was the Miami Heat player with the highest points in the 2006-2007 season Miami Heat statistics Dwyane Wade rebounds percentage change 2007-2008 2008-2009 seasons"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, content=[FunctionExecutionResult(content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', call_id='call_hl7EP6Lp5jj5wEdxeNHTwUVG', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, content='Here are the total points scored by Miami Heat players in the 2006-2007 season:\n        Udonis Haslem: 844 points\n        Dwayne Wade: 1397 points\n        James Posey: 550 points\n        ...\n        ', type='ToolCallSummaryMessage'), TextMessage(source='DataAnalystAgent', models_usage=RequestUsage(prompt_tokens=183, completion_tokens=1038), content='I found that in the 2006–2007 season the player with the highest points was Dwyane Wade (with 1,397 points). Could you please provide Dwyane Wade’s total rebounds for the 2007–2008 and the 2008–2009 seasons so I can calculate the percentage change?', type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=299, completion_tokens=109), content=[FunctionCall(id='call_lppGTILXDvO9waPwKO66ehK6', arguments='{"query": "Dwyane Wade total rebounds 2007-2008 and 2008-2009 seasons for Miami Heat"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, content=[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', call_id='call_lppGTILXDvO9waPwKO66ehK6', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2007-2008 is 214.', type='ToolCallSummaryMessage'), TextMessage(source='DataAnalystAgent', models_usage=RequestUsage(prompt_tokens=291, completion_tokens=224), content='Could you please provide Dwyane Wade’s total rebounds in the 2008-2009 season?', type='TextMessage'), ToolCallRequestEvent(source='WebSearchAgent', models_usage=RequestUsage(prompt_tokens=401, completion_tokens=37), content=[FunctionCall(id='call_r8DBcbJtQfdtugLtyTrqOvoK', arguments='{"query": "Dwyane Wade total rebounds 2008-2009 season Miami Heat"}', name='search_web_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='WebSearchAgent', models_usage=None, content=[FunctionExecutionResult(content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', call_id='call_r8DBcbJtQfdtugLtyTrqOvoK', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='WebSearchAgent', models_usage=None, content='The number of total rebounds for Dwayne Wade in the Miami Heat season 2008-2009 is 398.', type='ToolCallSummaryMessage'), ToolCallRequestEvent(source='DataAnalystAgent', models_usage=RequestUsage(prompt_tokens=353, completion_tokens=158), content=[FunctionCall(id='call_4jejv1wM7V1osbBCxJze8aQM', arguments='{"start": 214, "end": 398}', name='percentage_change_tool')], type='ToolCallRequestEvent'), ToolCallExecutionEvent(source='DataAnalystAgent', models_usage=None, content=[FunctionExecutionResult(content='85.98130841121495', call_id='call_4jejv1wM7V1osbBCxJze8aQM', is_error=False)], type='ToolCallExecutionEvent'), ToolCallSummaryMessage(source='DataAnalystAgent', models_usage=None, content='85.98130841121495', type='ToolCallSummaryMessage'), TextMessage(source='DataAnalystAgent', models_usage=RequestUsage(prompt_tokens=394, completion_tokens=138), content='Dwyane Wade was the Miami Heat player with the highest total points (1,397) during the 2006-2007 season. His total rebounds increased by approximately 86% from 214 in the 2007-2008 season to 398 in the 2008-2009 season.', type='TextMessage'), UserInputRequestedEvent(source='UserProxyAgent', models_usage=None, request_id='b3b05408-73fc-47d4-b832-16c9f447cd6e', content='', type='UserInputRequestedEvent'), TextMessage(source='UserProxyAgent', models_usage=None, content='Approve. TERMINATE', type='TextMessage')], stop_reason="Text 'TERMINATE' mentioned")
+```
+
+>有关如何提示推理模型的更多指导，请参阅 Azure AI 服务博客中的《[OpenAI 的 O1 和 O3-mini 推理模型的提示工程 ](https://techcommunity.microsoft.com/blog/azure-ai-services-blog/prompt-engineering-for-openai’s-o1-and-o3-mini-reasoning-models/4374010)》
