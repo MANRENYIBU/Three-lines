@@ -9720,3 +9720,496 @@ TaskResult(messages=[TextMessage(source='user', models_usage=None, content='Who 
 ```
 
 >有关如何提示推理模型的更多指导，请参阅 Azure AI 服务博客中的《[OpenAI 的 O1 和 O3-mini 推理模型的提示工程 ](https://techcommunity.microsoft.com/blog/azure-ai-services-blog/prompt-engineering-for-openai’s-o1-and-o3-mini-reasoning-models/4374010)》
+
+# LangChain
+
+## 1、介绍
+
+**LangChain** 是一个用于开发由大型语言模型（LLMs）驱动的应用程序的框架。
+
+LangChain 简化了 LLM 应用程序生命周期的每个阶段：
+
+- **开发** ：使用 LangChain 的开源 [组件 ](https://python.langchain.com/docs/concepts/)和 [第三方集成 ](https://python.langchain.com/docs/integrations/providers/)构建您的应用程序。使用 [LangGraph](https://python.langchain.com/docs/concepts/architecture/#langgraph) 构建具有一流流式传输和人工参与支持的状态代理。
+- **生产化** ：使用 [LangSmith](https://docs.smith.langchain.com/) 检查、监控和评估您的应用程序，以便您可以持续优化并自信地部署。
+- **部署** ：使用 [LangGraph 平台 ](https://langchain-ai.github.io/langgraph/cloud/)将您的 LangGraph 应用程序转换为生产就绪的 API 和助手。
+
+![Diagram](./img/小米虫爬山路-py版-img/langchain_stack_112024.svg)
+
+LangChain 为大型语言模型及相关技术（如嵌入模型和向量存储）实现了一个标准接口，并与数百个提供商集成。请查看 [集成 ](https://python.langchain.com/docs/integrations/providers/)页面了解更多。
+
+## 2、架构
+
+LangChain 框架由多个开源库组成。更多内容请查看 [架构 ](https://python.langchain.com/docs/concepts/architecture/)页面。
+
+- **`langchain-core`**: 用于聊天模型和其他组件的基础抽象。
+- **集成包** （例如 `langchain-openai`, `langchain-anthropic` 等）：重要的集成已拆分为由 LangChain 团队和集成开发者共同维护的轻量级包。
+- **`langchain`**：构成应用程序认知架构的链、代理和检索策略。
+- **`langchain-community`**：社区维护的第三方集成。
+- **`langgraph`**：用于将 LangChain 组件组合成具有持久化、流式传输等关键功能的可生产应用程序的编排框架。参见 [LangGraph 文档 ](https://langchain-ai.github.io/langgraph/)。
+
+## 3、快速入门
+
+在本快速入门中，我们将向您展示如何使用 LangChain 构建一个简单的 LLM 应用程序。该应用程序将英文文本翻译成另一种语言。这是一个相对简单的 LLM 应用程序——它只是一个 LLM 调用加上一些提示。尽管如此，这是开始使用 LangChain 的好方法——只需一些提示和一个 LLM 调用，就可以构建许多功能！
+
+阅读本教程后，您将了解：
+
+- 使用 [语言模型](https://python.langchain.com/docs/concepts/chat_models/)
+- 使用 [提示模板](https://python.langchain.com/docs/concepts/prompt_templates/)
+
+让我们开始吧！
+
+### 3.1 安装
+
+要安装 LangChain，请运行：
+
+```
+pip install langchain
+```
+
+更多详情，请参阅我们的[安装指南 ](https://python.langchain.com/docs/how_to/installation/)。
+
+### 3.2 使用语言模型
+
+首先，让我们学习如何单独使用语言模型。LangChain 支持多种不同的语言模型，您可以根据需要互换使用。有关如何开始使用特定模型的详细信息，请参考 [支持的集成 ](https://python.langchain.com/docs/integrations/chat/)。
+
+选择 [聊天模型 ](https://python.langchain.com/docs/integrations/chat/)：OpenAI
+
+```
+pip install -qU "langchain[openai]"
+```
+
+```python
+import getpass
+import os
+
+if not os.environ.get("OPENAI_API_KEY"):
+  os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter API key for OpenAI: ")
+
+from langchain.chat_models import init_chat_model
+
+model = init_chat_model("gpt-4o-mini", model_provider="openai")
+```
+
+让我们首先直接使用模型。ChatModels 是 LangChain Runnables 的实例，这意味着它们提供了一个标准接口用于与之交互。要简单地调用模型，我们可以将一系列[消息](https://python.langchain.com/docs/concepts/chat_models/)传递给 `.invoke` 方法。
+
+```python
+from langchain_core.messages import HumanMessage, SystemMessage
+
+messages = [
+    SystemMessage("Translate the following from English into Italian"),
+    HumanMessage("hi!"),
+]
+
+model.invoke(messages)
+```
+
+**API 参考：**[HumanMessage](https://python.langchain.com/api_reference/core/messages/langchain_core.messages.human.HumanMessage.html) | [SystemMessage](https://python.langchain.com/api_reference/core/messages/langchain_core.messages.system.SystemMessage.html)
+
+```
+AIMessage(content='Ciao!', additional_kwargs={'refusal': None}, response_metadata={'token_usage': {'completion_tokens': 3, 'prompt_tokens': 20, 'total_tokens': 23, 'completion_tokens_details': {'accepted_prediction_tokens': 0, 'audio_tokens': 0, 'reasoning_tokens': 0, 'rejected_prediction_tokens': 0}, 'prompt_tokens_details': {'audio_tokens': 0, 'cached_tokens': 0}}, 'model_name': 'gpt-4o-mini-2024-07-18', 'system_fingerprint': 'fp_0705bf87c0', 'finish_reason': 'stop', 'logprobs': None}, id='run-32654a56-627c-40e1-a141-ad9350bbfd3e-0', usage_metadata={'input_tokens': 20, 'output_tokens': 3, 'total_tokens': 23, 'input_token_details': {'audio': 0, 'cache_read': 0}, 'output_token_details': {'audio': 0, 'reasoning': 0}})
+```
+
+请注意，ChatModels 接收[消息](https://python.langchain.com/docs/concepts/messages/)对象作为输入，并生成消息对象作为输出。除了文本内容，消息对象还传达对话中的[角色 ](https://python.langchain.com/docs/concepts/messages/#role)，并包含重要数据，例如[工具调用](https://python.langchain.com/docs/concepts/tool_calling/)和 token 使用计数。
+
+LangChain 也支持通过字符串或 [OpenAI 格式 ](https://python.langchain.com/docs/concepts/messages/#openai-format)的方式输入聊天模型。以下两者是等价的：
+
+```python
+model.invoke("Hello")
+
+model.invoke([{"role": "user", "content": "Hello"}])
+
+model.invoke([HumanMessage("Hello")])
+```
+
+### 3.3 流式传输
+
+由于聊天模型是[可运行对象 ](https://python.langchain.com/docs/concepts/runnables/)，它们提供了一个标准接口，其中包括异步和流式调用模式。这使我们能够从聊天模型中流式传输单个标记：
+
+```python
+for token in model.stream(messages):
+    print(token.content, end="|")
+```
+
+```
+|C|iao|!||
+```
+
+您可以在[这篇指南](https://python.langchain.com/docs/how_to/chat_streaming/)中找到更多关于流式聊天模型输出的详细信息。
+
+### 3.4 提示模板
+
+现在我们直接将消息列表传递给语言模型。这个消息列表从何而来？通常，它是由用户输入和应用逻辑组合而成的。这种应用逻辑通常将原始用户输入转换为准备传递给语言模型的消息列表。常见的转换包括添加系统消息或使用用户输入格式化模板。
+
+[提示模板](https://python.langchain.com/docs/concepts/prompt_templates/)是 LangChain 中的一个概念，旨在协助进行这种转换。它们接收原始用户输入，并返回准备传递给语言模型的数据（一个提示）。
+
+让我们在这里创建一个提示模板。它将接收两个用户变量：
+
+- `language`: 要翻译文本的语言
+- `text`: 要翻译的文本
+
+```python
+from langchain_core.prompts import ChatPromptTemplate
+
+system_template = "Translate the following from English into {language}"
+
+prompt_template = ChatPromptTemplate.from_messages(
+    [("system", system_template), ("user", "{text}")]
+)
+```
+
+**API 参考：**[ChatPromptTemplate](https://python.langchain.com/api_reference/core/prompts/langchain_core.prompts.chat.ChatPromptTemplate.html)
+
+请注意，`ChatPromptTemplate` 在单个模板中支持多个 [消息角色 ](https://python.langchain.com/docs/concepts/messages/#role)。我们将 `language `参数格式化为系统消息，将用户 `text `格式化为用户消息。
+
+这个提示模板的输入是一个字典。我们可以单独玩转这个提示模板，看看它本身能做什么
+
+```python
+prompt = prompt_template.invoke({"language": "Italian", "text": "hi!"})
+
+prompt
+```
+
+```
+ChatPromptValue(messages=[SystemMessage(content='Translate the following from English into Italian', additional_kwargs={}, response_metadata={}), HumanMessage(content='hi!', additional_kwargs={}, response_metadata={})])
+```
+
+我们可以看到它返回了一个由两个消息组成的 `ChatPromptValue`。如果我们想直接访问消息，我们可以这样做：
+
+```python
+prompt.to_messages()
+```
+
+```
+[SystemMessage(content='Translate the following from English into Italian', additional_kwargs={}, response_metadata={}),
+ HumanMessage(content='hi!', additional_kwargs={}, response_metadata={})]
+```
+
+最后，我们可以在格式化的提示上调用聊天模型：
+
+```python
+response = model.invoke(prompt)
+print(response.content)
+```
+
+```
+Ciao!
+```
+
+> 提示
+>
+> 消息 `内容 `可以包含文本和带额外结构的 [内容块 ](https://python.langchain.com/docs/concepts/messages/#aimessage)。有关更多信息，请参阅 [此指南 ](https://python.langchain.com/docs/how_to/output_parser_string/)。
+
+## 4、如何指南
+
+在这里，您将找到关于“如何做……？”类型问题的答案。这些指南是 *目标导向* 和 *具体的* ；它们旨在帮助您完成特定任务。有关概念解释，请参阅 [概念指南 ](https://python.langchain.com/docs/concepts/)。有关端到端教程，请查看 [教程 ](https://python.langchain.com/docs/tutorials/)。有关每个类和函数的详细描述，请参阅 [API 参考 ](https://python.langchain.com/api_reference/)。
+
+### 4.1 安装
+
+- [如何：安装 LangChain 包](https://python.langchain.com/docs/how_to/installation/)
+- [如何：使用不同版本的 LangChain 与 Pydantic](https://python.langchain.com/docs/how_to/pydantic_compatibility/)
+
+### 4.2 关键特性
+
+这突出了使用 LangChain 的核心功能。
+
+- [如何：从模型返回结构化数据](https://python.langchain.com/docs/how_to/structured_output/)
+- [如何：使用模型调用工具](https://python.langchain.com/docs/how_to/tool_calling/)
+- [如何：流式运行可运行项](https://python.langchain.com/docs/how_to/streaming/)
+- [如何：调试你的 LLM 应用](https://python.langchain.com/docs/how_to/debugging/)
+
+### 4.3 组件
+
+这些是在构建应用程序时可以使用的核心构建块。
+
+#### 4.3.1 聊天模型
+
+[聊天模型](https://python.langchain.com/docs/concepts/chat_models/)是语言模型的新形式，它们接收消息并输出消息。有关从特定提供商开始使用聊天模型的详细信息，请参阅[支持的集成 ](https://python.langchain.com/docs/integrations/chat/)。
+
+- [如何：执行函数/工具调用](https://python.langchain.com/docs/how_to/tool_calling/)
+- [如何：获取模型返回结构化输出](https://python.langchain.com/docs/how_to/structured_output/)
+- [如何：缓存模型响应](https://python.langchain.com/docs/how_to/chat_model_caching/)
+- [如何：获取日志概率](https://python.langchain.com/docs/how_to/logprobs/)
+- [如何：创建自定义聊天模型类](https://python.langchain.com/docs/how_to/custom_chat_model/)
+- [如何：流式传输响应返回](https://python.langchain.com/docs/how_to/chat_streaming/)
+- [如何：跟踪令牌使用](https://python.langchain.com/docs/how_to/chat_token_usage_tracking/)
+- [如何：跨提供商跟踪响应元数据](https://python.langchain.com/docs/how_to/response_metadata/)
+- [如何：使用聊天模型调用工具](https://python.langchain.com/docs/how_to/tool_calling/)
+- [如何：流式传输工具调用](https://python.langchain.com/docs/how_to/tool_streaming/)
+- [如何：处理速率限制](https://python.langchain.com/docs/how_to/chat_model_rate_limiting/)
+- [如何：少量样本提示工具行为](https://python.langchain.com/docs/how_to/tools_few_shot/)
+- [如何：绑定特定模型格式化工具](https://python.langchain.com/docs/how_to/tools_model_specific/)
+- [如何：强制调用特定工具](https://python.langchain.com/docs/how_to/tool_choice/)
+- [如何：使用本地模型](https://python.langchain.com/docs/how_to/local_llms/)
+- [如何：一行代码初始化任何模型](https://python.langchain.com/docs/how_to/chat_models_universal_init/)
+- [如何：直接将多模态数据传递给模型](https://python.langchain.com/docs/how_to/multimodal_inputs/)
+
+#### 4.3.2 消息
+
+[消息](https://python.langchain.com/docs/concepts/messages/)是聊天模型的输入和输出。它们包含一些`内容`和一个`角色 `，描述消息的来源。
+
+- [如何：修剪消息](https://python.langchain.com/docs/how_to/trim_messages/)
+- [如何：过滤消息](https://python.langchain.com/docs/how_to/filter_messages/)
+- [如何：合并同类型连续消息](https://python.langchain.com/docs/how_to/merge_message_runs/)
+
+#### 4.3.3 提示模板
+
+[提示模板](https://python.langchain.com/docs/concepts/prompt_templates/)负责将用户输入格式化为可传递给语言模型的格式。
+
+- [如何：使用少量示例](https://python.langchain.com/docs/how_to/few_shot_examples/)
+- [如何：在聊天模型中使用少量示例](https://python.langchain.com/docs/how_to/few_shot_examples_chat/)
+- [如何：部分格式化提示模板](https://python.langchain.com/docs/how_to/prompts_partial/)
+- [如何：组合提示](https://python.langchain.com/docs/how_to/prompts_composition/)
+- [如何：使用多模态提示](https://python.langchain.com/docs/how_to/multimodal_prompts/)
+
+#### 4.3.4 示例选择器
+
+[示例选择器](https://python.langchain.com/docs/concepts/example_selectors/)负责选择正确的少量示例传递给提示。
+
+- [如何使用示例选择器](https://python.langchain.com/docs/how_to/example_selectors/)
+- [如何：按长度选择示例](https://python.langchain.com/docs/how_to/example_selectors_length_based/)
+- [如何：通过语义相似性选择示例](https://python.langchain.com/docs/how_to/example_selectors_similarity/)
+- [如何：通过语义 ngram 重叠选择示例](https://python.langchain.com/docs/how_to/example_selectors_ngram/)
+- [如何：通过最大边际相关性选择示例](https://python.langchain.com/docs/how_to/example_selectors_mmr/)
+- [如何：从 LangSmith few-shot 数据集中选择示例](https://python.langchain.com/docs/how_to/example_selectors_langsmith/)
+
+#### 4.3.5 LLMs
+
+LangChain 所说的 [LLMs](https://python.langchain.com/docs/concepts/text_llms/) 是语言模型的旧形式，它们接收一个字符串输入并输出一个字符串。
+
+- [如何：缓存模型响应](https://python.langchain.com/docs/how_to/llm_caching/)
+- [如何：创建一个自定义 LLM 类](https://python.langchain.com/docs/how_to/custom_llm/)
+- [如何：流式传输响应返回](https://python.langchain.com/docs/how_to/streaming_llm/)
+- [如何：跟踪令牌使用](https://python.langchain.com/docs/how_to/llm_token_usage_tracking/)
+- [如何：使用本地模型](https://python.langchain.com/docs/how_to/local_llms/)
+
+#### 4.3.6 输出解析器
+
+[输出解析器](https://python.langchain.com/docs/concepts/output_parsers/)负责将 LLM 的输出解析为更结构化的格式。
+
+- [如何：从消息对象中解析文本](https://python.langchain.com/docs/how_to/output_parser_string/)
+- [如何：使用输出解析器将 LLM 响应解析为结构化格式](https://python.langchain.com/docs/how_to/output_parser_structured/)
+- [如何：解析 JSON 输出](https://python.langchain.com/docs/how_to/output_parser_json/)
+- [如何：解析 XML 输出](https://python.langchain.com/docs/how_to/output_parser_xml/)
+- [如何：解析 YAML 输出](https://python.langchain.com/docs/how_to/output_parser_yaml/)
+- [如何：当输出解析错误时重试](https://python.langchain.com/docs/how_to/output_parser_retry/)
+- [如何：尝试修复输出解析中的错误](https://python.langchain.com/docs/how_to/output_parser_fixing/)
+- [如何：编写自定义输出解析器类](https://python.langchain.com/docs/how_to/output_parser_custom/)
+
+#### 4.3.7 文档加载器
+
+[文档加载器](https://python.langchain.com/docs/concepts/document_loaders/)负责从各种来源加载文档。
+
+- [如何：加载 PDF 文件](https://python.langchain.com/docs/how_to/document_loader_pdf/)
+- [如何：加载网页](https://python.langchain.com/docs/how_to/document_loader_web/)
+- [如何：加载 CSV 数据](https://python.langchain.com/docs/how_to/document_loader_csv/)
+- [如何：从目录加载数据](https://python.langchain.com/docs/how_to/document_loader_directory/)
+- [如何：加载 HTML 数据](https://python.langchain.com/docs/how_to/document_loader_html/)
+- [如何：加载 JSON 数据](https://python.langchain.com/docs/how_to/document_loader_json/)
+- [如何：加载 Markdown 数据](https://python.langchain.com/docs/how_to/document_loader_markdown/)
+- [如何：加载 Microsoft Office 数据](https://python.langchain.com/docs/how_to/document_loader_office_file/)
+- [如何：编写自定义文档加载器](https://python.langchain.com/docs/how_to/document_loader_custom/)
+
+#### 4.3.8 文本分割器
+
+[文本分割器 ](https://python.langchain.com/docs/concepts/text_splitters/)会对文档进行分割，生成可用于检索的片段。
+
+- [如何：递归分割文本](https://python.langchain.com/docs/how_to/recursive_text_splitter/)
+- [如何：分割 HTML](https://python.langchain.com/docs/how_to/split_html/)
+- [如何：按字符分割](https://python.langchain.com/docs/how_to/character_text_splitter/)
+- [如何：分割代码](https://python.langchain.com/docs/how_to/code_splitter/)
+- [如何：按标题分割 Markdown](https://python.langchain.com/docs/how_to/markdown_header_metadata_splitter/)
+- [如何：递归分割 JSON](https://python.langchain.com/docs/how_to/recursive_json_splitter/)
+- [如何：将文本分割为语义块](https://python.langchain.com/docs/how_to/semantic-chunker/)
+- [如何：按 token 分割](https://python.langchain.com/docs/how_to/split_by_token/)
+
+#### 4.3.9 嵌入模型
+
+[嵌入模型](https://python.langchain.com/docs/concepts/embedding_models/)将一段文本转换为其数值表示。有关从特定提供方开始使用嵌入模型的详细信息，请参阅[支持的集成 ](https://python.langchain.com/docs/integrations/text_embedding/)。
+
+- [如何：嵌入文本数据](https://python.langchain.com/docs/how_to/embed_text/)
+- [如何：缓存嵌入结果](https://python.langchain.com/docs/how_to/caching_embeddings/)
+- [如何：创建自定义嵌入类](https://python.langchain.com/docs/how_to/custom_embeddings/)
+
+#### 4.3.10 向量存储
+
+[向量存储](https://python.langchain.com/docs/concepts/vectorstores/)是能够高效存储和检索嵌入的数据库。有关从特定提供商处开始使用向量存储的详细信息，请参阅[支持的集成 ](https://python.langchain.com/docs/integrations/vectorstores/)。
+
+- [如何使用：使用向量存储检索数据](https://python.langchain.com/docs/how_to/vectorstores/)
+
+#### 4.3.11 检索器
+
+[检索器](https://python.langchain.com/docs/concepts/retrievers/)负责接收查询并返回相关文档。
+
+- [如何使用：使用向量存储检索数据](https://python.langchain.com/docs/how_to/vectorstore_retriever/)
+- [如何：生成多个查询以检索数据](https://python.langchain.com/docs/how_to/MultiQueryRetriever/)
+- [如何：使用上下文压缩来压缩检索到的数据](https://python.langchain.com/docs/how_to/contextual_compression/)
+- [如何：编写自定义检索器类](https://python.langchain.com/docs/how_to/custom_retriever/)
+- [如何：为检索器结果添加相似度分数](https://python.langchain.com/docs/how_to/add_scores_retriever/)
+- [如何：结合多个检索器的结果](https://python.langchain.com/docs/how_to/ensemble_retriever/)
+- [如何：重新排序检索结果以减轻"中间丢失"效应](https://python.langchain.com/docs/how_to/long_context_reorder/)
+- [如何：为每份文档生成多个嵌入](https://python.langchain.com/docs/how_to/multi_vector/)
+- [如何：为每个片段检索整个文档](https://python.langchain.com/docs/how_to/parent_document_retriever/)
+- [如何：生成元数据过滤器](https://python.langchain.com/docs/how_to/self_query/)
+- [如何：创建时间加权检索器](https://python.langchain.com/docs/how_to/time_weighted_vectorstore/)
+- [如何：使用混合向量与关键词检索](https://python.langchain.com/docs/how_to/hybrid/)
+
+#### 4.3.12 索引
+
+索引是指使您的向量存储与底层数据源保持同步的过程。
+
+- [如何：重新索引数据以保持您的向量存储与底层数据源同步](https://python.langchain.com/docs/how_to/indexing/)
+
+#### 4.3.13 工具
+
+LangChain [工具 ](https://python.langchain.com/docs/concepts/tools/)包含对工具的描述（传递给语言模型的）以及调用函数的实现。有关预构建工具的列表，请参考 [此处 ](https://python.langchain.com/docs/integrations/tools/)。
+
+- [如何：创建工具](https://python.langchain.com/docs/how_to/custom_tools/)
+- [如何：使用内置工具和工具包](https://python.langchain.com/docs/how_to/tools_builtin/)
+- [如何：使用聊天模型调用工具](https://python.langchain.com/docs/how_to/tool_calling/)
+- [如何：将工具输出传递给聊天模型](https://python.langchain.com/docs/how_to/tool_results_pass_to_model/)
+- [如何：将运行时值传递给工具](https://python.langchain.com/docs/how_to/tool_runtime/)
+- [如何：为工具添加人工介入环节](https://python.langchain.com/docs/how_to/tools_human/)
+- [如何：处理工具错误](https://python.langchain.com/docs/how_to/tools_error/)
+- [如何：强制模型调用工具](https://python.langchain.com/docs/how_to/tool_choice/)
+- [如何：禁用并行工具调用](https://python.langchain.com/docs/how_to/tool_calling_parallel/)
+- [如何：从工具访问 `RunnableConfig`](https://python.langchain.com/docs/how_to/tool_configure/)
+- [如何：从工具中流式传输事件](https://python.langchain.com/docs/how_to/tool_stream_events/)
+- [如何：从工具返回工件](https://python.langchain.com/docs/how_to/tool_artifacts/)
+- [如何：将 Runnables 转换为工具](https://python.langchain.com/docs/how_to/convert_runnable_to_tool/)
+- [如何：为模型添加临时工具调用功能](https://python.langchain.com/docs/how_to/tools_prompting/)
+- [如何：传递运行时密钥](https://python.langchain.com/docs/how_to/runnable_runtime_secrets/)
+
+#### 4.3.14 多模态
+
+- [如何：直接将多模态数据传递给模型](https://python.langchain.com/docs/how_to/multimodal_inputs/)
+- [如何：使用多模态提示](https://python.langchain.com/docs/how_to/multimodal_prompts/)
+
+#### 4.3.15 代理
+
+注意
+
+有关代理的深入指南，请查看 [LangGraph](https://langchain-ai.github.io/langgraph/) 文档。
+
+- [如何使用旧版 LangChain Agents (AgentExecutor)](https://python.langchain.com/docs/how_to/agent_executor/)
+- [如何从旧版 LangChain agents 迁移到 LangGraph](https://python.langchain.com/docs/how_to/migrate_agent/)
+
+#### 4.3.16 回调函数
+
+[回调 ](https://python.langchain.com/docs/concepts/callbacks/)允许你接入你的 LLM 应用的执行过程中的各个阶段。
+
+- [如何：在运行时传入回调函数](https://python.langchain.com/docs/how_to/callbacks_runtime/)
+- [如何：将回调附加到模块](https://python.langchain.com/docs/how_to/callbacks_attach/)
+- [如何：将回调传递到模块构造函数](https://python.langchain.com/docs/how_to/callbacks_constructor/)
+- [如何：创建自定义回调处理器](https://python.langchain.com/docs/how_to/custom_callbacks/)
+- [如何：在异步环境中使用回调](https://python.langchain.com/docs/how_to/callbacks_async/)
+- [如何：分发自定义回调事件](https://python.langchain.com/docs/how_to/callbacks_custom_events/)
+
+#### 4.3.17 自定义
+
+所有 LangChain 组件都可以轻松扩展以支持您自己的版本。
+
+- [如何：创建自定义聊天模型类](https://python.langchain.com/docs/how_to/custom_chat_model/)
+- [如何：创建一个自定义 LLM 类](https://python.langchain.com/docs/how_to/custom_llm/)
+- [如何：创建自定义嵌入类](https://python.langchain.com/docs/how_to/custom_embeddings/)
+- [如何：编写自定义检索器类](https://python.langchain.com/docs/how_to/custom_retriever/)
+- [如何：编写自定义文档加载器](https://python.langchain.com/docs/how_to/document_loader_custom/)
+- [如何：编写自定义输出解析器类](https://python.langchain.com/docs/how_to/output_parser_custom/)
+- [如何：创建自定义回调处理器](https://python.langchain.com/docs/how_to/custom_callbacks/)
+- [如何：定义自定义工具](https://python.langchain.com/docs/how_to/custom_tools/)
+- [如何：分发自定义回调事件](https://python.langchain.com/docs/how_to/callbacks_custom_events/)
+
+#### 4.3.18 序列化
+
+- [如何：保存和加载 LangChain 对象](https://python.langchain.com/docs/how_to/serialization/)
+
+### 4.4 用例
+
+这些指南涵盖了特定用例的详细信息。
+
+#### 4.4.1 与 RAG 进行问答
+
+检索增强生成（RAG）是一种将 LLMs 连接到外部数据源的方法。想了解 RAG 的高级教程，请查看[这篇指南 ](https://python.langchain.com/docs/tutorials/rag/)。
+
+- [如何：添加聊天历史](https://python.langchain.com/docs/how_to/qa_chat_history_how_to/)
+- [如何：流式传输](https://python.langchain.com/docs/how_to/qa_streaming/)
+- [如何：返回来源](https://python.langchain.com/docs/how_to/qa_sources/)
+- [如何：返回引文](https://python.langchain.com/docs/how_to/qa_citations/)
+- [如何：按用户进行检索](https://python.langchain.com/docs/how_to/qa_per_user/)
+
+#### 4.4.2 提取
+
+提取是指使用 LLMs 从非结构化文本中提取结构化信息。有关提取的高级教程，请查看[这篇指南 ](https://python.langchain.com/docs/tutorials/extraction/)。
+
+- [如何：使用参考示例](https://python.langchain.com/docs/how_to/extraction_examples/)
+- [如何：处理长文本](https://python.langchain.com/docs/how_to/extraction_long_text/)
+- [如何：不使用函数调用进行提取](https://python.langchain.com/docs/how_to/extraction_parse/)
+
+#### 4.4.3 聊天机器人
+
+聊天机器人涉及使用 LLM 进行对话。有关构建聊天机器人的高级教程，请查看[这个指南 ](https://python.langchain.com/docs/tutorials/chatbot/)。
+
+- [如何：管理内存](https://python.langchain.com/docs/how_to/chatbots_memory/)
+- [如何：执行检索](https://python.langchain.com/docs/how_to/chatbots_retrieval/)
+- [如何：使用工具](https://python.langchain.com/docs/how_to/chatbots_tools/)
+- [如何：管理大型聊天历史](https://python.langchain.com/docs/how_to/trim_messages/)
+
+#### 4.4.4 查询分析
+
+查询分析是指使用 LLM 生成一个查询，发送给检索器。有关查询分析的入门教程，请查看[这篇指南 ](https://python.langchain.com/docs/tutorials/rag/#query-analysis)。
+
+- [如何：向提示中添加示例](https://python.langchain.com/docs/how_to/query_few_shot/)
+- [如何：处理未生成查询的情况](https://python.langchain.com/docs/how_to/query_no_queries/)
+- [如何：处理多个查询](https://python.langchain.com/docs/how_to/query_multiple_queries/)
+- [如何：处理多个检索器](https://python.langchain.com/docs/how_to/query_multiple_retrievers/)
+- [如何：构建过滤器](https://python.langchain.com/docs/how_to/query_constructing_filters/)
+- [如何：处理高基数分类变量](https://python.langchain.com/docs/how_to/query_high_cardinality/)
+
+#### 4.4.5 SQL + CSV 的问答
+
+您可以使用 LLMs 对表格数据进行问答。要进行高级教程，请查看 [这个指南 ](https://python.langchain.com/docs/tutorials/sql_qa/)。
+
+- [如何：使用提示来改善结果](https://python.langchain.com/docs/how_to/sql_prompting/)
+- [如何：执行查询验证](https://python.langchain.com/docs/how_to/sql_query_checking/)
+- [如何：处理大型数据库](https://python.langchain.com/docs/how_to/sql_large_db/)
+- [如何：处理 CSV 文件](https://python.langchain.com/docs/how_to/sql_csv/)
+
+#### 4.4.6 图数据库的问答
+
+您可以使用 LLM 对图数据库进行问答。要了解高级教程，请查看[这个指南 ](https://python.langchain.com/docs/tutorials/graph/)。
+
+- [如何：在数据库上添加语义层](https://python.langchain.com/docs/how_to/graph_semantic/)
+- [如何：构建知识图谱](https://python.langchain.com/docs/how_to/graph_constructing/)
+
+#### 4.4.7 摘要
+
+LLMs 可以总结并提炼文本中的所需信息，包括大量文本。要进行高级教程，请查看 [这篇指南 ](https://python.langchain.com/docs/tutorials/summarization/)。
+
+- [如何：在单个 LLM 调用中总结文本](https://python.langchain.com/docs/how_to/summarize_stuff/)
+- [如何：通过并行化总结文本](https://python.langchain.com/docs/how_to/summarize_map_reduce/)
+- [如何：通过迭代细化来总结文本](https://python.langchain.com/docs/how_to/summarize_refine/)
+
+### 4.5 LangChain 表达式语言 (LCEL)
+
+我应该使用 LCEL 吗？
+
+LCEL 是一个编排解决方案。请参阅我们的 [概念页面 ](https://python.langchain.com/docs/concepts/lcel/#should-i-use-lcel)，用于获取何时使用 LCEL 的建议。
+
+[LangChain Expression Language](https://python.langchain.com/docs/concepts/lcel/) 是一种创建任意自定义链的方式。它基于 [Runnable](https://python.langchain.com/api_reference/core/runnables/langchain_core.runnables.base.Runnable.html) 协议构建。
+
+[**LCEL 快速参考** ](https://python.langchain.com/docs/how_to/lcel_cheatsheet/)：用于快速了解如何使用主要的 LCEL 基本元素。
+
+[**迁移指南** ](https://python.langchain.com/docs/versions/migrating_chains/)：用于将传统的链抽象迁移到 LCEL。
+
+- [如何：链式运行可执行项](https://python.langchain.com/docs/how_to/sequence/)
+- [如何：流式运行可运行项](https://python.langchain.com/docs/how_to/streaming/)
+- [如何：并行调用可运行项](https://python.langchain.com/docs/how_to/parallel/)
+- [如何：为可运行项添加默认调用参数](https://python.langchain.com/docs/how_to/binding/)
+- [如何：将任何函数转换为可运行项](https://python.langchain.com/docs/how_to/functions/)
+- [如何：将输入从一个链步骤传递到下一个](https://python.langchain.com/docs/how_to/passthrough/)
+- [如何：在运行时配置可运行项的行为](https://python.langchain.com/docs/how_to/configure/)
+- [如何：向链添加消息历史（记忆）](https://python.langchain.com/docs/how_to/message_history/)
+- [如何：在子链之间进行路由](https://python.langchain.com/docs/how_to/routing/)
+- [如何：创建动态（自构建）链](https://python.langchain.com/docs/how_to/dynamic_chain/)
+- [如何：检查可运行对象](https://python.langchain.com/docs/how_to/inspect/)
+- [如何：向可运行项添加回退](https://python.langchain.com/docs/how_to/fallbacks/)
+- [如何：将运行时密钥传递给可运行项](https://python.langchain.com/docs/how_to/runnable_runtime_secrets/)
