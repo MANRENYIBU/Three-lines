@@ -956,16 +956,15 @@ Python的集合类型是由不重复元素组成的无序的集。花括号或 s
 - 通过列表推导式的语法格式，明显会感觉到它和for循环存在某些关联。
 
 ```python
-1  #快速创建一个包含1-10之间所有偶数的列表
-2  list0 = [i for i in range(1, 11) if i % 2 == 0]
-3  print(list0)#[2, 4, 6, 8, 10]
+#快速创建一个包含1-10之间所有偶数的列表
+list0 = [i for i in range(1, 11) if i % 2 == 0]
+print(list0)#[2, 4, 6, 8, 10]
 
-4  list1 = [2.3,3.4,4.5,5.6,6.7]
-5  print ([int(x) for x in list1]) #割尾巴取整:[2, 3, 4, 5, 6]
-6  print ([int(x)**2 for x in list1]) #平方:[4, 9, 16, 25, 36]
-7  print ([int(x)**2 for x in list1 if int(x) % 2 == 0])  
+list1 = [2.3,3.4,4.5,5.6,6.7]
+print ([int(x) for x in list1]) #割尾巴取整:[2, 3, 4, 5, 6]
+print ([int(x)**2 for x in list1]) #平方:[4, 9, 16, 25, 36]
+print ([int(x)**2 for x in list1 if int(x) % 2 == 0])  
 #加了if条件限制，只打印偶数的平方:[4, 16, 36]
-
 ```
 
 注意:推导式的效率比for循环遍历的快很多
@@ -1274,9 +1273,9 @@ my_fun(3,4,*s,d=9,**kwargs)
 - 带星号 * 的形参只能有一个，可以在位置参数和默认值参数的前面或后面。但注意，带星号*的参数后的所有参数，必须以关键字参数的形式==**调用**==。  
 - 带两个星号 **的形参只能有一个，并且必须写在所有参数的最后。
 
-上面的几条规则不好记忆，实际上我们在使用的时候，一般按照“位置参数→默认值参数→任意值参数*args→任意值参数**kwargs”或者
+上面的几条规则不好记忆，实际上我们在使用的时候，一般按照==“位置参数→默认值参数→任意值参数*args→任意值参数**kwargs”==或者
 
-“位置参数→任意值参数*args→默认值参数→任意值参数**kwargs”的形式使用。本书把它归结为三条约定：
+==“位置参数→任意值参数*args→默认值参数→任意值参数**kwargs”==的形式使用。本书把它归结为三条约定：
 
 1. 约定1：如果有位置参数，则放在开头。
 2. 约定2：如果有“默认值参数或任意值参数*args”，则放中间。
@@ -1972,7 +1971,9 @@ print(itemgetter(0,1,3,6)(b))  # (0, 10, 30, 60)
 print([b[x] for x in range(len(b))  if x in [0,1,3,6]]) #[0, 10, 30, 60]
 ```
 
-两条打印语句中的参数都是获取给定列表中的指定位置的元素，生成一个新序列。只不过一个是利用了itemgetter，另一个是我们自己构造的列表推导式。       	先不管itemgetter的具体用法，后面会详细模拟和说明该函数。itemgetter能干的事，推导式一定可以做到。但是，==**能用itemgetter的地方，就不用推导式，因为itemgetter的效率更高**==，如例7.12所示。
+两条打印语句中的参数都是获取给定列表中的指定位置的元素，生成一个新序列。只不过一个是利用了itemgetter，另一个是我们自己构造的列表推导式。
+
+先不管itemgetter的具体用法，后面会详细模拟和说明该函数。itemgetter能干的事，推导式一定可以做到。但是，==**能用itemgetter的地方，就不用推导式，因为itemgetter的效率更高**==，如例7.12所示。
 
 ```python
 from operator import itemgetter
@@ -1988,7 +1989,7 @@ b=[0,10,20,30,40,50,60,70,80]
 
 ```
 
-​    但是，itemgetter的使用有点奇怪，itemgetter(0,1,3,6)(b)有连续两个小括号，接下来我们对它进行原理剖析。
+  但是，itemgetter的使用有点奇怪，itemgetter(0,1,3,6)(b)有连续两个小括号，接下来我们对它进行原理剖析。
 
 
 
@@ -2700,71 +2701,1497 @@ with open('myfile.txt','w') as f:
 
 ### 9.1 类和对象的概念
 
+想一下我们是如何认识这个世界的？小时候，妈妈带你去菜市场，走到卖鱼的地方，指着白鲢鱼对你说“鱼”，虽然你还不能说话，但是你对此非常感兴趣，好奇地看着鱼游来游去。一段时日以后，你会说话了，看到花鲢和草鱼，这个时候你说了一个字：“鱼”。恭喜，小小的你会总结了，从认识白鲢，学会了有关“鱼”的特征（这叫抽象），再把这些特征应用到花鲢和草鱼，认为这也是鱼。  
+
+上例中，“鱼”就是类，所谓白鲢和花鲢，就是鱼的“子类”，而你看到的那一条条鲜活的具体的鱼，就是“对象”（编程语言中又叫“实例”）。类具有特征和行为，比如鱼的特征有鱼鳞、圆眼睛（这些特征叫属性），鱼的行为有游泳、吐泡泡（这些行为叫方法）。  
+
+**面向对象编程是最有效的软件编写方法之一。**
+
+在面向对象的程序设计过程中有两个重要概念：**类（class）**和**对象（object，也被称为实例，instance）**。其中类是某一批对象的抽象，可以把类理解成某种概念。对象才是一个具体存在的实体。从这个意义上看，日常所说某个人，其实都是人的对象，而不是人类，我们说的“人定胜天”，这里的人不是具体哪一个人，而是人类。  根据类来创建对象被称为实例化，这让你能够使用类的实例。
+
+类和对象的区别：
+
+1. 定义不同：类是现实世界或思维世界中的实体在计算机中的反映，它将数据以及这些数据上的操作封装在一起；对象是具有类类型的变量。
+2. 范畴不同：类是一个抽象的概念，它不存在于现实中的时间、空间里，类知识为所有的对象定义了抽象的属性与行为；对象是类的一个具体。它是一个实实在在存在的东西。
+3. 状态不同：类是一个静态的概念，当没有为类创建任何数据时，类本身不存在于内存空间。对象是一个动态的概念；每一个对象都存在着有别于其它对象的属于自己的独特的属性和行为，属性可以随着它自己的行为而发生改变。
+
 ### 9.2 创建类和实例（一）
 
 #### 9.2.1 类的定义
 
+这个类没有任何属性和方法，用处不大（也不是全无用处，此处不展开）。通常，一个类需要定义属性和方法。
+
+```python
+class Student: #python3.x版本方式
+    pass
+class Student(object): #python2.x版本方式
+    pass
+```
+
+下面定义一个学生类Student：
+
+```python
+class Student:
+    stu_name=''   #姓名 初始值=''
+    stu_id=0     #学号 初始值=0
+    def study(参数表):
+       pass
+    def run(参数表):
+       pass
+
+```
+
+“class”是定义类的关键词，不能变，Student是类的名字，一般首字母大写。别忘了冒号：，定义了两个属性（必须赋值）：stu_name、stu_id，定义了两个方法：study、run。
+
+注意上述的属性必须有初始值赋值，否则会报类似于“NameError: name 'stu_id' is not defined”的异常。
+
+如果你学过Java或者C#等面向对象编程语言，对上述代码的结构应该“似曾相识”。
+
 #### 9.2.1 访问类的属性和方法
+
+Python和Java对于类的定义和使用在语法上存在很大不同，这个对于学过Java等面向对象编程语言的读者来讲要特别注意。下面我们看一个可以运行的“Student”
+
+类的定义：
+
+```python
+class Student:
+    stu_name=''   #姓名 初始值=''
+    stu_id=9999   #学号 初始值=9999
+    def run( ):
+       print('i can run. i am running.')
+```
+
+定义的属性和方法可以通过类使用，
+
+格式为：
+
+1. 类名.属性名
+2. 类名.方法名（参数表）
+
+```python
+Student.stu_name="小明"  #属性赋值
+print(Student.stu_name , Student.stu_id)  #属性访问
+Student.run( )  #调用方法
+#输出结果：
+#小明 9999
+# i can run. i am running.
+```
+
+Python中对于类的属性，一个重要的不同是，类的属性可以动态增加。比如：
+
+```python
+Student.stu_name="小明"
+Student.stu_score=85  #这是动态增加的属性
+print(Student.stu_name,Student.stu_id,Student.stu_score)
+Student.run()
+#输出结果：
+#        小明 9999 85
+#         i can run. i am running.
+```
+
+代码给Student增加了一个新的属性stu_score，并赋值为85。这有点类似于前面章节定义的字典，字典的键值对也是可以动态增加的，当访问一个不存在的“键”并赋值时，就会给字典增加该键值对。这里，当访问类的一个不存在的属性并赋值时，就会给类增加这个属性。这是Python和Java一个重要的不同。
+
+事实上，到目前为止，上述定义的属性和方法都是**“类级”**的，直接通过**类名加“.”的方式使用**。如果学过Java，这其实有点类似于**Java中类的静态属性和静态方法**。
 
 #### 9.2.3 访问实例的属性和方法
 
+有了Student这个类，我们想当然地想去创建“张三”、“李四”、“王五”……等一系列的具体的人。Python中通过类创建对象的过程叫“实例化”，创建的对象就叫“实例”。基本语法：
+
+>对象名=类名( )  或者  对象名=类名(参数表)
+
+定义一个Student类，并实例化
+
+```python
+s=Student()
+s.stu_name="小明"
+s.stu_id=1001
+s.stu_score=85
+print(s.stu_id,s.stu_name,s.stu_score)
+s.run( )  #报错，为什么？
+```
+
+定义的属性和方法可以通过实例访问使用，
+
+格式为：
+
+1. 实例名.属性名
+2. 实例名.方法名（参数表）
+
+第1行创建了一个实例s，创建的方式就是把“类名(参数)”赋值给变量s，这个时候s就是一个具体的学生对象，是类Student的一个实例。注意的是，该行的小括号是空的，没有参数。后面会讲带参数的类的实例化。
+
 #### 9.2.4 讨论：属性是谁的？
+
+上一小节中定义了类的属性：stu_name和stu_id，定义了方法run( )，实例化s对象后，对s对象动态增加了一个属性stu_score。现在提出的问题是：
+
+（1）上例中stu_name、stu_id和stu_score三个属性，是属于类Student的还是实例s的？
+
+（2）上例第6行为什么会报错？方法是属于类Student的还是实例s的？
+
+本节回答第一个问题。
+
+实际上，前面几节我们在类的定义中定义类的属性（stu_name和stu_id）都是“类级”的，都是类的，该属性由该类的所有实例共享。
+
+为此我们看如下代码（为简化，只保留属性）
+
+```python
+class Student:
+	stu_id=9999   #学号 初始值=9999
+
+s1=Student( )#创建实例s1
+s2=Student( )#创建实例s2
+
+print('Student,s1,s2')
+print(Student.stu_id, s1.stu_id, s2.stu_id)
+
+Student.stu_id=9000
+print(Student.stu_id, s1.stu_id, s2.stu_id)
+
+s1.stu_id=1000
+print(Student.stu_id, s1.stu_id, s2.stu_id)
+
+s2.stu_id=2000
+print(Student.stu_id,s1.stu_id,s2.stu_id)
+
+Student.stu_id=8000
+print(Student.stu_id,s1.stu_id,s2.stu_id)
+
+#输出结果：
+
+#Student,s1,s2
+#9999 9999 9999
+
+
+#9000 9000 9000
+
+
+#9000 1000 9000
+
+
+#9000 1000 2000
+
+
+#8000 1000 2000
+
+```
+
+为了说明上述问题，下表给出了程序运行的空间操作使用情况。由①②两处可以清楚地看出，在类中定义的属性stu_id是“类级”的，在类空间，是和该类的所有实例共享的一个空间。  在③处，执行第9行（s1.stu_id=1000）后，正如前面所说，实例s1动态创建了一个自己的属性stu_id，以后再用s1.stu_id访问该属性的时候，s1访问的正是这个“自己的”属性，而不是共享空间的那个了。   同理，在④处执行第11行（s2.stu_id=1000）后，实例s2动态创建了一个自己的属性stu_id，以后再用s2.stu_id访问该属性的时候，s2访问的正是这个“自己的”属性，而不是共享空间的那个了，更不是s1空间的那个。   在⑤处，虽然通过Student.stu_id=8000改变了类的属性，但是因为s1和s2都已经具有了自己的独立的局部变量stu_id，其值仍然是s1和s2自己原先的值，不变化。
+
+|                                                              |               |                               |
+| ------------------------------------------------------------ | ------------- | ----------------------------- |
+| ①第3，4行执行后（类中定义的的属性是共享的，因此第6行输出都是9999） | Student空间： | 属性stu_id 初始值=9999        |
+|                                                              | s1空间：      | 共享Student的属性stu_id =9999 |
+|                                                              | S2空间：      | 共享Student的属性stu_id =9999 |
+| ②第7行执行后（类中定义的的属性是共享的，因此第8行输出都是9000） | Student空间： | 属性stu_id 赋值新值=9000      |
+|                                                              | s1空间：      | 共享Student的属性stu_id =9000 |
+|                                                              | S2空间：      | 共享Student的属性stu_id =9000 |
+| ③第9行执行后（s1.stu_id=1000，给s1动态增加了一个属性，只不过刚好跟类的属性名字一致） | Student空间： | 属性stu_id 没有变化=9000      |
+|                                                              | s1空间：      | 创建s1自己的属性stu_id =1000  |
+|                                                              | S2空间：      | 共享Student的属性stu_id =9000 |
+| ④第11行执行后（s2.stu_id=2000，给s2动态增加了一个属性，只不过刚好跟类的属性名字一致） | Student空间： | 属性stu_id 没有变化=9000      |
+|                                                              | s1空间：      | s1自己的属性stu_id =1000      |
+|                                                              | S2空间：      | 创建s2自己的属性stu_id =2000  |
+| ⑤第13行执行后（Student.stu_id=8000，只改变了类的共享的属性，不影响s1和s2） | Student空间： | 属性stu_id 新值=8000          |
+|                                                              | s1空间：      | s1自己的属性stu_id =1000      |
+|                                                              | S2空间：      | s2自己的属性stu_id =2000      |
+
+其他语言比如C语言或者Java语言，有一条变量的使用准则，那就是“局部变量优先”，当在一个单元中定义的变量名字和更大的单元的名字冲突（一样）的时候，遵循就近定义的变量（局部变量）优先的原则。因此，Python在这一点上和其他语言并不冲突。
+
+  因此，stu_name、stu_id和stu_score三个属性，是属于类Student的还是实例s的？结论就是：
+
+(1)类中方法外定义的stu_name、stu_id属性是类所有实例（包含类自己）共享的。如果给Student在类的外部动态增加一个属性（Student.major=’软件工程’），这个major属性同样会和Student的所有实例（s1，s2）共享。换句话说，不管是在类的定义内定义的属性还是在类的外部动态增加的属性，其地位是一样的。
+
+(2)stu_score是s实例创建的（s.stu_score=85），仅仅是s实例所有。同样，当执行s1.stu_id=1000，stu_id成为实例s1自己的属性（尽管该属性和类的属性名称一样），因为局部变量优先。
 
 #### 9.2.5 讨论：方法是谁的？
 
+上一小节回答了“属性是谁的”问题。现在回答第二个问题：方法是属于类Student的还是实例的？明白了这个问题，就会知道为什么上例第6行会报错。
+
+答案是：**方法既是类的也是实例的，在于你的调用方式和Python的处理方式**。
+
+定义一个Student类，并进行方法调用
+
+```python
+class Student:
+"""this is a class"""
+     def func(a,b): 
+           print(b)
+           print(a)  #注意此处的输出结果
+
+s=Student( )
+
+Student.func(10,20)
+print('***************************')
+s.func(2	0)
+print('***************************')
+s.func(10,20)  #报错了 TypeError
+
+#输出结果：
+#20
+#10
+#*************************
+#20
+#<__main__.Student object at 0x00000214D5264FD0>
+#*************************
+#TypeError 
+#Traceback (most recent call last)
+#……
+#TypeError: func() takes 2 positional arguments but 3 were given
+```
+
+从上例可以看出，方法有两种调用方式：可以通过**“类名.方法名(参数表)”**的形式调用，也可以通过**“实例名.方法名(参数表)”**，跟前面讲得一致。
+
+(1)**“类名.方法名(参数表)”的形式调用：此时方法是“类级”的，方法有几个参数就要给几个参数**，就跟我们前面函数一章讲过的函数调用一样。如第7行所示。
+
+(2)“实例名.方法名(参数表)”的形式调用：此时方法是“实例级”的，方法是由实例调用，如第9行和第11行所示。
+
+对第(2)种情况，Python的处理方式和其他语言不一样。此时Python会自动传递一个实参给所调用的方法中的第一个形参，这个实参就是实例本身。如下图所示。
+
+![image-20250722220623498](./img/Python-img/image-20250722220623498.png)
+
+在第9行，执行s.func(20)，Python会把实例s当成第一个参数传递给方法func的第一个形参a，把20传递给方法func的第二个形参b。所以，看起来方法func有两个形参，调用的时候却是“s.func(20)”，只有一个实参20，对初学者就感觉比较怪异。
+
+这就不难解释“s.func(10,20)”所产生的报错信息了。实例s本身传递给形参a，数据10传递给形参b，此时20是多的一个实参。也就是说，函数func只有两个形参，调用的时候却是三个实参。这就是报错信息“func() takes 2 positional arguments but 3 were given”的含义：方法func有两个位置形参却给了三个实参。
+
+结论就是：**方法既可以由类调用，也可以由实例调用。区别在于实例调用的时候，系统会自动传递实例本身给第一个形参。**因此，一般情况下，我们会把类的方法的第一个参数命名为“self”，代表实例本身，这样就可以在类的代码中调用实例的属性和方法了。
+
 #### 9.2.6 创建公共服务类Math
+
+其实一般情况下我们不会通过“类名.属性名”或“类名.方法名（参数表）”的形式使用。
+
+只有当这个类是提供公共服务的，比如我们设计一个数学运算类，提供基本的数学运算，不需要实例化，可以直接通过类名调用属性和方法。下面给出了一个模拟的数学类Math。
+
+```python
+import math
+class Math:
+	PI=3.1415926
+	def circle_area(radius):
+		return Math.PI*radius*radius
+	def distance(x1,y1,x2,y2):
+		return math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))
+x1,y1=1,2
+x2,y2=4,6
+print(Math.distance(x1,y1,x2,y2))
+print(Math.circle_area(10))
+print(Math.PI)
+#输出结果：
+#5.0
+#314.15926
+#3.1415926
+```
 
 ### 9.3 创建类和实例（二）
 
+当类不是提供公共服务的时候，其实一般情况下我们不会通过“类名.属性名”或“类名.方法名（参数表）”的形式使用。除非确实是需要共享，比如所有学生共享一个班主任，此时班主任就可以按10.2节的方式定义为一个属性。
+
 #### 9.3.1 类的定义
+
+因此，如果一个类不是提供公共服务，我们通常的做法是：
+
+（1）方法考虑被实例调用，而不是被类直接调用；
+
+（2）属性定义为实例自己所有，而不是被类和实例所共享。
+
+下例给出了一个学生类，包含姓名、年龄和成绩。跟前面的类定义相比，主要的变化在于：第2行**把类的方法的第一个参数命名为“self”，代表实例本身**，这样就可以在类的代码中调用实例的属性和方法了（第6行）。**把属性的定义从方法外面，放在方法里面，通过“self.XX”这样的形式动态增加（第3、4、5行）**。在类的定义外面，不再通过类名引用属性和方法，而是通过实例去引用（第8行）。
+
+```python
+class Student:
+	def speak(self):
+		self.name ="zhang"
+		self.age = 20
+		self.score=90
+		print(self.name,self.age,self.score)
+s1=Student( )
+s1.speak()
+#输出结果：
+#zhang 20 90
+```
 
 #### 9.3.2 向方法传递实参
 
+上例这个例子中，定义了三个Student的属性并直接赋值（第3、4、5行）。这种直接赋值显然在实际中不是我们所需的，我们希望可以传递“我们想要的”值给speak方法，代码可以这样：
+
+Student类的定义-用户向方法传递实参
+
+```python
+class Student:
+    def speak(self,name,age,score):
+        self.name =name  #name等由用户传入
+        self.age = age     
+        self.score=score   
+        print(self.name,self.age,self.score)
+s1=Student( )
+s1.speak("Vivian",20,95)
+#输出结果：
+#Vivian 20 95
+```
+
+代码的第3,4,5行定义了三个属性，并通过形参赋值。这里注意：name是方法的局部变量，self.name是实例的局部变量。所以在这个方法中，name是最优先的，就是形参那个name。要使用实例的那个name，必须用self.name的形式引用。
+
+这里澄清一个定义，很多教材或资料上说，**方法的第一个参数必须定义为“self”，这个说法是错误的**，第一个参数（形参而已）的名字可以任意。比如把例中speak方法的第一个参数改为“this”，像这样：def speak(this,name,age,score)，方法内部的self也都相应改变，程序也是可以正常运行的。不过，Python的程序员习惯了第一个参数命名为self，约定俗成，我们以后也写为self。不遵循此约定会使得你的代码对其他 Python 程序员来说缺乏可读性。
+
 #### 9.3.3 类的构造方法
+
+在上例中，方法speak给实例self增加了一些属性并通过传递实参赋值，现在我们希望在创建对象（执行s1=Student( )）时可以直接对s1实例进行初始化。
+
+为了完成这一点，Python可以对类增加初始化方法。
+
+该方法名字叫`__init__`（init前后各有两个下划线符号），如下例所示。`__init__`是一个专有的名字，不能改变（为了方便，后续直接叫init方法）。方法的第一个参数正如前面所说，约定俗成叫“self”，由系统自动传入当前的实例对象，后面的参数（若有），用于接受用户传入的实参。
+
+```python
+class Student:
+	def __init__(self,name,age):#初始化方法，方法名字不能改
+		self.name =name
+		self.age = age
+	def speak(self):
+		print(self.name,self.age)     
+s1=Student("zhang",18)
+s1.speak()
+#输出结果：
+#zhang 18 
+```
+
+其init方法什么时候执行？该方法不需要用户调用，由系统在执行实例化的时候（即s1=Student("zhang",18)语句）自动调用。此时，系统会把s1对象传递给self参数。把“zhang”传递给name参数，把18传递给age参数，然后执行init方法。
+
+> 一个类一定有init这个初始化方法，实例化的时候必然执行init方法。
+
+上例中，执行“s=Student( )”语句同样会执行初始化方法，只不过在之前的Student类我们没有显式自己定义这个方法。当我们没有显式定义init方法的时候，系统默认有一个空的init方法。
+
+**当我们自定义了一个init方法的时候，这个默认的init方法就不存在了**。在上例中，如果执行“s1=Student( )”，就会报错，信息为：TypeError: __init__() missing 2 required positional arguments: 'name' and 'age'。因为init方法需要两个位置参数name和 age。
 
 #### 9.3.4 属性的get和set方法
 
+在上一节中，我们完成了如何在实例化的时候对实例进行初始化，现在我们看如何读取或者设置实例的属性。可以在类的外面通过实例对属性进行读取和设置，如下例所示（第9、10行是属性赋值，第12行是属性读取）。
+
+```python
+class Student:
+	def __init__(self,name,age):#初始化方法，名字不能改
+		self.name =name
+		self.age = age
+	def speak(self):
+		print(self.name,self.age,self.score)     
+s1=Student("zhang",18)
+s1.speak()
+s1.name="yun"   #属性重新赋值
+s1.age=220      #属性重新赋值
+s1.speak()
+print(f’姓名：{s1.name}，年龄：{s1.age}’)  #属性读取
+
+#输出结果：
+#zhang 18 
+
+#yun 220
+#姓名：yun，年龄：220
+```
+
+这个例子中，可以看到，我们可以“自由地”对实例的属性进行读取和赋值操作，没有任何限制，想一下年龄220岁合适吗？也就是说，此时，我们还没有对数据进行“校验”的机制。
+
+一般说来，可以设置专门的方法来完成对属性的存取，在方法中通过代码对数据进行校验或者限制、验证等操作，以达到“存你所存”或“取你所取”的目的。
+
+Student类的定义--加入get和set属性操作方法
+
+```python
+class Student:
+    def __init__(self,name,score):#初始化方法
+        self.name =name
+        self.score = score
+    def speak(self):
+        print(self.name,self.score)
+#########对属性name的存取##################        
+    def setName(self,name):#设置属性name
+        self.name=name
+    def getName(self):#取得属性name
+       return self.name
+#########对属性score的存取##################    
+    def setScore(self,score):#设置属性score，加入数据校验
+        if 0<=score<=100:
+            self.score=score
+           return True
+        print("输入错误，成绩只能在0-100之间！")
+        return False
+    def getScore(self):#取得属性score（假设返回五级制成绩）
+        if self.score>=90:
+            return "优秀"
+        elif self.score>=80:
+            return "良好"
+        elif self.score>=70:
+            return "中等"
+        elif self.score>=60:
+            return "及格"
+        return "不及格"    
+#################################
+s1=Student("zhang",92)
+s1.speak()
+s1.setName("yun")
+s1.setScore(85)
+s1.speak()
+print(s1.getName(),s1.getScore())
+#输出结果：
+#zhang 92
+
+
+#yun 85
+#yun 良好
+```
+
+在上例中，对于成绩score属性的存取通过getScore方法和setScore方法进行，加入了数据校验和处理。	
+
+现在进一步讨论两个问题：
+
+第一，对属性name，如果确定它就是简单的数据直存或直取，没有数据检验和处理操作，那么有没有必要加入name属性的get或set方法？答案是：都可以。但是建议也像上面例子一样使用相应的get和set方法处理。因为“需求是变化的”是永远的真理，比如现在需求变化了，要求输入的名字不超过50字符！只能在name的set方法中进行校验和处理。
+
+第二，上例中的init方法，直接对self.name和self.score赋值是否合适？答案是不合适。在软件设计中，有个基本的原则性要求，就是对业务的处理接口必须统一一致。上例的init方法并没有对传入的score实参进行数据校验和处理，这和setScore方法定义的业务处理方式不一致了。 因此，把init方法中的两条语句改为“self.setName(name)”和“self.setScore(score)”，这样就把对name和score属性的赋值操作统一到两个set方法中去了。同理，如果类中还有其他方法要修改name或者score属性的值，也要调用相应的set方法。
+
+上述第二条还有一个好处。大家想一想，如果业务需求变化了，我们只要在相应的set或get方法中修改一次即可，因为业务定义就这一个地方，其他的地方都是调用这里。但是如果业务规则和定义分布在很多地方，则需要每个地方都要修改到位，否则就引入了bug。并且在每个地方进行复制粘贴，也不符合“重复的代码只写一次”的复用原则。
+
 #### 9.3.5 属性和方法的可见性
+
+在上例中，我们已经对属性的操作封装在相应的get和set方法中了。但是在类的定义的外面，仍然可以对属性直接赋值，或者直接读取属性值，比如“s1.score=200”语句仍然是可以的。这是因为Python认为score属性是“公开的”，若不想让类外的对象对属性直接操作，可以把属性设置为“私有的”。也就是说，在类的外面，其他对象不能“看见”属性和方法。这就是属性和方法的“可见性”问题。下表给出了Python中可见性的类别和作用范围。
+
+| **权限** | **权限名称** | **类自己** | **子类** | **类的外部（不含子类）** | **起始标志**  |
+| -------- | ------------ | ---------- | -------- | ------------------------ | ------------- |
+| public   | 公开的       | 可见       | 可见     | 可见                     | 无下划线      |
+| protect  | 受保护的     | 可见       | 可见     | 不可见                   | _(单下划线)   |
+| private  | 私有的       | 可见       | 不可见   | 不可见                   | __ (双下划线) |
+
+>`xxx`     public可见性，属性或者方法在类内、子类内、类外都的可以直接访问的。
+>
+>`_xxx`    protect可见性，不能用 'from module import *' 导入，只能在类内、子类内直接访问。
+>
+>`__xxx`   private可见性，类中的私有变量名，只能在类内访问
+>
+>`__xxx__` 系统定义名字。系统中的特殊名字。我们一般不要取这样的名字。
+
+"单下划线" 开始的成员变量（成员变量包括属性和方法）叫做保护变量，意思是只有类对象和子类对象自己能访问到这些变量；"双下划线" 开始的是私有成员，意思是只有类对象自己能访问，连子类对象也不能访问到这个数据。"双下划线" 开始"双下划线" 结束的成员变量是系统具有特定含义的变量。我们前面定义的“name”、“score”就是“public”类型的变量。
+
+因此，在上例中，我们已经把对属性的操作封装在相应的get和set方法中了，如果不想让类外的对象对属性直接操作，可以把属性设置为“私有的”或者“受保护的”。下例给出了示例代码。
+
+```python
+  class Student:
+    def __init__(self,name,score):#初始化方法，名字不能改
+        self.setName(name)
+        self.setScore(score)
+    def speak(self):
+        print(self.getName( ),self.getScore( ))
+#########对属性name的存取##################        
+    def setName(self,name):#设置属性name
+        self.__name=name
+    def getName(self):#取得属性name
+        return self.__name
+#########对属性score的存取##################    
+    def setScore(self,score):#设置属性score，加入数据校验
+        if 0<=score<=100:
+            self.__score=score
+            return True
+        print("输入错误，成绩只能在0-100之间！")
+        return False
+    def getScore(self): #取得属性score,返回分数
+        return self.__score
+    def getGrade(self): #返回五级制成绩
+        if self.__score>=90:
+            return "优秀"
+        elif self.__score>=80:
+            return "良好"
+        elif self.__score>=70:
+            return "中等"
+        elif self.__score>=60:
+            return "及格"
+        return "不及格"    
+s1=Student("zhang",92)
+s1.speak( )                      #输出：zhang 92
+s1.setName("yun")
+s1.setScore(85)
+print(s1.getName( ),s1.getScore( ),s1.getGrade( )) 
+       #输出：yun 85 良好
+# print(s1.getName( ), s1.getScore( ), s1.__score)  
+#上句是错误的，不能访问s1.__score属性, 因为是私有的, 只能在类的里面使用, 不能在类的定义外面访问。
+s1.__score=220 #正确, 动态增加__score，但和类里面的那个__score不是一个, 容易混淆
+print(s1.getName( ), s1.getScore( ), s1.__score) 
+       #输出：wang 85 220
+```
 
 #### 9.3.6 `__slot__`语句的作用
 
+上例中第37行可以动态增加一个`__score`，从38行的输出可以看出：`s1.__score=220，s1.getScore( )=85`，也就是说，s1.__score和s1.getScore( )函数返回的`__score`不是同一个。是不是容易混淆？太纠结。
+
+Python可以阻止这种情况发生。通过在类的定义时加入slot语句，可以限定类不能动态增加属性，如下例所示，在第7行增加了一条语句，其作用就是限制类的实例只有`__name`和`__score`两个属性，不能在类内或类外动态增加其他属性了。
+
+```python
+#一般形式的类的定义
+#属性设置为私有属性（方法也可以设置为私有，只能在类的内部调用）
+#通过__slot__语句限制动态增加属性
+#通过getters和setters存取属性
+#有初始化的__init__方法
+class Student:
+    __slots__ = ('__name', '__score')#限定了该类只有2个属性。不能动态增加增加
+    def __init__(self,name,score):#初始化方法，名字不能改
+        self.setName(name) #对__name和__score的赋值操作接口统一到对应set方法中
+        self.setScore(score)
+    def speak(self): #对__name和__score的取值操作接口统一到对应get方法中
+        print(self.getName( ),self.getScore( ))
+#########对属性name的存取##################        
+    def setName(self,name):#设置属性name
+        self.__name=name
+    def getName(self):#取得属性name
+        return self.__name
+#########对属性score的存取##################    
+    def setScore(self,score):#设置属性score，加入数据校验
+        if 0<=score<=100:
+            self.__score=score
+            return True
+        print("输入错误，成绩只能在0-100之间！")
+        return False
+    def getScore(self):
+        return self.__score
+
+##########其他方法###########################
+    def grade(self):#返回五级制成绩
+        if self.__score>=90:
+            return "优秀"
+        elif self.__score>=80:
+            return "良好"
+        elif self.__score>=70:
+            return "中等"
+        elif self.__score>=60:
+            return "及格"
+        return "不及格"
+#####下面是用户程序#####
+s1=Student("zhang",92)
+s1.speak()   #输出：zhang 92
+
+s1.setName("yun")
+s1.setScore(85)
+print(s1.getName(), s1.getScore(), s1.grade( ))   #输出：yun  85 良好
+
+# s1.__score=220 #错误. 由于__slot__语句的限制，不能动态增加属性
+# s1.age=30     #错误. 由于__slot__语句的限制，不能动态增加属性
+```
+
 #### 9.3.7 @property 装饰器
+
+在上例中，我们对姓名和成绩两个属性的存取是通过相应的get和set方法实现的。也有很多人习惯了通过属性直接存取这种方式。下面列出了两种方式的比较。
+
+| **属性形式**       |                  | **方法形式**             |                  |
+| ------------------ | ---------------- | ------------------------ | ---------------- |
+| 存：s1.name=100    | 不能校验控制数据 | 存：s1.setName(100)      | 可以校验控制数据 |
+| 取：print(s1.name) |                  | 取：print(s1.getName( )) |                  |
+
+正如所说，很多人习惯了属性形式，而又想可以对数据进行校验和控制。这个时候，Python中的@property装饰器就派上用场了。
+
+@property可以用在某个方法xxx的前面，代表这个方法的名字xxx就是一个属性，以后对这个方法xxx的调用就可以不用方法形式，而是用属性形式（“取”数据）。
+
+要“存”数据，可以在另一个方法前面加上“@xxx.setter”，代表通过这个方法对属性“赋值”。
+
+```python
+#一般形式的类的定义
+#@property装饰器的使用
+class Student:
+    __slots__ = ('__name', '__score')#限定了该类只有2个属性。不能动态增加增加
+    def __init__(self,name,score):#实例的初始化方法，名字不能改
+        self.__name=name    #相当于原先的self.setName(name)
+        self.__score=score    #相当于原先的self.setScore(score)
+    def speak(self):
+        print(self.name,self.score)
+
+#########定义属性，对属性“取”操作##################        
+    @property      #通过@property定义了属性“name”
+    def name(self):   #相当于原先的getName方法
+        return self.__name
+    @property       #通过@property定义了属性“score”
+    def score(self):   #相当于原先的getScore方法
+        return self.__score   
+ 
+#########对属性“赋值”存操作################## 
+    @name.setter         #对应于@property定义的属性“name”的set方法
+    def name(self,name):   #相当于原先的setName方法
+        self.__name=name
+    @score.setter         #对应于@property定义的属性“score”的set方法
+    def score(self,score):   #相当于原先的setScore方法
+        if 0<=score<=100:
+            self.__score=score
+            return True
+        print("输入错误，成绩只能在0-100之间！")
+        self.__score=0
+        return False
+
+    def grade(self):#返回五级制成绩
+        if self.score==False:
+            return False
+        if self.__score>=90:
+            return "优秀"
+        elif self.__score>=80:
+            return "良好"
+        elif self.__score>=70:
+            return "中等"
+        elif self.__score>=60:
+            return "及格"
+        return "不及格"    
+
+s1=Student("zhang",192)
+s1.speak()  #输出：zhang 92
+s1.name="yun"  # 相当于原先的s1.setName("yun")
+s1.score=85    #相当于原先的s1.setScore(85)
+print(s1.name,s1.score,s1.grade( )) #输出：yun 85 良好
+```
+
+通过上例，已经把对属性的setter和getter方法又转换为“熟悉”的方式，但实际上是调用的方法来实现的，因此这种形式上的属性直存直取，可以同时实现对数据的校验和处理。  
+
+因此，如果涉及的类有属性的存取操作，请用@property装饰器形式。比较方便。
 
 ### 9.4 类的专有属性和方法
 
 #### 9.4.1 专有属性
 
+前面说过，Python中双下划线开始双下划线结尾的变量，形如`__XXX__`，是有特殊含义的。一个类创建后，自动会生成一些关于类的性质的属性，可以通过`类名.__XXX__`的形式引用。
+
+```python
+class Student:
+	"""this is the first class"""
+	id=12345
+	def __init__(self,name):
+		self.name=name
+	def f(self):
+		return 'hello world!'
+   
+print("Student.__bases__:",Student.__bases__)            #Student的父类（默认是object）
+print("Student.__name__:",Student.__name__)             #Student的名字
+print("Student.__doc__:",Student.__doc__)                  #Student的文档说明
+print("Student.__module__:",Student.__module__)      #Student的启动模块
+print("Student.__dict__:",Student.__dict__)       #Student的字典（包含所有属性键值对）
+
+print("------------------------------------")
+s=Student("zhang") 
+s.id=1000
+s.age=20
+print("s.__dict__:",s.__dict__)   #对象的字典（属性键值对）
+#输出结果为：
+#Student.__bases__: (<class 'object'>,)
+#Student.__name__: Student
+#Student.__doc__: this is the first class
+#Student.__module__: __main__
+#Student.__dict__: 
+#{ '__module__': '__main__', 
+#'__doc__': 'this is the first class', 
+#'id': 12345, 
+#'__init__': <function Student.__init__ at 0x000001ABEC09A840>, 
+#'f': <function Student.f at 0x000001ABEC70CEA0>,
+# '__dict__': <attribute '__dict__' of 'Student' objects>, 
+#'__weakref__': <attribute '__weakref__' of 'Student' objects>}
+#------------------------------------
+#s.__dict__: {'name': 'zhang', 'id': 1000, 'age': 20}
+```
+
+从上面的例子可以看出，`__dict__`属性其实包含了所有属性的键值对。通过`Student.__dict__`看到里面有个叫“id”的属性，它是类的所有实例共享的变量。通过`s.__dict__`可以看到s对象的属性列表，也有个叫“id”的属性，这是s的局部变量。
+
+所以，s.id的值是1000，而Student.id的值是12345。这是两个不同的值，分别保存在内存中的不同位置。
+
 #### 9.4.2 专有方法 
+
+正如前面介绍的`__init__`方法，Python定义了一些专有方法，下面列出其中一些：
+
+(1)`__init__`	构造函数，在生成对象时调用
+
+(2)`__del__ `	析构函数，释放对象时使用
+
+如果类中实现了`__del__ `方法，则当实例“消亡”（如del语句删除对象）的时候会执行该方法。例如下面代码： 
+
+```python
+class Test1:
+    def __init__(self,name=None):
+        print('__init__')
+    def __del__(self):
+        print('__del__')
+t=Test1() #执行__init__方法，输出'__init__'
+del t    #执行__del__方法，输出'__del__'
+```
+
+(3)`__repr__`	打印，转换
+
+(4)`__str__ ` 输出
+
+这两个专有方法用于输出。当我们定义一个对象，直接打印这个对象的时候，比如下面的代码“print(t)”，这个时候会自动打印`__str__`方法返回的内容，相当于执行语句“print(t.`__str__`( ))”。显然使用“print(t)”更简洁方便。当我们在交互式对话框里直接键入“对象名”时（此时常常是程序员用于调试程序），会调用`__repr__`方法。一般我们会重写`__str__`方法。
+
+```python
+class Test2:
+    def __init__(self,name=None):
+        self.name=name
+        print('__init__')
+    #__str__(self)功能基本和__repr__(self)一样
+#前者面向用户，后者面向程序员。
+    #前者类似于java里面的toString()方法。同时用的话前者覆盖后者。 
+    def __str__(self):  
+        return '__str__'
+    def __repr__(self):
+        return '__repr__'
+t=Test2()  #输出'__init__'
+print(t)    #面向用户调用__str__，输出'__str__'
+t         #面向程序员调用__repr__，输出'__repr__'
+```
+
+(5)`__setitem__`	按照索引赋值
+
+(6)`__getitem__`	按照索引获取值
+
+按关键字取值，按键值对赋值。外部可以直接调用方法，也可以直接使用['键名']进行引用，相当于重载中括号 '[ ] '。也就是把实例当成字典来使用。
+
+```python
+class Test3:
+    def __init__(self,name=None):
+        self.name=name
+        self.items={}
+    def __getitem__(self, key): 
+        return self.items[key]; 
+    def __setitem__(self, key, value): 
+        self.items[key] = value; 
+t=Test3()
+t.__setitem__('name','zhang')
+print(t.__getitem__('name'))
+#下面两行的运行效果同前面两行一样
+t['gender']='male'  #把实例t当成字典来使用
+print(t['gender'])
+```
+
+(7)`__len__`	    获得长度
+
+我们知道，要求得某个对象的长度可以调用系统内建函数len。比如a=[1,3,5,7]，则len(a)得到的结果是4。
+
+现在我们也要求某个类实例的长度，也想用len函数，则要在类中重写`__len__`函数。如下例所示。
+
+```python
+class Test4:
+    def __init__(self, value=0):
+        self.value=value
+    def __len__(self) : #相当于使用内建函数len（object）的时候会调用该方法
+        return len(str(self.value)); 
+t=Test4(1009)
+print(len(t))  #输出：4
+```
+
+(8)`__call__`	函数调用
+
+在Python中，函数其实是一个对象：
+
+`>>> f = abs       #f是对象`
+
+`>>> f.__name__   #输出对象的名字'abs'`
+
+`>>> f(-123)       #调用函数`
+
+由于 f 可以被调用，所以，f 被称为可调用对象。所有的函数都是可调用对象。一个类实例也可以变成一个可调用对象，只需要实现一个特殊方法`__call__()`。如下例所示。
+
+```python
+class Test5:
+    value=0
+    def __init__(self,value=0):
+        self.value=value
+    def __call__(self,value): #使得对象名可以当成函数使用
+        self.value=value*10; 
+        print(self.value)
+t=Test5(10)
+t.__call__(200)
+t(200)  #相当于t.__call__(200)
+```
+
+(9)`__add__`	加运算
+
+(10)`__sub__`	减运算
+
+(11)`__mul__`	乘运算
+
+(12)`__div__`	除运算
+
+(13)`__mod__`	求余运算
+
+(14)`__pow__`	乘方运算
 
 #### 9.4.3 运算符重载
 
+下面这几个专有方法，将会使得类的实例可以像四则运算那样进行操作。
+
+(1)`__add__`	加运算，重载“+”运算符
+
+(2)`__sub__`	减运算，重载“-”运算符
+
+(3)`__mul__`	乘运算，重载“*”运算符
+
+(4)`__div__`	除运算，重载“/”运算符
+
+(5)`__mod__`	求余运算，重载“%”求余运算符
+
+(6)`__pow__`	乘方运算，重载“**”乘方运算符
+
+下面以加法__add__专有方法为例说明。如下例所示。创建了两个实例t1和t2，可以执行“t1+t2”的运算。
+
+```python
+class Test6:
+    def __init__(self,value=0):
+        self.value=value
+    def __add__(self, t): #使得self和t可以进行“+”运算
+        return self.value+t.value; 
+t1=Test6(10)
+t2=Test6(20)
+print(t1+t2)  #此时系统会把t1传给第一个形参，t1传给第二个形参。
+#结果就是__add__函数的返回值30
+print(t1.__add__(t2)) #和上句结果相同。只是上句更容易理解
+```
+
 ### 9.5 类的继承
+
+继承是子类复用父类的属性和方法的机制，类的继承是以生活中继承为灵感设计的。
+
+生活中继承的例子有很多，例如，汽车的发展历程就体现了继承。最早汽车的轮胎都是实心的，功能少，性能差，而如今汽车的功能越来越多，性能越来越好，这是经过一代一代的发展而来的，每一代比上一代扩充了一些功能，改进了一些性能。这其中有些功能没有改变，有些功能是新增的，也有些功能经过了改良。这么做是有好处的：节省了设计流程，不用闭门造车；在前一代汽车基础之上设计，原来重复的生产技术还可以复用，这样就能大大地提高生产效率。
+
+假设设计一个师生管理系统，具有学生和教师两种用户，需要设计两个类，一个学生类(Student)，一个教师类(Teacher)。Student类有学号、姓名、性别、年龄、用户名、密码等属性，Teacher类有姓名、性别、年龄、用户名、密码、学历等属性，这两个类中都有属性的getter和setter方法。由此可知，这两个类中有许多相同的属性和方法，也就是说代码有冗余。
+
+为了避免这样的情况，就可以使用继承来优化设计。将Student类和Teacher类中相同的属性和方法抽取出来，单独作为一个父类，这个父类称为用户类(User)，而Student类和Teacher类作为子类继承父类User。Student类和Teacher类中就只放自己特有的属性和方法即可。由于这两个类都继承User类，因此User类中的属性和方法，它们可以直接使用。
+
+继承提高了代码的重用性，减少了代码和数据的冗余度。另外，如果要修改用户名属性，不采用继承的情况下，两个类的属性都需要修改，而使用继承后，只需要修改父类的用户名属性即可。由此可知，继承使代码的修改更加方便。
+
+需要指出的是，在继承中私有属性和私有方法是不能被继承的。
 
 #### 9.5.1 继承的定义
 
+定义一个类的时候，可以从某个现有的类继承。新的类称为子类（Subclass），而被继承的类称为基类、父类或超类（Base class、Super class）。继承的格式：
+
+```python
+class 子类名(基类):
+        <statement-1>
+        <statement-N>
+```
+
+如黑体所示，只要把基类放在类的名字后的小括号中即可。下面给出了一个简单的继承的例子。Dog类继承自Animal类，而Animal类继承自Object类（此时小括号和object也可以省略不写）。
+
+```python
+class Animal(object):#继承自object类
+   def run(self):
+       print('animal is running ...')
+   def __run(self):#双下划线开头，私有
+       print('私有方法，不能继承.')
+class Dog(Animal):#继承自Animal类
+   def eat(self):
+       print(' dog is eating ')
+dog = Dog( )
+dog.run( )  #运行的继承来的方法
+dog.eat( )  #运行的子类自己的方法
+dog.__run( ) #出错，不能继承私有方法
+#运行结果：
+#animal is running ...
+#dog is eating
+
+#AttributeError: 
+#...
+#'Dog' object has no attribute '__run'
+```
+
+上例中，Dog类继承自Animal类，因而可以调用run方法。继承提高了代码的重用性，减少了代码和数据的冗余度。需要指出的是，在继承中私有属性和私有方法是不能被继承的。如__run方法是Animal的私有方法，不能被Dog类继承，所以最后一条语句出错。
+
 #### 9.5.2 子类中重写父类的方法
+
+对于父类的方法，只要它不符合子类模拟的实物的行为，都可对其进行重写。为此，可在子类中定义一个这样的方法，即它与要重写的父类方法同名。这样，Python将不会考虑这个父类方法，而只关注你在子类中定义的相应方法。
+
+```python
+class Animal(object): 
+    def run(self):
+         print('animal is running ...')
+class Dog(Animal):  
+    def eat(self):
+         print(' dog is eating ')
+    def run(self):    #子类重写父类的方法run
+        print('dog is running ...')
+dog = Dog( )
+dog.run( )  #运行的重写后的方法
+dog.eat( )  #运行的增加的方法
+#运行结果：
+#dog is running ...
+#dog is eating
+```
 
 #### 9.5.3 子类中调用父类的方法
 
+如果在子类中调用父类定义的方法，有两种形式：
+
+>父类名称.父类方法(参数表)  #参数表要包含self参数
+>
+>super( ).父类方法(参数表)  #参数表不需要self参数
+
+```python
+class Father(object):
+    def getMsg(self,name):
+        msg='getMsg：姓名=' +name
+        return msg
+class Son(Father):#从Father类继承，子类没有重写__init__方法
+    def getMsg_1(self,name,age):
+        msg=Father.getMsg(self,name)+ '，年龄='+str(age)
+        return msg
+    def getMsg_2(self,name,age):
+        msg=super().getMsg(name)+ '，年龄='+str(age)
+        return msg
+if __name__=='__main__':
+    son=Son()
+    print (son.getMsg_1("maomao",30))
+    print (son.getMsg_2("linlin",20))
+#输出结果为：
+#getMsg：姓名=maomao，年龄=30
+#getMsg：姓名=linlin，年龄=20
+```
+
+从上例可以看出，子类Son中的方法def getMsg_1采用“父类名称.父类方法(参数表)”的形式调用父类方法，注意，self参数要传递，如第7行所示。子类Son中的方法def getMsg_2采用“super( ).父类方法(参数表)”的形式调用父类方法，self参数不需要传递。
+
+需要注意的是，使用super ( )调用父类的方法，一个是不能忘了写括号，另一个是不需要把self参数传递过去。写括号代表super( )是一个函数（很大可能），它恰恰是上节列出的内置函数之一。
+
+事实上，上述两种调用方式，对构造方法也适应。本质上，构造方法和其他方法没有太大区别，唯一的区别就是：构造方法在实例化的时候自动调用而已。
+
 #### 9.5.4 子类的构造方法
+
+创建子类的实例时，Python首先需要完成的任务是给父类的所有属性赋值。为此，子类的构造方法`__init__`( )需要父类施以援手。子类有两种处理构造方法的措施：
+
+（1）子类不重写构造方法；
+
+（2）子类重写构造方法。
+
+如果在子类中不重写构造方法，会自动调用父类定义的构造方法。
+
+下面的例子中，Son类继承自Father类，Son类中没有重写`__init__`方法，因此直接继承了Father的`__init__`方法，所以在第11行实例化的时候，直接使用的Father的构造方法。本例中还有一个方法getName(self)，父类中有，子类中又重写了，此时第12行调用的是子类自己的getName方法。
+
+```python
+class Father(object):
+    def __init__(self, name):
+        self.name=name
+        print( f'父类初始化方法: {self.name}')
+    def getName(self):
+        return '父类getName方法：' + self.name
+class Son(Father):#从Father类继承，子类没有重写__init__方法
+    def getName(self):
+        return '子类getName方法：'+self.name
+if __name__=='__main__':
+    son=Son('zhang')
+    print (son.getName())
+#输出结果为：
+#父类初始化方法: zhang
+#子类getName方法：zhang
+```
+
+如果在子类中重写了构造方法，实例化子类的时候就不会调用父类已经定义的 `__init__`，只能调用子类自己的构造方法。但我们可以在子类的构造方法中主动调用父类构造方法去初始化父类中定义的属性。调用方式正如我们在上节所讲的两种形式。
+
+```python
+class People: #定义一个People 类
+    def __init__(self,name,age):
+        self.name =name
+        self.age = age
+    def f(self):#其他方法
+        print("父类的f()方法")
+    def __str__(self):  #专有方法
+        return f"{self.name} , {self.age} years old"
+
+class Student(People):#继承自People类
+    def __init__(self,name,age,score):
+        People.__init__(self,name,age)
+        #格式：父类名称.__init__(self,参数1，参数2，...)
+        self.score=score;
+    def __str__(self):  
+        return People.__str__(self)+f",and score={self.score}"  
+p=People('zang',28)
+s=Student('zhang',18,120)
+print(p) #相当于调用p.__str__( )。
+print(s)
+#输出结果为：
+#zang , 28 years old
+#zhang , 18 years old,and score=120
+```
+
+在上例中，在子类构造方法中调用父类构造方法的格式是：
+
+> 父类名称.`__init__`(参数表)  #参数表要包含self参数
+
+如第11行，通过调用父类的构造方法来初始化name和age属性，然后再在子类的构造方法中初始化score属性。在第15行，调用了父类的`__str__`方法。
+
+在新的Python版本中，在子类中调用父类构造方法的标准格式是
+
+> super().`__init__`(参数表)  #参数表不要self参数
+
+下面给出了使用super函数调用父类构造方法的示例。
+
+```python
+class Student(People):#继承自People类
+	def __init__(self,name,age,score):
+		super( ).__init__(name,age)  #调用父类构造方法
+		self.score=score;
+	def __str__(self):  
+		super( ).f( )  #调用父类方法
+		return super( ).__str__( )+f", and score={self.score}"      
+s=Student('zhang',18,120)
+print(s)
+#输出结果为：
+#父类的f( )方法
+#zhang , 18 years old, and score=120
+```
+
+从上例可以看出，通过super( )函数可以获得父类对象，之后可以直接调用父类的构造方法。再次强调，使用super ( )调用父类的方法，不能忘了写括号，不需要把self参数传递过去。如第3行和第6行所示。
+
+需要注意的是，在Python2中调用父类的方法的格式是“super(子类，self).父类方法名”，现在不建议使用，此不展开。
 
 #### 9.5.5 类的应用实例
 
+回到上节开头的所举的一个场景：假设设计一个师生管理系统，具有学生和教师两种用户，需要设计两个类，一个学生类(Student)，一个教师类(Teacher)。
+
+Student类有学号、姓名、性别、专业属性。
+
+Teacher类有工号、姓名、性别、职称等属性。
+
+这两个类中都有属性的getter和setter方法。这两个类中有许多相同的属性和方法，可以使用继承来设计。将Student类和Teacher类中相同的属性和方法抽取出来，单独作为一个父类，这个父类称为用户类(User)，而Student类和Teacher类作为子类继承父类User。Student类和Teacher类中就只放自己特有的属性和方法即可。
+
+```python
+class User:
+    '''用户类(User)，Student类和Teacher类作为子类继承父类User。'''
+    __slots__ = ('__uid', '__name','__gender',)#限定了该类只有3个属性。
+    def __init__(self,uid,name,gender):
+        self.name=name
+        self.uid=uid
+        self.gender=gender    
+#########对属性name的存取################## 
+    @property
+    def name(self):#取得属性name
+        return self.__name
+    @name.setter
+    def name(self,name):#设置属性name
+        self.__name=name
+#########对属性id的存取##################    
+    @property
+    def uid(self):
+        return self.__uid
+    @uid.setter
+    def uid(self,uid):#设置属性id,长度四位
+        if len(str(uid))==4:
+            self.__uid=uid
+            return True
+        print("输入错误，id只能是四位！")
+        self.__uid="0000"
+        return False
+######对属性gender的存取######
+    @property
+    def gender(self):
+        return self.__gender
+    @gender.setter
+    def gender(self,gender):#设置属性gender，加入数据校验
+        if gender in ['f','female','F','Female','女']:
+            self.__gender='女'
+            return True
+        if gender in ['m','male','M','Male','男']:
+            self.__gender='男'
+            return True
+        print("性别输入错误！")
+        self.__gender=''
+        return False
+#######重写__str__ 方法#########  
+    def __str__(self):
+      return str([self.uid,self.name,self.gender]) 
+```
+
+```python
+class Student(User):
+    __slots__ = ('__major')#限定了该类不能动态增加属性
+    def __init__(self,uid,name,gender,major):#实例的初始化方法，名字不能改
+        super().__init__(uid,name,gender)
+        self.major=major     
+    @property
+    def major(self):  #返回专业
+        return self.__major
+    @major.setter
+    def major(self,major):#设置专业
+        self.__major=major    
+    def __str__(self):
+        return str([self.uid,self.name,self.gender,self.major]) 
+class Teacher(User):
+    __slots__ = ('__title')#限定了该类增加职称属性
+    def __init__(self,uid,name,gender,title):#实例的初始化方法
+        super().__init__(uid,name,gender)
+        self.title=title       
+    @property
+    def title(self):  #返回职称
+        return self.__title
+    @title.setter
+    def title(self,title):#设置职称
+        self.__title=title   
+    def __str__(self):
+        return str([self.uid,self.name,self.gender,self.title]) 
+#执行语句：
+u=User('0000','huang','f')
+s=Student(1000,"zhang","male","软件工程")
+t=Teacher(1001,"wang","女","副教授")
+print(u)
+print(s)
+print(t)
+#输出结果为：
+#['0000', 'huang', '女']
+#[1000, 'zhang', '男', '软件工程']
+#[1001, 'wang', '女', '副教授']
+```
+
 ### 9.6 多级继承
+
+继承在Python中可以有任何的深度(层级)。这叫多级继承。在多级继承中，基类和派生类的特性被继承到新的派生类中。下面给出了示意代码和示意图。
+
+```python
+class A:
+#默认继承自object类
+    pass
+class B(A):
+    pass
+class C(B):
+    pass
+```
+
+![image-20250723201348499](./img/Python-img/image-20250723201348499.png)
+
+```python
+class GraduteStudent(Student):
+    __slots__ = ('__research')  #限定了该类不能动态增加属性
+    def __init__(self,uid,name,gender,major,research):#初始化方法    
+        super().__init__(uid,name,gender,major)
+        self.research=research      
+    @property
+    def research(self):      #返回研究方向属性
+        return self.__research
+    @research.setter
+    def research(self,research):#设置研究方向属性
+        self.__research=research  
+    def __str__(self):
+        return str([self.uid,self.name,self.gender,self.major,self.research]) 
+u=User('0000','huang','f')
+s=Student(1000,"zhang","男","软件工程")
+g=GraduteStudent(1001,"wang","男","计算机技术","图像识别")
+print(u)
+print(s)
+print(g)
+#输出结果：
+#['0000', 'huang', '女']
+#[1000, 'zhang', '男', '软件工程']
+#[1001, 'wang', '男', '计算机技术', '图像识别']
+```
 
 ### 9.7 多重继承
 
 #### 9.7.1 专有属性
 
+Python支持多重继承，也就是说一个子类可以有多个直接父类，特点就是具备了多个父类的非私有属性和方法。多重继承的语法类似于单继承。
+
+Python多重继承基本结构如下：
+
+```python
+class A:
+    pass
+class B:
+    pass
+class C( A，B): 
+#该类继承自A和B类。
+    pass
+```
+
+![image-20250723201457338](./img/Python-img/image-20250723201457338.png)
+
+```python
+class  Animal:
+	def eat(self):
+		print('Eating...')
+class Runnable(object):
+	def run(self):
+		print('Running...')
+class Flyable(object):
+	def fly(self):
+		print('Flying...')
+class Dog(Animal,Runnable):
+	def kanmen(self): 
+		print('看门...')
+class Cock(Animal,Runnable,Flyable):
+	def daming(self):
+		print('打鸣...')
+dog=Dog()
+dog.run()
+cock=Cock()
+cock.daming()
+cock.fly()
+#输出结果：
+#Running...
+#打鸣...
+#Flying...
+```
+
+![image-20250723201727316](./img/Python-img/image-20250723201727316.png)
+
 #### 9.7.2 方法调用顺序：直接使用父类名字
 
+如果在子类中调用父类定义的方法，有两种形式：
+
+```python
+父类名称.父类方法(参数表)  #参数表要包含self参数
+super( ).父类方法(参数表)   #参数表不需要self参数
+```
+
+这是我们前面讲过的。在单重继承关系中，两种都不会出问题，都是可以的。第一种指明了要调用的是哪个父类，非常明确。第二种指定了super（）返回的对象（单重继承就是返回的父类对象），意义也非常明确。
+
+```python
+class A:
+    def work(self):
+        print("work A")
+class B1(A):
+    def work(self):
+        print("work B1")
+        A.work(self)
+class B2(A):
+    def work(self):
+        print("work B2")
+        A.work(self)
+class C(B1, B2):
+    def work(self):
+        print("work C")
+        B1.work(self)
+        B2.work(self)   
+    
+if __name__ == '__main__':
+    c = C()
+    c.work()
+#输出结果：
+#	work C
+#	work B1
+#	work A
+#	work B2
+#	work A
+
+```
+
+![image-20250723202104555](./img/Python-img/image-20250723202104555.png)
+
 #### 9.7.3 方法调用顺序：直接使用super函数
+```python
+class A:
+    def work(self):
+        print("work A")
+class B1(A):
+    def work(self):
+        print("work B1")
+        super( ).work( )     
+class B2(A):
+    def work(self):
+        print("work B2")
+        super( ).work( )
+class C(B1, B2):
+    def work(self):
+        print("work C")
+        super( ).work( )          
+if __name__ == '__main__':
+    c = C( )
+    c.work( )
+#输出结果：
+#	work C
+#	work B1
+#	work B2
+#	work A
+```
+
+那么，这里就涉及到一个调用的顺序问题。执行“ print(C.mro( ))”语句，结果输出`[<class '__main__.C'>, <class '__main__.B1'>, <class '__main__.B2'>, <class '__main__.A'>, <class 'object'>]`。mro( )函数可以输出类的方法解析顺序（method resolution order），又叫MRO解析链，也就是刚刚提到的方法的调用的顺序。可以看出，C类的方法调用按照“C>B1>B2>A>object”的顺序调用。
+
+
+
+在C类的MRO解析链：C>B1>B2>A>object。解析过程为：
+
+(1)第19行“c.work()”：输出"work C"，执行super().work()； 
+
+(2)super().work() ：相当于B1.work() ，输出“work B1”，执行super().work()；
+
+(3)super().work() ：相当于B2.work() ，输出“work B2”，执行super().work()；
+
+(4)super().work() ：相当于A.work() ，输出“work A”，执行super().work()；
+
+(5)super().work() ：相当于object.work() ，找不到work函数，结束。
+
+由上述过程分析可以看出，在多重继承中，super( )函数不是返回的父类，而是返回MRO解析链上的“下一个”对象。只要在这个链上的对象没有work( )方法，解析结束，也就意味着方法调用结束。
+
+有了上面的分析，下面看下例这个更复杂的例子，进一步说明MRO解析的过程。
+
+```python
+class X: 
+    def work(self):
+        print("work X")    
+class Y: 
+    def work(self):
+        print("work Y")
+class Z: 
+    def work(self):
+        print("work Z")
+
+class A(X,Y):
+    def work(self):
+        print("work A")   
+        super( ).work()
+class B(Y,Z): 
+    def work(self):
+        print("work B")
+        super( ).work()
+
+class M(B,A,Z): 
+    def work(self):
+        print("work M")
+        super( ).work()
+m=M()
+m.work()
+#输出结果：
+#	work M
+#	work B
+#	work A
+#	work X
+```
+
+![image-20250723202933953](./img/Python-img/image-20250723202933953.png)
+
+执行语句“print(M.mro())”，确定MRO链顺序：M→B→A→X→Y→Z→object。
+
+(1)第23行“m.work()”：输出"work M"，执行super().work() ； 
+
+(2)super().work() ：相当于B.work() ，输出“work B”，执行super().work()；
+
+(3)super().work() ：相当于A.work() ，输出“work A”，执行super().work()；
+
+(4)super().work() ：相当于X.work() ，输出“work X”，此时，注意，X.work()函数中没有super()函数，结束。
+
+所以最终的输出按“M→B→A→X”的顺序输出。	
+
+读者可以尝试在X类的print语句后加一句“super().work()”，验证以下输出结果：
+
+work M
+
+work B
+
+work A
+
+work X
+
+work Y
+
+在多重继承中，如果不理解super()函数，仅仅把它理解为“父类”，那就错了。因为X类的父类是object类，并没有work()函数。
 
 #### 9.7.4 多重继承的构造方法调用（1）
 
+```python
+class A :
+    def __init__(self):
+        print( "A ")
+class B(A):
+    pass
+class C(A):
+    pass
+class D(B,C):
+    pass
+class E(D):
+	pass
+
+e=E( )  #输出：A
+#==================================
+class A :
+    def __init__(self):
+        print( "A ")
+class B(A):
+    pass
+class C(A):
+    pass
+class D(B,C):
+    pass
+class E(D):
+	pass
+
+e=E( )  #输出：A
+#==================================
+class A :
+    def __init__(self):
+        print( "A ")
+class B(A):
+    pass
+class C(A):
+    pass
+class D(B,C):
+    pass
+class E(D):
+	pass
+
+e=E( )  #输出：A
+```
+
+注意，print(E.mro())输出的MRO链为：E>D>B>C>A>object。按此顺序，找到第一个构造函数运行后就不再继续。
+
 #### 9.7.5 多重继承的构造方法调用（2）
 
+本节讨论这么一种情形：在子类构造函数中显式地调用父类的构造函数。
+
+如果在子类中调用父类定义的构造方法，有两种形式：
+
+> `父类名称.__init__(self, 参数表)`  #参数表要包含self参数
+>
+> `super( ).__init__(参数表)`        #参数表不需要self参数
+
+```python
+class A(object) :
+    def __init__(self):
+        print( "init A Class")
+class B(A):
+    def __init__(self):
+        print( "init B class")
+        A.__init__(self)
+class C(A):
+    def __init__(self):
+        print( "init C class")
+        A.__init__(self)
+class D(B,C):
+    def __init__(self):
+        print( "init D class")
+        B.__init__(self)
+        C.__init__(self)
+d=D( )
+# 输出结果：
+# init D class
+# init B class
+# init A Class
+# init C class
+# init A Class
+```
+
+原则就是：找到MRO链，按链上的顺序访问对象，直到某构造函数内没有super( )函数调用就停止。
+
+```python
+class A:
+    def __init__(self):
+        print("init A Class")
+class B(A):
+    def __init__(self):
+        print("init B class")
+        super().__init__()
+class C(A):
+    def __init__(self):
+        print("init C class")
+        super().__init__()
+class D(B,C):
+    def __init__(self):
+        print( "init D class")
+        super().__init__( )  #注意这里，只有一句
+d=D( )
+print(D.mro( ))
+# 输出结果：
+# init D class
+# init B class
+# init C class
+# init A Class
+# [<class '__main__.D'>, <class '__main__.B'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>]
+
+```
+
+在多重继承中，super( )函数不是返回的父类，而是返回MRO解析链上的“下一个”对象。
+
 ### 9.8 类的继承
+
+你必须熟悉有些与类相关的编码风格问题，在你编写的程序较复杂时尤其如此。类名应采用驼峰命名法，即将类名中的每个单词的首字母都大写，而不使用下划线。实例名和模块名都采用小写格式，并在单词之间加上下划线。
+
+对于每个类，都应紧跟在类定义后面包含一个文档字符串。这种文档字符串简要地描述类的功能，并遵循编写函数的文档字符串时采用的格式约定。每个模块也都应包含一个文档字符串，对其中的类可用于做什么进行描述。
+
+可使用空行来组织代码，但不要滥用。在类中，可使用一个空行来分隔方法；而在模块中，可使用两个空行来分隔类。
+
+需要同时导入标准库中的模块和你编写的模块时，先编写导入标准库模块的import语句，再添加一个空行，然后编写导入你自己编写的模块的import语句。在包含多条import语句的程序中，这种做法让人更容易明白程序使用的各个模块都来自何方。
 
 ## 10、Numpy数组
 
@@ -4156,24 +5583,545 @@ axis参数--轴的理解：“脱衣服”理论——
 2. axis=1就是去掉2层括号后的对象进行计算；
 3. axis=2就是去掉3层括号后的对象进行计算；
 
-
 ## 11、Matplotlib数据可视化
 
+matplotlib是受MATLAB的绘图工具启发构建的。MATLAB语言是面向过程的，利用函数的调用，可以轻松的绘制图形。matplotlib有一套完全仿照MATLAB的函数形式的绘图接口，在matplotlib.pyplot模块中。Matplotlib 通常与 NumPy 和 SciPy（Scientific Python）一起使用， 这种组合广泛用于替代 MatLab，是一个强大的科学计算环境，有助于我们通过 Python 学习数据科学或者机器学习。
 
+Matplotlib 是 Python 的绘图库，它是一个非常强大的 Python 画图工具，我们可以使用该工具将很多数据通过图表的形式更直观的呈现出来。
 
+使用如下命令安装matplotlib库：
 
+> pip install matplotlib -i https://pypi.tuna.tsinghua.edu.cn/simple
 
+安装完后，你可以使用 python -m pip list 命令来查看是否安装了 matplotlib 模块。在下图中，可以看到安装的是matplotlib3.4.2版本。
 
+![image-20250724145736244](./img/Python-img/image-20250724145736244.png)
 
+### 11.1 绘图基本过程
 
+pyplot是 Matplotlib 的子库，提供了和 MATLAB 类似的绘图 API，能很方便让用户绘制2D图表。它包含一系列绘图相关函数。使用的时候，我们可以使用import导入pyplot库，为了方便引用，可以设置一个别名plt。
 
+使用matplotlib绘制图形的基本步骤包含四步：
 
+（1）导入matplotlib的pyplot库，`import matplotlib.pyplot as plt`，其中plt是别名，便于后面引用使用。一般 Python程序员都使用plt做别名。
 
+（2）准备数据。根据绘制图形要求准备数据，可以是Python的基本数据（列表，元组等），也可以是Numpy的数组等。该例准备了x和y两个列表。其中x是把2π分成了100份，加上两端共101个点。
 
+（3）使用plt绘制图形。根据需要可以绘制柱状图、饼状图、折线图等各种图形。
 
+（4）使用plt.show( )函数显示图形。
 
+下面我们通过一个简单的例子来看看如何绘制正弦函数。
 
+```python
+#导入包
+import matplotlib.pyplot as plt
+import math
+#准备数据
+x=[math.pi*2/100*i for i in range(101)]
+y=[math.sin(i) for i in x]
+plt.plot(x,y)#绘图
+plt.show( )#显示
+```
 
+![image-20250724150354426](./img/Python-img/image-20250724150354426.png)
+
+```python
+#导入包
+import matplotlib.pyplot as plt
+import numpy as np
+#准备数据,使用numpy
+x=np.linspace(0,np.pi*2,100)
+y=np.sin(x)
+plt.plot(x,y)#绘图
+plt.show( )#显示
+```
+
+![image-20250724150513689](./img/Python-img/image-20250724150513689.png)
+
+### 11.2 绘图参数设置
+
+#### 11.2.1 解决负号和汉字乱码问题
+
+仔细观察我们生成的正弦图，发现一个问题：负号没有正确显示。另外，如果图形中输入汉字，汉字会显示乱码。
+
+- 负号不能正确显示的解决方法，只要在绘图前加入语句“plt.rcParams ['axes.unicode_minus'] =False”即可。
+- 而对于汉字不能正确显示问题，是因为默认字体不支持汉字，只要在绘制图形前加入语句“plt.rcParams ['font.family'] ='FangSong'”即可。
+
+```python
+#导入包
+import matplotlib.pyplot as plt
+import math
+#解决负号、乱码问题
+plt.rcParams['axes.unicode_minus']=False
+plt.rcParams['font.family']='FangSong'  
+#准备数据
+x=[math.pi*2/100*i for i in range(100)]
+y=[math.sin(i) for i in x]
+plt.plot(x,y)#绘图
+plt.show( )#显示
+```
+
+#### 11.2.2 plt.rcParams参数设置
+
+我们在绘制正弦函数-解决负号和乱码问题时，我们使用了语句：
+
+plt.rcParams['axes.unicode_minus']=False
+
+plt.rcParams['font.family']='FangSong' 
+
+下面说明该参数设置的原理。matplotlib将默认参数配置保存在matplotlibrc（matplotlib Resource Configurations，rc：资源配置）文件中，可以定义各种属性，我们称之为rc配置或者rc参数。在matplotlib中你可以使用rc参数控制几乎所有的默认属性：线条宽度、颜色、坐标轴、网格、字体等属性。
+
+通过下面的语句可以获得目前使用的rc配置文件的路径：
+
+import matplotlib
+
+print(matplotlib.matplotlib_fname( ))
+
+笔者本机的输出为：c:\program files\python37\lib\site-packages\matplotlib\mpl-data\matplotlibrc。找到该文件，用记事本打开，查找上例中的字符串“axes.unicode_minus”，可以看到大概如下图所示信息。可以看到，文件中保存的是键值对，键值之间是用分号分开。
+
+![image-20250724151118292](./img/Python-img/image-20250724151118292.png)
+
+在matplotlib模块载入时Python会自动调用rc_params( )函数，并把得到的配置字典保存到rcParams变量中，该变量可以通过matplotlib访问，也可以通过pyplot访问。执行“print(matplotlib.rcParams)”或者“print(plt.rcParams)”，可以得到和下图一样的结果。
+
+![image-20250724151136227](./img/Python-img/image-20250724151136227.png)
+
+综上，我们有两种基本的修改绘图属性的方法：
+
+(1)直接修改rc配置文件，可修改图表的缺省样式；
+
+(2) 在代码中使用形如“plt.rcParams['axes.unicode_minus']=False”的形式进行设置。
+
+注意：在用plt.rcParams['font.family']='FangSong' 语句设置字体来解决中文乱码问题时，字体名称必须是matplotlib支持的字体名称。不能想当然地写为“仿宋”。可以通过以下语句查看matplotlib支持的字体
+
+列表：
+
+import matplotlib.font_manager as fm  
+
+print([f.name for f in fm.fontManager.ttflist])
+
+#### 11.2.3 添加轴标签和图标题、绘制网格
+
+下面的例子第6、7两行给出了坐标轴信息，并使用了汉字，第8行给出了图形标题信息，第9行给出了图形的网格设置。如果没有第5行语句，则汉字显示的是乱码。加入这一行，则图中的汉字可以正常显示。
+
+```python
+import matplotlib.pyplot as plt#导入包
+import math
+#绘图参数设置
+plt.rcParams['axes.unicode_minus']=False
+plt.rcParams['font.family']='FangSong'  
+plt.xlabel('弧度')   # 这两条语句对坐标轴进行标签化，也就是轴的说明
+plt.ylabel('正弦') 
+plt.title('绘制正弦函数')
+plt.grid( )
+#准备数据
+x=[math.pi*2/100*i for i in range(100)]
+y=[math.sin(i) for i in x]
+plt.plot(x,y)  #绘图
+plt.show( )   #显示
+```
+
+![image-20250724151538468](./img/Python-img/image-20250724151538468.png)
+
+##### plt.xlabel( )、plt.ylabel( )和plt.title( )
+
+可以使用xlabel( )和ylabel( )方法来设置x轴和y轴的标签，使用title()方法来设置图的标题。函数原型：
+
+`plt.title(label, fontdict=None, loc=None, pad=None, *, y=None, **kwargs)`
+
+`plt.xlabel(xlabel, fontdict=None, labelpad=None, *, loc=None, **kwargs)`
+
+`plt.ylabel(xlabel, fontdict=None, labelpad=None, *, loc=None, **kwargs)`
+
+主要的参数说明：
+
+①　参数label、xlabel、ylabel，显示的标签或标题内容。
+
+②　参数loc，来设置标题显示的位置，可以设置为: left、right和 center，默认值为center。
+
+③   参数fontdict，是一个字典。
+
+④   参数**kwargs是可变参数（字典形式）
+
+plt.xlabel( )、plt.ylabel( )和plt.title( )
+
+对于fontdict，它可能的键有【以plt.title( )函数为例】：
+
+{ 'fontsize': rcParams['axes.titlesize'],       #设置字体大小    
+
+'fontweight': rcParams['axes.titleweight'],  #设置字体粗细  
+
+'color': rcParams['axes.titlecolor'],        #设置颜色  
+
+'verticalalignment': 'baseline',           #设置垂直对齐方式  
+
+'horizontalalignment': loc}              #设置水平对齐方式
+
+fontsize，默认12，可选参数xx-small、x-small、small、medium、large、x-large、xx-large。fontweight，可选参数 light、normal、medium、semibold、bold、heavy、black。
+
+color，默认黑色，可以设置为r-红色、g-绿色、b-蓝色、c-青色、m-品红、y-黄色、k-黑色、w-白色。当然也可以使用其他颜色值，此不展开。
+
+verticalalignment ，可选参数 ：center、top、bottom、baseline。
+
+horizontalalignment，可选参数：left、right、center。
+
+##### plt.grid( )
+
+函数原型：plt.grid(b=None, which='major', axis='both', **kwargs)。此函数kwargs是一个不定长的字典，键较多，不一一赘述。
+
+这里仅介绍几个常用的：
+
+color，默认黑色：r-红色、g-绿色、b-蓝色、c-青色、m-品红、y-黄色、k-黑色、w-白色。
+
+linestyle，线型，{'-', '--', '-.',  ':',...}对应实线、破折线、点画线、虚线、...。
+
+linewidth，float数字，代表粗细。
+
+注意，上述几个函数的参数说明，在很多函数中都有相同的名称和可选值，具有一定的普遍意义，可以记忆一下。
+
+```python
+import matplotlib.pyplot as plt
+import math
+plt.rcParams['axes.unicode_minus']=False  # 加入这条语句解决负号乱码问题
+plt.rcParams['font.family']='FangSong'     # 加入这条语句解决中文乱码问题
+x=[math.pi*2/100*i for i in range(100)]
+y=[math.sin(i) for i in x]
+plt.xlabel('弧度',fontsize='xx-large',fontweight='heavy')  
+plt.ylabel('正弦',color='g')  #绿色
+plt.title('绘制正弦函数',color='b')  #蓝色
+plt.grid(color='r' , linestyle='--', linewidth=0.5)  #红色，虚线，0.5粗细
+plt.plot(x,y)
+plt.show( )
+```
+
+#### 11.2.4 轴刻度和显示值设置
+
+另外补充几个关于坐标轴设置的函数使用：
+
+plt.xlim( )  #设置x轴显示区间
+
+plt.ylim( )  #设置y轴显示区间
+
+plt.xticks( )  #设置x轴显示刻度值
+
+plt.yticks( )  #设置y轴显示刻度值
+
+##### 1.plt.xlim( )、plt.ylim( ) 
+
+函数原型：plt.xlim(xmin, xmax)。
+
+函数功能：设置x轴的数值显示范围。
+
+参数说明：
+
+- xmin：x轴上的最小值；
+- xmax：x轴上的最大值。
+
+函数签名和参数说明同样可以平移到函数ylim()上。
+
+##### 2.plt.xticks( )、plt.yticks( )
+
+函数原型：`xticks(ticks, [labels], **kwargs)，yticks(ticks, [labels], **kwargs)`
+
+函数功能：设置x轴刻度位置和刻度标签。
+
+参数说明：
+
+ticks：数组类型，用于设置X轴刻度间隔（刻度位置）；
+
+[labels]：数组类型，用于设置每个间隔的显示标签（刻度标签）；
+
+**kwargs：用于设置标签字体和颜色等外观属性。
+
+```python
+###### 绘图参数设置--坐标轴设置######
+#导入包
+import math
+import matplotlib.pyplot as plt
+π=math.pi
+# 绘图参数设置
+plt.rcParams['axes.unicode_minus']=False  # 加入这条语句解决负号乱码问题
+plt.rcParams['font.family']='FangSong'    # 加入这条语句解决中文乱码问题
+#设置x轴显示区间为[0,2π],y轴显示区间为[-1,1]
+plt.xlim([0,2*π])
+plt.ylim([-1,1])
+#设置x轴刻度位置和刻度标签
+xticks =  [0,  π/4,   π/2,  3*π/4,  π,  5*π/4,  3*π/2,  7*π/4,  2*π]
+xticklabels = ['0', 'π/4', 'π/2', '3π/4', 'π', '5π/4', '3π/2', '7π/4', '2π']
+plt.xticks(xticks,xticklabels)
+#加入网格线
+plt.grid( )
+#设置坐标轴上的刻度值的标签字体大小
+plt.tick_params(labelsize=14.5)
+#准备正弦函数和余弦函数数据
+x=[math.pi*2/100*i for i in range(101)]
+ycos=[math.cos(i) for i in x]
+#绘制余弦函数
+plt.plot(x,ycos)  #cos曲线
+#显示图形
+plt.show()
+```
+
+![image-20250724153000601](./img/Python-img/image-20250724153000601.png)
+
+### 11.3 绘制图形
+
+#### 11.3.1 使用plot函数绘制折线图
+
+plot( ) 可以绘制点和线，它能够把许多点连成折线，也可以选择不画线，只画点。函数原型：
+
+plot([x], y, [fmt], *, data=None, **kwargs)        # 画单条线
+
+plot([x], y, [fmt], [x2], y2, [fmt2], ..., **kwargs)   # 画多条线
+
+参数说明：
+
+x, y：点或线的节点，x 为 x 轴数据，y 为 y 轴数据，数据可以列表或数组。
+
+fmt：可选，定义基本格式（如颜色、标记和线条样式）。
+
+**kwargs：可选，设置指定属性，如标签、线宽、标签等，主要的属性以及属性的可选值
+
+该函数提供了两种形式设置颜色（color）、线型（linestyle）和标记（marker）。
+
+一种是使用函数中的参数fmt的简写形式，
+
+一种是直接指定左图中的参数名称。
+
+下面的例子给出了使用plot函数绘制点线图的实例和说明。
+
+![image-20250724153125010](./img/Python-img/image-20250724153125010.png)
+
+注意：marker仅仅列出了部分
+
+```python
+#plot函数绘图
+import matplotlib.pyplot as plt
+import math
+
+plt.rcParams['axes.unicode_minus']=False 
+plt.rcParams['font.family']='FangSong'   
+plt.xlabel('X-轴')  
+plt.ylabel('Y-轴')  
+plt.title('画直线和点')
+x=[2,1]
+y=[4,5]
+plt.plot(x,y,linewidth=2,linestyle='-.',marker='s',color='r')#画虚线
+
+x=[1,3]
+y=[3,4]
+plt.plot(x,y,'^b-') #画直线
+x=[4,6,7,8,11,15]
+y=[2,2.5,2,3,2,3]
+plt.plot(x,y,'*')  #画散点，不连线
+
+x=[3,4,6,7,9,12]
+y=[2,2.5,2,3,2,3]
+plt.plot(x,y,'-')  #折线图
+
+plt.grid( )
+plt.show()
+```
+
+![image-20250724153320902](./img/Python-img/image-20250724153320902.png)
+
+注意：fmt格式控制字符串可以包含颜色（color）、线型（linestyle）和标记（marker）三种控制字符，顺序不限，个数不限。
+
+```python
+import math
+import matplotlib.pyplot as plt
+π=math.pi
+
+# 绘图参数设置
+plt.rcParams['axes.unicode_minus']=False  # 加入这条语句解决负号乱码问题
+plt.rcParams['font.family']='FangSong'    # 加入这条语句解决中文乱码问题
+
+#设置x轴显示区间为[0,2π],y轴显示区间为[-1,1]
+plt.xlim([0,2*π])
+plt.ylim([-1,1])
+#设置x轴刻度位置和刻度标签
+xticks =    [0,   π/4,  π/2,  3*π/4,   π,  5*π/4,  3*π/2,  7*π/4,  2*π]
+xticklabes = ['0',  'π/4',  'π/2',  '3π/4',  'π',  '5π/4',  '3π/2',  '7π/4',  '2π']
+plt.xticks(xticks,xticklabes)
+
+#加入网格线
+plt.grid( )
+#准备正弦函数和余弦函数数据
+x=[math.pi*2/100*i for i in range(101)]
+ysin=[math.sin(i) for i in x]
+ycos=[math.cos(i) for i in x]
+
+#绘制正弦函数和余弦函数
+plt.plot(x, ysin, "-", label="sin")   #sin曲线
+plt.plot(x, ycos, ":", label="cos")   #cos曲线
+
+#打上图例标签,没有这句，plot函数中的label不起作用
+plt.legend( ) 
+#显示图形
+plt.show( )
+```
+
+![image-20250724153927190](./img/Python-img/image-20250724153927190.png)
+
+多数情况下，我们绘制的图形打印出来是非彩色图形，所以往往按照标记和线型区分不同的线。在一个区域绘制多个图形，往往需要对图形作出标记和图例。
+
+#### 11.3.2 使用scatter函数绘制散点图
+
+函数原型：plt.scatter(x,y, s=None, c=None, marker=None, cmap=None, norm=None, vmin=None, vmax=None, alpha=None, linewidths=None, verts=None, edgecolors=None, *, data=None, **kwargs)
+
+主要参数说明：
+
+x，y：表示的是大小为(n,)的数组，也就是我们即将绘制散点图的数据点
+
+s：是一个实数或者是一个数组，大小为(n,)，标记的大小
+
+c：是一个实数或者是一个数组，大小为(n,)，标记的颜色。默认是蓝色'b'
+
+marker：表示的是标记的样式，默认的是'o'
+
+alpha：实数，0-1之间，标记的透明度
+
+linewidths：是一个实数或者是一个数组，大小为(n,)，标记的线宽，该参数可以简写为lw
+
+```python
+import matplotlib.pyplot as plt
+import random as rnd
+#设置坐标轴刻度字体大小
+plt.tick_params(labelsize=15)
+plt.xlim(0,100)
+plt.ylim(0, 1)
+x = range(100)
+y = [rnd.random() for i in x]
+plt.scatter(x, y)
+plt.show()
+```
+
+![image-20250724154133708](./img/Python-img/image-20250724154133708.png)
+
+#### 11.3.3 使用bar函数绘制条形图
+
+中国的四个直辖市北京市、上海市、天津市和重庆市， 2019年的GDP分别为：北京市35371.3亿元、上海市38155.32亿元、天津市14104.28、重庆市23605.77亿元。对于这样一组数据，我们该如何使用条形图来展示各自的GDP水平呢？
+
+在下面的下例中，我们将要使用了两个函数来解答这个问题，一个是bar函数绘制条形图，一个是text函数用于在图上添加文本信息（plot函数、scatter函数等也可以使用text函数标注信息）。
+
+```python
+# 导入模块
+import numpy as np
+import matplotlib.pyplot as plt 
+# 中文乱码的处理
+plt.rcParams['axes.unicode_minus']=False  # 解决负号乱码问题
+plt.rcParams['font.family']='SimHei'       # 解决中文乱码问题
+# 构建数据。本例使用numpy数组形式。
+x=np.arange(4)   # x轴的数据就是位置顺序
+GDP = np.array([35371.3, 38155.32, 14104.28,23605.77]) #y轴数据就是GDP，亿元
+city=np.array(['北京市','上海市','天津市','重庆市'])      #x轴数据标签
+# 图形显示参数设置
+plt.tick_params(labelsize=13)  #设置坐标轴上的刻度值的标签字体大小
+plt.ylabel( 'G D P ( 亿元 )')   # 添加轴标签
+plt.title( '2019年四个直辖市GDP对比', fontsize=13) # 添加标题,字号13
+plt.xticks(x,city)             # 添加刻度标签
+plt.ylim([ 10000, 40000])     # 设置Y轴的刻度范围
+plt.grid( )
+# 绘图
+plt.bar(x, GDP, width=0.5, align = 'center',color='grey', alpha = 0.5) 
+# 为每个条柱添加数值标签，一般plt.text放在绘图函数后。否则可能绘图不正确
+for x,y in zip(x,GDP): 
+    plt.text(x,y+ 300, y, ha= 'center',fontsize=13) 
+# 显示图形
+plt.show()
+```
+
+![image-20250724154614445](./img/Python-img/image-20250724154614445.png)
+
+下面我们来了解一下所用到的两种函数原型
+
+`plt.text(x,y, string, fontsize=15, verticalalignment="top", horizontalalignment="right")`
+
+参数说明：
+
+x，y：表示坐标，文本标注的位置
+
+string：表示说明文字的文本
+
+fontsize：表示字体大小
+
+verticalalignment ( va )：垂直对齐方式，参数：[ 'center'  | 'top'  | 'bottom'  | 'baseline' ]
+
+horizontalalignment ( ha )：水平对齐方式，参数：[ 'center'  | 'right'  | 'left']
+
+`plt.bar(x, height, width=0.8, bottom=None, *, align='center', data=None, **kwargs)`
+
+参数说明：
+
+x：条形的 x 坐标。浮点数或类似数组
+
+height：条的高度。浮点数或类似数组
+
+width：条形的宽度。浮点数或类似数组，默认值：0.8
+
+align：条形与x坐标的对齐，{'center', 'edge'}，默认值：'center'
+
+### 11.4 绘制多窗口图
+
+本节介绍利用subplot 实现在一张画布同时画多张图。在matplotlib下，一个Figure对象可以包含多个子图（Axes），可以使用subplot()快速绘制，其调用形式如下：
+
+**subplot(numRows, numCols, plotNum)**
+
+图表的整个绘图区域被分成numRows行和numCols列，plotNum参数指定创建的Axes对象所在的区域。如果numRows＝3，numCols＝2，那整个绘制图表样式为3X2（3行2列）的绘图区域，用坐标表示为（1，1），（1，2），（1，3），（2，1），（2，2），（2，3）。这时，当plotNum ＝ 1时，表示的坐标为（1，1），即第一个子图。
+
+```python
+import  matplotlib.pyplot as plt
+import numpy as np 
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus']=False 
+t=np.arange(0.0,2.0,0.1)  # x轴数据
+####●设置画布大小####
+plt.figure(1)  #在第“1”号画布绘图，可以是数字编号也可以是命名字符串
+plt.figure(figsize=(8,6), dpi=160) #figsize画布大小，dpi绘图分辨率，默认dpi=80
+####●绘制第1个子图####
+y=np.sin(t*np.pi)
+plt.subplot(221)  #2行2列，第1个图。注意，从1开始
+plt.plot(t,y, color="r",linestyle = "--")
+plt.title('sin')
+####●绘制第2个子图####
+y=np.cos(t*np.pi)
+plt.subplot(222)  #2行2列，第2个图
+plt.plot(t,y,color="y",linestyle = "-")
+plt.title('cos')
+####●绘制第3个子图####
+y=np.tan(t*np.pi)
+plt.subplot(223)  #2行2列，第3个图
+plt.plot(t,y,color="g",linestyle = "-.")
+plt.title('tan')
+####●绘制第4个子图####
+y=np.log10(t*np.pi)
+plt.subplot(224)  #2行2列，第1个图
+plt.plot(t,y,color="b",linestyle = ":")
+plt.title('log10')
+plt.show( )
+```
+
+![image-20250724155150835](./img/Python-img/image-20250724155150835.png)
+
+在上例中，第7行定义了一块“1”号画布，后续的绘图都在该画布上进行。第8行对画布设置了大小。这两行可以合并为一行“plt.figure(1, figsize=(8,6),  dpi=160 )”，都是使用figure函数。下面是该函数的说明。
+
+函数原型：
+
+figure(num=None, figsize=None, dpi=None, facecolor=None, edgecolor=None, frameon=True)
+
+num：图像编号或名称，数字为编号 ，字符串为名称
+
+figsize：指定figure的宽和高，单位为英寸；
+
+dpi：参数指定绘图对象的分辨率，即每英寸多少个像素，缺省值为80；
+
+facecolor：背景颜色，
+
+edgecolor：边框颜色，
+
+frameon：是否显示边框
+
+解释：第11行“plt.subplot(221)定义了画布是2行2列，也就是画布有4个子图。当前把第1个子图设置为绘图对象，后续绘图在1号子图绘制。注意，子图序号从1开始。同理，第16行“plt.subplot(222)  把第2个子图设置为绘图对象，后续绘图在2号子图绘制。并以此类推。
 
 ## 12、Pandas数据处理
 
@@ -5438,4 +7386,1258 @@ df['等级']=ap #增加一列
 print(df)
 
 ```
+
+## 13、模块和包
+
+### 13.1 模块
+
+#### 13.1.1 介绍模块
+
+Python 模块(Module)，是一个 Python 文件，以 .py 结尾.  模块能定义函数，类和变量，模块里也能包含可执行的代码.
+
+模块的作用:  python中有很多各种不同的模块, 每一个模块都可以帮助我们快速的实现一些功能, 比如实现和时间相关的功能就可以使用time模块我们可以认为一个模块就是一个工具包, 每一个工具包中都有各种不同的工具供我们使用进而实现各种不同的功能。
+
+**大白话：模块就是一个Python文件，里面有类、函数、变量等，我们可以拿过来用（导入模块去使用）**
+
+#### 13.1.2 模块的导入方式
+
+模块在使用前需要先导入 导入的语法如下:
+
+![image-20250724165542587](./img/Python-img/image-20250724165542587.png)
+
+常用的组合形式如：
+
+import 模块名
+
+from 模块名 import 类、变量、方法等
+
+from 模块名 import *
+
+import 模块名 as 别名
+
+from 模块名 import 功能名 as 别名
+
+##### 13.1.2.1 import模块名
+
+基本语法：
+
+```
+import 模块名
+import 模块名1，模块名2
+
+模块名.功能名()
+```
+
+案例：导入time模块
+
+```python
+# 导入时间模块
+import time
+print("开始")
+# 让程序睡眠1秒(阻塞)
+time.sleep(1)
+print("结束")
+```
+
+##### 13.1.2.2 from 模块名 import 功能名
+
+基本语法：
+
+```
+from 模块名 import 功能名
+
+功能名()
+```
+
+案例：导入time模块中的sleep方法
+
+```python
+# 导入时间模块中的sleep方法
+from time import sleep
+print("开始")
+# 让程序睡眠1秒(阻塞)
+sleep(1)
+print("结束")
+```
+
+##### 13.1.2.3 from 模块名 import *
+
+基本语法：
+
+```
+from 模块名 import *
+
+功能名()
+```
+
+案例：导入time模块中所有的方法
+
+```python
+# 导入时间模块中所有的方法
+from time import *
+print("开始")
+# 让程序睡眠1秒(阻塞)
+sleep(1)
+print("结束")
+```
+
+##### 13.1.2.4 as定义别名
+
+基本语法：
+
+```
+# 模块定义别名
+import 模块名 as 别名
+
+# 功能定义别名
+from 模块名 import 功能 as 别名
+```
+
+案例：
+
+```python
+# 模块别名
+import time as tt
+tt.sleep(2)
+print('hello')
+# 功能别名
+from time import sleep as sl
+sl(2)
+print('hello')
+```
+
+> 注意事项：from可以省略，直接import即可，as别名可以省略，通过”.”来确定层级关系，模块的导入一般写在代码文件的开头位置
+
+#### 13.1.2 制作自定义模块
+
+Python中已经帮我们实现了很多的模块. 不过有时候我们需要一些个性化的模块, 这里就可以通过自定义模块实现, 也就是自己制作一个模块
+
+案例：新建一个Python文件，命名为my_module1.py，并定义test函数
+
+![image-20250724170311673](./img/Python-img/image-20250724170311673.png)
+
+![image-20250724170315547](./img/Python-img/image-20250724170315547.png)
+
+注意: 每个Python文件都可以作为一个模块，模块的名字就是文件的名字. 也就是说自定义模块名必须要符合标识符命名规则
+
+##### 13.1.2.1 测试模块
+
+在实际开发中，当一个开发人员编写完一个模块后，为了让模块能够在项目中达到想要的效果，这个开发人员会自行在py文件中添加一些测试信息，例如，在my_module1.py文件中添加测试代码test(1,1)
+
+```python
+def test(a, b):
+    print(a + b)
+
+
+test(1, 1)
+```
+
+问题: 此时，无论是当前文件，还是其他已经导入了该模块的文件，在运行的时候都会自动执行`test`函数的调用
+
+解决方案：
+
+```python
+def test(a, b):
+    print(a + b)
+
+# 只在当前文件中调用该函数，其他导入的文件内不符合该条件，则不执行test函数调用
+if __name__ == '__main__':
+    test (1, 1)
+```
+
+注意事项
+
+![image-20250724170813399](./img/Python-img/image-20250724170813399.png)
+
+注意事项：当**导入多个模块**的时候，且模块内有同名功能. 当调用这个同名功能的时候，**调用到的是后面导入的模块的功能**。
+
+##### 13.1.2.2 `__all__`
+
+如果一个模块文件中有`__all__`变量，当使用`from xxx import *`导入时，只能导入这个列表中的元素
+
+![image-20250724170919674](./img/Python-img/image-20250724170919674.png)
+
+![image-20250724170925580](./img/Python-img/image-20250724170925580.png)
+
+### 13.2 包
+
+#### 13.2.1 介绍包
+
+基于Python模块，我们可以在编写代码的时候，导入许多外部代码来丰富功能。但是，如果**Python的模块太多了**，就可能造成一定的混乱，那么如何管理呢？通过Python包的功能来管理。
+
+从物理上看，包就是一个文件夹，在该文件夹下包含了一个 `__init__.py` 文件，该文件夹可用于包含多个模块文件从逻辑上看，**包的本质依然是模块**
+
+![image-20250724171345289](./img/Python-img/image-20250724171345289.png)
+
+包的作用: 当我们的模块文件越来越多时,包可以帮助我们管理这些模块, 包的作用就是包含多个模块，但包的本质依然是模块
+
+#### 13.2.2 定义包
+
+步骤如下:
+
+① 新建包`my_package`
+
+② 新建包内模块：`my_module1` 和 `my_module2`
+
+③ 模块内代码如下
+
+![image-20250724171447445](./img/Python-img/image-20250724171447445.png)
+
+Pycharm中的基本步骤:
+
+1. [New]
+2. [Python Package]  
+3. 输入包名
+4. [OK]
+5. 新建功能模块(有联系的模块)
+
+注意：新建包后，包内部会自动创建`__init__.py`文件，这个文件控制着包的导入行为
+
+#### 13.2.3 导入包
+
+##### 13.2.3.1 方式一
+
+```
+import 包名.模块名
+
+包名.模块名.目标
+```
+
+![image-20250724172017169](./img/Python-img/image-20250724172017169.png)
+
+##### 13.2.3.2 方式二
+
+```
+from 包名 import *
+模块名.目标
+```
+
+注意：必须在`__init__.py`文件中添加`__all__ = []`，控制允许导入的模块列表
+
+![image-20250724172228056](./img/Python-img/image-20250724172228056.png)
+
+my_module1报红证明不可用
+
+注意: ` __all__`针对的是 ’ from ... import * ‘ 这种方式对 ‘ import xxx ’ 这种方式无效
+
+## 14、多线程
+
+### 14.1 进程、线程
+
+现代操作系统比如Mac OS X，UNIX，Linux，Windows等，都是支持“多任务”的操作系统。
+
+进程： 就是一个程序，运行在系统之上，那么便称之这个程序为一个运行进程，并分配进程ID方便系统管理。
+
+线程：线程是归属于进程的，一个进程可以开启多个线程，执行不同的工作，是进程的实际工作最小单位。
+
+![image-20250724173829069](./img/Python-img/image-20250724173829069.png)
+
+进程就好比一家公司，是操作系统对程序进行运行管理的单位。线程就好比公司的员工，进程可以有多个线程（员工），是进程实际的工作者。
+
+操作系统中可以运行多个进程，即多任务运行。一个进程内可以运行多个线程，即多线程运行。
+
+注意点：进程之间是内存隔离的， 即不同的进程拥有各自的内存空间。 这就类似于不同的公司拥有不同的办公场所。
+
+线程之间是内存共享的，线程是属于进程的，一个进程内的多个线程之间是共享这个进程所拥有的内存空间的。这就好比，公司员工之间是共享公司的办公场所。
+
+![image-20250724173943689](./img/Python-img/image-20250724173943689.png)
+
+### 14.2 并行执行
+
+并行执行的意思指的是同一时间做不同的工作。
+
+进程之间就是并行执行的，操作系统可以同时运行好多程序，这些程序都是在并行执行。
+
+除了进程外，线程其实也是可以并行执行的。也就是比如一个Python程序，其实是完全可以做到：
+
+- 一个线程在输出：你好
+- 一个线程在输出：Hello
+
+像这样一个程序在同一时间做两件乃至多件不同的事情， 我们就称之为：多线程并行执行
+
+### 14.3 threading模块
+
+绝大多数编程语言，都允许多线程编程，Pyhton也不例外。
+
+Python的多线程可以通过threading模块来实现。
+
+![image-20250724174201255](./img/Python-img/image-20250724174201255.png)
+
+![image-20250724174205120](./img/Python-img/image-20250724174205120.png)
+
+#### 14.3.1 多线程编程
+
+![image-20250724174350661](./img/Python-img/image-20250724174350661.png)
+
+![image-20250724174355091](./img/Python-img/image-20250724174355091.png)
+
+需要传参的话可以通过：
+
+- args参数通过元组（按参数顺序）的方式传参
+- 或使用kwargs参数用字典的形式传参
+
+![image-20250724175036266](./img/Python-img/image-20250724175036266.png)
+
+![image-20250724175045958](./img/Python-img/image-20250724175045958.png)
+
+## 15、网络编程
+
+### 15.1 Socket
+
+socket (简称 套接字) 是进程之间通信一个工具，好比现实生活中的插座，所有的家用电器要想工作都是基于插座进行，进程之间想要进行网络通信需要socket。
+
+Socket负责进程之间的网络数据传输，好比数据的搬运工。
+
+![image-20250724175232668](./img/Python-img/image-20250724175232668.png)
+
+### 15.2 客户端和服务端
+
+2个进程之间通过Socket进行相互通讯，就必须有服务端和客户端
+
+Socket服务端：等待其它进程的连接、可接受发来的消息、可以回复消息
+
+Socket客户端：主动连接服务端、可以发送消息、可以接收回复
+
+![image-20250724175307245](./img/Python-img/image-20250724175307245.png)
+
+### 15.3 Socket服务端编程
+
+主要分为如下几个步骤：
+
+1. 创建socket对象
+
+![image-20250724175444683](./img/Python-img/image-20250724175444683.png)
+
+2. 绑定socket_server到指定IP和地址
+
+![image-20250724175449130](./img/Python-img/image-20250724175449130.png)
+
+3. 服务端开始监听端口
+
+![image-20250724175452253](./img/Python-img/image-20250724175452253.png)
+
+4. 接收客户端连接，获得连接对象
+
+![image-20250724175456902](./img/Python-img/image-20250724175456902.png)
+
+5. 客户端连接后，通过recv方法，接收客户端发送的消息
+
+![image-20250724180337262](./img/Python-img/image-20250724180337262.png)
+
+6. 通过conn（客户端当次连接对象），调用send方法可以回复消息
+
+![image-20250724180346909](./img/Python-img/image-20250724180346909.png)
+
+7. conn（客户端当次连接对象）和socket_server对象调用close方法，关闭连接
+
+### 15.4 Socket客户端编程
+
+主要分为如下几个步骤：
+
+1. 创建socket对象
+
+![image-20250724180651250](./img/Python-img/image-20250724180651250.png)
+
+2. 连接到服务端
+
+![image-20250724180655116](./img/Python-img/image-20250724180655116.png)
+
+3. 发送消息
+
+![image-20250724180657974](./img/Python-img/image-20250724180657974.png)
+
+4. 接收返回消息
+
+![image-20250724180717667](./img/Python-img/image-20250724180717667.png)
+
+5. 关闭链接
+
+![image-20250724180720847](./img/Python-img/image-20250724180720847.png)
+
+## 16、元类
+
+用模块、框架实现业务功能，作为扩展的知识点。
+
+创建类
+
+```python
+# 定义类
+class Foo(object):
+    def __init__(self, name):
+        self.name = name
+
+    def __new__(cls, *args, **kwargs):
+        return object.__new__(cls)
+
+
+# 根据类创建对象
+# 1执行类的new方法，创建空对象【构造方法】{}
+# 2执行类的init方法，初始化对象 【初始化方法】{name:"luffy"}
+obj = Foo("luffy")
+
+```
+
+对象是基础类创建的。
+问题：类是谁创建的?
+答案：类是由type创建。
+
+```python
+# 传统方式创建类
+class Foo(object):
+    v1 = 123
+
+    def func(self):
+        return 666
+
+
+# 非传统方式创建类
+Foo = type("Foo", (object,), {"v1": 123, "func": lambda self: 666})
+# 非传统方式创建对象
+obj = Foo()
+# 非传统方式调用v1的变量
+print(obj.v1)
+
+#传统方式创建类（直观）
+"""
+class Foo(object):
+	v1=123
+	def func(self):
+		return 666
+print(Foo)
+"""
+#非传统方式（一行)
+# 1创建类型
+#	-类名
+#	-继承类
+#	-成员
+Fa = type("Foo", (object,), {"v1":123, "func": lambda self:666, "do":do})
+# 2根据类创建对象
+obj = Fa()
+# 3调用对象中的v1变量
+print(obj.v1)
+# 4 执行对象中的func方法
+result = obj.func()
+```
+
+类默认是以type创建，怎么让类的创建改成使用其他的元类创建。
+
+```python
+# type 创建Foo类
+class Foo(object):
+	pass
+# 其他的东⻄创建类
+class Foo(object, metaclass=自定义其他元类)
+	pass
+
+class MyType(type):
+    pass
+class Foo(object,metaclass=MyType):
+    pass
+    # Foo类由MyType创建
+class MyType(type):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+        
+	def __new_(cls,*args, **kwargs):
+		new_cls = super()._new__(cls, *args, **kwargs)
+		return new_cls
+	def __call__(self, *args, **kwargs):
+		#调用自己的那个类__new__方法去创建对象
+		empty_object = self.__new_(self)
+		#调用你自己的__init__方法取初始化
+		self.__init__(empty_object, *args, **kwargs)
+		return empty_object
+class Foo(object, metaclass=MyType):
+	def __init_(self, name):
+		self.name = name
+	#假设Foo是一个对象由MyType创建
+	#Foo其实是MyType的一个对象
+	# Foo(）-> MyType对象()
+v1 = Foo("alex")
+print(v1)
+print(v1.name)
+```
+
+## 17、asyncio高性能异步编程
+
+### 17.1 协程的实现
+
+在Python中有多种方式可以实现协程，例如：
+
+- greenlet，是一个第三方模块，用于实现协程代码（Gevent协程就是基于greenlet实现）
+- yield，生成器，借助生成器的特点也可以实现协程代码。
+- asyncio，在Python3.4中引入的模块用于编写协程代码。
+- async & awiat，在Python3.5中引入的两个关键字，结合asyncio模块可以更方便的编写协程代码。
+
+#### 17.1.1 greenlet
+
+greentlet是一个第三方模块，需要提前安装 `pip3 install greenlet`才能使用。
+
+```python
+from greenlet import greenlet
+
+
+def func1():
+    print(1)        # 第1步：输出 1
+    gr2.switch()    # 第3步：切换到 func2 函数
+    print(2)        # 第6步：输出 2
+    gr2.switch()    # 第7步：切换到 func2 函数，从上一次执行的位置继续向后执行
+
+
+def func2():
+    print(3)        # 第4步：输出 3
+    gr1.switch()    # 第5步：切换到 func1 函数，从上一次执行的位置继续向后执行
+    print(4)        # 第8步：输出 4
+
+
+gr1 = greenlet(func1)
+gr2 = greenlet(func2)
+gr1.switch() # 第1步：去执行 func1 函数
+```
+
+注意：switch中也可以传递参数用于在切换执行时相互传递值。
+
+#### 17.1.2 yield
+
+基于Python的生成器的yield和yield form关键字实现协程代码。
+
+```python
+def func1():
+    yield 1
+    yield from func2()
+    yield 2
+
+
+def func2():
+    yield 3
+    yield 4
+
+
+f1 = func1()
+for item in f1:
+    print(item)
+```
+
+注意：yield form关键字是在Python3.3中引入的。
+
+#### 17.1.3 asyncio
+
+在Python3.4之前官方未提供协程的类库，一般大家都是使用greenlet等其他来实现。在Python3.4发布后官方正式支持协程，即：asyncio模块。
+
+```python
+import asyncio
+
+@asyncio.coroutine
+def func1():
+    print(1)
+    yield from asyncio.sleep(2)  # 遇到IO耗时操作，自动化切换到tasks中的其他任务
+    print(2)
+
+
+@asyncio.coroutine
+def func2():
+    print(3)
+    yield from asyncio.sleep(2) # 遇到IO耗时操作，自动化切换到tasks中的其他任务
+    print(4)
+
+
+tasks = [
+    asyncio.ensure_future( func1() ),
+    asyncio.ensure_future( func2() )
+]
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(asyncio.wait(tasks))
+```
+
+注意：基于asyncio模块实现的协程比之前的要更厉害，因为他的内部还集成了遇到IO耗时操作自动切花的功能。
+
+#### 17.1.4 async & awit
+
+async & awit 关键字在Python3.5版本中正式引入，基于他编写的协程代码其实就是 上一示例 的加强版，让代码可以更加简便。
+
+Python3.8之后 `@asyncio.coroutine` 装饰器就会被移除，推荐使用async & awit 关键字实现协程代码。
+
+```python
+import asyncio
+
+
+async def func1():
+    print(1)
+    await asyncio.sleep(2)
+    print(2)
+
+
+async def func2():
+    print(3)
+    await asyncio.sleep(2)
+    print(4)
+
+
+tasks = [
+    asyncio.ensure_future(func1()),
+    asyncio.ensure_future(func2())
+]
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(asyncio.wait(tasks))
+```
+
+#### 17.1.5 小结
+
+关于协程有多种实现方式，目前主流使用是Python官方推荐的asyncio模块和async&await关键字的方式，例如：在tonado、sanic、fastapi、django3 中均已支持。
+
+接下来，我们也会针对 `asyncio模块` + `async & await` 关键字进行更加详细的讲解。
+
+### 17.2 协程的意义
+
+通过学习，我们已经了解到协程可以通过一个线程在多个上下文中进行来回切换执行。
+
+`<span>`**但是**，协程来回切换执行的意义何在呢？（网上看到很多文章舔协程，协程牛逼之处是哪里呢？）
+
+```
+计算型的操作，利用协程来回切换执行，没有任何意义，来回切换并保存状态 反倒会降低性能。
+IO型的操作，利用协程在IO等待时间就去切换执行其他任务，当IO操作结束后再自动回调，那么就会大大节省资源并提供性能，从而实现异步编程（不等待任务结束就可以去执行其他代码）。
+```
+
+#### 17.2.1 爬虫案例
+
+例如：用代码实现下载 `url_list` 中的图片。
+
+- 方式一：同步编程实现
+
+```python
+"""
+下载图片使用第三方模块requests，请提前安装：pip3 install requests
+"""
+import requests
+
+
+def download_image(url):
+	print("开始下载:",url)
+    # 发送网络请求，下载图片
+    response = requests.get(url)
+	print("下载完成")
+    # 图片保存到本地文件
+    file_name = url.rsplit('_')[-1]
+    with open(file_name, mode='wb') as file_object:
+        file_object.write(response.content)
+
+
+if __name__ == '__main__':
+    url_list = [
+        'https://www3.autoimg.cn/newsdfs/g26/M02/35/A9/120x90_0_autohomecar__ChsEe12AXQ6AOOH_AAFocMs8nzU621.jpg',
+        'https://www2.autoimg.cn/newsdfs/g30/M01/3C/E2/120x90_0_autohomecar__ChcCSV2BBICAUntfAADjJFd6800429.jpg',
+        'https://www3.autoimg.cn/newsdfs/g26/M0B/3C/65/120x90_0_autohomecar__ChcCP12BFCmAIO83AAGq7vK0sGY193.jpg'
+    ]
+    for item in url_list:
+        download_image(item)
+
+```
+
+- 方式二：基于协程的异步编程实现
+
+```python
+"""
+下载图片使用第三方模块aiohttp，请提前安装：pip3 install aiohttp
+"""
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+import aiohttp
+import asyncio
+
+
+async def fetch(session, url):
+    print("发送请求：", url)
+    async with session.get(url, verify_ssl=False) as response:
+        content = await response.content.read()
+        file_name = url.rsplit('_')[-1]
+        with open(file_name, mode='wb') as file_object:
+            file_object.write(content)
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        url_list = [
+            'https://www3.autoimg.cn/newsdfs/g26/M02/35/A9/120x90_0_autohomecar__ChsEe12AXQ6AOOH_AAFocMs8nzU621.jpg',
+            'https://www2.autoimg.cn/newsdfs/g30/M01/3C/E2/120x90_0_autohomecar__ChcCSV2BBICAUntfAADjJFd6800429.jpg',
+            'https://www3.autoimg.cn/newsdfs/g26/M0B/3C/65/120x90_0_autohomecar__ChcCP12BFCmAIO83AAGq7vK0sGY193.jpg'
+        ]
+        tasks = [asyncio.create_task(fetch(session, url)) for url in url_list]
+    await asyncio.wait(tasks)
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+
+上述两种的执行对比之后会发现，`基于协程的异步编程` 要比 `同步编程`的效率高了很多。因为：
+
+- 同步编程，按照顺序逐一排队执行，如果图片下载时间为2分钟，那么全部执行完则需要6分钟。
+- 异步编程，几乎同时发出了3个下载任务的请求（遇到IO请求自动切换去发送其他任务请求），如果图片下载时间为2分钟，那么全部执行完毕也大概需要2分钟左右就可以了。
+
+#### 17.2.2 小结
+
+协程一般应用在有IO操作的程序中，因为协程可以利用IO等待的时间去执行一些其他的代码，从而提升代码执行效率。
+
+生活中不也是这样的么，假设 你是一家制造汽车的老板，员工点击设备的【开始】按钮之后，在设备前需等待30分钟，然后点击【结束】按钮，此时作为老板的你一定希望这个员工在等待的那30分钟的时间去做点其他的工作。
+
+### 17.3 异步编程
+
+基于 `async` & `await`关键字的协程可以实现异步编程，这也是目前python异步相关的主流技术。
+
+想要真正的了解Python中内置的异步编程，根据下文的顺序一点点来看。
+
+#### 17.3.1 事件循环
+
+事件循环，可以把他当做是一个while循环，这个while循环在周期性的运行并执行一些 `任务`，在特定条件下终止循环。
+
+```python
+# 伪代码
+
+任务列表 = [ 任务1, 任务2, 任务3,... ]
+
+while True:
+    可执行的任务列表，已完成的任务列表 = 去任务列表中检查所有的任务，将'可执行'和'已完成'的任务返回
+  
+    for 就绪任务 in 已准备就绪的任务列表:
+        执行已就绪的任务
+      
+    for 已完成的任务 in 已完成的任务列表:
+        在任务列表中移除 已完成的任务
+
+	如果 任务列表 中的任务都已完成，则终止循环
+```
+
+在编写程序时候可以通过如下代码来获取和创建事件循环。
+
+```python
+import asyncio
+
+loop = asyncio.get_event_loop()
+```
+
+#### 17.3.2 协程和异步编程
+
+协程函数，定义形式为 [`async def`](https://docs.python.org/zh-cn/3.8/reference/compound_stmts.html#async-def) 的函数。
+
+协程对象，调用 *协程函数* 所返回的对象。
+
+```python
+# 定义一个协程函数
+async def func():
+    pass
+
+# 调用协程函数，返回一个协程对象
+result = func()
+```
+
+**注意**：调用协程函数时，函数内部代码不会执行，只是会返回一个协程对象。
+
+##### 17.3.2.1 基本应用
+
+程序中，如果想要执行协程函数的内部代码，需要 `事件循环` 和 `协程对象` 配合才能实现，如：
+
+```python
+import asyncio
+
+
+async def func():
+    print("协程内部代码")
+
+# 调用协程函数，返回一个协程对象。
+result = func()
+
+# 方式一
+# loop = asyncio.get_event_loop() # 创建一个事件循环
+# loop.run_until_complete(result) # 将协程当做任务提交到事件循环的任务列表中，协程执行完成之后终止。
+
+# 方式二
+# 本质上方式一是一样的，内部先 创建事件循环 然后执行 run_until_complete，一个简便的写法。
+# asyncio.run 函数在 Python 3.7 中加入 asyncio 模块，
+asyncio.run(result)
+```
+
+这个过程可以简单理解为：将 `协程`当做任务添加到 `事件循环` 的任务列表，然后事件循环检测列表中的 `协程`是否 已准备就绪（默认可理解为就绪状态），如果准备就绪则执行其内部代码。
+
+##### 17.3.2.2 await
+
+await是一个只能在协程函数中使用的关键字，用于遇到IO操作时挂起 当前协程（任务），当前协程（任务）挂起过程中 事件循环可以去执行其他的协程（任务），当前协程IO处理完成时，可以再次切换回来执行await之后的代码。代码如下：
+
+**示例1：**
+
+```python
+import asyncio
+
+
+async def func():
+    print("执行协程函数内部代码")
+
+    # 遇到IO操作挂起当前协程（任务），等IO操作完成之后再继续往下执行。
+    # 当前协程挂起时，事件循环可以去执行其他协程（任务）。
+    response = await asyncio.sleep(2)
+
+    print("IO请求结束，结果为：", response)
+
+result = func()
+
+asyncio.run(result)
+```
+
+**示例2：**
+
+```python
+import asyncio
+
+
+async def others():
+    print("start")
+    await asyncio.sleep(2)
+    print('end')
+    return '返回值'
+
+
+async def func():
+    print("执行协程函数内部代码")
+
+    # 遇到IO操作挂起当前协程（任务），等IO操作完成之后再继续往下执行。当前协程挂起时，事件循环可以去执行其他协程（任务）。
+    response = await others()
+
+    print("IO请求结束，结果为：", response)
+  
+asyncio.run( func() )
+```
+
+**示例3：**
+
+```python
+import asyncio
+
+
+async def others():
+    print("start")
+    await asyncio.sleep(2)
+    print('end')
+    return '返回值'
+
+
+async def func():
+    print("执行协程函数内部代码")
+
+    # 遇到IO操作挂起当前协程（任务），等IO操作完成之后再继续往下执行。当前协程挂起时，事件循环可以去执行其他协程（任务）。
+    response1 = await others()
+    print("IO请求结束，结果为：", response1)
+  
+    response2 = await others()
+    print("IO请求结束，结果为：", response2)
+  
+asyncio.run( func() )
+```
+
+上述的所有示例都只是创建了一个任务，即：事件循环的任务列表中只有一个任务，所以在IO等待时无法演示切换到其他任务效果。
+
+在程序想要创建多个任务对象，需要使用Task对象来实现。
+
+##### 17.3.2.3 Task对象
+
+> *Tasks* are used to schedule coroutines *concurrently*.
+>
+> When a coroutine is wrapped into a *Task* with functions like [`asyncio.create_task()`](https://docs.python.org/3.8/library/asyncio-task.html#asyncio.create_task) the coroutine is automatically scheduled to run soon。
+
+Tasks用于并发调度协程，通过 `asyncio.create_task(协程对象)`的方式创建Task对象，这样可以让协程加入事件循环中等待被调度执行。除了使用 `asyncio.create_task()` 函数以外，还可以用低层级的 `loop.create_task()` 或 `ensure_future()` 函数。不建议手动实例化 Task 对象。
+
+本质上是将协程对象封装成task对象，并将协程立即加入事件循环，同时追踪协程的状态。
+
+注意：`asyncio.create_task()` 函数在 Python 3.7 中被加入。在 Python 3.7 之前，可以改用低层级的 `asyncio.ensure_future()` 函数。
+
+**示例1：**
+
+```python
+import asyncio
+
+
+async def func():
+    print(1)
+    await asyncio.sleep(2)
+    print(2)
+    return "返回值"
+
+
+async def main():
+    print("main开始")
+
+    # 创建协程，将协程封装到一个Task对象中并立即添加到事件循环的任务列表中，等待事件循环去执行（默认是就绪状态）。
+    task1 = asyncio.create_task(func())
+
+    # 创建协程，将协程封装到一个Task对象中并立即添加到事件循环的任务列表中，等待事件循环去执行（默认是就绪状态）。
+    task2 = asyncio.create_task(func())
+
+    print("main结束")
+
+    # 当执行某协程遇到IO操作时，会自动化切换执行其他任务。
+    # 此处的await是等待相对应的协程全都执行完毕并获取结果
+    ret1 = await task1
+    ret2 = await task2
+    print(ret1, ret2)
+
+
+asyncio.run(main())
+```
+
+**示例2：**
+
+```python
+import asyncio
+
+
+async def func():
+    print(1)
+    await asyncio.sleep(2)
+    print(2)
+    return "返回值"
+
+
+async def main():
+    print("main开始")
+
+    # 创建协程，将协程封装到Task对象中并添加到事件循环的任务列表中，等待事件循环去执行（默认是就绪状态）。
+    # 在调用
+    task_list = [
+        asyncio.create_task(func(), name="n1"),
+        asyncio.create_task(func(), name="n2")
+    ]
+
+    print("main结束")
+
+    # 当执行某协程遇到IO操作时，会自动化切换执行其他任务。
+    # 此处的await是等待所有协程执行完毕，并将所有协程的返回值保存到done
+    # 如果设置了timeout值，则意味着此处最多等待的秒，完成的协程返回值写入到done中，未完成则写到pending中。
+    done, pending = await asyncio.wait(task_list, timeout=None)
+    print(done, pending)
+
+
+asyncio.run(main())
+```
+
+注意：`asyncio.wait` 源码内部会对列表中的每个协程执行ensure_future从而封装为Task对象，所以在和wait配合使用时task_list的值为 `[func(),func()]` 也是可以的。
+
+**示例3：**
+
+```python
+import asyncio
+
+
+async def func():
+    print("执行协程函数内部代码")
+
+    # 遇到IO操作挂起当前协程（任务），等IO操作完成之后再继续往下执行。当前协程挂起时，事件循环可以去执行其他协程（任务）。
+    response = await asyncio.sleep(2)
+
+    print("IO请求结束，结果为：", response)
+
+
+coroutine_list = [func(), func()]
+
+# 错误：coroutine_list = [ asyncio.create_task(func()), asyncio.create_task(func()) ]  
+# 此处不能直接 asyncio.create_task，因为将Task立即加入到事件循环的任务列表，
+# 但此时事件循环还未创建，所以会报错。
+
+
+# 使用asyncio.wait将列表封装为一个协程，并调用asyncio.run实现执行两个协程
+# asyncio.wait内部会对列表中的每个协程执行ensure_future，封装为Task对象。
+done,pending = asyncio.run( asyncio.wait(coroutine_list) )
+```
+
+##### 17.3.2.4 asyncio.Future对象
+
+> A `Future`is a special **low-level** awaitable object that represents an **eventual result** of an asynchronous operation.
+
+asyncio中的Future对象是一个相对更偏向底层的可对象，通常我们不会直接用到这个对象，而是直接使用Task对象来完成任务的并和状态的追踪。（ Task 是 Futrue的子类 ）
+
+Future为我们提供了异步编程中的 最终结果 的处理（Task类也具备状态处理的功能）。
+
+示例1：
+
+```python
+async def main():
+    # 获取当前事件循环
+    loop = asyncio.get_running_loop()
+
+    # # 创建一个任务（Future对象），这个任务什么都不干。
+    fut = loop.create_future()
+
+    # 等待任务最终结果（Future对象），没有结果则会一直等下去。
+    await fut
+
+asyncio.run(main())
+```
+
+示例2：
+
+```python
+import asyncio
+
+
+async def set_after(fut):
+    await asyncio.sleep(2)
+    fut.set_result("666")
+
+
+async def main():
+    # 获取当前事件循环
+    loop = asyncio.get_running_loop()
+
+    # 创建一个任务（Future对象），没绑定任何行为，则这个任务永远不知道什么时候结束。
+    fut = loop.create_future()
+
+    # 创建一个任务（Task对象），绑定了set_after函数，函数内部在2s之后，会给fut赋值。
+    # 即手动设置future任务的最终结果，那么fut就可以结束了。
+    await loop.create_task(set_after(fut))
+
+    # 等待 Future对象获取 最终结果，否则一直等下去
+    data = await fut
+    print(data)
+
+asyncio.run(main())
+```
+
+Future对象本身函数进行绑定，所以想要让事件循环获取Future的结果，则需要手动设置。而Task对象继承了Future对象，其实就对Future进行扩展，他可以实现在对应绑定的函数执行完成之后，自动执行 `set_result`，从而实现自动结束。
+
+虽然，平时使用的是Task对象，但对于结果的处理本质是基于Future对象来实现的。
+
+扩展：支持 `await 对象`语 法的对象课成为可等待对象，所以 `协程对象`、`Task对象`、`Future对象` 都可以被成为可等待对象。
+
+##### 17.3.2.5 futures.Future对象
+
+在Python的 `concurrent.futures`模块中也有一个Future对象，这个对象是基于线程池和进程池实现异步操作时使用的对象。
+
+```python
+import time
+from concurrent.futures import Future
+from concurrent.futures.thread import ThreadPoolExecutor
+from concurrent.futures.process import ProcessPoolExecutor
+
+
+def func(value):
+    time.sleep(1)
+    print(value)
+
+
+pool = ThreadPoolExecutor(max_workers=5)
+# 或 pool = ProcessPoolExecutor(max_workers=5)
+
+
+for i in range(10):
+    fut = pool.submit(func, i)
+    print(fut)
+```
+
+两个Future对象是不同的，他们是为不同的应用场景而设计，例如：`concurrent.futures.Future`不支持await语法 等。
+
+官方提示两对象之间不同：
+
+- unlike asyncio Futures, [`concurrent.futures.Future`](https://docs.python.org/3.8/library/concurrent.futures.html#concurrent.futures.Future) instances cannot be awaited.
+- [`asyncio.Future.result()`](https://docs.python.org/3.8/library/asyncio-future.html#asyncio.Future.result) and [`asyncio.Future.exception()`](https://docs.python.org/3.8/library/asyncio-future.html#asyncio.Future.exception) do not accept the *timeout* argument.
+- [`asyncio.Future.result()`](https://docs.python.org/3.8/library/asyncio-future.html#asyncio.Future.result) and [`asyncio.Future.exception()`](https://docs.python.org/3.8/library/asyncio-future.html#asyncio.Future.exception) raise an [`InvalidStateError`](https://docs.python.org/3.8/library/asyncio-exceptions.html#asyncio.InvalidStateError) exception when the Future is not *done*.
+- Callbacks registered with [`asyncio.Future.add_done_callback()`](https://docs.python.org/3.8/library/asyncio-future.html#asyncio.Future.add_done_callback) are not called immediately. They are scheduled with [`loop.call_soon()`](https://docs.python.org/3.8/library/asyncio-eventloop.html#asyncio.loop.call_soon) instead.
+- asyncio Future is not compatible with the [`concurrent.futures.wait()`](https://docs.python.org/3.8/library/concurrent.futures.html#concurrent.futures.wait) and [`concurrent.futures.as_completed()`](https://docs.python.org/3.8/library/concurrent.futures.html#concurrent.futures.as_completed) functions.
+
+在Python提供了一个将 `futures.Future` 对象包装成 `asyncio.Future`对象的函数 `asynic.wrap_future`。
+
+接下里你肯定问：为什么python会提供这种功能？
+
+其实，一般在程序开发中我们要么统一使用 asycio 的协程实现异步操作、要么都使用进程池和线程池实现异步操作。但如果 `协程的异步`和 `进程池/线程池的异步` 混搭时，那么就会用到此功能了。
+
+```python
+import time
+import asyncio
+import concurrent.futures
+
+def func1():
+    # 某个耗时操作
+    time.sleep(2)
+    return "SB"
+
+async def main():
+    loop = asyncio.get_running_loop()
+
+    # 1. Run in the default loop's executor ( 默认ThreadPoolExecutor )
+    # 第一步：内部会先调用 ThreadPoolExecutor 的 submit 方法去线程池中申请一个线程去执行func1函数，并返回一个concurrent.futures.Future对象
+    # 第二步：调用asyncio.wrap_future将concurrent.futures.Future对象包装为asycio.Future对象。
+    # 因为concurrent.futures.Future对象不支持await语法，所以需要包装为 asycio.Future对象 才能使用。
+    fut = loop.run_in_executor(None, func1)
+    result = await fut
+    print('default thread pool', result)
+
+    # 2. Run in a custom thread pool:
+    # with concurrent.futures.ThreadPoolExecutor() as pool:
+    #     result = await loop.run_in_executor(
+    #         pool, func1)
+    #     print('custom thread pool', result)
+
+    # 3. Run in a custom process pool:
+    # with concurrent.futures.ProcessPoolExecutor() as pool:
+    #     result = await loop.run_in_executor(
+    #         pool, func1)
+    #     print('custom process pool', result)
+
+asyncio.run(main())
+```
+
+应用场景：当项目以协程式的异步编程开发时，如果要使用一个第三方模块，而第三方模块不支持协程方式异步编程时，就需要用到这个功能，例如：
+
+```python
+import asyncio
+import requests
+
+
+async def download_image(url):
+    # 发送网络请求，下载图片（遇到网络下载图片的IO请求，自动化切换到其他任务）
+    print("开始下载:", url)
+
+    loop = asyncio.get_event_loop()
+    # requests模块默认不支持异步操作，所以就使用线程池来配合实现了。
+    future = loop.run_in_executor(None, requests.get, url)
+
+    response = await future
+    print('下载完成')
+    # 图片保存到本地文件
+    file_name = url.rsplit('_')[-1]
+    with open(file_name, mode='wb') as file_object:
+        file_object.write(response.content)
+
+
+if __name__ == '__main__':
+    url_list = [
+        'https://www3.autoimg.cn/newsdfs/g26/M02/35/A9/120x90_0_autohomecar__ChsEe12AXQ6AOOH_AAFocMs8nzU621.jpg',
+        'https://www2.autoimg.cn/newsdfs/g30/M01/3C/E2/120x90_0_autohomecar__ChcCSV2BBICAUntfAADjJFd6800429.jpg',
+        'https://www3.autoimg.cn/newsdfs/g26/M0B/3C/65/120x90_0_autohomecar__ChcCP12BFCmAIO83AAGq7vK0sGY193.jpg'
+    ]
+
+    tasks = [download_image(url) for url in url_list]
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete( asyncio.wait(tasks) )
+```
+
+##### 17.3.2.6 异步迭代器
+
+**什么是异步迭代器**
+
+实现了 [`__aiter__()`](https://docs.python.org/zh-cn/3.8/reference/datamodel.html#object.__aiter__) 和 [`__anext__()`](https://docs.python.org/zh-cn/3.8/reference/datamodel.html#object.__anext__) 方法的对象。`__anext__` 必须返回一个 [awaitable](https://docs.python.org/zh-cn/3.8/glossary.html#term-awaitable) 对象。[`async for`](https://docs.python.org/zh-cn/3.8/reference/compound_stmts.html#async-for) 会处理异步迭代器的 [`__anext__()`](https://docs.python.org/zh-cn/3.8/reference/datamodel.html#object.__anext__) 方法所返回的可等待对象，直到其引发一个 [`StopAsyncIteration`](https://docs.python.org/zh-cn/3.8/library/exceptions.html#StopAsyncIteration) 异常。由 [**PEP 492**](https://www.python.org/dev/peps/pep-0492) 引入。
+
+**什么是异步可迭代对象？**
+
+可在 [`async for`](https://docs.python.org/zh-cn/3.8/reference/compound_stmts.html#async-for) 语句中被使用的对象。必须通过它的 [`__aiter__()`](https://docs.python.org/zh-cn/3.8/reference/datamodel.html#object.__aiter__) 方法返回一个 [asynchronous iterator](https://docs.python.org/zh-cn/3.8/glossary.html#term-asynchronous-iterator)。由 [**PEP 492**](https://www.python.org/dev/peps/pep-0492) 引入。
+
+```python
+import asyncio
+
+
+class Reader(object):
+    """ 自定义异步迭代器（同时也是异步可迭代对象） """
+
+    def __init__(self):
+        self.count = 0
+
+    async def readline(self):
+        # await asyncio.sleep(1)
+        self.count += 1
+        if self.count == 100:
+            return None
+        return self.count
+
+    def __aiter__(self):
+        return self
+
+    async def __anext__(self):
+        val = await self.readline()
+        if val == None:
+            raise StopAsyncIteration
+        return val
+
+
+async def func():
+    # 创建异步可迭代对象
+    async_iter = Reader()
+    # async for 必须要放在async def函数内，否则语法错误。
+    async for item in async_iter:
+        print(item)
+
+asyncio.run(func())
+```
+
+异步迭代器其实没什么太大的作用，只是支持了async for语法而已。
+
+##### 17.3.2.6 异步上下文管理器
+
+此种对象通过定义 [`__aenter__()`](https://docs.python.org/zh-cn/3.8/reference/datamodel.html#object.__aenter__) 和 [`__aexit__()`](https://docs.python.org/zh-cn/3.8/reference/datamodel.html#object.__aexit__) 方法来对 [`async with`](https://docs.python.org/zh-cn/3.8/reference/compound_stmts.html#async-with) 语句中的环境进行控制。由 [**PEP 492**](https://www.python.org/dev/peps/pep-0492) 引入。
+
+```python
+import asyncio
+
+
+class AsyncContextManager:
+	def __init__(self):
+        self.conn = conn
+      
+    async def do_something(self):
+        # 异步操作数据库
+        return 666
+
+    async def __aenter__(self):
+        # 异步链接数据库
+        self.conn = await asyncio.sleep(1)
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb):
+        # 异步关闭数据库链接
+		await asyncio.sleep(1)
+
+
+async def func():
+    async with AsyncContextManager() as f:
+        result = await f.do_something()
+        print(result)
+
+
+asyncio.run(func())
+```
+
+这个异步的上下文管理器还是比较有用的，平时在开发过程中 打开、处理、关闭 操作时，就可以用这种方式来处理。
+
+#### 17.3.3 小结
+
+在程序中只要看到 `async`和 `await`关键字，其内部就是基于协程实现的异步编程，这种异步编程是通过一个线程在IO等待时间去执行其他任务，从而实现并发。
+
+以上就是异步编程的常见操作，内容参考官方文档。
+
+- 中文版：https://docs.python.org/zh-cn/3.8/library/asyncio.html
+- 英文本：https://docs.python.org/3.8/library/asyncio.html
+
+### 17.4 uvloop
+
+Python标准库中提供了 `asyncio`模块，用于支持基于协程的异步编程。
+
+uvloop是 asyncio 中的事件循环的替代方案，替换后可以使得asyncio性能提高。事实上，uvloop要比nodejs、gevent等其他python异步框架至少要快2倍，性能可以比肩Go语言。
+
+安装uvloop
+
+```
+pip3 install uvloop
+```
+
+在项目中想要使用uvloop替换asyncio的事件循环也非常简单，只要在代码中这么做就行。
+
+```python
+import asyncio
+import uvloop
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+
+# 编写asyncio的代码，与之前写的代码一致。
+
+# 内部的事件循环自动化会变为uvloop
+asyncio.run(...)
+```
+
+注意：知名的asgi uvicorn内部就是使用的uvloop的事件循环。
 

@@ -1504,7 +1504,7 @@ let timerId = setInterval(() => alert('tick'), 2000);
 setTimeout(() => { clearInterval(timerId); alert('stop'); }, 5000);
 ```
 
-## 13 事件监听
+## 13、 事件监听
 
 语法:元素对象.addEventListener('事件类型'，要执行的函数)
 
@@ -1581,7 +1581,7 @@ document.addEventListener('keydown', function(event) {
 
 
 
-## 14 DOM节点操作
+## 14、 DOM节点操作
 
 DOM树中的每一个内容都称之为节点，类型有==元素节点==(所有标签)、==属性节点==、==文本节点==和其他节点
 
@@ -1652,7 +1652,7 @@ cloneNode会克隆出一个跟原标签一样的元素，括号内传入布尔�
 
 删除节点和隐藏节点(==display:none==）有区别的:隐藏节点还是存在的，但是删除，则从html中删除节点
 
-## 15 本地存储
+## 15 、本地存储
 
 Web 存储对象 `localStorage` 和 `sessionStorage` 允许我们在浏览器上保存键/值对。它们有趣的是，在页面刷新后（对于 `sessionStorage`）甚至浏览器完全重启（对于 `localStorage`）后，数据仍然保留在浏览器中。我们很快就会看到。
 
@@ -1707,7 +1707,7 @@ Web 存储对象 `localStorage` 和 `sessionStorage` 允许我们在浏览器上
 
 与localStorage使用相同
 
-## 16 正则表达式
+## 16、 正则表达式
 
 正则表达式是提供了一种在文本中进行搜索和替换的强大的方式的模式。在 JavaScript 中，我们可以通过 `RegExp`对象使用它们，也可以与字符串方法结合使用。
 
