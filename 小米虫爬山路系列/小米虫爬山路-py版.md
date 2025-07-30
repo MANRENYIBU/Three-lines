@@ -10216,15 +10216,2543 @@ LCEL 是一个编排解决方案。请参阅我们的 [概念页面 ](https://py
 
 # LangGraph
 
+## 1、快速入门
+
+### 1.1 概述
+
+LangGraph 是为希望构建强大、灵活的 AI 代理的开发者而设计的。开发者选择 LangGraph 的原因有：
+
+- **可靠性和可控性。** 通过审核检查和人工介入批准来引导代理行为。LangGraph 持久化上下文以支持长时间运行的流程，使您的代理保持正确方向。
+- **低级和可扩展性。** 使用完全描述性的低级原语构建自定义代理，这些原语不受限制自定义的僵化抽象的限制。设计可扩展的多代理系统，每个代理都根据您的用例需求扮演特定角色。
+- **一流的流式支持。** 通过逐个 token 的流式传输和中间步骤的流式传输，LangGraph 让用户能够实时清晰地了解代理的推理和行动过程。
+
+#### 1.1.1 学习 LangGraph 基础
+
+要熟悉 LangGraph 的关键概念和功能，请完成以下 LangGraph 基础教程系列：
+
+1. [构建一个基础聊天机器人](https://langchain-ai.github.io/langgraph/tutorials/get-started/1-build-basic-chatbot/)
+2. [添加工具](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/)
+3. [添加记忆](https://langchain-ai.github.io/langgraph/tutorials/get-started/3-add-memory/)
+4. [添加人工回路控制](https://langchain-ai.github.io/langgraph/tutorials/get-started/4-human-in-the-loop/)
+5. [自定义状态](https://langchain-ai.github.io/langgraph/tutorials/get-started/5-customize-state/)
+6. [时间旅行](https://langchain-ai.github.io/langgraph/tutorials/get-started/6-time-travel/)
+
+在完成这一系列教程后，你将在 LangGraph 中构建一个支持聊天机器人，它能够：
+
+- ✅ **通过搜索网络回答常见问题**
+- ✅ **跨调用维护对话状态**
+- ✅ **将复杂查询路由给人类进行审核**
+- ✅ **使用自定义状态** 来控制其行为
+- ✅ **回溯并探索**替代对话路径
+
+### 1.2 构建一个基础聊天机器人
+
+在本教程中，你将构建一个基础聊天机器人。这个聊天机器人是后续一系列教程的基础，在这些教程中，你将逐步添加更复杂的功能，并介绍关键的 LangGraph 概念。让我们开始吧！🌟
+
+#### 1.2.1 前置条件
+
+在开始本教程之前，确保你能够访问一个支持工具调用功能的 LLM，例如 [OpenAI](https://platform.openai.com/api-keys)， [Anthropic](https://console.anthropic.com/settings/keys)，或 [Google Gemini](https://ai.google.dev/gemini-api/docs/api-key).
+
+#### 1.2.2 安装包
+
+安装所需包：
+
+```
+pip install -U langgraph langsmith
+```
+
+> **提示**
+>
+> 注册 LangSmith，以便快速发现问题并提升您的 LangGraph 项目的性能。LangSmith 允许您使用跟踪数据来调试、测试和监控使用 LangGraph 构建的 LLM 应用。有关如何开始的更多信息，请参阅 [LangSmith 文档 ](https://docs.smith.langchain.com/)。
+
+#### 1.2.3 创建一个 `StateGraph`
+
+现在你可以使用 LangGraph 创建一个基本的聊天机器人。这个聊天机器人将直接响应用户消息。
+
+首先创建一个 `StateGraph`。一个 `StateGraph` 对象定义了我们聊天机器人的结构作为一个“状态机”。我们将添加 `nodes` 来表示 llm 和聊天机器人可以调用的函数，以及 `edges` 来指定机器人如何在这些函数之间进行转换。
+
+```python
+from typing import Annotated
+
+from typing_extensions import TypedDict
+
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+
+
+class State(TypedDict):
+    # Messages have the type "list". The `add_messages` function
+    # in the annotation defines how this state key should be updated
+    # (in this case, it appends messages to the list, rather than overwriting them)
+    messages: Annotated[list, add_messages]
+
+
+graph_builder = StateGraph(State)
+```
+
+我们的图表现在可以处理两个关键任务：
+
+1. 每个 `node` 可以接收当前的 `State` 作为输入，并输出状态更新。
+2. 由于使用了预构建的 [`add_messages`](https://langchain-ai.github.io/langgraph/reference/graphs/?h=add+messages#add_messages) 函数和 `Annotated` 语法，对 `messages` 的更新将追加到现有列表而不是覆盖它。
+
+------
+
+> **概念**
+>
+> 在定义图时，第一步是定义其 `State`。`State` 包括图的架构和 [reducer 函数 ](https://langchain-ai.github.io/langgraph/concepts/low_level/#reducers)，用于处理状态更新。在我们的示例中，`State` 是一个 `TypedDict`，包含一个键：`messages`。使用 [`add_messages`](https://langchain-ai.github.io/langgraph/reference/graphs/#langgraph.graph.message.add_messages) reducer 函数将新消息追加到列表中，而不是覆盖它。没有 reducer 注释的键将覆盖之前的值。要了解更多关于状态、reducers 及相关概念的信息，请参阅 [LangGraph 参考文档 ](https://langchain-ai.github.io/langgraph/reference/graphs/#langgraph.graph.message.add_messages)。
+
+#### 1.2.4 添加一个节点
+
+接下来，添加一个 "`chatbot`" 节点。 **节点** 代表工作单元，通常是普通的 Python 函数。
+
+让我们先选择一个聊天模型：
+
+```bash
+pip install -U "langchain[openai]"
+```
+
+```python
+import os
+from langchain.chat_models import init_chat_model
+
+os.environ["OPENAI_API_KEY"] = "sk-..."
+
+llm = init_chat_model("openai:gpt-4.1")
+```
+
+👉 阅读 [OpenAI 集成文档](https://python.langchain.com/docs/integrations/chat/openai/)
+
+我们可以现在将聊天模型集成到一个简单的节点中：
+
+```python
+def chatbot(state: State):
+    return {"messages": [llm.invoke(state["messages"])]}
+
+
+# The first argument is the unique node name
+# The second argument is the function or object that will be called whenever
+# the node is used.
+graph_builder.add_node("chatbot", chatbot)
+```
+
+**注意** `chatbot` 节点函数如何将当前的 `State` 作为输入，并返回一个包含更新后的 `messages` 列表（在键 "messages" 下）的字典。这是所有 LangGraph 节点函数的基本模式。
+
+我们 `State` 中的 `add_messages` 函数会将 LLM 的响应消息追加到状态中已有的任何消息之后。
+
+#### 1.2.5 添加一个 `entry` 入口
+
+为告诉图每次运行时**从哪里开始工作** ，添加一个 `entry` 入口点：
+
+```python
+graph_builder.add_edge(START, "chatbot")
+```
+
+#### 1.2.6 添加一个 `exit` 出口
+
+添加一个 `exit` 点来指示**图应该在哪里结束执行** 。这对于更复杂的流程很有帮助，即使在这个简单的图中，添加一个结束节点也能提高清晰度。
+
+```python
+graph_builder.add_edge("chatbot", END)
+```
+
+这告诉图在运行聊天机器人节点后终止。
+
+#### 1.2.7 编译图
+
+在运行图之前，我们需要编译它。我们可以通过调用图构建器上的 `compile()` 来完成。 这会创建一个我们可以用于状态上的 `CompiledStateGraph`。
+
+```python
+graph = graph_builder.compile()
+```
+
+#### 1.2.8 可视化图形（可选）
+
+您可以使用 `get_graph` 方法和"draw"方法之一（如 `draw_ascii` 或 `draw_png`）来可视化图。每个 `draw` 方法都需要额外的依赖。
+
+```python
+from IPython.display import Image, display
+
+try:
+    display(Image(graph.get_graph().draw_mermaid_png()))
+except Exception:
+    # This requires some extra dependencies and is optional
+    pass
+```
+
+![basic chatbot diagram](./img/小米虫爬山路-py版-img/basic-chatbot.png)
+
+#### 12.9 运行聊天机器人
+
+现在运行聊天机器人！
+
+> 提示
+>
+> 你可以随时通过输入 `quit`、`exit` 或 `q` 来退出聊天循环。
+
+```python
+def stream_graph_updates(user_input: str):
+    for event in graph.stream({"messages": [{"role": "user", "content": user_input}]}):
+        for value in event.values():
+            print("Assistant:", value["messages"][-1].content)
+
+
+while True:
+    try:
+        user_input = input("User: ")
+        if user_input.lower() in ["quit", "exit", "q"]:
+            print("Goodbye!")
+            break
+        stream_graph_updates(user_input)
+    except:
+        # fallback if input() is not available
+        user_input = "What do you know about LangGraph?"
+        print("User: " + user_input)
+        stream_graph_updates(user_input)
+        break
+```
+
+```
+Assistant: LangGraph is a library designed to help build stateful multi-agent applications using language models. It provides tools for creating workflows and state machines to coordinate multiple AI agents or language model interactions. LangGraph is built on top of LangChain, leveraging its components while adding graph-based coordination capabilities. It's particularly useful for developing more complex, stateful AI applications that go beyond simple query-response interactions.
+Goodbye!
+```
+
+**恭喜！** 你已经使用 LangGraph 构建了你的第一个聊天机器人。这个机器人可以通过接收用户输入并使用 LLM 生成响应来进行基本对话。你可以检查上述调用的 [LangSmith 追踪 ](https://smith.langchain.com/public/7527e308-9502-4894-b347-f34385740d5a/r)。
+
+以下是本教程的完整代码：
+
+API 参考：init_chat_model | StateGraph | START | END | add_messages
+
+```python
+from typing import Annotated
+
+from langchain.chat_models import init_chat_model
+from typing_extensions import TypedDict
+
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+
+graph_builder = StateGraph(State)
+
+
+llm = init_chat_model("anthropic:claude-3-5-sonnet-latest")
+
+
+def chatbot(state: State):
+    return {"messages": [llm.invoke(state["messages"])]}
+
+
+# The first argument is the unique node name
+# The second argument is the function or object that will be called whenever
+# the node is used.
+graph_builder.add_node("chatbot", chatbot)
+graph_builder.add_edge(START, "chatbot")
+graph_builder.add_edge("chatbot", END)
+graph = graph_builder.compile()
+```
+
+### 1.3 添加工具
+
+为了处理聊天机器人无法"凭记忆"回答的查询，集成一个网络搜索工具。聊天机器人可以使用这个工具查找相关信息并提供更好的回复。
+
+> 注意
+>
+> 本教程基于[构建一个基础聊天机器人 ](https://langchain-ai.github.io/langgraph/tutorials/get-started/1-build-basic-chatbot/)。
+
+#### 1.3.1 前置条件
+
+在开始本教程之前，请确保您已准备好以下内容：
+
+- 一个 [Tavily 搜索引擎](https://python.langchain.com/docs/integrations/tools/tavily_search/)的 API 密钥。
+
+#### 1.3.2 安装搜索引擎
+
+安装使用 [Tavily Search Engine](https://python.langchain.com/docs/integrations/tools/tavily_search/) 所需的依赖项：
+
+```
+pip install -U langchain-tavily
+```
+
+#### 1.3.3 配置你的环境
+
+使用你的搜索引擎 API 密钥配置你的环境：
+
+```python
+def _set_env(var: str):
+    if not os.environ.get(var):
+        os.environ[var] = getpass.getpass(f"{var}: ")
+
+_set_env("TAVILY_API_KEY")
+os.environ["TAVILY_API_KEY"]:  "········"
+```
+
+#### 1.3.4 定义工具
+
+定义网络搜索工具：
+
+API 参考：TavilySearch
+
+```python
+from langchain_tavily import TavilySearch
+
+tool = TavilySearch(max_results=2)
+tools = [tool]
+tool.invoke("What's a 'node' in LangGraph?")
+```
+
+搜索结果为聊天机器人可使用的页面摘要，用于回答问题：
+
+```python
+{'query': "What's a 'node' in LangGraph?",
+'follow_up_questions': None,
+'answer': None,
+'images': [],
+'results': [{'title': "Introduction to LangGraph: A Beginner's Guide - Medium",
+'url': 'https://medium.com/@cplog/introduction-to-langgraph-a-beginners-guide-14f9be027141',
+'content': 'Stateful Graph: LangGraph revolves around the concept of a stateful graph, where each node in the graph represents a step in your computation, and the graph maintains a state that is passed around and updated as the computation progresses. LangGraph supports conditional edges, allowing you to dynamically determine the next node to execute based on the current state of the graph. We define nodes for classifying the input, handling greetings, and handling search queries. def classify_input_node(state): LangGraph is a versatile tool for building complex, stateful applications with LLMs. By understanding its core concepts and working through simple examples, beginners can start to leverage its power for their projects. Remember to pay attention to state management, conditional edges, and ensuring there are no dead-end nodes in your graph.',
+'score': 0.7065353,
+'raw_content': None},
+{'title': 'LangGraph Tutorial: What Is LangGraph and How to Use It?',
+'url': 'https://www.datacamp.com/tutorial/langgraph-tutorial',
+'content': 'LangGraph is a library within the LangChain ecosystem that provides a framework for defining, coordinating, and executing multiple LLM agents (or chains) in a structured and efficient manner. By managing the flow of data and the sequence of operations, LangGraph allows developers to focus on the high-level logic of their applications rather than the intricacies of agent coordination. Whether you need a chatbot that can handle various types of user requests or a multi-agent system that performs complex tasks, LangGraph provides the tools to build exactly what you need. LangGraph significantly simplifies the development of complex LLM applications by providing a structured framework for managing state and coordinating agent interactions.',
+'score': 0.5008063,
+'raw_content': None}],
+'response_time': 1.38}
+```
+
+#### 1.3.5 定义图
+
+对于你在[第一个教程](https://langchain-ai.github.io/langgraph/tutorials/get-started/1-build-basic-chatbot/)中创建的 `StateGraph`，在 LLM 上添加 `bind_tools`。这能让 LLM 知道如果它想要使用搜索引擎，应该使用正确的 JSON 格式。
+
+让我们首先选择我们的 LLM：
+
+[OpenAI](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_1_1)[Anthropic](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_1_2)[Azure](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_1_3)[Google Gemini](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_1_4)[AWS Bedrock](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_1_5)
+
+```python
+pip install -U "langchain[openai]"
+import os
+from langchain.chat_models import init_chat_model
+
+os.environ["OPENAI_API_KEY"] = "sk-..."
+
+llm = init_chat_model("openai:gpt-4.1")
+```
+
+👉 阅读 [OpenAI 集成文档](https://python.langchain.com/docs/integrations/chat/openai/)
+
+我们可以将其整合到 `StateGraph` 中：
+
+```python
+from typing import Annotated
+
+from typing_extensions import TypedDict
+
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+graph_builder = StateGraph(State)
+
+# Modification: tell the LLM which tools it can call
+# highlight-next-line
+llm_with_tools = llm.bind_tools(tools)
+
+def chatbot(state: State):
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
+graph_builder.add_node("chatbot", chatbot)
+```
+
+#### 1.3.6 创建一个运行工具的函数
+
+现在，创建一个函数来运行这些工具，如果它们被调用的话。通过将工具添加到一个名为 `BasicToolNode` 的新节点来实现，该节点检查状态中的最新消息，如果消息包含 `tool_calls`，则调用工具。它依赖于 LLM 的 `tool_calling` 支持，该支持在 Anthropic、OpenAI、Google Gemini 以及其他许多 LLM 提供者那里都可用。
+
+API 参考：ToolMessage
+
+```python
+import json
+
+from langchain_core.messages import ToolMessage
+
+
+class BasicToolNode:
+    """A node that runs the tools requested in the last AIMessage."""
+
+    def __init__(self, tools: list) -> None:
+        self.tools_by_name = {tool.name: tool for tool in tools}
+
+    def __call__(self, inputs: dict):
+        if messages := inputs.get("messages", []):
+            message = messages[-1]
+        else:
+            raise ValueError("No message found in input")
+        outputs = []
+        for tool_call in message.tool_calls:
+            tool_result = self.tools_by_name[tool_call["name"]].invoke(
+                tool_call["args"]
+            )
+            outputs.append(
+                ToolMessage(
+                    content=json.dumps(tool_result),
+                    name=tool_call["name"],
+                    tool_call_id=tool_call["id"],
+                )
+            )
+        return {"messages": outputs}
+
+
+    tool_node = BasicToolNode(tools=[tool])
+    graph_builder.add_node("tools", tool_node)
+```
+
+> 注意
+>
+> 如果你不希望在将来自己构建这个，你可以使用 LangGraph 的预构建 [ToolNode](https://langchain-ai.github.io/langgraph/reference/agents/#langgraph.prebuilt.tool_node.ToolNode)。
+
+#### 1.3.7 定义 `conditional_edges`
+
+在添加了工具节点后，现在你可以定义 `conditional_edges`。
+
+**边**将控制流从一个节点路由到下一个节点。 **条件边**从一个节点开始，通常包含"if"语句，根据当前图状态将控制流路由到不同的节点。这些函数接收当前的图`状态 `，并返回一个字符串或字符串列表，指示下一个要调用的节点。
+
+接下来，定义一个名为 `route_tools` 的路由函数，该函数用于检查聊天机器人的输出中是否存在 `tool_calls`。通过调用 `add_conditional_edges` 将此函数提供给图，这会告诉图，每当 `chatbot` 节点完成时，需要检查此函数以确定下一步的去向。
+
+如果存在工具调用，该条件将路由到 `tools`；如果不存在，则路由到 `END`。由于该条件可以返回 `END`，因此这次无需显式设置 `finish_point`。
+
+```python
+def route_tools(
+    state: State,
+):
+    """
+    Use in the conditional_edge to route to the ToolNode if the last message
+    has tool calls. Otherwise, route to the end.
+    """
+    if isinstance(state, list):
+        ai_message = state[-1]
+    elif messages := state.get("messages", []):
+        ai_message = messages[-1]
+    else:
+        raise ValueError(f"No messages found in input state to tool_edge: {state}")
+    if hasattr(ai_message, "tool_calls") and len(ai_message.tool_calls) > 0:
+        return "tools"
+    return END
+
+
+# The `tools_condition` function returns "tools" if the chatbot asks to use a tool, and "END" if
+# it is fine directly responding. This conditional routing defines the main agent loop.
+graph_builder.add_conditional_edges(
+    "chatbot",
+    route_tools,
+    # The following dictionary lets you tell the graph to interpret the condition's outputs as a specific node
+    # It defaults to the identity function, but if you
+    # want to use a node named something else apart from "tools",
+    # You can update the value of the dictionary to something else
+    # e.g., "tools": "my_tools"
+    {"tools": "tools", END: END},
+)
+# Any time a tool is called, we return to the chatbot to decide the next step
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+graph = graph_builder.compile()
+```
+
+> 注意
+>
+> 您可以用预构建的 [tools_condition](https://langchain-ai.github.io/langgraph/reference/prebuilt/#tools_condition) 来替换它，这样更简洁。
+
+#### 1.3.8 可视化图形（可选）
+
+您可以使用 `get_graph` 方法和"draw"方法之一（如 `draw_ascii` 或 `draw_png`）来可视化图。每个 `draw` 方法都需要额外的依赖。
+
+```python
+from IPython.display import Image, display
+
+try:
+    display(Image(graph.get_graph().draw_mermaid_png()))
+except Exception:
+    # This requires some extra dependencies and is optional
+    pass
+```
+
+![chatbot-with-tools-diagram](./img/小米虫爬山路-py版-img/chatbot-with-tools.png)
+
+#### 1.3.9 向机器人提问
+
+现在您可以向聊天机器人询问其训练数据之外的问题：
+
+```python
+def stream_graph_updates(user_input: str):
+    for event in graph.stream({"messages": [{"role": "user", "content": user_input}]}):
+        for value in event.values():
+            print("Assistant:", value["messages"][-1].content)
+
+while True:
+    try:
+        user_input = input("User: ")
+        if user_input.lower() in ["quit", "exit", "q"]:
+            print("Goodbye!")
+            break
+
+        stream_graph_updates(user_input)
+    except:
+        # fallback if input() is not available
+        user_input = "What do you know about LangGraph?"
+        print("User: " + user_input)
+        stream_graph_updates(user_input)
+        break
+```
+
+```
+Assistant: [{'text': "To provide you with accurate and up-to-date information about LangGraph, I'll need to search for the latest details. Let me do that for you.", 'type': 'text'}, {'id': 'toolu_01Q588CszHaSvvP2MxRq9zRD', 'input': {'query': 'LangGraph AI tool information'}, 'name': 'tavily_search_results_json', 'type': 'tool_use'}]
+Assistant: [{"url": "https://www.langchain.com/langgraph", "content": "LangGraph sets the foundation for how we can build and scale AI workloads \u2014 from conversational agents, complex task automation, to custom LLM-backed experiences that 'just work'. The next chapter in building complex production-ready features with LLMs is agentic, and with LangGraph and LangSmith, LangChain delivers an out-of-the-box solution ..."}, {"url": "https://github.com/langchain-ai/langgraph", "content": "Overview. LangGraph is a library for building stateful, multi-actor applications with LLMs, used to create agent and multi-agent workflows. Compared to other LLM frameworks, it offers these core benefits: cycles, controllability, and persistence. LangGraph allows you to define flows that involve cycles, essential for most agentic architectures ..."}]
+Assistant: Based on the search results, I can provide you with information about LangGraph:
+
+1. Purpose:
+   LangGraph is a library designed for building stateful, multi-actor applications with Large Language Models (LLMs). It's particularly useful for creating agent and multi-agent workflows.
+
+2. Developer:
+   LangGraph is developed by LangChain, a company known for its tools and frameworks in the AI and LLM space.
+
+3. Key Features:
+   - Cycles: LangGraph allows the definition of flows that involve cycles, which is essential for most agentic architectures.
+   - Controllability: It offers enhanced control over the application flow.
+   - Persistence: The library provides ways to maintain state and persistence in LLM-based applications.
+
+4. Use Cases:
+   LangGraph can be used for various applications, including:
+   - Conversational agents
+   - Complex task automation
+   - Custom LLM-backed experiences
+
+5. Integration:
+   LangGraph works in conjunction with LangSmith, another tool by LangChain, to provide an out-of-the-box solution for building complex, production-ready features with LLMs.
+
+6. Significance:
+...
+   LangGraph is noted to offer unique benefits compared to other LLM frameworks, particularly in its ability to handle cycles, provide controllability, and maintain persistence.
+
+LangGraph appears to be a significant tool in the evolving landscape of LLM-based application development, offering developers new ways to create more complex, stateful, and interactive AI systems.
+Goodbye!
+Output is truncated. View as a scrollable element or open in a text editor. Adjust cell output settings...
+```
+
+#### 1.3.10 使用预构建的
+
+为了方便使用，请将您的代码调整为使用 LangGraph 的预构建组件来替换以下内容。这些组件内置了如并行 API 执行等功能。
+
+- `BasicToolNode` 被替换为预构建的 [ToolNode](https://langchain-ai.github.io/langgraph/reference/prebuilt/#toolnode)
+- `route_tools` 被替换为预构建的 [tools_condition](https://langchain-ai.github.io/langgraph/reference/prebuilt/#tools_condition)
+
+[OpenAI](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_2_1)[Anthropic](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_2_2)[Azure](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_2_3)[Google Gemini](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_2_4)[AWS Bedrock](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/#__tabbed_2_5)
+
+```python
+pip install -U "langchain[openai]"
+import os
+from langchain.chat_models import init_chat_model
+
+os.environ["OPENAI_API_KEY"] = "sk-..."
+
+llm = init_chat_model("openai:gpt-4.1")
+```
+
+👉 阅读 [OpenAI 集成文档](https://python.langchain.com/docs/integrations/chat/openai/)
+
+```python
+from typing import Annotated
+
+from langchain_tavily import TavilySearch
+from langchain_core.messages import BaseMessage
+from typing_extensions import TypedDict
+
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+graph_builder = StateGraph(State)
+
+tool = TavilySearch(max_results=2)
+tools = [tool]
+llm_with_tools = llm.bind_tools(tools)
+
+def chatbot(state: State):
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
+graph_builder.add_node("chatbot", chatbot)
+
+tool_node = ToolNode(tools=[tool])
+graph_builder.add_node("tools", tool_node)
+
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition,
+)
+# Any time a tool is called, we return to the chatbot to decide the next step
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+graph = graph_builder.compile()
+```
+
+**恭喜！** 您在 LangGraph 中创建了一个能够使用搜索引擎在需要时检索更新信息的对话代理。现在它可以处理更广泛的用户查询。要查看您的代理刚刚执行的所有步骤，请查看这个 [LangSmith 跟踪记录 ](https://smith.langchain.com/public/4fbd7636-25af-4638-9587-5a02fdbb0172/r)。
+
+### 1.4 添加内存
+
+聊天机器人现在可以使用工具来回答用户问题，但它不记得之前的交互上下文。这限制了它进行连贯的多轮对话的能力。
+
+LangGraph 通过持久化检查点解决了这个问题。如果你在编译图时提供检查点器，并在调用你的图时提供线程 ID，LangGraph 会自动在每一步之后保存状态。当你使用相同的线程 ID 再次调用图时，图会加载其保存的状态，允许聊天机器人从它停止的地方继续。
+
+我们稍后会看到，检查点比简单的聊天记忆要强大得多——它允许你在任何时间保存和恢复复杂的状态，用于错误恢复、人工参与工作流程、时间旅行交互等。但首先，让我们添加检查点以启用多轮对话。
+
+> 注意
+>
+> 本教程基于 [添加工具 ](https://langchain-ai.github.io/langgraph/tutorials/get-started/2-add-tools/)。
+
+#### 1.4.1 创建一个 `InMemorySaver` 检查点器
+
+创建一个 `InMemorySaver` 检查点器：
+
+```python
+from langgraph.checkpoint.memory import InMemorySaver
+
+memory = InMemorySaver()
+```
+
+这是一个内存中的检查点器，对教程来说很方便。然而，在生产应用中，你可能会将其更改为使用 `SqliteSaver` 或 `PostgresSaver` 并连接数据库。
+
+#### 1.4.2 编译图
+
+使用提供的检查点器编译图，这将使图在处理每个节点时将 `State` 作为检查点保存：
+
+```python
+graph = graph_builder.compile(checkpointer=memory)
+```
 
 
 
+```python
+from IPython.display import Image, display
+
+try:
+    display(Image(graph.get_graph().draw_mermaid_png()))
+except Exception:
+    # This requires some extra dependencies and is optional
+    pass
+```
+
+#### 1.4.3 与你的聊天机器人交互
+
+现在你可以与你的机器人互动了！
+
+1. 选择一个线程作为这次对话的键。
+
+   ```python
+   config = {"configurable": {"thread_id": "1"}}
+   ```
+
+2. 调用你的聊天机器人：
+
+   ```python
+   user_input = "Hi there! My name is Will."
+   
+   # The config is the **second positional argument** to stream() or invoke()!
+   events = graph.stream(
+       {"messages": [{"role": "user", "content": user_input}]},
+       config,
+       stream_mode="values",
+   )
+   for event in events:
+       event["messages"][-1].pretty_print()
+   ```
+
+   ```
+   ================================ Human Message =================================
+   
+   Hi there! My name is Will.
+   ================================== Ai Message ==================================
+   
+   Hello Will! It's nice to meet you. How can I assist you today? Is there anything specific you'd like to know or discuss?
+   ```
+
+   > 注意：配置作为图调用的**第二个位置参数**提供。它重要的是**不**嵌套在图输入中（`{'messages': []}`）。
+
+#### 1.4.4 提出后续问题
+
+问一个后续问题：
+
+```python
+user_input = "Remember my name?"
+
+# The config is the **second positional argument** to stream() or invoke()!
+events = graph.stream(
+    {"messages": [{"role": "user", "content": user_input}]},
+    config,
+    stream_mode="values",
+)
+for event in events:
+    event["messages"][-1].pretty_print()
+```
+
+```
+================================ Human Message =================================
+
+Remember my name?
+================================== Ai Message ==================================
+
+Of course, I remember your name, Will. I always try to pay attention to important details that users share with me. Is there anything else you'd like to talk about or any questions you have? I'm here to help with a wide range of topics or tasks.
+```
+
+**注意**我们并未使用外部列表来管理内存：所有操作均由检查点器处理！您可以通过这个 [LangSmith 跟踪 ](https://smith.langchain.com/public/29ba22b5-6d40-4fbe-8d27-b369e3329c84/r?ajs_aid=3cc2a450-7f1b-4d21-9c0b-f09d1704da91)查看完整执行过程，了解具体操作情况。
+
+不信我？试试用不同的配置。
+
+```python
+# The only difference is we change the `thread_id` here to "2" instead of "1"
+events = graph.stream(
+    {"messages": [{"role": "user", "content": user_input}]},
+    {"configurable": {"thread_id": "2"}},
+    stream_mode="values",
+)
+for event in events:
+    event["messages"][-1].pretty_print()
+```
+
+```
+================================ Human Message =================================
+
+Remember my name?
+================================== Ai Message ==================================
+
+I apologize, but I don't have any previous context or memory of your name. As an AI assistant, I don't retain information from past conversations. Each interaction starts fresh. Could you please tell me your name so I can address you properly in this conversation?
+```
+
+**注意**我们仅修改了配置中的**唯一**变化是 `thread_id`。请参考此调用的 [LangSmith 跟踪](https://smith.langchain.com/public/51a62351-2f0a-4058-91cc-9996c5561428/r?ajs_aid=3cc2a450-7f1b-4d21-9c0b-f09d1704da91)进行比较。
+
+#### 1.4.5 检查状态
+
+到目前为止，我们在两个不同的线程中设置了一些检查点。但检查点包含哪些内容呢？要检查给定配置在任何时间点的图的 `state`，请调用 `get_state(config)`。
+
+```python
+snapshot = graph.get_state(config)
+snapshot
+```
+
+```
+StateSnapshot(values={'messages': [HumanMessage(content='Hi there! My name is Will.', additional_kwargs={}, response_metadata={}, id='8c1ca919-c553-4ebf-95d4-b59a2d61e078'), AIMessage(content="Hello Will! It's nice to meet you. How can I assist you today? Is there anything specific you'd like to know or discuss?", additional_kwargs={}, response_metadata={'id': 'msg_01WTQebPhNwmMrmmWojJ9KXJ', 'model': 'claude-3-5-sonnet-20240620', 'stop_reason': 'end_turn', 'stop_sequence': None, 'usage': {'input_tokens': 405, 'output_tokens': 32}}, id='run-58587b77-8c82-41e6-8a90-d62c444a261d-0', usage_metadata={'input_tokens': 405, 'output_tokens': 32, 'total_tokens': 437}), HumanMessage(content='Remember my name?', additional_kwargs={}, response_metadata={}, id='daba7df6-ad75-4d6b-8057-745881cea1ca'), AIMessage(content="Of course, I remember your name, Will. I always try to pay attention to important details that users share with me. Is there anything else you'd like to talk about or any questions you have? I'm here to help with a wide range of topics or tasks.", additional_kwargs={}, response_metadata={'id': 'msg_01E41KitY74HpENRgXx94vag', 'model': 'claude-3-5-sonnet-20240620', 'stop_reason': 'end_turn', 'stop_sequence': None, 'usage': {'input_tokens': 444, 'output_tokens': 58}}, id='run-ffeaae5c-4d2d-4ddb-bd59-5d5cbf2a5af8-0', usage_metadata={'input_tokens': 444, 'output_tokens': 58, 'total_tokens': 502})]}, next=(), config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1ef7d06e-93e0-6acc-8004-f2ac846575d2'}}, metadata={'source': 'loop', 'writes': {'chatbot': {'messages': [AIMessage(content="Of course, I remember your name, Will. I always try to pay attention to important details that users share with me. Is there anything else you'd like to talk about or any questions you have? I'm here to help with a wide range of topics or tasks.", additional_kwargs={}, response_metadata={'id': 'msg_01E41KitY74HpENRgXx94vag', 'model': 'claude-3-5-sonnet-20240620', 'stop_reason': 'end_turn', 'stop_sequence': None, 'usage': {'input_tokens': 444, 'output_tokens': 58}}, id='run-ffeaae5c-4d2d-4ddb-bd59-5d5cbf2a5af8-0', usage_metadata={'input_tokens': 444, 'output_tokens': 58, 'total_tokens': 502})]}}, 'step': 4, 'parents': {}}, created_at='2024-09-27T19:30:10.820758+00:00', parent_config={'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1ef7d06e-859f-6206-8003-e1bd3c264b8f'}}, tasks=())
+```
+
+```
+snapshot.next  # (since the graph ended this turn, `next` is empty. If you fetch a state from within a graph invocation, next tells which node will execute next)
+```
+
+上面的快照包含了当前状态值、相应的配置以及要处理的 `next` 节点。在我们的案例中，图已经达到 `END` 状态，所以 `next` 为空。
+
+**恭喜！** 由于 LangGraph 的检查点系统，您的聊天机器人现在可以在会话之间保持对话状态。这为更自然、更具上下文的交互打开了令人兴奋的可能性。LangGraph 的检查点甚至可以处理**任意复杂的图状态** ，这比简单的聊天记忆更具表现力和强大的功能。
+
+查看下面的代码片段，以回顾本教程中的图表：
+
+```
+pip install -U "langchain[openai]"
+```
+
+```python
+import os
+from langchain.chat_models import init_chat_model
+
+os.environ["OPENAI_API_KEY"] = "sk-..."
+
+llm = init_chat_model("openai:gpt-4.1")
+```
+
+```python
+from typing import Annotated
+
+from langchain.chat_models import init_chat_model
+from langchain_tavily import TavilySearch
+from langchain_core.messages import BaseMessage
+from typing_extensions import TypedDict
+
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.graph import StateGraph
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+graph_builder = StateGraph(State)
+
+tool = TavilySearch(max_results=2)
+tools = [tool]
+llm_with_tools = llm.bind_tools(tools)
+
+def chatbot(state: State):
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
+graph_builder.add_node("chatbot", chatbot)
+
+tool_node = ToolNode(tools=[tool])
+graph_builder.add_node("tools", tool_node)
+
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition,
+)
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.set_entry_point("chatbot")
+memory = InMemorySaver()
+graph = graph_builder.compile(checkpointer=memory)
+```
+
+### 1.5 添加人工介入控制
+
+代理可能不可靠，并可能需要人工输入才能成功完成任务。类似地，对于某些操作，您可能希望在运行之前要求人工批准，以确保一切按预期运行。
+
+LangGraph 的 [持久化 ](https://langchain-ai.github.io/langgraph/concepts/persistence/)层支持 **人工介入** 工作流程，允许根据用户反馈暂停和恢复执行。此功能的主要接口是 [`interrupt`](https://langchain-ai.github.io/langgraph/how-tos/human_in_the_loop/add-human-in-the-loop/) 函数。在节点内部调用 `interrupt` 将暂停执行。通过传递一个 [Command](https://langchain-ai.github.io/langgraph/concepts/low_level/#command)，可以与来自人类的新输入一起恢复执行。`interrupt` 在人体工学方面与 Python 的内置 `input()` 类似，[ 但有一些注意事项 ](https://langchain-ai.github.io/langgraph/how-tos/human_in_the_loop/add-human-in-the-loop/)。
+
+> 注意：本教程基于 [添加记忆 ](https://langchain-ai.github.io/langgraph/tutorials/get-started/3-add-memory/)构建。
+
+#### 1.5.1 添加 `human_assistance` 工具
+
+从现有的 [为聊天机器人添加记忆 ](https://langchain-ai.github.io/langgraph/tutorials/get-started/3-add-memory/)教程中的代码开始，将 `human_assistance` 工具添加到聊天机器人中。该工具使用 `interrupt` 接收来自人类的信息。
+
+让我们先选择一个聊天模型：
+
+```
+pip install -U "langchain[openai]"
+```
+
+```python
+import os
+from langchain.chat_models import init_chat_model
+
+os.environ["OPENAI_API_KEY"] = "sk-..."
+
+llm = init_chat_model("openai:gpt-4.1")
+```
+
+现在我们可以使用一个额外的工具将其整合到我们的 `StateGraph` 中：
+
+```python
+from typing import Annotated
+
+from langchain_tavily import TavilySearch
+from langchain_core.tools import tool
+from typing_extensions import TypedDict
+
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+
+from langgraph.types import Command, interrupt
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+graph_builder = StateGraph(State)
+
+@tool
+def human_assistance(query: str) -> str:
+    """Request assistance from a human."""
+    human_response = interrupt({"query": query})
+    return human_response["data"]
+
+tool = TavilySearch(max_results=2)
+tools = [tool, human_assistance]
+llm_with_tools = llm.bind_tools(tools)
+
+def chatbot(state: State):
+    message = llm_with_tools.invoke(state["messages"])
+    # Because we will be interrupting during tool execution,
+    # we disable parallel tool calling to avoid repeating any
+    # tool invocations when we resume.
+    assert len(message.tool_calls) <= 1
+    return {"messages": [message]}
+
+graph_builder.add_node("chatbot", chatbot)
+
+tool_node = ToolNode(tools=tools)
+graph_builder.add_node("tools", tool_node)
+
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition,
+)
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+```
+
+>提示
+>
+>有关更多关于人工参与工作流程的信息和示例，请参阅[人工参与 ](https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/)。
+
+#### 1.5.2 编译图
+
+我们像之前一样使用检查点来编译图：
+
+```python
+memory = InMemorySaver()
+
+graph = graph_builder.compile(checkpointer=memory)
+```
+
+#### 1.5.3 可视化图形（可选）
+
+可视化这个图，你得到和之前相同的布局——只是增加了这个工具！
+
+```python
+from IPython.display import Image, display
+
+try:
+    display(Image(graph.get_graph().draw_mermaid_png()))
+except Exception:
+    # This requires some extra dependencies and is optional
+    pass
+```
+
+![chatbot-with-tools-diagram](./img/小米虫爬山路-py版-img/chatbot-with-tools-1753618098269-1.png)
+
+#### 1.5.4 提示聊天机器人
+
+现在，向聊天机器人提出一个问题，以激活新的 `human_assistance` 工具：
+
+```python
+user_input = "I need some expert guidance for building an AI agent. Could you request assistance for me?"
+config = {"configurable": {"thread_id": "1"}}
+
+events = graph.stream(
+    {"messages": [{"role": "user", "content": user_input}]},
+    config,
+    stream_mode="values",
+)
+for event in events:
+    if "messages" in event:
+        event["messages"][-1].pretty_print()
+```
+
+```
+================================ Human Message =================================
+
+I need some expert guidance for building an AI agent. Could you request assistance for me?
+================================== Ai Message ==================================
+
+[{'text': "Certainly! I'd be happy to request expert assistance for you regarding building an AI agent. To do this, I'll use the human_assistance function to relay your request. Let me do that for you now.", 'type': 'text'}, {'id': 'toolu_01ABUqneqnuHNuo1vhfDFQCW', 'input': {'query': 'A user is requesting expert guidance for building an AI agent. Could you please provide some expert advice or resources on this topic?'}, 'name': 'human_assistance', 'type': 'tool_use'}]
+Tool Calls:
+  human_assistance (toolu_01ABUqneqnuHNuo1vhfDFQCW)
+ Call ID: toolu_01ABUqneqnuHNuo1vhfDFQCW
+  Args:
+    query: A user is requesting expert guidance for building an AI agent. Could you please provide some expert advice or resources on this topic?
+```
+
+聊天机器人生成了一个工具调用，但随后执行被中断。如果你检查图状态，你会发现它停在工具节点上：
+
+```
+snapshot = graph.get_state(config)
+snapshot.next
+('tools',)
+```
+
+> 信息
+>
+> 仔细查看一下 `human_assistance` 工具：
+>
+> ```python
+> @tool
+> def human_assistance(query: str) -> str:
+>     """Request assistance from a human."""
+>     human_response = interrupt({"query": query})
+>     return human_response["data"]
+> ```
+>
+> 与 Python 的内置 `input()` 函数类似，在工具内部调用 `interrupt` 将暂停执行。进度基于 [checkpointer](https://langchain-ai.github.io/langgraph/concepts/persistence/#checkpointer-libraries) 进行持久化；因此，如果它使用 Postgres 进行持久化，只要数据库处于活动状态，它就可以随时恢复。在这个示例中，它使用内存中的 checkpointer 进行持久化，只要 Python 内核正在运行，就可以随时恢复。
+
+#### 1.5.5 继续执行
+
+要恢复执行，传递一个包含工具预期数据的 [`Command`](https://langchain-ai.github.io/langgraph/concepts/low_level/#command) 对象。此数据的格式可以根据需求自定义。对于此示例，使用一个键为 `"data"` 的 dict：
+
+```python
+human_response = (
+    "We, the experts are here to help! We'd recommend you check out LangGraph to build your agent."
+    " It's much more reliable and extensible than simple autonomous agents."
+)
+
+human_command = Command(resume={"data": human_response})
+
+events = graph.stream(human_command, config, stream_mode="values")
+for event in events:
+    if "messages" in event:
+        event["messages"][-1].pretty_print()
+```
+
+```
+================================== Ai Message ==================================
+
+[{'text': "Certainly! I'd be happy to request expert assistance for you regarding building an AI agent. To do this, I'll use the human_assistance function to relay your request. Let me do that for you now.", 'type': 'text'}, {'id': 'toolu_01ABUqneqnuHNuo1vhfDFQCW', 'input': {'query': 'A user is requesting expert guidance for building an AI agent. Could you please provide some expert advice or resources on this topic?'}, 'name': 'human_assistance', 'type': 'tool_use'}]
+Tool Calls:
+  human_assistance (toolu_01ABUqneqnuHNuo1vhfDFQCW)
+ Call ID: toolu_01ABUqneqnuHNuo1vhfDFQCW
+  Args:
+    query: A user is requesting expert guidance for building an AI agent. Could you please provide some expert advice or resources on this topic?
+================================= Tool Message =================================
+Name: human_assistance
+
+We, the experts are here to help! We'd recommend you check out LangGraph to build your agent. It's much more reliable and extensible than simple autonomous agents.
+================================== Ai Message ==================================
+
+Thank you for your patience. I've received some expert advice regarding your request for guidance on building an AI agent. Here's what the experts have suggested:
+
+The experts recommend that you look into LangGraph for building your AI agent. They mention that LangGraph is a more reliable and extensible option compared to simple autonomous agents.
+
+LangGraph is likely a framework or library designed specifically for creating AI agents with advanced capabilities. Here are a few points to consider based on this recommendation:
+
+1. Reliability: The experts emphasize that LangGraph is more reliable than simpler autonomous agent approaches. This could mean it has better stability, error handling, or consistent performance.
+
+2. Extensibility: LangGraph is described as more extensible, which suggests that it probably offers a flexible architecture that allows you to easily add new features or modify existing ones as your agent's requirements evolve.
+
+3. Advanced capabilities: Given that it's recommended over "simple autonomous agents," LangGraph likely provides more sophisticated tools and techniques for building complex AI agents.
+...
+2. Look for tutorials or guides specifically focused on building AI agents with LangGraph.
+3. Check if there are any community forums or discussion groups where you can ask questions and get support from other developers using LangGraph.
+
+If you'd like more specific information about LangGraph or have any questions about this recommendation, please feel free to ask, and I can request further assistance from the experts.
+Output is truncated. View as a scrollable element or open in a text editor. Adjust cell output settings...
+```
+
+输入已被接收并作为工具消息处理。请查看此调用的 [LangSmith 跟踪 ](https://smith.langchain.com/public/9f0f87e3-56a7-4dde-9c76-b71675624e91/r?ajs_aid=3cc2a450-7f1b-4d21-9c0b-f09d1704da91)，以了解上述调用中具体执行的工作。请注意，状态在第一步中已加载，以便我们的聊天机器人可以继续它之前停止的地方。
+
+**恭喜！** 您已使用 `interrupt` 为您的聊天机器人添加了人工介入执行，允许在需要时进行人工监督和干预。这为您能够创建的 AI 系统界面打开了新的可能性。由于您已经添加了 **检查点** ，只要底层持久化层正在运行，图可以**无限期**暂停，并在任何时候恢复，就像什么都没发生过一样。
+
+查看下面的代码片段，以回顾本教程中的图表：
+
+```
+pip install -U "langchain[openai]"
+```
+
+```python
+import os
+from langchain.chat_models import init_chat_model
+
+os.environ["OPENAI_API_KEY"] = "sk-..."
+
+llm = init_chat_model("openai:gpt-4.1")
+```
+
+```python
+from typing import Annotated
+
+from langchain_tavily import TavilySearch
+from langchain_core.tools import tool
+from typing_extensions import TypedDict
+
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+from langgraph.types import Command, interrupt
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+graph_builder = StateGraph(State)
+
+@tool
+def human_assistance(query: str) -> str:
+    """Request assistance from a human."""
+    human_response = interrupt({"query": query})
+    return human_response["data"]
+
+tool = TavilySearch(max_results=2)
+tools = [tool, human_assistance]
+llm_with_tools = llm.bind_tools(tools)
+
+def chatbot(state: State):
+    message = llm_with_tools.invoke(state["messages"])
+    assert(len(message.tool_calls) <= 1)
+    return {"messages": [message]}
+
+graph_builder.add_node("chatbot", chatbot)
+
+tool_node = ToolNode(tools=tools)
+graph_builder.add_node("tools", tool_node)
+
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition,
+)
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+
+memory = InMemorySaver()
+graph = graph_builder.compile(checkpointer=memory)
+```
+
+### 1.6 自定义状态
+
+在本教程中，你将向状态中添加额外字段，以便在不依赖消息列表的情况下定义复杂行为。聊天机器人将使用其搜索工具查找特定信息，并将这些信息转发给人类进行审核。
+
+> 注意
+>
+> 本教程基于[添加人工介入控制 ](https://langchain-ai.github.io/langgraph/tutorials/get-started/4-human-in-the-loop/)。
+
+#### 1.6.1 向状态中添加键
+
+更新聊天机器人以通过向状态中添加 `name` 和 `birthday` 键来研究实体的生日：
+
+```python
+from typing import Annotated
+
+from typing_extensions import TypedDict
+
+from langgraph.graph.message import add_messages
 
 
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+    name: str
+    birthday: str
+```
+
+将此信息添加到状态中，使其可被其他图节点（如存储或处理信息的下游节点）以及图的持久化层轻松访问。
+
+#### 1.6.2 在工具内部更新状态
+
+现在，在 `human_assistance` 工具内部填充状态键。这允许人类在信息存储到状态之前进行审查。使用 [`Command`](https://langchain-ai.github.io/langgraph/concepts/low_level/#using-inside-tools) 从工具内部发出状态更新。
+
+```python
+from langchain_core.messages import ToolMessage
+from langchain_core.tools import InjectedToolCallId, tool
+
+from langgraph.types import Command, interrupt
+
+@tool
+# Note that because we are generating a ToolMessage for a state update, we
+# generally require the ID of the corresponding tool call. We can use
+# LangChain's InjectedToolCallId to signal that this argument should not
+# be revealed to the model in the tool's schema.
+def human_assistance(
+    name: str, birthday: str, tool_call_id: Annotated[str, InjectedToolCallId]
+) -> str:
+    """Request assistance from a human."""
+    human_response = interrupt(
+        {
+            "question": "Is this correct?",
+            "name": name,
+            "birthday": birthday,
+        },
+    )
+    # If the information is correct, update the state as-is.
+    if human_response.get("correct", "").lower().startswith("y"):
+        verified_name = name
+        verified_birthday = birthday
+        response = "Correct"
+    # Otherwise, receive information from the human reviewer.
+    else:
+        verified_name = human_response.get("name", name)
+        verified_birthday = human_response.get("birthday", birthday)
+        response = f"Made a correction: {human_response}"
+
+    # This time we explicitly update the state with a ToolMessage inside
+    # the tool.
+    state_update = {
+        "name": verified_name,
+        "birthday": verified_birthday,
+        "messages": [ToolMessage(response, tool_call_id=tool_call_id)],
+    }
+    # We return a Command object in the tool to update our state.
+    return Command(update=state_update)
+```
+
+图的其他部分保持不变。
+
+#### 1.6.3 提示聊天机器人
+
+提示聊天机器人查询 LangGraph 库的"生日"，并在获取所需信息后指示聊天机器人联系 `human_assistance` 工具。通过在工具的参数中设置 `name` 和 `birthday`，你强制聊天机器人为这些字段生成建议。
+
+```python
+user_input = (
+    "Can you look up when LangGraph was released? "
+    "When you have the answer, use the human_assistance tool for review."
+)
+config = {"configurable": {"thread_id": "1"}}
+
+events = graph.stream(
+    {"messages": [{"role": "user", "content": user_input}]},
+    config,
+    stream_mode="values",
+)
+for event in events:
+    if "messages" in event:
+        event["messages"][-1].pretty_print()
+```
+
+```
+================================ Human Message =================================
+
+Can you look up when LangGraph was released? When you have the answer, use the human_assistance tool for review.
+================================== Ai Message ==================================
+
+[{'text': "Certainly! I'll start by searching for information about LangGraph's release date using the Tavily search function. Then, I'll use the human_assistance tool for review.", 'type': 'text'}, {'id': 'toolu_01JoXQPgTVJXiuma8xMVwqAi', 'input': {'query': 'LangGraph release date'}, 'name': 'tavily_search_results_json', 'type': 'tool_use'}]
+Tool Calls:
+  tavily_search_results_json (toolu_01JoXQPgTVJXiuma8xMVwqAi)
+ Call ID: toolu_01JoXQPgTVJXiuma8xMVwqAi
+  Args:
+    query: LangGraph release date
+================================= Tool Message =================================
+Name: tavily_search_results_json
+
+[{"url": "https://blog.langchain.dev/langgraph-cloud/", "content": "We also have a new stable release of LangGraph. By LangChain 6 min read Jun 27, 2024 (Oct '24) Edit: Since the launch of LangGraph Platform, we now have multiple deployment options alongside LangGraph Studio - which now fall under LangGraph Platform. LangGraph Platform is synonymous with our Cloud SaaS deployment option."}, {"url": "https://changelog.langchain.com/announcements/langgraph-cloud-deploy-at-scale-monitor-carefully-iterate-boldly", "content": "LangChain - Changelog | ☁ 🚀 LangGraph Platform: Deploy at scale, monitor LangChain LangSmith LangGraph LangChain LangSmith LangGraph LangChain LangSmith LangGraph LangChain Changelog Sign up for our newsletter to stay up to date DATE: The LangChain Team LangGraph LangGraph Platform ☁ 🚀 LangGraph Platform: Deploy at scale, monitor carefully, iterate boldly DATE: June 27, 2024 AUTHOR: The LangChain Team LangGraph Platform is now in closed beta, offering scalable, fault-tolerant deployment for LangGraph agents. LangGraph Platform also includes a new playground-like studio for debugging agent failure modes and quick iteration: Join the waitlist today for LangGraph Platform. And to learn more, read our blog post announcement or check out our docs. Subscribe By clicking subscribe, you accept our privacy policy and terms and conditions."}]
+================================== Ai Message ==================================
+
+[{'text': "Based on the search results, it appears that LangGraph was already in existence before June 27, 2024, when LangGraph Platform was announced. However, the search results don't provide a specific release date for the original LangGraph. \n\nGiven this information, I'll use the human_assistance tool to review and potentially provide more accurate information about LangGraph's initial release date.", 'type': 'text'}, {'id': 'toolu_01JDQAV7nPqMkHHhNs3j3XoN', 'input': {'name': 'Assistant', 'birthday': '2023-01-01'}, 'name': 'human_assistance', 'type': 'tool_use'}]
+Tool Calls:
+  human_assistance (toolu_01JDQAV7nPqMkHHhNs3j3XoN)
+ Call ID: toolu_01JDQAV7nPqMkHHhNs3j3XoN
+  Args:
+    name: Assistant
+    birthday: 2023-01-01
+```
+
+我们再次遇到了 `human_assistance` 工具中的 `interrupt`。
+
+#### 1.6.4 添加人工协助
+
+聊天机器人未能识别正确日期，因此向它提供信息：
+
+```python
+human_command = Command(
+    resume={
+        "name": "LangGraph",
+        "birthday": "Jan 17, 2024",
+    },
+)
+
+events = graph.stream(human_command, config, stream_mode="values")
+for event in events:
+    if "messages" in event:
+        event["messages"][-1].pretty_print()
+```
+
+```
+================================== Ai Message ==================================
+
+[{'text': "Based on the search results, it appears that LangGraph was already in existence before June 27, 2024, when LangGraph Platform was announced. However, the search results don't provide a specific release date for the original LangGraph. \n\nGiven this information, I'll use the human_assistance tool to review and potentially provide more accurate information about LangGraph's initial release date.", 'type': 'text'}, {'id': 'toolu_01JDQAV7nPqMkHHhNs3j3XoN', 'input': {'name': 'Assistant', 'birthday': '2023-01-01'}, 'name': 'human_assistance', 'type': 'tool_use'}]
+Tool Calls:
+  human_assistance (toolu_01JDQAV7nPqMkHHhNs3j3XoN)
+ Call ID: toolu_01JDQAV7nPqMkHHhNs3j3XoN
+  Args:
+    name: Assistant
+    birthday: 2023-01-01
+================================= Tool Message =================================
+Name: human_assistance
+
+Made a correction: {'name': 'LangGraph', 'birthday': 'Jan 17, 2024'}
+================================== Ai Message ==================================
+
+Thank you for the human assistance. I can now provide you with the correct information about LangGraph's release date.
+
+LangGraph was initially released on January 17, 2024. This information comes from the human assistance correction, which is more accurate than the search results I initially found.
+
+To summarize:
+1. LangGraph's original release date: January 17, 2024
+2. LangGraph Platform announcement: June 27, 2024
+
+It's worth noting that LangGraph had been in development and use for some time before the LangGraph Platform announcement, but the official initial release of LangGraph itself was on January 17, 2024.
+```
+
+请注意这些字段现在已反映在状态中：
+
+```python
+snapshot = graph.get_state(config)
+
+{k: v for k, v in snapshot.values.items() if k in ("name", "birthday")}
+{'name': 'LangGraph', 'birthday': 'Jan 17, 2024'}
+```
+
+这使得它们可以轻松地被下游节点（例如，进一步处理或存储信息的节点）访问。
+
+#### 1.6.5 手动更新状态
+
+LangGraph 对应用程序状态提供了高度的控制。例如，在任何时刻（包括中断时），您可以使用 `graph.update_state` 手动覆盖一个键：
+
+```python
+graph.update_state(config, {"name": "LangGraph (library)"})
+```
+
+```
+{'configurable': {'thread_id': '1','checkpoint_ns': '','checkpoint_id': '1efd4ec5-cf69-6352-8006-9278f1730162'}}
+```
+
+#### 1.6.6 查看新值
+
+如果你调用 `graph.get_state`，你可以看到新值被反映：
+
+```python
+snapshot = graph.get_state(config)
+
+{k: v for k, v in snapshot.values.items() if k in ("name", "birthday")}
+{'name': 'LangGraph (library)', 'birthday': 'Jan 17, 2024'}
+```
+
+手动状态更新将在 LangSmith 中[生成一个追踪 ](https://smith.langchain.com/public/7ebb7827-378d-49fe-9f6c-5df0e90086c8/r?ajs_aid=3cc2a450-7f1b-4d21-9c0b-f09d1704da91)。如果需要，它们也可以用来[控制人机交互工作流 ](https://langchain-ai.github.io/langgraph/how-tos/human_in_the_loop/add-human-in-the-loop/)。通常建议使用 `interrupt` 函数，因为它允许在独立于状态更新的情况下，在人机交互中传输数据。
+
+**恭喜！** 你已将自定义键添加到状态中，以促进更复杂的工作流程，并学习了如何从工具内部生成状态更新。
+
+查看下面的代码片段，以回顾本教程中的图表：
+
+```
+pip install -U "langchain[openai]"
+```
+
+```py
+import os
+from langchain.chat_models import init_chat_model
+
+os.environ["OPENAI_API_KEY"] = "sk-..."
+
+llm = init_chat_model("openai:gpt-4.1")
+```
+
+```python
+from typing import Annotated
+
+from langchain_tavily import TavilySearch
+from langchain_core.messages import ToolMessage
+from langchain_core.tools import InjectedToolCallId, tool
+from typing_extensions import TypedDict
+
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+from langgraph.types import Command, interrupt
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+    name: str
+    birthday: str
+
+@tool
+def human_assistance(
+    name: str, birthday: str, tool_call_id: Annotated[str, InjectedToolCallId]
+) -> str:
+    """Request assistance from a human."""
+    human_response = interrupt(
+        {
+            "question": "Is this correct?",
+            "name": name,
+            "birthday": birthday,
+        },
+    )
+    if human_response.get("correct", "").lower().startswith("y"):
+        verified_name = name
+        verified_birthday = birthday
+        response = "Correct"
+    else:
+        verified_name = human_response.get("name", name)
+        verified_birthday = human_response.get("birthday", birthday)
+        response = f"Made a correction: {human_response}"
+
+    state_update = {
+        "name": verified_name,
+        "birthday": verified_birthday,
+        "messages": [ToolMessage(response, tool_call_id=tool_call_id)],
+    }
+    return Command(update=state_update)
 
 
+tool = TavilySearch(max_results=2)
+tools = [tool, human_assistance]
+llm_with_tools = llm.bind_tools(tools)
+
+def chatbot(state: State):
+    message = llm_with_tools.invoke(state["messages"])
+    assert(len(message.tool_calls) <= 1)
+    return {"messages": [message]}
+
+graph_builder = StateGraph(State)
+graph_builder.add_node("chatbot", chatbot)
+
+tool_node = ToolNode(tools=tools)
+graph_builder.add_node("tools", tool_node)
+
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition,
+)
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+
+memory = InMemorySaver()
+graph = graph_builder.compile(checkpointer=memory)
+```
+
+### 1.7 时间旅行
+
+在典型的聊天机器人工作流程中，用户与机器人交互一次或多次以完成一项任务。[记忆](https://langchain-ai.github.io/langgraph/tutorials/get-started/3-add-memory/)和[人工参与](https://langchain-ai.github.io/langgraph/tutorials/get-started/4-human-in-the-loop/)使图状态中的检查点得以实现，并控制未来的响应。
+
+如果你想让用户能够从之前的响应开始并探索不同的结果怎么办？或者如果你想让用户能够倒带聊天机器人的工作以修正错误或尝试不同的策略，这在像自主软件工程师这样的应用中很常见吗？
+
+您可以使用 LangGraph 的内置**时间旅行**功能创建这些类型的体验。
+
+#### 1.7.1 回溯您的图
+
+通过使用图的 `get_state_history` 方法获取检查点来回溯您的图。然后，您可以在这个先前的时间点继续执行。
+
+```
+pip install -U "langchain[openai]"
+```
+
+```python
+import os
+from langchain.chat_models import init_chat_model
+
+os.environ["OPENAI_API_KEY"] = "sk-..."
+
+llm = init_chat_model("openai:gpt-4.1")
+```
+
+👉 阅读 [OpenAI 集成文档](https://python.langchain.com/docs/integrations/chat/openai/)
+
+```python
+from typing import Annotated
+
+from langchain_tavily import TavilySearch
+from langchain_core.messages import BaseMessage
+from typing_extensions import TypedDict
+
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+
+graph_builder = StateGraph(State)
+
+tool = TavilySearch(max_results=2)
+tools = [tool]
+llm_with_tools = llm.bind_tools(tools)
+
+def chatbot(state: State):
+    return {"messages": [llm_with_tools.invoke(state["messages"])]}
+
+graph_builder.add_node("chatbot", chatbot)
+
+tool_node = ToolNode(tools=[tool])
+graph_builder.add_node("tools", tool_node)
+
+graph_builder.add_conditional_edges(
+    "chatbot",
+    tools_condition,
+)
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+
+memory = InMemorySaver()
+graph = graph_builder.compile(checkpointer=memory)
+```
+
+#### 1.7.2 添加步骤
+
+向您的图添加步骤。每个步骤都会在它的状态历史中被打点：
+
+```python
+config = {"configurable": {"thread_id": "1"}}
+events = graph.stream(
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": (
+                    "I'm learning LangGraph. "
+                    "Could you do some research on it for me?"
+                ),
+            },
+        ],
+    },
+    config,
+    stream_mode="values",
+)
+for event in events:
+    if "messages" in event:
+        event["messages"][-1].pretty_print()
+```
+
+```
+================================ Human Message =================================
+
+I'm learning LangGraph. Could you do some research on it for me?
+================================== Ai Message ==================================
+
+[{'text': "Certainly! I'd be happy to research LangGraph for you. To get the most up-to-date and accurate information, I'll use the Tavily search engine to look this up. Let me do that for you now.", 'type': 'text'}, {'id': 'toolu_01BscbfJJB9EWJFqGrN6E54e', 'input': {'query': 'LangGraph latest information and features'}, 'name': 'tavily_search_results_json', 'type': 'tool_use'}]
+Tool Calls:
+  tavily_search_results_json (toolu_01BscbfJJB9EWJFqGrN6E54e)
+ Call ID: toolu_01BscbfJJB9EWJFqGrN6E54e
+  Args:
+    query: LangGraph latest information and features
+================================= Tool Message =================================
+Name: tavily_search_results_json
+
+[{"url": "https://blockchain.news/news/langchain-new-features-upcoming-events-update", "content": "LangChain, a leading platform in the AI development space, has released its latest updates, showcasing new use cases and enhancements across its ecosystem. According to the LangChain Blog, the updates cover advancements in LangGraph Platform, LangSmith's self-improving evaluators, and revamped documentation for LangGraph."}, {"url": "https://blog.langchain.dev/langgraph-platform-announce/", "content": "With these learnings under our belt, we decided to couple some of our latest offerings under LangGraph Platform. LangGraph Platform today includes LangGraph Server, LangGraph Studio, plus the CLI and SDK. ... we added features in LangGraph Server to deliver on a few key value areas. Below, we'll focus on these aspects of LangGraph Platform."}]
+================================== Ai Message ==================================
+
+Thank you for your patience. I've found some recent information about LangGraph for you. Let me summarize the key points:
+
+1. LangGraph is part of the LangChain ecosystem, which is a leading platform in AI development.
+
+2. Recent updates and features of LangGraph include:
+
+   a. LangGraph Platform: This seems to be a cloud-based version of LangGraph, though specific details weren't provided in the search results.
+...
+3. Keep an eye on LangGraph Platform developments, as cloud-based solutions often provide an easier starting point for learners.
+4. Consider how LangGraph fits into the broader LangChain ecosystem, especially its interaction with tools like LangSmith.
+
+Is there any specific aspect of LangGraph you'd like to know more about? I'd be happy to do a more focused search on particular features or use cases.
+Output is truncated. View as a scrollable element or open in a text editor. Adjust cell output settings...
+```
+
+```python
+events = graph.stream(
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": (
+                    "Ya that's helpful. Maybe I'll "
+                    "build an autonomous agent with it!"
+                ),
+            },
+        ],
+    },
+    config,
+    stream_mode="values",
+)
+for event in events:
+    if "messages" in event:
+        event["messages"][-1].pretty_print()
+```
+
+```
+================================ Human Message =================================
+
+Ya that's helpful. Maybe I'll build an autonomous agent with it!
+================================== Ai Message ==================================
+
+[{'text': "That's an exciting idea! Building an autonomous agent with LangGraph is indeed a great application of this technology. LangGraph is particularly well-suited for creating complex, multi-step AI workflows, which is perfect for autonomous agents. Let me gather some more specific information about using LangGraph for building autonomous agents.", 'type': 'text'}, {'id': 'toolu_01QWNHhUaeeWcGXvA4eHT7Zo', 'input': {'query': 'Building autonomous agents with LangGraph examples and tutorials'}, 'name': 'tavily_search_results_json', 'type': 'tool_use'}]
+Tool Calls:
+  tavily_search_results_json (toolu_01QWNHhUaeeWcGXvA4eHT7Zo)
+ Call ID: toolu_01QWNHhUaeeWcGXvA4eHT7Zo
+  Args:
+    query: Building autonomous agents with LangGraph examples and tutorials
+================================= Tool Message =================================
+Name: tavily_search_results_json
+
+[{"url": "https://towardsdatascience.com/building-autonomous-multi-tool-agents-with-gemini-2-0-and-langgraph-ad3d7bd5e79d", "content": "Building Autonomous Multi-Tool Agents with Gemini 2.0 and LangGraph | by Youness Mansar | Jan, 2025 | Towards Data Science Building Autonomous Multi-Tool Agents with Gemini 2.0 and LangGraph A practical tutorial with full code examples for building and running multi-tool agents Towards Data Science LLMs are remarkable — they can memorize vast amounts of information, answer general knowledge questions, write code, generate stories, and even fix your grammar. In this tutorial, we are going to build a simple LLM agent that is equipped with four tools that it can use to answer a user’s question. This Agent will have the following specifications: Follow Published in Towards Data Science --------------------------------- Your home for data science and AI. Follow Follow Follow"}, {"url": "https://github.com/anmolaman20/Tools_and_Agents", "content": "GitHub - anmolaman20/Tools_and_Agents: This repository provides resources for building AI agents using Langchain and Langgraph. This repository provides resources for building AI agents using Langchain and Langgraph. This repository provides resources for building AI agents using Langchain and Langgraph. This repository serves as a comprehensive guide for building AI-powered agents using Langchain and Langgraph. It provides hands-on examples, practical tutorials, and resources for developers and AI enthusiasts to master building intelligent systems and workflows. AI Agent Development: Gain insights into creating intelligent systems that think, reason, and adapt in real time. This repository is ideal for AI practitioners, developers exploring language models, or anyone interested in building intelligent systems. This repository provides resources for building AI agents using Langchain and Langgraph."}]
+================================== Ai Message ==================================
+
+Great idea! Building an autonomous agent with LangGraph is definitely an exciting project. Based on the latest information I've found, here are some insights and tips for building autonomous agents with LangGraph:
+
+1. Multi-Tool Agents: LangGraph is particularly well-suited for creating autonomous agents that can use multiple tools. This allows your agent to have a diverse set of capabilities and choose the right tool for each task.
+
+2. Integration with Large Language Models (LLMs): You can combine LangGraph with powerful LLMs like Gemini 2.0 to create more intelligent and capable agents. The LLM can serve as the "brain" of your agent, making decisions and generating responses.
+
+3. Workflow Management: LangGraph excels at managing complex, multi-step AI workflows. This is crucial for autonomous agents that need to break down tasks into smaller steps and execute them in the right order.
+...
+6. Pay attention to how you structure the agent's decision-making process and workflow.
+7. Don't forget to implement proper error handling and safety measures, especially if your agent will be interacting with external systems or making important decisions.
+
+Building an autonomous agent is an iterative process, so be prepared to refine and improve your agent over time. Good luck with your project! If you need any more specific information as you progress, feel free to ask.
+Output is truncated. View as a scrollable element or open in a text editor. Adjust cell output settings...
+```
+
+#### 1.7.3 重播完整状态历史
+
+现在您已向聊天机器人添加了步骤，可以`回放`完整的状态历史，以查看所有发生的情况。
+
+```python
+to_replay = None
+for state in graph.get_state_history(config):
+    print("Num Messages: ", len(state.values["messages"]), "Next: ", state.next)
+    print("-" * 80)
+    if len(state.values["messages"]) == 6:
+        # We are somewhat arbitrarily selecting a specific state based on the number of chat messages in the state.
+        to_replay = state
+```
+
+```
+Num Messages:  8 Next:  ()
+--------------------------------------------------------------------------------
+Num Messages:  7 Next:  ('chatbot',)
+--------------------------------------------------------------------------------
+Num Messages:  6 Next:  ('tools',)
+--------------------------------------------------------------------------------
+Num Messages:  5 Next:  ('chatbot',)
+--------------------------------------------------------------------------------
+Num Messages:  4 Next:  ('__start__',)
+--------------------------------------------------------------------------------
+Num Messages:  4 Next:  ()
+--------------------------------------------------------------------------------
+Num Messages:  3 Next:  ('chatbot',)
+--------------------------------------------------------------------------------
+Num Messages:  2 Next:  ('tools',)
+--------------------------------------------------------------------------------
+Num Messages:  1 Next:  ('chatbot',)
+--------------------------------------------------------------------------------
+Num Messages:  0 Next:  ('__start__',)
+--------------------------------------------------------------------------------
+```
+
+检查点会保存图中的每一步。这 **跨越调用** ，因此你可以回溯整个线程的历史。
+
+#### 1.7.4 从检查点恢复
+
+从 `to_replay` 状态恢复，该状态位于第二次图调用中的 `chatbot` 节点之后。从这一点恢复将调用 `action` 节点。
+
+```python
+print(to_replay.next)
+print(to_replay.config)
+```
+
+```
+('tools',)
+{'configurable': {'thread_id': '1', 'checkpoint_ns': '', 'checkpoint_id': '1efd43e3-0c1f-6c4e-8006-891877d65740'}}
+```
+
+#### 1.7.4 从某个时间点加载状态
+
+检查点的 `to_replay.config` 包含一个 `checkpoint_id` 时间戳。提供这个 `checkpoint_id` 值会指示 LangGraph 的检查点器 **加载** 那个时间点的状态。
+
+```python
+# The `checkpoint_id` in the `to_replay.config` corresponds to a state we've persisted to our checkpointer.
+for event in graph.stream(None, to_replay.config, stream_mode="values"):
+    if "messages" in event:
+        event["messages"][-1].pretty_print()
+```
+
+```
+================================== Ai Message ==================================
+
+[{'text': "That's an exciting idea! Building an autonomous agent with LangGraph is indeed a great application of this technology. LangGraph is particularly well-suited for creating complex, multi-step AI workflows, which is perfect for autonomous agents. Let me gather some more specific information about using LangGraph for building autonomous agents.", 'type': 'text'}, {'id': 'toolu_01QWNHhUaeeWcGXvA4eHT7Zo', 'input': {'query': 'Building autonomous agents with LangGraph examples and tutorials'}, 'name': 'tavily_search_results_json', 'type': 'tool_use'}]
+Tool Calls:
+  tavily_search_results_json (toolu_01QWNHhUaeeWcGXvA4eHT7Zo)
+ Call ID: toolu_01QWNHhUaeeWcGXvA4eHT7Zo
+  Args:
+    query: Building autonomous agents with LangGraph examples and tutorials
+================================= Tool Message =================================
+Name: tavily_search_results_json
+
+[{"url": "https://towardsdatascience.com/building-autonomous-multi-tool-agents-with-gemini-2-0-and-langgraph-ad3d7bd5e79d", "content": "Building Autonomous Multi-Tool Agents with Gemini 2.0 and LangGraph | by Youness Mansar | Jan, 2025 | Towards Data Science Building Autonomous Multi-Tool Agents with Gemini 2.0 and LangGraph A practical tutorial with full code examples for building and running multi-tool agents Towards Data Science LLMs are remarkable — they can memorize vast amounts of information, answer general knowledge questions, write code, generate stories, and even fix your grammar. In this tutorial, we are going to build a simple LLM agent that is equipped with four tools that it can use to answer a user’s question. This Agent will have the following specifications: Follow Published in Towards Data Science --------------------------------- Your home for data science and AI. Follow Follow Follow"}, {"url": "https://github.com/anmolaman20/Tools_and_Agents", "content": "GitHub - anmolaman20/Tools_and_Agents: This repository provides resources for building AI agents using Langchain and Langgraph. This repository provides resources for building AI agents using Langchain and Langgraph. This repository provides resources for building AI agents using Langchain and Langgraph. This repository serves as a comprehensive guide for building AI-powered agents using Langchain and Langgraph. It provides hands-on examples, practical tutorials, and resources for developers and AI enthusiasts to master building intelligent systems and workflows. AI Agent Development: Gain insights into creating intelligent systems that think, reason, and adapt in real time. This repository is ideal for AI practitioners, developers exploring language models, or anyone interested in building intelligent systems. This repository provides resources for building AI agents using Langchain and Langgraph."}]
+================================== Ai Message ==================================
+
+Great idea! Building an autonomous agent with LangGraph is indeed an excellent way to apply and deepen your understanding of the technology. Based on the search results, I can provide you with some insights and resources to help you get started:
+
+1. Multi-Tool Agents:
+   LangGraph is well-suited for building autonomous agents that can use multiple tools. This allows your agent to have a variety of capabilities and choose the appropriate tool based on the task at hand.
+
+2. Integration with Large Language Models (LLMs):
+   There's a tutorial that specifically mentions using Gemini 2.0 (Google's LLM) with LangGraph to build autonomous agents. This suggests that LangGraph can be integrated with various LLMs, giving you flexibility in choosing the language model that best fits your needs.
+
+3. Practical Tutorials:
+   There are tutorials available that provide full code examples for building and running multi-tool agents. These can be invaluable as you start your project, giving you a concrete starting point and demonstrating best practices.
+...
+
+Remember, building an autonomous agent is an iterative process. Start simple and gradually increase complexity as you become more comfortable with LangGraph and its capabilities.
+
+Would you like more information on any specific aspect of building your autonomous agent with LangGraph?
+Output is truncated. View as a scrollable element or open in a text editor. Adjust cell output settings...
+```
+
+该图从 `action` 节点恢复执行。你可以看出这一点，因为上面打印的第一个值是我们搜索引擎工具的响应。
+
+**恭喜！** 您现在已经在 LangGraph 中使用了时间旅行检查点遍历。能够回溯并探索替代路径，为调试、实验和交互式应用打开了无限可能。
+
+## 2、工作流和代理
+
+本指南回顾了智能体系统的常见模式。在描述这些系统时，区分“工作流”和“智能体”可能很有用。这种差异的一种思考方式在 [Anthropic](https://python.langchain.com/docs/integrations/providers/anthropic/?__hstc=5909356.07e26e39de75a1660439efac016db969.1753359841193.1753613895369.1753629627212.7&__hssc=5909356.1.1753629627212&__hsfp=1034399852)`Building Effective Agents` 博客文章中有很好的解释：
+
+> 工作流是 LLMs 和工具通过预定义的代码路径进行协调的系统。而智能体则是 LLMs 动态指导其自身过程和工具使用的系统，它们保持对完成任务方式的控制。
+
+这里有一种简单的方法来可视化这些差异：
+
+![Agent Workflow](https://langchain-ai.github.io/langgraph/concepts/img/agent_workflow.png)
+
+在构建代理和工作流时，LangGraph 提供了多种好处，包括持久化、流式传输以及支持调试和部署。
+
+### 2.1 设置
+
+您可以使用支持结构化输出和工具调用的任何聊天模型。下面，我们展示了安装包、设置 API 密钥以及测试 Anthropic 的结构化输出/工具调用的过程。
+
+```
+pip install langchain_core langchain-anthropic langgraph
+```
+
+初始化一个 LLM
+
+```python
+import os
+import getpass
+
+from langchain_anthropic import ChatAnthropic
+
+def _set_env(var: str):
+    if not os.environ.get(var):
+        os.environ[var] = getpass.getpass(f"{var}: ")
 
 
+_set_env("ANTHROPIC_API_KEY")
+
+llm = ChatAnthropic(model="claude-3-5-sonnet-latest")
+```
+
+### 2.2 构建模块：增强型 LLM
+
+LLM 具有支持构建工作流和代理的增强功能。这些功能包括[结构化输出](https://python.langchain.com/docs/concepts/structured_outputs/?__hstc=5909356.07e26e39de75a1660439efac016db969.1753359841193.1753613895369.1753629627212.7&__hssc=5909356.1.1753629627212&__hsfp=1034399852)和[工具调用 ](https://python.langchain.com/docs/concepts/tool_calling/?__hstc=5909356.07e26e39de75a1660439efac016db969.1753359841193.1753613895369.1753629627212.7&__hssc=5909356.1.1753629627212&__hsfp=1034399852)，如 Anthropic 博客中《` 构建高效代理 `》文章中的这张图片所示：
+
+![augmented_llm.png](./img/小米虫爬山路-py版-img/augmented_llm.png)
+
+```python
+# Schema for structured output
+from pydantic import BaseModel, Field
+
+class SearchQuery(BaseModel):
+    search_query: str = Field(None, description="Query that is optimized web search.")
+    justification: str = Field(
+        None, description="Why this query is relevant to the user's request."
+    )
+
+
+# Augment the LLM with schema for structured output
+structured_llm = llm.with_structured_output(SearchQuery)
+
+# Invoke the augmented LLM
+output = structured_llm.invoke("How does Calcium CT score relate to high cholesterol?")
+
+# Define a tool
+def multiply(a: int, b: int) -> int:
+    return a * b
+
+# Augment the LLM with tools
+llm_with_tools = llm.bind_tools([multiply])
+
+# Invoke the LLM with input that triggers the tool call
+msg = llm_with_tools.invoke("What is 2 times 3?")
+
+# Get the tool call
+msg.tool_calls
+```
+
+### 2.3 提示链
+
+在提示链中，每个 LLM 调用处理前一个调用的输出。
+
+正如 Anthropic 在 `Building Effective Agents` 博客中所述：
+
+> 提示链将任务分解为一系列步骤，其中每个 LLM 调用处理前一个调用的输出。您可以在任何中间步骤上添加程序化检查（见下图中的“gate”）以确保流程仍在轨道上。
+>
+> 何时使用此工作流：当任务可以轻松且清晰地分解为固定子任务时，此工作流非常理想。主要目标是权衡延迟以换取更高的准确性，通过使每个 LLM 调用成为一项更简单的任务。
+
+![prompt_chain.png](./img/小米虫爬山路-py版-img/prompt_chain.png)
+
+```python
+from typing_extensions import TypedDict
+from langgraph.graph import StateGraph, START, END
+from IPython.display import Image, display
+
+
+# Graph state
+class State(TypedDict):
+    topic: str
+    joke: str
+    improved_joke: str
+    final_joke: str
+
+
+# Nodes
+def generate_joke(state: State):
+    """First LLM call to generate initial joke"""
+
+    msg = llm.invoke(f"Write a short joke about {state['topic']}")
+    return {"joke": msg.content}
+
+
+def check_punchline(state: State):
+    """Gate function to check if the joke has a punchline"""
+
+    # Simple check - does the joke contain "?" or "!"
+    if "?" in state["joke"] or "!" in state["joke"]:
+        return "Pass"
+    return "Fail"
+
+
+def improve_joke(state: State):
+    """Second LLM call to improve the joke"""
+
+    msg = llm.invoke(f"Make this joke funnier by adding wordplay: {state['joke']}")
+    return {"improved_joke": msg.content}
+
+
+def polish_joke(state: State):
+    """Third LLM call for final polish"""
+
+    msg = llm.invoke(f"Add a surprising twist to this joke: {state['improved_joke']}")
+    return {"final_joke": msg.content}
+
+
+# Build workflow
+workflow = StateGraph(State)
+
+# Add nodes
+workflow.add_node("generate_joke", generate_joke)
+workflow.add_node("improve_joke", improve_joke)
+workflow.add_node("polish_joke", polish_joke)
+
+# Add edges to connect nodes
+workflow.add_edge(START, "generate_joke")
+workflow.add_conditional_edges(
+    "generate_joke", check_punchline, {"Fail": "improve_joke", "Pass": END}
+)
+workflow.add_edge("improve_joke", "polish_joke")
+workflow.add_edge("polish_joke", END)
+
+# Compile
+chain = workflow.compile()
+
+# Show workflow
+display(Image(chain.get_graph().draw_mermaid_png()))
+
+# Invoke
+state = chain.invoke({"topic": "cats"})
+print("Initial joke:")
+print(state["joke"])
+print("\n--- --- ---\n")
+if "improved_joke" in state:
+    print("Improved joke:")
+    print(state["improved_joke"])
+    print("\n--- --- ---\n")
+
+    print("Final joke:")
+    print(state["final_joke"])
+else:
+    print("Joke failed quality gate - no punchline detected!")
+```
+
+### 2.4 并行化
+
+通过并行化，LLMs 同时处理一个任务：
+
+>LLMs 有时可以同时处理一个任务，并程序性地聚合它们的输出。这种工作流程，并行化，表现为两种关键变化：分段：将任务分解为并行运行的独立子任务。投票：多次运行相同任务以获得多样化的输出。
+>
+>何时使用此工作流程：当分解的子任务可以并行化以提高速度，或者需要多个视角或尝试以获得更高置信度的结果时，并行化是有效的。对于具有多个考量的复杂任务，当每个考量都由单独的 LLM 调用处理时，LLMs 通常表现更好，这允许专注于每个特定方面。
+
+![parallelization.png](./img/小米虫爬山路-py版-img/parallelization.png)
+
+```python
+# Graph state
+class State(TypedDict):
+    topic: str
+    joke: str
+    story: str
+    poem: str
+    combined_output: str
+
+
+# Nodes
+def call_llm_1(state: State):
+    """First LLM call to generate initial joke"""
+
+    msg = llm.invoke(f"Write a joke about {state['topic']}")
+    return {"joke": msg.content}
+
+
+def call_llm_2(state: State):
+    """Second LLM call to generate story"""
+
+    msg = llm.invoke(f"Write a story about {state['topic']}")
+    return {"story": msg.content}
+
+
+def call_llm_3(state: State):
+    """Third LLM call to generate poem"""
+
+    msg = llm.invoke(f"Write a poem about {state['topic']}")
+    return {"poem": msg.content}
+
+
+def aggregator(state: State):
+    """Combine the joke and story into a single output"""
+
+    combined = f"Here's a story, joke, and poem about {state['topic']}!\n\n"
+    combined += f"STORY:\n{state['story']}\n\n"
+    combined += f"JOKE:\n{state['joke']}\n\n"
+    combined += f"POEM:\n{state['poem']}"
+    return {"combined_output": combined}
+
+
+# Build workflow
+parallel_builder = StateGraph(State)
+
+# Add nodes
+parallel_builder.add_node("call_llm_1", call_llm_1)
+parallel_builder.add_node("call_llm_2", call_llm_2)
+parallel_builder.add_node("call_llm_3", call_llm_3)
+parallel_builder.add_node("aggregator", aggregator)
+
+# Add edges to connect nodes
+parallel_builder.add_edge(START, "call_llm_1")
+parallel_builder.add_edge(START, "call_llm_2")
+parallel_builder.add_edge(START, "call_llm_3")
+parallel_builder.add_edge("call_llm_1", "aggregator")
+parallel_builder.add_edge("call_llm_2", "aggregator")
+parallel_builder.add_edge("call_llm_3", "aggregator")
+parallel_builder.add_edge("aggregator", END)
+parallel_workflow = parallel_builder.compile()
+
+# Show workflow
+display(Image(parallel_workflow.get_graph().draw_mermaid_png()))
+
+# Invoke
+state = parallel_workflow.invoke({"topic": "cats"})
+print(state["combined_output"])
+```
+
+### 2.5 路由
+
+路由对输入进行分类并将其导向后续任务。正如 Anthropic 在《` 构建高效代理 `》博客中所述：
+
+> 路由分类输入并将其导向一个专门的处理任务。这种工作流允许关注点的分离，并构建更专业的提示。没有这种工作流，针对一种输入的优化可能会损害其他输入的性能。
+>
+> 何时使用此工作流：路由适用于复杂任务，其中存在不同的类别，这些类别更适合分别处理，并且分类可以由 LLM 或更传统的分类模型/算法准确处理。
+
+![routing.png](./img/小米虫爬山路-py版-img/routing.png)
+
+```python
+from typing_extensions import Literal
+from langchain_core.messages import HumanMessage, SystemMessage
+
+
+# Schema for structured output to use as routing logic
+class Route(BaseModel):
+    step: Literal["poem", "story", "joke"] = Field(
+        None, description="The next step in the routing process"
+    )
+
+
+# Augment the LLM with schema for structured output
+router = llm.with_structured_output(Route)
+
+
+# State
+class State(TypedDict):
+    input: str
+    decision: str
+    output: str
+
+
+# Nodes
+def llm_call_1(state: State):
+    """Write a story"""
+
+    result = llm.invoke(state["input"])
+    return {"output": result.content}
+
+
+def llm_call_2(state: State):
+    """Write a joke"""
+
+    result = llm.invoke(state["input"])
+    return {"output": result.content}
+
+
+def llm_call_3(state: State):
+    """Write a poem"""
+
+    result = llm.invoke(state["input"])
+    return {"output": result.content}
+
+
+def llm_call_router(state: State):
+    """Route the input to the appropriate node"""
+
+    # Run the augmented LLM with structured output to serve as routing logic
+    decision = router.invoke(
+        [
+            SystemMessage(
+                content="Route the input to story, joke, or poem based on the user's request."
+            ),
+            HumanMessage(content=state["input"]),
+        ]
+    )
+
+    return {"decision": decision.step}
+
+
+# Conditional edge function to route to the appropriate node
+def route_decision(state: State):
+    # Return the node name you want to visit next
+    if state["decision"] == "story":
+        return "llm_call_1"
+    elif state["decision"] == "joke":
+        return "llm_call_2"
+    elif state["decision"] == "poem":
+        return "llm_call_3"
+
+
+# Build workflow
+router_builder = StateGraph(State)
+
+# Add nodes
+router_builder.add_node("llm_call_1", llm_call_1)
+router_builder.add_node("llm_call_2", llm_call_2)
+router_builder.add_node("llm_call_3", llm_call_3)
+router_builder.add_node("llm_call_router", llm_call_router)
+
+# Add edges to connect nodes
+router_builder.add_edge(START, "llm_call_router")
+router_builder.add_conditional_edges(
+    "llm_call_router",
+    route_decision,
+    {  # Name returned by route_decision : Name of next node to visit
+        "llm_call_1": "llm_call_1",
+        "llm_call_2": "llm_call_2",
+        "llm_call_3": "llm_call_3",
+    },
+)
+router_builder.add_edge("llm_call_1", END)
+router_builder.add_edge("llm_call_2", END)
+router_builder.add_edge("llm_call_3", END)
+
+# Compile workflow
+router_workflow = router_builder.compile()
+
+# Show the workflow
+display(Image(router_workflow.get_graph().draw_mermaid_png()))
+
+# Invoke
+state = router_workflow.invoke({"input": "Write me a joke about cats"})
+print(state["output"])
+```
+
+### 2.6 编排器-工作器
+
+使用编排器-工作器，编排器会分解任务并将每个子任务分配给工作器。正如 Anthropic 在《` 构建高效代理 `》博客中所述：
+
+>在编排器-工作器工作流中，一个中心 LLM 会动态分解任务，将它们分配给工作器 LLMs，并整合它们的结果。
+>
+>何时使用此工作流：此工作流适用于无法预测所需子任务的复杂任务（例如在编程中，需要更改的文件数量以及每个文件中更改的性质很可能取决于任务）。虽然它与并行化在拓扑结构上相似，但关键区别在于其灵活性——子任务不是预先定义的，而是由协调者根据具体输入来确定。
+
+![worker.png](./img/小米虫爬山路-py版-img/worker.png)
+
+```python
+from typing import Annotated, List
+import operator
+
+
+# Schema for structured output to use in planning
+class Section(BaseModel):
+    name: str = Field(
+        description="Name for this section of the report.",
+    )
+    description: str = Field(
+        description="Brief overview of the main topics and concepts to be covered in this section.",
+    )
+
+
+class Sections(BaseModel):
+    sections: List[Section] = Field(
+        description="Sections of the report.",
+    )
+
+
+# Augment the LLM with schema for structured output
+planner = llm.with_structured_output(Sections)
+```
+
+**在 LangGraph 中创建工作员**
+
+由于协调器-工作节点工作流很常见，LangGraph **提供了 `Send` API 来支持这种工作流** 。它允许你动态创建工作节点，并将特定的输入发送给每个节点。每个工作节点都有自己的状态，所有工作节点的输出都会写入到一个*共享状态键* ，协调器图可以访问这个键。这使协调器能够获取所有工作节点的输出，并将其综合为最终的输出。如下方所示，我们遍历一个章节列表，并将每个章节 `Send` 给一个工作节点。请参考更多文档[此处](https://langchain-ai.github.io/langgraph/how-tos/map-reduce/)和[此处 ](https://langchain-ai.github.io/langgraph/concepts/low_level/#send)。
+
+```python
+from langgraph.types import Send
+
+
+# Graph state
+class State(TypedDict):
+    topic: str  # Report topic
+    sections: list[Section]  # List of report sections
+    completed_sections: Annotated[
+        list, operator.add
+    ]  # All workers write to this key in parallel
+    final_report: str  # Final report
+
+
+# Worker state
+class WorkerState(TypedDict):
+    section: Section
+    completed_sections: Annotated[list, operator.add]
+
+
+# Nodes
+def orchestrator(state: State):
+    """Orchestrator that generates a plan for the report"""
+
+    # Generate queries
+    report_sections = planner.invoke(
+        [
+            SystemMessage(content="Generate a plan for the report."),
+            HumanMessage(content=f"Here is the report topic: {state['topic']}"),
+        ]
+    )
+
+    return {"sections": report_sections.sections}
+
+
+def llm_call(state: WorkerState):
+    """Worker writes a section of the report"""
+
+    # Generate section
+    section = llm.invoke(
+        [
+            SystemMessage(
+                content="Write a report section following the provided name and description. Include no preamble for each section. Use markdown formatting."
+            ),
+            HumanMessage(
+                content=f"Here is the section name: {state['section'].name} and description: {state['section'].description}"
+            ),
+        ]
+    )
+
+    # Write the updated section to completed sections
+    return {"completed_sections": [section.content]}
+
+
+def synthesizer(state: State):
+    """Synthesize full report from sections"""
+
+    # List of completed sections
+    completed_sections = state["completed_sections"]
+
+    # Format completed section to str to use as context for final sections
+    completed_report_sections = "\n\n---\n\n".join(completed_sections)
+
+    return {"final_report": completed_report_sections}
+
+
+# Conditional edge function to create llm_call workers that each write a section of the report
+def assign_workers(state: State):
+    """Assign a worker to each section in the plan"""
+
+    # Kick off section writing in parallel via Send() API
+    return [Send("llm_call", {"section": s}) for s in state["sections"]]
+
+
+# Build workflow
+orchestrator_worker_builder = StateGraph(State)
+
+# Add the nodes
+orchestrator_worker_builder.add_node("orchestrator", orchestrator)
+orchestrator_worker_builder.add_node("llm_call", llm_call)
+orchestrator_worker_builder.add_node("synthesizer", synthesizer)
+
+# Add edges to connect nodes
+orchestrator_worker_builder.add_edge(START, "orchestrator")
+orchestrator_worker_builder.add_conditional_edges(
+    "orchestrator", assign_workers, ["llm_call"]
+)
+orchestrator_worker_builder.add_edge("llm_call", "synthesizer")
+orchestrator_worker_builder.add_edge("synthesizer", END)
+
+# Compile the workflow
+orchestrator_worker = orchestrator_worker_builder.compile()
+
+# Show the workflow
+display(Image(orchestrator_worker.get_graph().draw_mermaid_png()))
+
+# Invoke
+state = orchestrator_worker.invoke({"topic": "Create a report on LLM scaling laws"})
+
+from IPython.display import Markdown
+Markdown(state["final_report"])
+```
+
+### 2.7 评估器-优化器
+
+在 evaluator-optimizer 工作流中，一个 LLM 调用生成一个响应，同时另一个提供评估和反馈，形成一个循环：
+
+>在 evaluator-optimizer 工作流中，一个 LLM 调用生成一个响应，同时另一个提供评估和反馈，形成一个循环。
+>
+>何时使用此工作流程：当我们有明确的评估标准，并且迭代改进能带来可衡量的价值时，这个工作流程特别有效。良好的匹配有两个标志：首先，当人类清晰地表达他们的反馈时，LLM 的响应可以被明显地改进；其次，LLM 能够提供这样的反馈。这类似于人类作家在撰写一份精心打磨的文档时可能经历的迭代写作过程。
+
+![evaluator_optimizer.png](./img/小米虫爬山路-py版-img/evaluator_optimizer.png)
+
+```python
+# Graph state
+class State(TypedDict):
+    joke: str
+    topic: str
+    feedback: str
+    funny_or_not: str
+
+
+# Schema for structured output to use in evaluation
+class Feedback(BaseModel):
+    grade: Literal["funny", "not funny"] = Field(
+        description="Decide if the joke is funny or not.",
+    )
+    feedback: str = Field(
+        description="If the joke is not funny, provide feedback on how to improve it.",
+    )
+
+
+# Augment the LLM with schema for structured output
+evaluator = llm.with_structured_output(Feedback)
+
+
+# Nodes
+def llm_call_generator(state: State):
+    """LLM generates a joke"""
+
+    if state.get("feedback"):
+        msg = llm.invoke(
+            f"Write a joke about {state['topic']} but take into account the feedback: {state['feedback']}"
+        )
+    else:
+        msg = llm.invoke(f"Write a joke about {state['topic']}")
+    return {"joke": msg.content}
+
+
+def llm_call_evaluator(state: State):
+    """LLM evaluates the joke"""
+
+    grade = evaluator.invoke(f"Grade the joke {state['joke']}")
+    return {"funny_or_not": grade.grade, "feedback": grade.feedback}
+
+
+# Conditional edge function to route back to joke generator or end based upon feedback from the evaluator
+def route_joke(state: State):
+    """Route back to joke generator or end based upon feedback from the evaluator"""
+
+    if state["funny_or_not"] == "funny":
+        return "Accepted"
+    elif state["funny_or_not"] == "not funny":
+        return "Rejected + Feedback"
+
+
+# Build workflow
+optimizer_builder = StateGraph(State)
+
+# Add the nodes
+optimizer_builder.add_node("llm_call_generator", llm_call_generator)
+optimizer_builder.add_node("llm_call_evaluator", llm_call_evaluator)
+
+# Add edges to connect nodes
+optimizer_builder.add_edge(START, "llm_call_generator")
+optimizer_builder.add_edge("llm_call_generator", "llm_call_evaluator")
+optimizer_builder.add_conditional_edges(
+    "llm_call_evaluator",
+    route_joke,
+    {  # Name returned by route_joke : Name of next node to visit
+        "Accepted": END,
+        "Rejected + Feedback": "llm_call_generator",
+    },
+)
+
+# Compile the workflow
+optimizer_workflow = optimizer_builder.compile()
+
+# Show the workflow
+display(Image(optimizer_workflow.get_graph().draw_mermaid_png()))
+
+# Invoke
+state = optimizer_workflow.invoke({"topic": "Cats"})
+print(state["joke"])
+```
+
+### 2.8 Agent
+
+Agent 通常被实现为一个 LLM，它根据环境反馈在循环中执行操作（通过工具调用）。正如 Anthropic 在`构建高效 Agent` 博客中提到的：
+
+> Agent 可以处理复杂任务，但它们的实现通常很简单。它们通常是基于环境反馈在循环中使用工具的 LLM。因此，设计工具集及其文档时必须清晰且周全。
+>
+> 何时使用代理：代理可用于开放式问题，这些问题难以或不可能预测所需的步骤数，并且无法硬编码固定路径。LLM 可能会进行多轮操作，你必须对其决策有一定的信任。代理的自主性使它们非常适合在可信环境中扩展任务。
+
+![agent.png](./img/小米虫爬山路-py版-img/agent.png)
+
+```python
+from langchain_core.tools import tool
+
+
+# Define tools
+@tool
+def multiply(a: int, b: int) -> int:
+    """Multiply a and b.
+
+    Args:
+        a: first int
+        b: second int
+    """
+    return a * b
+
+
+@tool
+def add(a: int, b: int) -> int:
+    """Adds a and b.
+
+    Args:
+        a: first int
+        b: second int
+    """
+    return a + b
+
+
+@tool
+def divide(a: int, b: int) -> float:
+    """Divide a and b.
+
+    Args:
+        a: first int
+        b: second int
+    """
+    return a / b
+
+
+# Augment the LLM with tools
+tools = [add, multiply, divide]
+tools_by_name = {tool.name: tool for tool in tools}
+llm_with_tools = llm.bind_tools(tools)
+```
+
+```python
+from langgraph.graph import MessagesState
+from langchain_core.messages import SystemMessage, HumanMessage, ToolMessage
+
+
+# Nodes
+def llm_call(state: MessagesState):
+    """LLM decides whether to call a tool or not"""
+
+    return {
+        "messages": [
+            llm_with_tools.invoke(
+                [
+                    SystemMessage(
+                        content="You are a helpful assistant tasked with performing arithmetic on a set of inputs."
+                    )
+                ]
+                + state["messages"]
+            )
+        ]
+    }
+
+
+def tool_node(state: dict):
+    """Performs the tool call"""
+
+    result = []
+    for tool_call in state["messages"][-1].tool_calls:
+        tool = tools_by_name[tool_call["name"]]
+        observation = tool.invoke(tool_call["args"])
+        result.append(ToolMessage(content=observation, tool_call_id=tool_call["id"]))
+    return {"messages": result}
+
+
+# Conditional edge function to route to the tool node or end based upon whether the LLM made a tool call
+def should_continue(state: MessagesState) -> Literal["environment", END]:
+    """Decide if we should continue the loop or stop based upon whether the LLM made a tool call"""
+
+    messages = state["messages"]
+    last_message = messages[-1]
+    # If the LLM makes a tool call, then perform an action
+    if last_message.tool_calls:
+        return "Action"
+    # Otherwise, we stop (reply to the user)
+    return END
+
+
+# Build workflow
+agent_builder = StateGraph(MessagesState)
+
+# Add nodes
+agent_builder.add_node("llm_call", llm_call)
+agent_builder.add_node("environment", tool_node)
+
+# Add edges to connect nodes
+agent_builder.add_edge(START, "llm_call")
+agent_builder.add_conditional_edges(
+    "llm_call",
+    should_continue,
+    {
+        # Name returned by should_continue : Name of next node to visit
+        "Action": "environment",
+        END: END,
+    },
+)
+agent_builder.add_edge("environment", "llm_call")
+
+# Compile the agent
+agent = agent_builder.compile()
+
+# Show the agent
+display(Image(agent.get_graph(xray=True).draw_mermaid_png()))
+
+# Invoke
+messages = [HumanMessage(content="Add 3 and 4.")]
+messages = agent.invoke({"messages": messages})
+for m in messages["messages"]:
+    m.pretty_print()
+```
+
+#### 2.8.1 预构建
+
+LangGraph 还提供了一个预构建的方法来创建上述定义的代理（使用 [create_react_agent">`create_react_agent`](https://langchain-ai.github.io/langgraph/reference/agents/#langgraph.prebuilt.chat_agent_executor.create_react_agent) 函数）：
+
+https://langchain-ai.github.io/langgraph/how-tos/create-react-agent/
+
+API 参考：create_react_agent
+
+```python
+from langgraph.prebuilt import create_react_agent
+
+# Pass in:
+# (1) the augmented LLM with tools
+# (2) the tools list (which is used to create the tool node)
+pre_built_agent = create_react_agent(llm, tools=tools)
+
+# Show the agent
+display(Image(pre_built_agent.get_graph().draw_mermaid_png()))
+
+# Invoke
+messages = [HumanMessage(content="Add 3 and 4.")]
+messages = pre_built_agent.invoke({"messages": messages})
+for m in messages["messages"]:
+    m.pretty_print()
+```
+
+## 3、代理架构
+
+许多 LLM 应用在 LLM 调用之前和/或之后实现特定的控制流程步骤。例如，[RAG](https://github.com/langchain-ai/rag-from-scratch) 执行与用户问题相关的文档检索，并将这些文档传递给 LLM，以便将模型的响应与提供的文档上下文相结合。
+
+我们有时不希望硬编码固定的控制流程，而是希望 LLM 系统能够选择自己的控制流程来解决更复杂的问题！这就是一个*代理*的定义：代理是一个使用 LLM 来决定应用程序控制流程的系统。LLM 控制应用程序的方法有很多：
+
+- LLM 可以在两个潜在路径之间进行路由
+- LLM 可以决定调用哪些工具
+- 一个 LLM 可以决定生成的答案是否足够或需要更多工作
+
+因此，存在许多不同类型的[代理架构 ](https://blog.langchain.dev/what-is-a-cognitive-architecture/)，这些架构赋予 LLM 不同程度的控制权。
+
+![Agent Types](./img/小米虫爬山路-py版-img/agent_types.png)
+
+### 3.1 路由
+
+一个路由器允许 LLM 从指定的选项集中选择一个步骤。这是一种控制水平相对有限的代理架构，因为 LLM 通常专注于做出单一决策，并从有限的预定义选项集中生成特定输出。路由器通常采用几种不同的概念来实现这一点。
+
+#### 3.1.1 结构化输出
+
+使用 LLMs 的结构化输出是通过提供一个特定的格式或模式，让 LLM 在其响应中遵循。这类似于工具调用，但更通用。虽然工具调用通常涉及选择和使用预定义的函数，但结构化输出可用于任何类型的格式化响应。实现结构化输出的常见方法包括：
+
+1. 提示工程：通过系统提示指示 LLM 以特定格式响应。
+2. 输出解析器：使用后处理从 LLM 响应中提取结构化数据。
+3. 工具调用：利用某些 LLMs 的内置工具调用功能生成结构化输出。
+
+结构化输出对于路由至关重要，因为它们确保 LLM 的决策可以被系统可靠地解释和执行。在本指南中了解更多关于[结构化输出](https://python.langchain.com/docs/how_to/structured_output/)的信息。
+
+### 3.2 工具调用代理
+
+虽然路由器允许 LLM 做出单一决策，但更复杂的代理架构通过两种关键方式扩展了 LLM 的控制能力：
+
+1. 多步决策：LLM 可以依次做出一系列决策，而不仅仅是单一决策。
+2. 工具访问：LLM 可以从多种工具中选择并使用它们来完成任务。
+
+[ReAct](https://arxiv.org/abs/2210.03629) 是一种流行的通用代理架构，它结合了这些扩展，集成了三个核心概念。
+
+1. [工具调用 ](https://langchain-ai.github.io/langgraph/concepts/agentic_concepts/#tool-calling)：允许 LLM 根据需要选择和使用各种工具。
+2. [记忆 ](https://langchain-ai.github.io/langgraph/concepts/agentic_concepts/#memory): 使代理能够保留和使用先前步骤的信息。
+3. [规划 ](https://langchain-ai.github.io/langgraph/concepts/agentic_concepts/#planning): 赋能 LLM 创建和遵循多步骤计划以实现目标。
+
+这种架构允许更复杂和灵活的代理行为，超越了简单的路由，以实现具有多个步骤的动态问题解决。与最初的[论文](https://arxiv.org/abs/2210.03629)不同，今天的代理依赖于 LLM 的[工具调用](https://langchain-ai.github.io/langgraph/concepts/agentic_concepts/#tool-calling)功能，并在[消息](https://langchain-ai.github.io/langgraph/concepts/low_level/#why-use-messages)列表上运行。
+
+在 LangGraph 中，您可以使用预构建的[代理](https://langchain-ai.github.io/langgraph/agents/agents/#2-create-an-agent)开始使用工具调用代理。
+
+#### 3.2.1 工具调用
+
+当您希望代理与外部系统交互时，工具非常有用。外部系统（例如 API）通常需要特定的输入模式或负载，而不是自然语言。例如，当我们把一个 API 绑定为一个工具时，我们会让模型了解所需的输入模式。模型将根据用户的自然语言输入选择调用一个工具，并返回一个符合该工具所需模式的输出。
+
+[许多 LLM 提供商支持工具调用 ](https://python.langchain.com/docs/integrations/chat/?__hstc=5909356.07e26e39de75a1660439efac016db969.1753359841193.1753768081977.1753772451903.20&__hssc=5909356.4.1753772451903&__hsfp=1034399852)，LangChain 中的工具调用接口非常简单：您只需将任何 Python `function` 传入 `ChatModel.bind_tools(function)` 。
+
+![Tools](./img/小米虫爬山路-py版-img/tool_call.png)
+
+#### 3.2.2 记忆
+
+[记忆](https://langchain-ai.github.io/langgraph/how-tos/memory/add-memory/)对代理至关重要，使它们能够在解决问题的多个步骤中保留和利用信息。它以不同的尺度运作：
+
+1. [短期记忆 ](https://langchain-ai.github.io/langgraph/how-tos/memory/add-memory/#add-short-term-memory)：允许代理访问在序列中早期步骤中获取的信息。
+2. [长期记忆 ](https://langchain-ai.github.io/langgraph/how-tos/memory/add-memory/#add-long-term-memory)：使代理能够回忆起先前交互中的信息，例如对话中的过往消息。
+
+LangGraph 提供对内存实现的完全控制：
+
+- [`State `](https://langchain-ai.github.io/langgraph/concepts/low_level/#state): 用户定义的架构，指定保留内存的确切结构。
+- [`Checkpointer`](https://langchain-ai.github.io/langgraph/concepts/persistence/#checkpoints)：在会话内不同交互的每一步存储状态的机制。
+- [`Store`](https://langchain-ai.github.io/langgraph/concepts/persistence/#memory-store)：跨会话存储用户特定或应用级数据的机制。
+
+这种灵活的方法允许您根据特定的智能体架构需求定制记忆系统。有效的记忆管理增强了智能体维持上下文、从过去的经验中学习以及随着时间的推移做出更明智决策的能力。有关添加和管理记忆的实用指南，请参阅 [Memory](https://langchain-ai.github.io/langgraph/how-tos/memory/add-memory/)。
+
+#### 3.2.3 规划
+
+在一个调用工具的[代理](https://langchain-ai.github.io/langgraph/agents/overview/#what-is-an-agent)中，LLM 在一个 while 循环中被反复调用。在每一步，代理会决定调用哪些工具，以及这些工具的输入应该是什么。然后执行这些工具，并将输出作为观察结果反馈给 LLM。当代理决定它已经拥有足够的信息来解决问题，并且不值得再调用更多工具时，while 循环就会终止。
+
+### 3.3 自定义代理架构
+
+虽然路由器和调用工具的代理（如 ReAct）很常见，但[自定义代理架构](https://blog.langchain.dev/why-you-should-outsource-your-agentic-infrastructure-but-own-your-cognitive-architecture/)通常能带来特定任务的更好性能。LangGraph 提供了多种强大的功能，用于构建定制的代理系统：
+
+#### 3.3.1 人工参与流程
+
+人工参与可以显著提高代理的可靠性，特别是对于敏感任务。这可以包括：
+
+- 批准特定操作
+- 提供反馈以更新代理的状态
+- 在复杂的决策过程中提供指导
+
+当完全自动化不可行或不合适时，人工参与模式至关重要。了解更多内容，请查看我们的[人工参与指南 ](https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/)。
+
+#### 3.3.2 并行化
+
+并行处理对于高效的多元智能体系统和复杂任务至关重要。LangGraph 通过其 [发送 ](https://langchain-ai.github.io/langgraph/concepts/low_level/#send)API 支持并行化，能够：
+
+- 并发处理多个状态
+- 实现类似 map-reduce 的操作
+- 高效处理独立子任务
+
+在实际应用中，请参阅我们的 [map-reduce 教程](https://langchain-ai.github.io/langgraph/how-tos/graph-api/#map-reduce-and-the-send-api)
+
+#### 3.3.3 子图
+
+[子图](https://langchain-ai.github.io/langgraph/concepts/subgraphs/)对于管理复杂的代理架构至关重要，特别是在[多代理系统](https://langchain-ai.github.io/langgraph/concepts/multi_agent/)中。它们允许：
+
+- 为单个代理提供隔离状态管理
+- 代理团队的层级组织
+- 代理与主系统之间的受控通信
+
+子图通过状态模式中的重叠键与父图通信。这实现了灵活、模块化的代理设计。有关实现细节，请参阅我们的[子图如何指南 ](https://langchain-ai.github.io/langgraph/how-tos/subgraph/)。
+
+#### 3.3.4 反思
+
+反射机制可以通过以下方式显著提高代理的可靠性：
+
+1. 评估任务完成度和正确性
+2. 提供反馈以进行迭代改进
+3. 实现自我纠正和学习
+
+虽然反射通常基于 LLM，但也可以使用确定性方法。例如，在编程任务中，编译错误可以作为反馈。这种方法在[这个使用 LangGraph 进行自我纠正代码生成的视频](https://www.youtube.com/watch?v=MvNdgmM7uyc)中得到了演示。
+
+通过利用这些特性，LangGraph 能够创建复杂、特定任务的代理架构，这些架构可以处理复杂的流程、有效协作，并持续改进其性能。
 
 
 
