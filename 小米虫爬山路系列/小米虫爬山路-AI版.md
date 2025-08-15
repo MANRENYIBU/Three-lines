@@ -328,6 +328,131 @@ CRISPE 这类框架命中注定结构简单，因为过于复杂将难以记忆�
 
 可参考：构建生产级鲁棒高性能 Prompt([11])
 
+# 提示词案例
+
+## RAG Agent
+
+```markdown
+## CURRENT_TIME: {{ CURRENT_TIME }}
+
+---
+
+## 1. 角色定义
+
+你是一个 **RAG（Retrieval-Augmented Generation）智能问答 Agent**，旨在高效地从知识库中检索相关信息并生成准确、流畅、丰富的回答。  
+你具备以下能力：
+
+1. **关键字提取**：能够解析用户输入，提取核心关键词或主题。  
+2. **知识检索**：调用 `rag_query_tool` 工具，根据关键词检索知识库中相关文档。  
+3. **信息整合**：结合检索结果与已有上下文，生成逻辑清晰、准确、结构化的回答。  
+4. **内容润色**：在保持原意准确的前提下，对内容进行适当的润色和丰富，提升可读性和完整性。  
+5. **推理判断**：能基于上下文判断是否需要进一步检索，避免冗余查询。  
+
+---
+
+## 2. 执行流程
+
+1. **思考当前情况**：评估现有上下文信息是否足够回答用户问题。  
+
+2. **流程分支**：
+
+   - **分支 1（上下文充足）**：直接基于现有信息回答用户问题。  
+   - **分支 2（上下文不足）**：  
+     1. 解析用户输入，提取关键词。  
+     2. 调用 `rag_query_tool` 工具检索知识库。  
+     3. 整合检索结果与已有信息，再生成回答。  
+
+3. **回答生成**：  
+   - 回答必须**严格基于检索到的内容**，不得臆造或曲解原意。  
+   - 可以在**不改变原意**的情况下，适当加入 **图标、Emoji 或其他视觉元素** 来增强可读性与视觉效果。  
+   - 在润色时，可**减少过多的分段和分点**，多使用自然语言衔接，使整体表述更加连贯流畅。  
+   - 在保持准确性的前提下，可以：
+     - 补充相关背景信息（基于检索内容）  
+     - 优化语言表达和逻辑结构  
+     - 添加实用的示例或类比（基于检索内容）  
+     - 提供更详细的解释和说明  
+   - **严禁行为**：
+     - 添加检索内容中不存在的信息  
+     - 歪曲或误解原文含义  
+     - 基于个人推测补充未经证实的内容  
+
+---
+
+## 3. 输入输出格式
+
+### 输入格式
+
+- 用户自然语言提问（中文或英文）  
+- 可能包含上下文（如先前消息、会话历史）  
+- 检索结果（调用工具后获得的文档内容）  
+
+### 输出格式
+
+- **Markdown 格式**输出  
+- 内容应以**自然语言**连贯表达为主，减少分段分点；适当加入视觉元素（图标、Emoji 等）提升体验。  
+- 必须包含：
+  - **简洁直接的答案**  
+  - **丰富但准确的内容**（基于检索结果的润色和扩展）  
+- 如果问题不明确或信息不足：
+  - 请求用户补充关键信息  
+  - 或提示无法回答  
+
+---
+
+## 4. 信息安全与合规
+
+- **禁止生成虚假信息**，若无相关资料则明确告知用户。  
+- **不得泄露隐私信息**（包括用户个人数据、敏感机构信息等）。  
+- **严格基于检索结果回答**，不得臆造内容。  
+- **保持中立**，避免带有偏见或情绪化的回答。  
+- **润色原则**：只能在检索内容基础上进行语言优化和结构调整，不能添加新的事实性信息。  
+
+---
+
+## 5. 语言与风格
+
+- **默认使用中文**回答（除非用户明确指出使用某种语言回答）。  
+- **语言风格**：专业、准确、简洁，可根据用户语气适度调整亲和度。  
+- **内容丰富度**：在保持准确性的前提下，尽可能提供完整、详细、易懂的回答。  
+- **表达连贯**：尽量使用自然语言衔接内容，减少过多分段分点；可适当加入图标或 Emoji 提升可读性。  
+
+---
+
+## 6. 工具使用规范
+
+- 在 **上下文不足** 时调用 `rag_query_tool` 工具，但**推荐频繁调用工具**以保证充足的上下文信息，提升回答的准确性与完整性。  
+- 工具输入必须是提炼后的关键词或简短查询语句。  
+- 检索结果需经过整合和判断后再用于生成最终回答。  
+- 基于检索结果进行适当的内容润色和结构优化。  
+
+---
+
+## 7. 示例
+
+### 示例 1（上下文充足）
+
+用户：`请问RAG是什么？`
+
+> **回答**：  
+> 💡 RAG（Retrieval-Augmented Generation）是一种结合检索与生成的大模型方法，通过先从知识库中检索相关文档，再由生成模型基于这些文档生成回答。这种方式既能确保内容的准确性，又能让表达更加自然流畅。
+
+### 示例 2（上下文不足）
+
+用户：`请解释Transformer在NLP中的作用`
+
+> **执行流程**：  
+> 1. 解析关键词：`Transformer`、`NLP`、`作用`  
+> 2. 调用 `rag_query_tool("Transformer NLP 作用")`  
+> 3. 整合检索结果生成回答  
+
+> **回答**：  
+> ✨ Transformer 在自然语言处理（NLP）中是一种用于序列建模的深度学习架构，它利用自注意力机制来捕捉长距离依赖关系，从而显著提升翻译、问答等任务的性能，让模型在处理上下文信息时更加灵活和高效。
+```
+
+
+
+
+
 # MCP
 
 资料来源：[Introduction - Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro)
@@ -969,13 +1094,658 @@ sendEmail(to: "team@work.com", subject: "Out of Office", body: "...")
 
 该协议为开发者提供了自由设计符合其应用的自然界面的空间。关键原则包括易于发现可用提示、清晰描述每个提示的功能、自然且带验证的参数输入，以及透明展示提示底层模板。
 
+## 4、客户端概念
 
+MCP 客户端由主机应用程序实例化，用于与特定的 MCP 服务器通信。主机应用程序，如 Claude.ai 或集成开发环境（IDE），管理整体用户体验并协调多个客户端。每个客户端负责与一个服务器进行直接通信。
 
+理解这种区别很重要： *主机*是用户交互的应用程序，而*客户端*是使能服务器连接的协议级组件。
 
+### 4.1 核心客户端功能
 
+除了利用服务器提供的上下文外，客户端还可以向服务器提供多种功能。这些客户端功能使服务器开发者能够构建更丰富的交互。例如，客户端可以允许 MCP 服务器通过提示（elicitations）向用户请求额外信息。客户端可以提供以下功能：
 
+#### 4.1.1 采样
 
+采样允许服务器通过客户端请求语言模型补全，从而在保持安全性和用户控制的同时实现代理行为。
 
+##### 4.1.1.1 概述
+
+采样使服务器能够执行依赖 AI 的任务，而无需直接集成或付费使用 AI 模型。相反，服务器可以请求客户端——该客户端已经具有 AI 模型访问权限——代为处理这些任务。这种方法使客户端能够完全控制用户权限和安全措施。由于采样请求是在其他操作（如工具分析数据）的上下文中发生的，并且作为单独的模型调用进行处理，因此它们在不同上下文之间保持了清晰的界限，从而能够更有效地利用上下文窗口。
+
+**采样流程：**
+
+```mermaid
+sequenceDiagram
+    participant LLM
+    participant User
+    participant Client
+    participant Server
+
+    Note over Server,Client: Server initiates sampling
+    Server->>Client: sampling/createMessage
+
+    Note over Client,User: Human-in-the-loop review
+    Client->>User: Present request for approval
+    User-->>Client: Review and approve/modify
+
+    Note over Client,LLM: Model interaction
+    Client->>LLM: Forward approved request
+    LLM-->>Client: Return generation
+
+    Note over Client,User: Response review
+    Client->>User: Present response for approval
+    User-->>Client: Review and approve/modify
+
+    Note over Server,Client: Complete request
+    Client-->>Server: Return approved response
+```
+
+该流程通过多个人工审核节点确保安全性。用户可以在响应返回服务器之前，审查并修改初始请求和生成的响应。
+
+**请求参数示例：**
+
+```json
+{
+  messages: [
+    {
+      role: "user",
+      content: "Analyze these flight options and recommend the best choice:\n" +
+               "[47 flights with prices, times, airlines, and layovers]\n" +
+               "User preferences: morning departure, max 1 layover"
+    }
+  ],
+  modelPreferences: {
+    hints: [{
+      name: "claude-3-5-sonnet"  // Suggested model
+    }],
+    costPriority: 0.3,      // Less concerned about API cost
+    speedPriority: 0.2,     // Can wait for thorough analysis
+    intelligencePriority: 0.9  // Need complex trade-off evaluation
+  },
+  systemPrompt: "You are a travel expert helping users find the best flights based on their preferences",
+  maxTokens: 1500
+}
+```
+
+##### 4.1.1.2 示例：航班分析工具
+
+考虑一个旅游预订服务器，其中有一个名为 `findBestFlight` 的工具，该工具使用抽样方法分析可用航班并推荐最佳选择。当用户询问“帮我预订下个月去巴塞罗那的最佳航班”时，该工具需要 AI 协助来评估复杂的权衡。
+
+该工具查询航空公司 API 并收集了 47 个航班选项。然后它请求 AI 协助来分析这些选项：“分析这些航班选项并推荐最佳选择：[47 个包含价格、时间、航空公司和中转的航班] 用户偏好：上午出发，最多 1 次中转。
+
+”客户端询问用户：“允许抽样请求？”经批准后，AI 评估权衡——比如廉价红眼航班与便利的上午出发之间的权衡。该工具使用这一分析来呈现前三项推荐。
+
+##### 4.1.1.3 用户交互模型
+
+采样设计以人机协同控制为基本原则。用户通过多种机制保持监督：
+
+**审批控制** ：每个采样请求都需要用户明确同意。客户端展示服务器希望分析的内容及其原因。用户可以批准、拒绝或修改请求。
+
+**透明度功能** ：客户端显示确切的提示、模型选择和令牌限制。用户在 AI 响应返回服务器前进行审查。
+
+**配置选项** ：用户可以设置模型偏好、配置可信操作的自动批准，或要求所有操作都需批准。客户端可能提供编辑敏感信息的选择。用户可通过 `includeContext` 参数决定多少对话上下文将被包含在采样请求中。
+
+**隔离** : 采样请求默认与主对话上下文隔离。服务器无法访问用户对话。
+
+**安全考虑** : 客户端和服务器在采样期间必须适当处理敏感数据。客户端应实施速率限制并验证所有消息内容。人工介入设计确保服务器发起的 AI 交互不会在未经明确用户同意的情况下危及安全或访问敏感数据。
+
+#### 4.1.2 根源
+
+Roots 定义服务器操作的文件系统边界，允许客户端指定服务器应关注的目录。
+
+##### 4.1.2.1 概述
+
+Roots 是客户端向服务器传达文件系统访问边界的机制。它们由指示服务器可操作的目录的文件 URI 组成，帮助服务器理解可用文件和文件夹的范围。与给予服务器无限制的文件系统访问权限相比，roots 引导它们到相关的工 作目录，同时保持安全边界。
+
+**根结构：**
+
+```json
+{
+  "uri": "file:///Users/agent/travel-planning",
+  "name": "Travel Planning Workspace"
+}
+```
+
+根是专一的文件系统路径，始终使用 `file://`URI 方案。它们帮助服务器理解项目边界、工作空间组织以及可访问的目录。根列表可以根据用户在不同项目或文件夹中工作动态更新，当边界变化时，服务器通过 `roots/list_changed` 接收通知。
+
+需要注意的是，虽然根为服务器提供操作位置的指导，但客户端始终完全控制文件访问。根仅传达预期的边界——实际文件访问始终由客户端的安全策略进行中介。
+
+##### 4.1.2.2 示例：旅行规划工作区
+
+一位同时处理多个客户行程的旅行代理人可以从文件系统访问的根源中受益。考虑一个包含不同目录的工作空间，用于旅行规划的不同方面。客户向旅行规划服务器提供文件系统根源：
+
+- `file:///Users/agent/travel-planning` - 主工作区，包含所有旅行文件
+- `file:///Users/agent/travel-templates` - 可重用的行程模板和资源
+- `file:///Users/agent/client-documents` - 客户护照和旅行文件
+
+当代理创建巴塞罗那行程时，服务器在这些边界内工作——访问模板、保存新的行程、并引用客户文件。它无法访问这些根目录之外的文件。服务器通常通过从根目录使用相对路径或利用尊重根边界文件搜索工具来访问根目录内的文件。
+
+如果代理打开一个像 `file:///Users/agent/archive/2023-trips` 这样的归档文件夹，客户端通过 `roots/list_changed` 更新根目录列表。
+
+##### 4.1.2.3 用户交互模型
+
+根通常由主机应用程序根据用户操作自动管理，尽管某些应用程序可能会提供手动根管理：
+
+**自动根检测** ：当用户打开文件夹时，客户端会自动将其作为根暴露。打开旅行工作区可以让服务器访问该目录中的行程和文档。
+
+**手动根配置** ：高级用户可以通过配置指定根目录。例如，添加 `/travel-templates` 用于可重用资源，同时排除包含财务记录的目录。
+
+#### 4.1.3 启发
+
+提取使服务器能够在交互过程中请求特定信息，从而创建更动态和响应迅速的工作流程。
+
+##### 4.1.3.1 概述
+
+提取提供了一种结构化的方式，让服务器按需收集必要信息。服务器不再需要一开始就获取所有信息，或者在数据缺失时失败，而是可以暂停操作，向用户请求特定的输入。这种方式创造了更灵活的交互，服务器会根据用户需求进行调整，而不是遵循僵化的模式。
+
+**触发流程：**
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Client
+    participant Server
+
+    Note over Server,Client: Server initiates elicitation
+    Server->>Client: elicitation/create
+
+    Note over Client,User: Human interaction
+    Client->>User: Present elicitation UI
+    User-->>Client: Provide requested information
+
+    Note over Server,Client: Complete request
+    Client-->>Server: Return user response
+
+    Note over Server: Continue processing with new information
+```
+
+该流程支持动态信息收集。服务器在需要时可以请求特定数据，用户通过合适的界面提供信息，服务器继续使用新获取的上下文进行处理。
+
+**提取组件示例：**
+
+```json
+{
+  method: "elicitation/requestInput",
+  params: {
+    message: "Please confirm your Barcelona vacation booking details:",
+    schema: {
+      type: "object",
+      properties: {
+        confirmBooking: {
+          type: "boolean",
+          description: "Confirm the booking (Flights + Hotel = $3,000)"
+        },
+        seatPreference: {
+          type: "string",
+          enum: ["window", "aisle", "no preference"],
+          description: "Preferred seat type for flights"
+        },
+        roomType: {
+          type: "string",
+          enum: ["sea view", "city view", "garden view"],
+          description: "Preferred room type at hotel"
+        },
+        travelInsurance: {
+          type: "boolean",
+          default: false,
+          description: "Add travel insurance ($150)"
+        }
+      },
+      required: ["confirmBooking"]
+    }
+  }
+}
+```
+
+##### 4.1.3.2 示例：假日预订审批
+
+一个旅游预订服务器通过最终预订确认过程展示了引导的力量。当用户选择了理想的巴塞罗那度假套餐后，服务器需要在继续之前收集最终的批准和任何缺失的细节。
+
+服务器通过一个结构化的请求引导预订确认，其中包括旅行摘要（巴塞罗那航班6月15日至22日、海滨酒店、总计3000美元）以及任何额外偏好的字段——例如座位选择、房型或旅行保险选项。
+
+随着预订的进行，服务器引导完成预订所需的联系信息。它可能会要求提供航班预订的旅客详细信息、酒店的特殊要求或紧急联系人信息。
+
+##### 4.1.3.3 用户交互模型
+
+获取交互设计得清晰、有上下文且尊重用户自主权：
+
+**请求展示** ：客户端以清晰上下文展示获取请求，说明是哪个服务器请求、为何需要信息以及如何使用这些信息。请求消息解释目的，而模式提供结构和验证。
+
+**响应选项** ：用户可以通过适当的 UI 控件（文本字段、下拉菜单、复选框）提供所需信息，选择不提供信息并可选解释原因，或取消整个操作。客户端在将响应返回给服务器之前，会根据提供的模式进行验证。
+
+**隐私考虑** ：提取过程从不请求密码或 API 密钥。客户端会警告可疑请求，并允许用户在发送前审查数据。
+
+## 5、服务器开发
+
+开始构建你自己的服务器，用于在 Claude for Desktop 和其他客户端中使用。
+
+在本教程中，我们将构建一个简单的 MCP 天气服务器，并将其连接到主机 Claude for Desktop。我们将从基本设置开始，然后逐步过渡到更复杂的使用案例。
+
+### 5.1 我们将构建什么
+
+许多 LLMs 目前还没有获取天气预报和恶劣天气警报的能力。让我们使用 MCP 来解决这个问题！我们将构建一个提供两个工具的服务器：`get_alerts` 和 `get_forecast`。然后我们将服务器连接到 MCP 主机（在这个例子中，是桌面版的 Claude）：
+
+![img](./img/小米虫爬山路-AI版-img/weather-alerts.png)
+
+![img](./img/小米虫爬山路-AI版-img/current-weather.png)
+
+### 5.2 MCP 核心概念
+
+MCP 服务器可以提供三种主要功能：
+
+1. **资源** ：客户端可以读取的类似文件的数据（如 API 响应或文件内容）
+2. **工具** ：LLM 可以调用（经用户批准）的函数
+3. **提示** ：帮助用户完成特定任务的预写模板
+
+本教程将主要关注工具。
+
+让我们开始构建我们的天气服务器！[ 我们即将构建的完整代码可以在这里找到。](https://github.com/modelcontextprotocol/quickstart-resources/tree/main/weather-server-python)
+
+### 5.3 先决知识
+
+这个快速入门指南假设你熟悉以下内容：
+
+- Python
+- LLMs 像 Claude
+
+### 5.4 登录 MCP 服务器
+
+在实现 MCP 服务器时，请小心处理日志记录：
+
+**对于基于 STDIO 的服务器：** 永远不要向标准输出（stdout）写入。这包括：
+
+- `print()` 语句在 Python 中
+- `console.log()` 在 JavaScript 中
+- `fmt.Println()` 在 Go 中
+- 其他语言中的类似 stdout 函数
+
+写入标准输出会损坏 JSON-RPC 消息并导致您的服务器崩溃。**对于基于 HTTP 的服务器：** 标准输出日志记录是没问题的，因为它不会干扰 HTTP 响应。
+
+```python
+# ❌ Bad (STDIO)
+print("Processing request")
+
+# ✅ Good (STDIO)
+import logging
+logging.info("Processing request")
+```
+
+### 5.5 快速开始
+
+#### 5.5.1 配置环境
+
+首先，让我们安装 `uv` 并设置我们的 Python 项目和环境：
+
+```
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+确保之后重启你的终端，以确保 `uv` 命令能被正确识别。
+
+现在，让我们创建并设置我们的项目：
+
+```bash
+# Create a new directory for our project
+uv init weather
+cd weather
+
+# Create virtual environment and activate it
+uv venv
+.venv\Scripts\activate
+
+# Install dependencies
+uv add mcp[cli] httpx
+
+# Create our server file
+new-item weather.py
+```
+
+现在让我们深入构建你的服务器。
+
+#### 5.5.2 构建你的服务器
+
+##### 5.5.2.1 导入包和设置实例
+
+在 `weather.py` 的顶部添加这些内容：
+
+```python
+from typing import Any
+import httpx
+from mcp.server.fastmcp import FastMCP
+
+# Initialize FastMCP server
+mcp = FastMCP("weather")
+
+# Constants
+NWS_API_BASE = "https://api.weather.gov"
+USER_AGENT = "weather-app/1.0"
+```
+
+FastMCP 类使用 Python 类型提示和文档字符串自动生成工具定义，便于创建和维护 MCP 工具。
+
+##### 5.5.2.2 辅助函数
+
+接下来，让我们添加用于查询和格式化国家气象服务 API 数据的辅助函数：
+
+```python
+async def make_nws_request(url: str) -> dict[str, Any] | None:
+    """Make a request to the NWS API with proper error handling."""
+    headers = {
+        "User-Agent": USER_AGENT,
+        "Accept": "application/geo+json"
+    }
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url, headers=headers, timeout=30.0)
+            response.raise_for_status()
+            return response.json()
+        except Exception:
+            return None
+
+def format_alert(feature: dict) -> str:
+    """Format an alert feature into a readable string."""
+    props = feature["properties"]
+    return f"""
+		Event: {props.get('event', 'Unknown')}
+		Area: {props.get('areaDesc', 'Unknown')}
+		Severity: {props.get('severity', 'Unknown')}
+		Description: {props.get('description', 'No description available')}
+		Instructions: {props.get('instruction', 'No specific instructions provided')}
+	"""
+```
+
+##### 5.5.2.3 实现工具执行
+
+工具执行处理器负责实际执行每个工具的逻辑。让我们添加它：
+
+```python
+@mcp.tool()
+async def get_alerts(state: str) -> str:
+    """Get weather alerts for a US state.
+
+    Args:
+        state: Two-letter US state code (e.g. CA, NY)
+    """
+    url = f"{NWS_API_BASE}/alerts/active/area/{state}"
+    data = await make_nws_request(url)
+
+    if not data or "features" not in data:
+        return "Unable to fetch alerts or no alerts found."
+
+    if not data["features"]:
+        return "No active alerts for this state."
+
+    alerts = [format_alert(feature) for feature in data["features"]]
+    return "\n---\n".join(alerts)
+
+@mcp.tool()
+async def get_forecast(latitude: float, longitude: float) -> str:
+    """Get weather forecast for a location.
+
+    Args:
+        latitude: Latitude of the location
+        longitude: Longitude of the location
+    """
+    # First get the forecast grid endpoint
+    points_url = f"{NWS_API_BASE}/points/{latitude},{longitude}"
+    points_data = await make_nws_request(points_url)
+
+    if not points_data:
+        return "Unable to fetch forecast data for this location."
+
+    # Get the forecast URL from the points response
+    forecast_url = points_data["properties"]["forecast"]
+    forecast_data = await make_nws_request(forecast_url)
+
+    if not forecast_data:
+        return "Unable to fetch detailed forecast."
+
+    # Format the periods into a readable forecast
+    periods = forecast_data["properties"]["periods"]
+    forecasts = []
+    for period in periods[:5]:  # Only show next 5 periods
+        forecast = f"""
+{period['name']}:
+Temperature: {period['temperature']}°{period['temperatureUnit']}
+Wind: {period['windSpeed']} {period['windDirection']}
+Forecast: {period['detailedForecast']}
+"""
+        forecasts.append(forecast)
+
+    return "\n---\n".join(forecasts)
+```
+
+##### 5.5.2.4 运行服务器
+
+最后，让我们初始化并运行服务器：
+
+```python
+if __name__ == "__main__":
+    # Initialize and run the server
+    mcp.run(transport='stdio')
+```
+
+您的服务器已准备就绪！运行 `uv run weather.py` 来启动 MCP 服务器，它将监听来自 MCP 主机的消息。
+
+## 6、客户端开发
+
+### 6.1 环境配置
+
+首先，使用 `uv` 创建一个新的 Python 项目：
+
+```bash
+# Create project directory
+uv init mcp-client
+cd mcp-client
+
+# Create virtual environment
+uv venv
+
+# Activate virtual environment
+# On Windows:
+.venv\Scripts\activate
+# On Unix or macOS:
+source .venv/bin/activate
+
+# Install required packages
+uv add mcp anthropic python-dotenv
+
+# Remove boilerplate files
+# On Windows:
+del main.py
+# On Unix or macOS:
+rm main.py
+
+# Create our main file
+touch client.py
+```
+
+### 6.2 创建客户端
+
+#### 6.2.1 基本客户端结构
+
+首先，让我们设置导入并创建基本的客户端类：
+
+```python
+import asyncio
+from typing import Optional
+from contextlib import AsyncExitStack
+
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+from anthropic import Anthropic
+from dotenv import load_dotenv
+
+load_dotenv()  # load environment variables from .env
+
+class MCPClient:
+    def __init__(self):
+        # Initialize session and client objects
+        self.session: Optional[ClientSession] = None
+        self.exit_stack = AsyncExitStack()
+        self.anthropic = Anthropic()
+    # methods will go here
+```
+
+##### 6.2.1.1 服务器连接管理
+
+接下来，我们将实现连接到 MCP 服务器的功能：
+
+```python
+async def connect_to_server(self, server_script_path: str):
+    """Connect to an MCP server
+
+    Args:
+        server_script_path: Path to the server script (.py or .js)
+    """
+    is_python = server_script_path.endswith('.py')
+    is_js = server_script_path.endswith('.js')
+    if not (is_python or is_js):
+        raise ValueError("Server script must be a .py or .js file")
+
+    command = "python" if is_python else "node"
+    server_params = StdioServerParameters(
+        command=command,
+        args=[server_script_path],
+        env=None
+    )
+
+    stdio_transport = await self.exit_stack.enter_async_context(stdio_client(server_params))
+    self.stdio, self.write = stdio_transport
+    self.session = await self.exit_stack.enter_async_context(ClientSession(self.stdio, self.write))
+
+    await self.session.initialize()
+
+    # List available tools
+    response = await self.session.list_tools()
+    tools = response.tools
+    print("\nConnected to server with tools:", [tool.name for tool in tools])
+```
+
+##### 6.2.1.2 查询处理逻辑
+
+现在让我们添加处理查询和调用工具的核心功能：
+
+```python
+async def process_query(self, query: str) -> str:
+    """Process a query using Claude and available tools"""
+    messages = [
+        {
+            "role": "user",
+            "content": query
+        }
+    ]
+
+    response = await self.session.list_tools()
+    available_tools = [{
+        "name": tool.name,
+        "description": tool.description,
+        "input_schema": tool.inputSchema
+    } for tool in response.tools]
+
+    # Initial Claude API call
+    response = self.anthropic.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=1000,
+        messages=messages,
+        tools=available_tools
+    )
+
+    # Process response and handle tool calls
+    final_text = []
+
+    assistant_message_content = []
+    for content in response.content:
+        if content.type == 'text':
+            final_text.append(content.text)
+            assistant_message_content.append(content)
+        elif content.type == 'tool_use':
+            tool_name = content.name
+            tool_args = content.input
+
+            # Execute tool call
+            result = await self.session.call_tool(tool_name, tool_args)
+            final_text.append(f"[Calling tool {tool_name} with args {tool_args}]")
+
+            assistant_message_content.append(content)
+            messages.append({
+                "role": "assistant",
+                "content": assistant_message_content
+            })
+            messages.append({
+                "role": "user",
+                "content": [
+                    {
+                        "type": "tool_result",
+                        "tool_use_id": content.id,
+                        "content": result.content
+                    }
+                ]
+            })
+
+            # Get next response from Claude
+            response = self.anthropic.messages.create(
+                model="claude-3-5-sonnet-20241022",
+                max_tokens=1000,
+                messages=messages,
+                tools=available_tools
+            )
+
+            final_text.append(response.content[0].text)
+
+    return "\n".join(final_text)
+```
+
+##### 6.2.1.3 交互式聊天界面
+
+现在我们将添加聊天循环和清理功能：
+
+```python
+async def chat_loop(self):
+    """Run an interactive chat loop"""
+    print("\nMCP Client Started!")
+    print("Type your queries or 'quit' to exit.")
+
+    while True:
+        try:
+            query = input("\nQuery: ").strip()
+
+            if query.lower() == 'quit':
+                break
+
+            response = await self.process_query(query)
+            print("\n" + response)
+
+        except Exception as e:
+            print(f"\nError: {str(e)}")
+
+async def cleanup(self):
+    """Clean up resources"""
+    await self.exit_stack.aclose()
+```
+
+##### 6.2.1.4 主入口点
+
+最后，我们将添加主要的执行逻辑：
+
+```python
+async def main():
+    if len(sys.argv) < 2:
+        print("Usage: python client.py <path_to_server_script>")
+        sys.exit(1)
+
+    client = MCPClient()
+    try:
+        await client.connect_to_server(sys.argv[1])
+        await client.chat_loop()
+    finally:
+        await client.cleanup()
+
+if __name__ == "__main__":
+    import sys
+    asyncio.run(main())
+```
 
 
 
