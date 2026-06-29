@@ -641,3 +641,610 @@ func stopm(){
     // ...
 }
 ```
+### 4 逆向追踪：G的让渡艺术
+
+有借有还，再借不难。G拿到了M的执行权，也得在适当的时候还回去。这个"还"的过程，我们称之为 **让渡（yield）** 。让渡是一个主动的行为，由G自己发起，目的是把执行权交还给 `g0` ，让 `g0` 可以去调度其他的G。这是一个从 `g` 到 `g0` 的转换。
+
+#### 4.1 功成身退：执行结束
+
+![](img/Go-img/file-20260629232042750.png)
+
+当一个G的任务执行完毕，它会调用 `goexit1` ，这是一个主动的"退休"申请。
+
+1. 在 `goexit1` 里，它会调用 `mcall(goexit0)` ，这个 `mcall` 指令会把执行权从当前的G切换到M的 `g0` 上，并让 `g0` 去执行 `goexit0` 函数。
+2. `goexit0` 函数（此时由 `g0` 执行）会负责给这个退休的G办"后事"：
+	- 把G的状态从 `_Grunning` 更新为 `_Gdead` 。
+		- 清理G内部的数据。
+		- 解除G和M的绑定关系（ `dropg` ）。
+		- 把这个G的结构体放到P的 `gfree` 队列里，方便下次创建新G时复用，避免了内存的反复申请和释放。
+		- 最后，调用 `schedule()` ，开始新一轮的调度。
+```go
+// goroutine运行结束，此时执行方是普通g
+func goexit1() {
+        // 通过mcall，将执行方转为g0，调用goexit0方法
+        mcall(goexit0)
+}
+
+// 此时执行方为g0，入参gp为已经运行结束的g
+func goexit0(gp *g) {
+        _g_ := getg() // 获取g0
+        _p_ := _g_.m.p.ptr()
+
+        // 将gp的状态由running更新为dead
+        casgstatus(gp, _Grunning, _Gdead)
+        // ... 清理工作 ...
+        
+        // 将g和p解除关系
+        dropg()
+
+        // 将g添加到p的gfree队列中以供复用
+        gfput(_p_, gp)
+        
+        // 发起新一轮调度流程
+        schedule()
+}
+```
+
+#### 4.2 高风亮节：主动让渡
+
+![](img/Go-img/file-20260629235320185.png)
+
+我们可以通过在代码里调用 `runtime.Gosched()` 来手动让一个G让出CPU。这个函数会做和 `goexit1` 类似的事情：
+
+1. 调用 `mcall(gosched_m)` ，把执行权从当前G切换到 `g0` 。
+2. `g0` 执行 `gosched_m` 函数，它的逻辑是：
+	- 把G的状态从 `_Grunning` 改回 `_Grunnable` 。
+		- 解除G和M的绑定。
+		- 把这个G直接扔到 **全局队列GRQ** 中，等待下一次被调度。
+		- 调用 `schedule()` ，开始新一轮调度。
+```go
+// 主动让渡出执行权，此时执行方还是普通g
+func Gosched() {
+        // 通过mcall，将执行方转为g0，调用gosched_m方法
+        mcall(gosched_m)
+}
+
+// 此时执行方为g0
+func gosched_m(gp *g) {
+        // ...
+        goschedImpl(gp)
+}
+
+func goschedImpl(gp *g) {
+        // 将g状态由running改为runnable就绪态
+        casgstatus(gp, _Grunning, _Grunnable)
+        // 解除g和m的关系
+        dropg()
+        // 将g添加到全局队列grq
+        lock(&sched.lock)
+        globrunqput(gp)
+        unlock(&sched.lock)
+        // 发起新一轮调度
+        schedule()
+}
+```
+
+#### 4.3 情非得已：阻塞让渡
+
+![](img/Go-img/file-20260629235646387.png)
+
+这是最常见的一种让渡方式。当G执行到需要等待某个外部条件的地方（比如读一个空的channel，或者等待一个锁），它就会被阻塞。
+
+这个过程的核心是 `gopark` 函数：
+
+1. 当G需要阻塞时，上层函数（比如channel的读写逻辑）会调用 `gopark` 。
+2. `gopark` 同样会调用 `mcall(park_m)` ，把执行权交给 `g0` 。
+3. `g0` 执行 `park_m` ，它会：
+	- 把G的状态从 `_Grunning` 改为 `_Gwaiting` 。
+		- 解除G和M的绑定。
+		- **注意** ： `_Gwaiting` 状态的G不会被放到任何就绪队列里！它会被上层调用者（比如channel）自己保管。
+		- `g0` 调用 `schedule()` ，寻找下一个G来执行。
+
+当外部条件满足时（比如channel里有了数据），另一个G会调用 `goready` 函数来唤醒这个处于 `_Gwaiting` 状态的G。
+
+`goready` 会：
+
+1. 把目标G的状态从 `_Gwaiting` 改回 `_Grunnable` 。
+2. 调用 `runqput` ，把这个G重新放回到就绪队列（LRQ或GRQ）中。
+3. 调用 `wakep` ，尝试唤醒一个空闲的P来处理这个刚被唤醒的G。
+
+这一 `park` 一 `ready` ，完美地实现了G级别的阻塞和唤醒，整个过程高效且对用户透明。
+
+以下是具体的代码分析：
+
+```go
+// 此时执行方为普通 g
+func gopark(unlockf func(*g, unsafe.Pointer)bool,lockunsafe.Pointer, reason waitReason, traceEv byte, traceskip int){
+    // 获取 m 正在执行的 g，也就是要阻塞让渡的 g
+    gp := mp.curg
+    // ...
+    // 通过 mcall，将执行方由普通 g -> g0
+    mcall(park_m)
+}
+
+// 此时执行方为 g0. 入参 gp 为需要执行 park 的普通 g
+func park_m(gp *g){
+    // 获取 g0 
+    _g_ := getg()
+
+    // 将 gp 状态由 running 变更为 waiting
+    casgstatus(gp,_Grunning,_Gwaiting)
+    // 解绑 g 与 m 的关系
+    dropg()
+
+    // g0 发起新一轮调度流程
+    schedule()
+}
+```
+
+与 gopark 相对的，是用于唤醒 g 的 goready 方法，其中会通过 systemstack 压栈切换至 g0 执行 ready 方法——将目标 g 状态由 waiting 改为 runnable，然后添加到就绪队列中.
+
+```go
+// 此时执行方为普通 g. 入参 gp 为需要唤醒的另一个普通 g
+func goready(gp *g, traceskip int) {
+    // 调用 systemstack 后，会切换至 g0 调用传入的 ready 方法. 调用结束后则会直接切换回到当前普通 g 继续执行. 
+    systemstack(func() {
+        ready(gp, traceskip, true)
+    })
+
+    // 恢复成普通 g 继续执行 ...
+}
+```
+```go
+// 此时执行方为 g0. 入参 gp 为拟唤醒的普通 g
+func ready(gp *g, traceskip int, next bool){
+    // ...
+
+    // 获取当前 g0
+    _g_ := getg()
+    // ...
+    // 将目标 g 状态由 waiting 更新为 runnable
+    casgstatus(gp,_Gwaiting,_Grunnable)
+    /*
+        1) 优先将目标 g 添加到当前 p 的本地队列 lrq
+        2）若 lrq 满了，则将 g 追加到全局队列 grq
+    */
+    runqput(_g_.m.p.ptr(), gp,next)
+    // 如果有 m 或 p 处于 idle 状态，将其唤醒
+    wakep()
+    // ...
+}
+```
+### 5 第三方视角：抢占式调度
+
+前面说的"让渡"都是G的主动行为。但如果一个G是个"老赖"，执行一个超长的计算任务，一直不主动让出CPU怎么办？难道要让整个系统都等它一个吗？
+
+当然不行！Go调度器还有一个"霸道总裁"的角色来强制干预，就是 **抢占（Preemption）** 。一个由外部力量发起的、为了维护整个系统公平和效率的"强制让位"过程。
+
+![](img/Go-img/file-20260630002050084.png)
+
+#### 5.1 幕后英雄：无处不在的sysmon
+
+在我们的Go程序启动时，除了我们熟知的主线程外，runtime还会悄悄启动一个非常关键的后台线程—— `sysmon` （System Monitor，系统监控）。
+
+你可以把它想象成一个永不休息的"巡逻兵"，它独立于普通的G-P-M调度模型，持续地在后台循环执行。这个线程在整个程序生命周期里是全局唯一的，就像一个大管家，不知疲倦地监视着整个Go程序的运行状态。
+
+![](https://golangstar.cn/assets/%E7%9B%91%E6%8E%A7%E7%BA%BF%E7%A8%8B%E4%BF%AE%E6%94%B9-CDEhqbSE.png)
+
+`sysmon` 的工作是一个永不停歇的循环，它主要关心三件大事儿：
+
+- **网络轮询（netpoll）** ：检查有没有已经完成IO操作的网络连接，唤醒那些等待IO的Goroutine。
+- **抢占（retake）** ：找出那些运行时间太长的Goroutine，毫不留情地把它"踹"下CPU。
+- **GC触发检查** ：看看是不是时候该进行垃圾回收（GC）了。
+
+这个 `sysmon` 线程是在哪里创建的呢？答案就在 `main` 函数启动的深处。Go运行时会通过 `newm` 创建一个新的系统线程（M）专门来跑 `sysmon` 这个函数。
+
+它的核心工作逻辑大致如下：
+
+```go
+// The main goroutine.
+// main goroutine的入口
+func main(){
+        systemstack(func() {
+                // 创建一个新的M（系统线程）来执行sysmon函数
+                // 这个M不关联任何P，是一个专门用于系统监控的线程
+                newm(sysmon, nil, -1)
+        })
+        // ...
+}
+
+// sysmon是系统监控函数，它在一个独立的M上无限循环运行
+func sysmon() {
+        //..
+        for {
+                // 根据程序的繁忙程度，动态调整休眠时间
+                // 如果程序比较空闲，会休眠长一点，最长10毫秒
+                usleep(delay)
+                // ...
+
+                // 记录上次网络轮询的时间
+                lastpoll := int64(atomic.Load64(&sched.lastpoll))
+                // 如果网络轮询器已初始化，并且距离上次轮询超过10ms
+                if netpollinited() && lastpoll != 0 && lastpoll+10*1000*1000 < now {
+                        //...
+                        // 执行非阻塞的网络轮询，返回一个就绪的goroutine列表
+                        list := netpoll(0) 
+                        // ...
+                }
+
+                // 执行抢占工作，这是我们的重点
+                retake(now)
+                //...
+
+                // 检查是否需要触发GC
+                if t := (gcTrigger{kind: gcTriggerTime, now: now}); t.test() && atomic.Load(&forcegc.idle) != 0 {
+                        // ...
+                }
+                // ...
+        }
+}
+```
+
+可以看到， `sysmon` 的核心就是一个 `for` 死循环，每次循环都会执行一遍它的"三板斧"。而我们的抢占逻辑，就藏在 `retake` 这个函数里。 `retake` 会根据Goroutine的不同状态，采取不同的抢占策略，主要分为两种： **系统调用抢占** 和 **运行超时抢占** 。
+
+#### 5.2 系统调用抢占
+
+我们知道，系统调用（syscall）是连接用户态程序和操作系统内核的桥梁。但当一个M（系统线程）陷入系统调用时，它就会被操作系统挂起，暂时无法执行任何用户态代码。这对Go的调度器来说是个大问题，因为如果M上还绑定着一个P（处理器），那这个P也就跟着被闲置了，它所管理的本地Goroutine队列就得不到执行，造成了资源浪费。
+
+Go的策略非常聪明： **人走可以，但办公桌得留下！**
+
+当一个Goroutine即将发起系统调用时，调度器会做几件事：
+
+1. **解除P与M的绑定** ：把当前线程M和处理器P分离开。
+2. **状态更新** ：把Goroutine和P的状态都更新为 `_Gsyscall` 和 `_Psyscall` 。
+3. **保留弱联系** ：虽然P和M分开了，但M会记住这个P（存放在 `m.oldp` ），方便回来的时候能"再续前缘"。
+4. **寻找新机会** ：脱离了M的P，可以去和其他空闲的M结合，继续执行其他Goroutine，一点都不耽误事儿。
+![](img/Go-img/file-20260630003002618.png)
+
+这个过程主要发生在 `reentersyscall` 函数中：
+
+```go
+// reentersyscall 在goroutine进入系统调用时被调用
+func reentersyscall(pc, sp uintptr) {
+        _g_ := getg() // 获取当前的goroutine
+
+        // ...
+        // 保存当前的程序计数器(PC)和栈指针(SP)等上下文信息
+        save(pc, sp)
+        // ...
+
+        // 1. 将goroutine的状态从 _Grunning 更新为 _Gsyscall
+        casgstatus(_g_, _Grunning, _Gsyscall)
+
+        // ...
+        // 2. 解除 P 和 M 的绑定关系
+        pp := _g_.m.p.ptr()
+        pp.m = 0          // P的m指针置空
+        _g_.m.p = 0       // M的p指针置空
+
+        // 3. 将P设置为M的oldp，建立一个弱引用关系
+        _g_.m.oldp.set(pp)
+        
+        // 4. 将P的状态更新为 _Psyscall
+        atomic.Store(&pp.status, _Psyscall)
+
+        // ...
+}
+```
+
+等系统调用结束，Goroutine从内核态返回时，会执行 `exitsyscall` 函数。这时它会尝试"复位归来"：
+
+- **快速路径** ：先看看之前那个P（ `oldp` ）是不是还单身（没有和其他M结合）。如果是，太好了，直接拿回来用，光速恢复执行。
+- **慢速路径** ：如果P已经被别的M"拐走"了，那就没办法了。当前Goroutine会被切换到 `g0` 栈，执行 `exitsyscall0` ，尝试为自己所在的M寻找一个新的空闲P。如果找到了，就继续执行；如果找不到，说明现在很忙，M就会被挂起，这个Goroutine则被放到全局队列中，等待下一次被调度
+```go
+// exitsyscall 在goroutine退出系统调用时执行
+func exitsyscall() {
+        _g_ := getg() // 获取当前goroutine
+
+        // ...
+        // 尝试快速路径：如果oldp没有被其他M绑定，就直接复用
+        oldp := _g_.m.oldp.ptr()
+        _g_.m.oldp = 0
+        if exitsyscallfast(oldp) {
+                // ...
+                // 快速恢复成功，将g的状态改回_Grunning
+                casgstatus(_g_, _Gsyscall, _Grunning)
+                // ...
+                return // 直接返回，继续执行g
+        }
+
+        // 快速路径失败，切换到g0栈，执行慢速路径逻辑
+        mcall(exitsyscall0)
+        // ...
+}
+
+// exitsyscall0 在g0栈上为当前M寻找一个新的P
+func exitsyscall0(gp *g) {
+        // 将goroutine的状态从 _Gsyscall 改为 _Grunnable 就绪态
+        casgstatus(gp, _Gsyscall, _Grunnable)
+        // 解除g和当前M的绑定
+        dropg()
+        lock(&sched.lock)
+        
+        // 尝试从空闲列表获取一个P
+        var _p_ *p
+        _p_, _ = pidleget(0)
+        // ...
+        
+        // 如果没有找到空闲的P
+        if _p_ == nil {
+                // 将g放入全局运行队列
+                globrunqput(gp)
+                // ...
+        }
+        // ...
+        unlock(&sched.lock)
+
+        // 如果找到了P
+        if _p_ != nil {
+                // 绑定P，然后立即执行这个goroutine
+                acquirep(_p_)
+                execute(gp, false) // 不会返回
+        }
+
+        // 如果没找到P，M只能进入休眠
+        stopm()
+        // 当M被唤醒后，重新开始调度循环
+        schedule() // 不会返回
+}
+```
+![](img/Go-img/file-20260630003616346.png)
+
+你可能会问，这和 `sysmon` 有什么关系？关系大了！ `sysmon` 会在它的 `retake` 检查中，遍历所有的P。如果发现某个P长时间处于 `_Psyscall` 状态（默认超过10ms），或者这个P虽然在syscall，但它的本地队列里还有其他Goroutine在排队， `sysmon` 就会认为不能再等了，必须执行抢占。 它会调用 `handoffp` ，强制把这个P从syscall的M那里"抢"过来，分配给一个新的或者空闲的M，去执行P本地队列里的其他任务。
+
+```go
+// retake 函数由 sysmon 线程周期性调用
+func retake(now int64) uint32{
+    n :=0
+    // 加锁
+    lock(&allpLock)
+    // 遍历所有 p
+    for i :=0; i <len(allp); i++{
+        _p_ := allp[i]
+        // ...
+        s := _p_.status
+        // ...
+        // 对于正在执行 syscall 的 p
+        if s ==_Psyscall{
+            // 如果 p 本地队列为空且发起系统调用时间 < 10ms，则不进行抢占
+            if runqempty(_p_)&& atomic.Load(&sched.nmspinning)+atomic.Load(&sched.npidle)>0&& pd.syscallwhen+10*1000*1000> now {
+                continue
+            }
+            unlock(&allpLock)
+            // 将 p 的状态由 syscall 更新为 idle
+            if atomic.Cas(&_p_.status, s,_Pidle){
+                // ...
+                // 让 p 拥有和其他 m 结合的机会
+                handoffp(_p_)
+            }
+            // ...
+            lock(&allpLock)
+        }
+    }
+    unlock(&allpLock)
+    return uint32(n)
+}
+```
+```javascript
+func handoffp(_p_ *p) {
+    // 如果 p lrq 中还有 g 或者全局队列 grq 中还有 g，则立即分配一个新 m 与该 p 结合
+    if!runqempty(_p_)|| sched.runqsize !=0{
+        // 分配一个 m 与 p 结合
+        startm(_p_,false)
+        return
+    }
+    // ...
+    // 若系统空闲没有 g 需要调度，则将 p 添加到 schedt 中的空闲 p 队列 pidle 中
+    pidleput(_p_,0)
+    // ...
+}
+```
+
+#### 5.3 运行超时抢占
+
+除了系统调用，另一种需要抢占的场景就是Goroutine运行时间过长。比如一个纯计算的循环，没有任何IO或channel操作，它就会像个"钉子户"一样霸占着CPU。
+
+![](img/Go-img/file-20260630004729237.png)
+
+`sysmon` 在 `retake` 函数中同样会检查每个处于 `_Prunning` 状态的P。它会看当前P上的Goroutine从何时开始执行（ `schedwhen` ），如果执行时间超过了一个阈值（ `forcePreemptNS` ，通常是10ms）， `sysmon` 就会认为需要抢占了。
+
+```go
+// retake 函数的一部分
+func retake(now int64) uint32 {
+        // ...
+        for i := 0; i < len(allp); i++ {
+                _p_ := allp[i]
+                // ...
+                // 如果P正在运行
+                if s == _Prunning {
+                        // ...
+                        // 检查当前goroutine的执行时间是否超过了10ms
+                        if _p_.schedwhen+forcePreemptNS <= now {
+                                // 发起抢占
+                                preemptone(_p_)
+                        }
+                }
+        }
+        // ...
+}
+```
+
+这里的抢占又分为两种方式：一种是"好言相劝"，一种是"强行执法"。
+
+##### 5.3.1 协作式抢占
+
+这是Go早期版本就有的抢占方式，比较"温柔"。 `sysmon` 在决定抢占后，会调用 `preemptone` 函数。这个函数首先会给目标Goroutine打上一个"抢占标记"。具体来说，就是把 `gp.preempt` 设置为 `true` ，同时把 `gp.stackguard0` 设置为一个特殊值 `stackPreempt` 。
+
+```go
+// preemptone 抢占指定P上正在运行的g
+func preemptone(_p_ *p) bool {
+        // 获取P上绑定的M
+        mp := _p_.m.ptr()
+        // 获取M上正在运行的g，也就是我们的抢占目标
+        gp := mp.curg
+
+        // ...
+        // 1. 设置协作式抢占标志
+        gp.preempt = true
+        
+        // 2. 修改栈保护标志，这是协作式抢占的关键
+        // 当g进行函数调用（特别是涉及栈检查）时，会检查这个值
+        gp.stackguard0 = stackPreempt
+
+        // ...
+}
+```
+
+这个 `stackguard0` 标志位非常关键。Goroutine在执行函数调用时，尤其是可能导致栈扩容的场景下，会检查这个标志位。当它发现 `stackguard0` 变成了 `stackPreempt` ，就知道："哦，调度器想让我让位了"。于是，它就会很"自觉"地停止当前工作，调用 `gopreempt_m` ，将自己重新放回全局队列，让出CPU。这个过程就叫做 **协作式抢占** 。
+
+![](img/Go-img/file-20260630004802745.png)
+
+这个检查点通常在 `newstack` 函数中，也就是栈扩容的逻辑里：
+
+```go
+// newstack 在g0栈上为goroutine扩展栈空间时执行
+func newstack() {
+        // 获取当前需要扩容栈的goroutine
+        gp := thisg.m.curg
+        
+        // 读取g的栈保护标志
+        stackguard0 := atomic.Loaduintptr(&gp.stackguard0)
+
+        // 如果标志被设置为stackPreempt，说明被标记为需要抢占
+        if stackguard0 == stackPreempt {
+                // 检查当前g是否满足被抢占的条件（比如没有持有锁等）
+                if canPreemptM(thisg.m) {
+                        // 条件满足，响应抢占，执行让渡操作
+                        gopreempt_m(gp) // 这个函数不会返回
+                }
+        }
+        // ...
+}
+
+// gopreempt_m 会走到 goschedImpl，后续流程和主动让渡(gosched)一样
+func gopreempt_m(gp *g) {
+        // ...
+        goschedImpl(gp)
+}
+
+func goschedImpl(gp *g) {
+        // g状态从_Grunning变为_Grunnable
+        casgstatus(gp, _Grunning, _Grunnable)
+        // 解绑M
+        dropg()
+        // 加锁后放入全局队列
+        lock(&sched.lock)
+        globrunqput(gp)
+        unlock(&sched.lock)
+        // 触发新一轮调度
+        schedule()
+}
+```
+
+但协作式抢占有个明显的缺点：如果一个Goroutine是个铁憨憨，一直在执行纯计算的死循环，没有任何函数调用，那它就永远没有机会去检查 `stackguard0` ，也就无法响应抢占意图。这可怎么办？
+
+##### 5.3.2 非协作式抢占
+
+为了解决协作式抢占的短板，Go 1.14 版本引入了基于信号的抢占机制，也就是 **非协作式抢占** 。这种方式就非常"硬核"了。
+
+在 `preemptone` 函数中，除了设置协作标记，还会做一件事：向目标Goroutine所在的M（线程）发送一个信号 `sigPreempt` 。
+
+```go
+// preemptone 函数的另一部分
+func preemptone(_p_ *p) bool {
+    // ... （前面设置协作标记的代码）
+
+        // 3. 基于信号实现非协作式抢占
+        if preemptMSupported && debug.asyncpreemptoff == 0 {
+                _p_.preempt = true
+                // 向目标M发送抢占信号
+                preemptM(mp)
+        }
+        return true
+}
+
+func preemptM(mp *m) {
+    // ...
+    // 向指定的线程（由mp.procid标识）发送sigPreempt信号
+    signalM(mp, sigPreempt)
+    // ...
+}
+
+func signalM(mp *m, sig int) {
+        // 底层通过pthread_kill实现向线程发送信号
+        pthread_kill(pthread(mp.procid), uint32(sig))
+}
+```
+
+Go程序启动时，会注册一个信号处理器 `sighandler` 来处理各种信号，其中就包括了我们的 `sigPreempt`
+
+![](img/Go-img/file-20260630004821268.png)
+
+当M接收到 `sigPreempt` 信号后，操作系统会中断M的当前执行，转而去执行 `sighandler` 。 信号处理函数会发现这是一个抢占信号，然后检查当前的Goroutine是否满足被抢占的条件（例如，没有在执行一些敏感的运行时代码）。
+
+如果条件满足，最关键的一步来了： `sighandler` 会像一个黑客一样，直接修改G的寄存器信息，主要是程序计数器（PC）和栈顶指针（SP）。它会强行在G的执行流中"注入"一段代码，这段代码就是 `asyncPreempt` 函数。
+
+```go
+// sighandler 是go的信号处理总入口
+// 它在gsignal这个特殊的goroutine上执行
+func sighandler(sig uint32, info *siginfo, ctxt unsafe.Pointer, gp *g) {
+        // ...
+        // 如果收到了抢占信号
+        if sig == sigPreempt {
+                // 执行抢占处理
+                doSigPreempt(gp, ctxt)
+        }
+        // ...
+}
+
+// doSigPreempt 执行具体的信号抢占逻辑
+func doSigPreempt(gp *g, ctxt *sigctxt) {
+        // 判断g是否满足抢占条件
+        if wantAsyncPreempt(gp) {
+                if ok, newpc := isAsyncSafePoint(gp, ctxt.sigpc(), ctxt.sigsp(), ctxt.siglr()); ok {
+                        // 通过修改g的寄存器，强行让它下一条指令去执行asyncPreempt
+                        ctxt.pushCall(abi.FuncPCABI0(asyncPreempt), newpc)
+                }
+        }
+        // ...
+}
+
+// pushCall 修改栈指针和程序计数器，实现"指令注入"
+func (c *sigctxt) pushCall(targetPC, resumePC uintptr) {
+        // 获取当前栈顶指针 sp (rsp寄存器)
+        sp := uintptr(c.rsp())
+        // 栈向下移动一个指针大小，为返回地址腾出空间
+        sp -= goarch.PtrSize
+        // 将原始的下一条指令地址（resumePC）存入新的栈顶
+        *(*uintptr)(unsafe.Pointer(sp)) = resumePC
+        // 更新栈顶指针
+        c.set_rsp(uint64(sp))
+        // 将程序计数器（rip寄存器）设置为我们要注入的函数的地址 (targetPC)
+        c.set_rip(uint64(targetPC))
+}
+```
+
+这样一来，当信号处理结束，G恢复执行时，它下一条要执行的指令不再是原来被打断的地方，而是被篡改为了 `asyncPreempt` 函数。这个函数会立即调用 `mcall` 切换到 `g0` 栈，执行 `gopreempt_m` ，最终完成让渡操作，和协作式抢占殊途同归。
+
+```go
+// asyncPreempt2 是被强行注入的代码逻辑
+// 此时的执行方是被抢占的g自己
+func asyncPreempt2() {
+        gp := getg()
+        // ...
+        // 切换到g0栈，调用gopreempt_m完成让渡
+        mcall(gopreempt_m)
+        // ...
+}
+```
+
+至此，哪怕是最顽固的"钉子户"Goroutine，也会被这种强制手段给请下CPU，保证了调度器的公平性。
+
+**抢占** 是Go调度器为了公平和效率，由 `sysmon` 线程发起的强制性调度行为。
+
+1. **系统调用抢占** ：通过解绑P和M，让P可以继续服务其他Goroutine，避免因单个M阻塞导致整个P被浪费。
+2. **运行超时抢占** ：针对长时间运行的Goroutine，Go提供了两手准备：
+	- **协作式抢占** ：温柔地打个标记，让Goroutine在函数调用时"自觉"让出CPU。
+	- **非协作式抢占** ：对于不自觉的Goroutine，直接发送信号，通过修改PC和SP寄存器的方式，强行中断其执行，注入让渡逻辑。
+
+正是有了这套精密的、软硬兼施的抢占机制，Go的并发调度才能如此健壮和高效，让我们能够放心地创建和使用海量的Goroutine。
