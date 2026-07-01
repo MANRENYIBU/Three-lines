@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "06dc3b2d1063f26f",
+        "id": "37c88cae85b55f90",
         "type": "tabs",
         "children": [
           {
-            "id": "70553f15aed8f19c",
+            "id": "40f1497d7e4fbf58",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "语言系列/Go.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Go"
+              "title": "新标签页"
             }
           }
         ]
@@ -154,13 +150,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "语言系列/Go.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Go 的大纲"
+              "title": "大纲"
             }
           }
         ],
@@ -181,20 +176,22 @@
       "bases:新建数据库": false
     }
   },
-  "active": "8a37257879402733",
+  "active": "40f1497d7e4fbf58",
   "lastOpenFiles": [
-    "Clippings/13. GMP调度原理.md",
     "语言系列/Go.md",
+    "Clippings/10. 逃逸分析.md",
+    "语言系列/img/Go-img/file-20260701224927485.png",
+    "语言系列/img/Go-img/file-20260701224612041.png",
+    "语言系列/img/Go-img/file-20260701224430365.png",
+    "语言系列/img/Go-img/file-20260701224426893.png",
+    "语言系列/img/Go-img/file-20260701223528443.png",
+    "Clippings",
+    "Clippings/13. GMP调度原理.md",
     "语言系列/img/Go-img/file-20260630004821268.png",
     "语言系列/img/Go-img/file-20260630004802745.png",
     "语言系列/img/Go-img/file-20260630004729237.png",
     "语言系列/img/Go-img/file-20260630003616346.png",
     "语言系列/img/Go-img/file-20260630003002618.png",
-    "语言系列/img/Go-img/file-20260630002050084.png",
-    "语言系列/img/Go-img/file-20260629235646387.png",
-    "语言系列/img/Go-img/file-20260629235320185.png",
-    "语言系列/img/Go-img/file-20260629232042750.png",
-    "语言系列/img/Go-img/file-20260628230723275.png",
     "语言系列/Java.md",
     "语言系列/Html.md",
     "未命名.md",
@@ -202,7 +199,6 @@
     "语言系列/img/Go-img",
     "未命名.base",
     "未命名.canvas",
-    "Clippings",
     "README.md",
     "Clippings/入门指南.md",
     "语言系列/img/go-img",
