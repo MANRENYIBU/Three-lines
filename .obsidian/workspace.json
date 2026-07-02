@@ -1,20 +1,24 @@
 {
   "main": {
-    "id": "1d670c1917b9c474",
+    "id": "54ccc8c18a15cdd2",
     "type": "split",
     "children": [
       {
-        "id": "37c88cae85b55f90",
+        "id": "218d9482e66fc84f",
         "type": "tabs",
         "children": [
           {
-            "id": "40f1497d7e4fbf58",
+            "id": "7a882603a4c7a8f9",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "语言系列/Go.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "Go"
             }
           }
         ]
@@ -23,15 +27,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "835fc4ab7ab6ff73",
+    "id": "f15c23252c2b1646",
     "type": "split",
     "children": [
       {
-        "id": "cb7857264281d2a4",
+        "id": "81046bd74ea6383c",
         "type": "tabs",
         "children": [
           {
-            "id": "8a37257879402733",
+            "id": "c020aa435704a96a",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -44,7 +48,7 @@
             }
           },
           {
-            "id": "83acf92de0670cd4",
+            "id": "e8b4cc238353736a",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -61,7 +65,7 @@
             }
           },
           {
-            "id": "59f20283e4603677",
+            "id": "3d8704948c5c0182",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -74,49 +78,51 @@
       }
     ],
     "direction": "horizontal",
-    "width": 205.5
+    "width": 300
   },
   "right": {
-    "id": "239da3f69dacc30a",
+    "id": "022b21c74c382598",
     "type": "split",
     "children": [
       {
-        "id": "32360628abdfe93e",
+        "id": "1d22a47a7463fafd",
         "type": "tabs",
         "children": [
           {
-            "id": "958dcb67c6f56d9d",
+            "id": "c07fb9fb614faabe",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
+                "file": "语言系列/Go.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
-                "backlinkCollapsed": false,
+                "backlinkCollapsed": true,
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "反向链接"
+              "title": "Go 的反向链接列表"
             }
           },
           {
-            "id": "87d0fd2ac2754c17",
+            "id": "4fe3b62fee85813f",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "语言系列/Go.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "出链"
+              "title": "Go 的出链列表"
             }
           },
           {
-            "id": "e4b3dd3bd6b18641",
+            "id": "1b2a6426bd81ef73",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -131,7 +137,7 @@
             }
           },
           {
-            "id": "703f6a8c21c05bcf",
+            "id": "48c194f4361decb1",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -145,17 +151,18 @@
             }
           },
           {
-            "id": "b74fed529efdfc1d",
+            "id": "ed6f2a1a9de4d6e6",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
+                "file": "语言系列/Go.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大纲"
+              "title": "Go 的大纲"
             }
           }
         ],
@@ -163,7 +170,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 308.5
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -176,32 +183,53 @@
       "bases:新建数据库": false
     }
   },
-  "active": "40f1497d7e4fbf58",
+  "active": "c020aa435704a96a",
   "lastOpenFiles": [
+    "语言系列/img/Go-img/file-20260702203041429.png",
+    "语言系列/img/Go-img/file-20260702203035679.png",
+    "语言系列/img/Go-img/file-20260702203028929.png",
+    "语言系列/img/Go-img/file-20260702203024813.png",
+    "语言系列/img/Go-img/file-20260702203020528.png",
+    "语言系列/img/Go-img/file-20260702203015816.png",
+    "语言系列/img/Go-img/file-20260702202911062.png",
+    "语言系列/img/Go-img/file-20260702202901309.png",
+    "语言系列/img/Go-img/file-20260702202820541.png",
+    "语言系列/img/Go-img/file-20260702202811327.png",
+    "语言系列/img/Go-img/file-20260702202754923.png",
+    "Clippings/12. 垃圾回收.md",
     "语言系列/Go.md",
-    "Clippings/10. 逃逸分析.md",
-    "语言系列/img/Go-img/file-20260701224927485.png",
-    "语言系列/img/Go-img/file-20260701224612041.png",
-    "语言系列/img/Go-img/file-20260701224430365.png",
-    "语言系列/img/Go-img/file-20260701224426893.png",
-    "语言系列/img/Go-img/file-20260701223528443.png",
+    "未命名 1.base",
+    "未命名.base",
     "Clippings",
-    "Clippings/13. GMP调度原理.md",
-    "语言系列/img/Go-img/file-20260630004821268.png",
-    "语言系列/img/Go-img/file-20260630004802745.png",
-    "语言系列/img/Go-img/file-20260630004729237.png",
-    "语言系列/img/Go-img/file-20260630003616346.png",
-    "语言系列/img/Go-img/file-20260630003002618.png",
+    "语言系列/img/Shell-img",
+    "语言系列/img/Python-img",
+    "语言系列/img/JavaScript-img",
+    "语言系列/img/Java-img",
+    "语言系列/img/Html-img",
+    "语言系列/img/Go-img",
+    "语言系列/img/Css-img",
+    "语言系列/TypeScript.md",
+    "语言系列/Shell.md",
+    "语言系列/Python.md",
+    "语言系列/JavaScript.md",
     "语言系列/Java.md",
     "语言系列/Html.md",
-    "未命名.md",
     "语言系列/Css.md",
-    "语言系列/img/Go-img",
-    "未命名.base",
-    "未命名.canvas",
-    "README.md",
-    "Clippings/入门指南.md",
-    "语言系列/img/go-img",
-    "语言系列/${noteFileName}-img"
+    "计算机系列/计算机操作系统.md",
+    "算法系列/算法题解.md",
+    "算法系列/数据结构与算法.md",
+    "方法论系列/设计模式.md",
+    "小米虫爬山路系列/小米虫爬山路3.md",
+    "小米虫爬山路系列/小米虫爬山路2.md",
+    "小米虫爬山路系列/小米虫爬山路-源码.md",
+    "小米虫爬山路系列/小米虫爬山路.md",
+    "小米虫爬山路系列/小米虫爬山路-py版.md",
+    "小米虫爬山路系列/小米虫爬山路-AI版.md",
+    "小米虫宝典系列/小米虫宝典-理论面试篇.md",
+    "小米虫宝典系列/小米虫宝典-框架面试篇.md",
+    "小米虫宝典系列/小米虫宝典-拷打篇.md",
+    "小米虫宝典系列/小米虫宝典-基础面试篇.md",
+    "小米虫宝典系列/小米虫宝典-场景面试篇.md",
+    "小米虫宝典系列/小米虫宝典-反问篇.md"
   ]
 }
